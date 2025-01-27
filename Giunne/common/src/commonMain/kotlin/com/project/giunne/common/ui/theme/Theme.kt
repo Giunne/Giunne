@@ -11,7 +11,7 @@ fun GiunnaeTheme(
 ) {
     MaterialTheme(
         colorScheme = lightColorScheme(
-            primary = GPColor.MainBlueColor,
+            primary = GPColor.MainOrangeColor,
             background = GPColor.White
         )
     ) {

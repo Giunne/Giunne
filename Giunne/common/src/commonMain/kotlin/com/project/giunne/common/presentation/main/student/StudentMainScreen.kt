@@ -201,7 +201,7 @@ fun NavItem(
 ) {
     val iconColor by animateColorAsState(
         targetValue = when {
-            onTop -> GPColor.ButtonBlue
+            onTop -> GPColor.MainOrangeColor
             else -> GPColor.ButtonGray
         },
     )
