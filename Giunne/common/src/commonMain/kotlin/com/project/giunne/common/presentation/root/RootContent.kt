@@ -1,10 +1,11 @@
 package com.project.giunne.common.presentation.root
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import coil3.compose.setSingletonImageLoaderFactory
 import com.arkivanov.decompose.FaultyDecomposeApi
@@ -15,12 +16,14 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.Stac
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.isEnter
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
+import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.project.giunne.common.presentation.common.newImageLoader
 import com.project.giunne.common.presentation.login.LoginScreen
 import com.project.giunne.common.presentation.main.splash.SplashScreen
 import com.project.giunne.common.presentation.main.student.StudentMainScreen
 import com.project.giunne.common.presentation.main.teacher.TeacherMainScreen
 import com.project.giunne.common.presentation.signup.SignupScreen
+import com.project.giunne.common.presentation.signup.SignupTypeSelectScreen
 import com.project.giunne.common.util.NanumRound
 import kotlinx.coroutines.delay
 
@@ -42,13 +45,31 @@ fun RootContent(
         component.navigateToLogin()
     }
 
+    val childStack by component.childStack.subscribeAsState()
+    val activeComponent = childStack.active.instance
+
     Scaffold (
         modifier = modifier
     ) {
-        Box (
+        Column(
             modifier = modifier
                 .fillMaxSize()
         ) {
+//            GPTopBar(
+//                modifier = Modifier.background(
+//                    color = GPColor.BackgroundLightGray
+//                ),
+//                titleText = when (activeComponent) {
+//                    is RootComponent.Child.SignupChild ->  "회원가입"
+//                    is RootComponent.Child.SignupTypeChild -> "회원가입"
+//                    else -> null
+//                },
+//                onBackButtonClicked = when (activeComponent) {
+//                    is RootComponent.Child.SignupChild ->  { { component.navigateBack() } }
+//                    is RootComponent.Child.SignupTypeChild -> { { component.navigateBack() } }
+//                    else -> null
+//                }
+//            )
             Children(component = component)
         }
     }
@@ -66,11 +87,18 @@ private fun Children(component: RootComponent, modifier: Modifier = Modifier) {
             is RootComponent.Child.SplashChild -> SplashScreen()
             is RootComponent.Child.LoginChild -> LoginScreen(
                 component = child.component,
-                navigateSignup = { component.navigateToSignup() }
+                navigateSignup = { component.navigateToSignupType() }
+            )
+            is RootComponent.Child.SignupTypeChild -> SignupTypeSelectScreen(
+                onClickBackButton = { component.navigateBack() },
+                onSelected = { type ->
+                    component.navigateToSignup(type)
+                }
             )
             is RootComponent.Child.SignupChild -> SignupScreen(
                 component = child.component,
-                onClickBackButton = { component.navigateBack() }
+                onClickBackButton = { component.navigateBack() },
+                signupType = child.type
             )
             is RootComponent.Child.StudentMainChild -> StudentMainScreen(component = child.component)
             is RootComponent.Child.TeacherMainChild -> TeacherMainScreen(component = child.component)
@@ -93,9 +121,10 @@ private val RootComponent.Child.index: Int
         when (this) {
             is RootComponent.Child.SplashChild -> 0
             is RootComponent.Child.LoginChild -> 1
-            is RootComponent.Child.SignupChild -> 2
-            is RootComponent.Child.StudentMainChild -> 3
-            is RootComponent.Child.TeacherMainChild -> 4
+            is RootComponent.Child.SignupTypeChild -> 2
+            is RootComponent.Child.SignupChild -> 3
+            is RootComponent.Child.StudentMainChild -> 4
+            is RootComponent.Child.TeacherMainChild -> 5
         }
 
 private fun StackAnimator.flipSide(): StackAnimator =

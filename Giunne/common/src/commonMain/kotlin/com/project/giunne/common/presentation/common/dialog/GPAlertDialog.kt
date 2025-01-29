@@ -82,13 +82,13 @@ fun GPAlertDialog(
                 }
                 Row(
                     modifier = Modifier
-                        .height(80.gdp),
+                        .height(68.gdp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     GPButton(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(56.gdp),
+                            .height(48.gdp),
                         normalColor = GPColor.ButtonOrange,
                         pressColor = GPColor.ButtonPressOrange,
                         hoverColor = GPColor.ButtonHoverOrange,

@@ -1,5 +1,8 @@
 package com.project.giunne.common.presentation.signup
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.arkivanov.decompose.ComponentContext
 import com.project.giunne.common.util.GLog
 import kotlinx.coroutines.CoroutineScope
@@ -14,5 +17,11 @@ class SignupComponent(
 
     init {
         GLog.d(TAG, "onCreate")
+    }
+
+    companion object {
+        const val TYPE_NONE = ""
+        const val TYPE_TEACHER = "teacher"
+        const val TYPE_STUDENT = "student"
     }
 }

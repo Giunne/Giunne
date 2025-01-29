@@ -9,8 +9,7 @@
         android:allowBackup="false"
         android:supportsRtl="true"
         android:largeHeap="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        android:icon="@drawable/icon_person">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         <activity
             android:name="com.project.giunne.android.MainActivity"

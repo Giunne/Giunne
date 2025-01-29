@@ -41,6 +41,20 @@ class InfoStore(
         }
     }
 
+    fun onClickSchoolSearchButton() {
+        setState { copy(schoolSearchDialog = true) }
+    }
+
+    fun onSchoolSelected(
+        schoolName: String,
+    ) {
+        setState { copy(schoolText = schoolName) }
+    }
+
+    fun dismissSchoolSearchDialog() {
+        setState { copy(schoolSearchDialog = false) }
+    }
+
     private inline fun setState(crossinline block: InfoState.() -> InfoState) {
         infoState.value = block.invoke(infoState.value)
     }
