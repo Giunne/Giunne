@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -25,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.FaultyDecomposeApi
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.Direction
@@ -36,23 +39,29 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stac
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.certification.student.StudentCertificationScreen
+import com.project.giunne.common.presentation.common.badge.GPNotificationBadge
+import com.project.giunne.common.presentation.common.button.GPBackButton
 import com.project.giunne.common.presentation.common.dropdown.GPDropdownMenu
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.common.topbar.GPMainTopBar
 import com.project.giunne.common.presentation.friend.student.StudentFriendScreen
 import com.project.giunne.common.presentation.home.student.StudentHomeScreen
+import com.project.giunne.common.presentation.main.common.NotificationScreen
+import com.project.giunne.common.presentation.main.dummy.notiList
 import com.project.giunne.common.presentation.mypage.student.StudentMyPageScreen
 import com.project.giunne.common.presentation.roadmap.student.StudentRoadmapScreen
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import com.project.giunne.icon_back_arrow
 import com.project.giunne.icon_certification
 import com.project.giunne.icon_friends
 import com.project.giunne.icon_home
 import com.project.giunne.icon_mypage
 import com.project.giunne.icon_roadmap
+import com.project.giunne.image_giunne
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -68,6 +77,10 @@ fun StudentMainScreen(
     val activeComponent = childStack.active.instance
     var testOptionItem by remember { mutableStateOf("선택해주세요.") }
 
+    //// TEST ////
+    var noti by remember { mutableStateOf(false) }
+    //////////////
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -77,26 +90,65 @@ fun StudentMainScreen(
                     .fillMaxSize()
             ) {
                 GPMainTopBar(
-                    titleText = when (activeComponent) {
-                        is StudentMainComponent.StudentChild.StudentHomeChild -> ""
-                        is StudentMainComponent.StudentChild.StudentRoadmapChild -> "로드맵"
-                        is StudentMainComponent.StudentChild.StudentCertificationChild -> "인증"
-                        is StudentMainComponent.StudentChild.StudentFriendsChild -> "친구"
-                        is StudentMainComponent.StudentChild.StudentMyPageChild -> "내정보"
+                    titleText = if (noti) { "알림" } else {
+                        when (activeComponent) {
+                            is StudentMainComponent.StudentChild.StudentHomeChild -> ""
+                            is StudentMainComponent.StudentChild.StudentRoadmapChild -> "로드맵"
+                            is StudentMainComponent.StudentChild.StudentCertificationChild -> "인증"
+                            is StudentMainComponent.StudentChild.StudentFriendsChild -> "친구"
+                            is StudentMainComponent.StudentChild.StudentMyPageChild -> "내정보"
+                        }
                     },
+                    leftIcon = {
+                        if (noti) {
+                            GPBackButton(
+                                onClick = {
+                                    noti = false
+                                }
+                            )
+                        } else {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .aspectRatio(1f),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Image(
+                                    modifier = Modifier.size(32.gdp),
+                                    painter = painterResource(Res.drawable.image_giunne),
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                    },
+                    rightIcon = {
+                        if (!noti) {
+                            GPNotificationBadge(
+                                count = notiList.filter { !it.isRead }.size,
+                                onClick = {
+                                    noti = true
+                                }
+                            )
+                        }
+                    }
                 )
-                StudentChildren(
-                    modifier = Modifier
-                        .weight(1f)
-                    ,
-                    component = component
-                )
+                if (noti) {
+                    NotificationScreen(
+                        notificationItemList = notiList
+                    )
+                } else {
+                    StudentChildren(
+                        modifier = Modifier
+                            .weight(1f),
+                        component = component
+                    )
+                }
                 StudentBottomNav(
                     component = component,
                     activeComponent = activeComponent
                 )
             }
-            if (activeComponent is StudentMainComponent.StudentChild.StudentHomeChild) {
+            if (activeComponent is StudentMainComponent.StudentChild.StudentHomeChild && !noti) {
                 /* TODO(추후 API에서 불러오도록 변경) */
                 GPDropdownMenu(
                     modifier = Modifier
