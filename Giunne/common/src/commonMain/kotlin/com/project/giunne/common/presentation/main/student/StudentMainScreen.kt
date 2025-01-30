@@ -88,6 +88,7 @@ fun StudentMainScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(GPColor.BackgroundLightGray)
             ) {
                 GPMainTopBar(
                     titleText = if (noti) { "알림" } else {

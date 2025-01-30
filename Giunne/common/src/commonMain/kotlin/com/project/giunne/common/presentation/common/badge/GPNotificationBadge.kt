@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.gdp
 import com.project.giunne.icon_badge
 import org.jetbrains.compose.resources.painterResource
 
@@ -41,7 +42,7 @@ fun GPNotificationBadge(
             badge = {
                 if (0 < count) {
                     Badge(
-                        modifier = Modifier.offset(x = (-4).dp,y = (-4).dp),
+                        modifier = Modifier.offset(x = (0).gdp,y = (-4).gdp),
                         containerColor = GPColor.MainOrangeColor,
                         contentColor = Color.White
                     ) {

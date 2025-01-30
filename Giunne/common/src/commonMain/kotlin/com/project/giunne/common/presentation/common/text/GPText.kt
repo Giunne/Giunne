@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -22,18 +23,20 @@ fun GPText(
     textDecoration: TextDecoration? = null,
     fontFamily: FontFamily = GPFontFamily.Medium,
     textAlign: TextAlign? = null,
-    maxLines: Int = Int.MAX_VALUE
+    maxLines: Int = Int.MAX_VALUE,
+    style: TextStyle = TextStyle(
+        lineHeight = TextUnit.Unspecified
+    )
 ) {
     Text(
-        modifier = modifier.graphicsLayer {
-            translationY = (-1).gsp.toPx()
-        },
+        modifier = modifier,
         text = text,
         fontFamily = fontFamily,
         fontSize = textSize,
         textDecoration = textDecoration,
         color = textColor,
         textAlign = textAlign,
-        maxLines = maxLines
+        maxLines = maxLines,
+        style = style
     )
 }
