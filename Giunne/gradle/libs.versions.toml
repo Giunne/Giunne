@@ -24,7 +24,7 @@ coil = "3.0.3"
 androidx-lifecycle = "2.8.3"
 androidx-collection = "1.4.4"
 kotlinx-coroutines = "1.9.0"
-
+compottie="2.0.0-rc02"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -128,6 +128,9 @@ androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle
 androidx-collection = { module = "androidx.collection:collection", version.ref = "androidx-collection" }
 
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+
+# compottie
+compottie = { module = "io.github.alexzhirkevich:compottie", version.ref = "compottie" }
 
 [plugins]
 #compose-desktop = { id = "org.jetbrains.compose", version.ref = "compose" }

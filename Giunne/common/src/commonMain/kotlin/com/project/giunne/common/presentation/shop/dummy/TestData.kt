@@ -32,3 +32,13 @@ val faceItemWithOffset1 = TestItem(ItemType.FACE, size = IntSize(33, 39), offset
 val faceItemWithOffset2 = TestItem(ItemType.FACE, size = IntSize(59, 27), offsetX = 99, offsetY = 82, image = Res.drawable.test_item_face2)
 val characterItemWithOffsetGacha = TestItem(ItemType.CHARACTER, size = IntSize(33, 39), offsetX = 125, offsetY = 83, image = Res.drawable.test_item_chracter_gacha)
 val characterItemWithOffset = Res.drawable.test_item_character
+
+val gachaItems = listOf(
+    Res.drawable.test_item_head,
+    Res.drawable.test_item_head2,
+    Res.drawable.test_item_body,
+    Res.drawable.test_item_body1,
+    Res.drawable.test_item_body2,
+    Res.drawable.test_item_face,
+    Res.drawable.test_item_face2,
+)
