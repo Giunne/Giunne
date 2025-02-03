@@ -51,6 +51,7 @@ import com.project.giunne.common.presentation.main.common.NotificationScreen
 import com.project.giunne.common.presentation.main.dummy.notiList
 import com.project.giunne.common.presentation.mypage.student.StudentMyPageScreen
 import com.project.giunne.common.presentation.roadmap.student.StudentRoadmapScreen
+import com.project.giunne.common.presentation.shop.ShopScreen
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
@@ -300,7 +301,8 @@ private fun StudentChildren(component: StudentMainComponent, modifier: Modifier 
             is StudentMainComponent.StudentChild.StudentRoadmapChild -> StudentRoadmapScreen(component = child.component)
             is StudentMainComponent.StudentChild.StudentCertificationChild -> StudentCertificationScreen(component = child.component)
             is StudentMainComponent.StudentChild.StudentFriendsChild -> StudentFriendScreen(component = child.component)
-            is StudentMainComponent.StudentChild.StudentMyPageChild -> StudentMyPageScreen(component = child.component)
+//            is StudentMainComponent.StudentChild.StudentMyPageChild -> StudentMyPageScreen(component = child.component)
+            is StudentMainComponent.StudentChild.StudentMyPageChild -> ShopScreen()
         }
     }
 }
