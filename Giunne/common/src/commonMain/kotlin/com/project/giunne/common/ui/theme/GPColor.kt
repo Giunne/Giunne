@@ -8,6 +8,7 @@ object GPColor {
     @Stable val White = Color(0xFFFFFFFF)
     @Stable val MainOrangeColor = Color(0xFFFF814D)
     @Stable val MainBlueColor = Color(0xFF546EED)
+    @Stable val Red = Color(0xFFFF5A5A)
     @Stable val Green = Color(0xFF7AD171)
 
     // Text
@@ -32,6 +33,7 @@ object GPColor {
     // Background
     @Stable val BackgroundLightGray = Color(0xFFFBFBFB)
     @Stable val BackgroundGray_F6F6F6 = Color(0xFFF6F6F6)
+    @Stable val BackgroundGray_EBEBEB = Color(0xFFEBEBEB)
     @Stable val BackgroundLoading = Color(0x80000000)
     @Stable val BackgroundFrameOrange = Color(0xFFFF9C73)
 

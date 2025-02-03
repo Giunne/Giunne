@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import com.project.giunne.Res
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.text.GPText
@@ -28,6 +29,7 @@ import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import com.project.giunne.test_character
 
 private const val TAG = "StudentRoadmapScreen"
 @Composable
@@ -54,7 +56,9 @@ internal fun StudentHomeScreen(
         ) {
             StudentCharacter(
                 level = 3,
-                percent = 0.6f
+                percent = 0.6f,
+                character = Res.drawable.test_character,
+                items = listOf()
             )
             TeacherCheckingBox(
                 modifier = Modifier.fillMaxWidth(),
