@@ -69,6 +69,7 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
+                api(libs.androidx.activity.compose)
                 api(libs.androidx.appcompat)
                 api(libs.androidx.core)
                 api(libs.ktor.okHttp)
@@ -76,6 +77,10 @@ kotlin {
                 api(libs.koin.android)
                 api(libs.sqlDelight.android)
                 api(libs.ktor.engine.android)
+                api(libs.permissions)
+                api(libs.androidx.media3.exoplayer)
+                api(libs.androidx.media3.exoplayer.dash)
+                api(libs.androidx.media3.ui)
 //                api(libs.multiplatform.resources.generator)
 //                api(libs.coil.android)
             }
@@ -93,6 +98,12 @@ kotlin {
                 api(libs.jdbc)
                 api(libs.kotlinx.coroutines.swing)
                 api(libs.ktor.engine.jvm)
+
+                compileOnly("org.openjfx:javafx-base:22:mac")
+                compileOnly("org.openjfx:javafx-swing:22:mac")
+                compileOnly("org.openjfx:javafx-media:22:mac")
+                compileOnly("org.openjfx:javafx-controls:22:mac")
+                compileOnly("org.openjfx:javafx-graphics:22:mac")
             }
         }
     }
