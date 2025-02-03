@@ -24,6 +24,7 @@ import coil3.compose.AsyncImagePainter.State.Empty.painter
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.shape.GPSquircleShape
+import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.main.dummy.Noti
@@ -51,11 +52,12 @@ internal fun NotificationScreen(
     Scaffold(
         modifier = Modifier
             .addFocusCleaner(focusManager)
-            .fillMaxSize(),
+            .fillMaxSize()
     ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .background(color = GPColor.BackgroundLightGray),
         ) {
             items(
                 count = notificationItemList.size
@@ -64,7 +66,7 @@ internal fun NotificationScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(66.gdp)
-                        .padding(horizontal = 16.gdp),
+                        .padding(vertical = 8.gdp, horizontal = 16.gdp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     GPSquircleShape(
@@ -120,6 +122,7 @@ internal fun NotificationScreen(
                             fontFamily = GPFontFamily.Medium,
                             textColor = GPColor.ButtonLightGray
                         )
+                        SpH(6.gdp)
                         GPText(
                             text = notificationItemList[it].content,
                             textSize = 12.gsp,
@@ -127,8 +130,13 @@ internal fun NotificationScreen(
                             textColor = GPColor.TextBlack
                         )
                     }
-                    Box{
+                    Box(
+                        modifier = Modifier
+                            .height(20.gdp)
+                            .align(Alignment.Top)
+                    ){
                         GPText(
+                            modifier = Modifier.align(Alignment.BottomEnd),
                             text = notificationItemList[it].time,
                             textSize = 10.gsp,
                             fontFamily = GPFontFamily.Medium,

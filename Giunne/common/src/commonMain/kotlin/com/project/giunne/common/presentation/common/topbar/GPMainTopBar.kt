@@ -1,5 +1,6 @@
 package com.project.giunne.common.presentation.common.topbar
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,7 +23,8 @@ fun GPMainTopBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(52.gdp),
+            .height(52.gdp)
+            .background(color = GPColor.BackgroundLightGray),
 //            .padding(horizontal = 16.gdp),
         contentAlignment = Alignment.Center
     ) {

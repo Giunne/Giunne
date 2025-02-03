@@ -1,6 +1,7 @@
 package com.project.giunne.common.presentation.friend.student
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,6 +48,7 @@ internal fun StudentFriendScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .background(color = GPColor.BackgroundLightGray)
         ) {
             items(
                 count = friendList.size

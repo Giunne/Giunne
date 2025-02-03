@@ -10,29 +10,38 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.certification.student.dummy.roadmapDoneList
+import com.project.giunne.common.presentation.certification.student.intent.VideoUploadStore
+import com.project.giunne.common.presentation.common.picker.VideoPicker
+import com.project.giunne.common.presentation.common.player.VideoPlayer
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.gdp
 import com.project.giunne.roadcon_3_beast
 import org.jetbrains.compose.resources.painterResource
+import java.io.File
 
+private const val TAG = "RoadMapCertScreen"
 @Composable
 fun RoadMapCertScreen(
     modifier: Modifier = Modifier,
     onCertButtonClicked: () -> Unit,
     step: Int?
 ) {
-    //// test ////
-    var video by remember { mutableStateOf<Boolean?>(null) }
-    //////////////
+    val scope = rememberCoroutineScope()
+
+    val videoUploadStore = remember { VideoUploadStore(scope) }
+    val videoUploadState by videoUploadStore.state.collectAsState()
 
     Column(
         modifier = modifier,
@@ -70,9 +79,13 @@ fun RoadMapCertScreen(
                     .height(262.gdp),
                 roadmapLevel = "3단계", /* TODO API */
                 roadmapName = "비스트",
-                video = video,
-                onUploadButtonClicked = { video = true }, /* T ODO API */
+                video = videoUploadState.videoFile,
+                onUploadButtonClicked = {
+                    videoUploadStore.onClickVideoUploadButton()
+                }, /* TODO API */
                 onCertButtonClicked = { onCertButtonClicked() },
+                onPlayButtonClicked = { videoUploadStore.onClickVideoPlayButton() },
+                onResetButtonClicked = { videoUploadStore.onClickVideoResetButton() },
             )
         }
         SpH(10.gdp)
@@ -100,5 +113,23 @@ fun RoadMapCertScreen(
                 }
             }
         )
+    }
+
+    with(videoUploadState.videoPicker) {
+        if (this) {
+            VideoPicker { file ->
+                if (file != null) videoUploadStore.initVideoFile(file)
+                videoUploadStore.dismissVideoPicker()
+            }
+        }
+    }
+
+    with(videoUploadState.videoPlayer) {
+        if (this) {
+            VideoPlayer(
+                videoPath = videoUploadState.videoFile?.getPath() ?: "",
+                dismiss = { videoUploadStore.dismissVideoPlayer() }
+            )
+        }
     }
 }

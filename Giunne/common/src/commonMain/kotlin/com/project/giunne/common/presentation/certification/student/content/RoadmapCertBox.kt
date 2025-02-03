@@ -22,6 +22,7 @@ import coil3.compose.AsyncImage
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.button.GPIconButton
+import com.project.giunne.common.presentation.common.picker.PlatformFile
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
@@ -31,15 +32,18 @@ import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_upload_video
 import org.jetbrains.compose.resources.painterResource
+import java.io.File
 
 @Composable
 fun RoadmapCertBox(
     modifier: Modifier = Modifier,
     roadmapLevel: String,
     roadmapName: String,
-    video: Any? = null,
+    video: PlatformFile? = null,
     onUploadButtonClicked: () -> Unit,
     onCertButtonClicked: () -> Unit,
+    onPlayButtonClicked: () -> Unit,
+    onResetButtonClicked: () -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -80,14 +84,16 @@ fun RoadmapCertBox(
         ) {
             if (video != null) {
                 Spacer(modifier = Modifier.weight(1f))
-                AsyncImage(
+                VideoUploadBox(
                     modifier = Modifier
                         .height(130.gdp)
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.gdp)),
-                    model = "https://picsum.photos/200/300",
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
+                        .background(
+                            color = GPColor.TextBlack,
+                            shape = RoundedCornerShape(12.gdp)
+                        ),
+                    onPlayButtonClicked = { onPlayButtonClicked() },
+                    onResetButtonClicked = { onResetButtonClicked() },
                 )
                 SpH(16.gdp)
                 GPButton(

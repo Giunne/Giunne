@@ -73,7 +73,10 @@ fun main() {
 //            windowState.size = DpSize(780.dp, 360.dp)
 
             GiunnaeTheme {
-                RootContent(root)
+                RootContent(
+                    root,
+                    exitProgram = {      }
+                )
             }
         }
     }

@@ -17,29 +17,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import coil3.compose.AsyncImage
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.button.GPIconButton
 import com.project.giunne.common.presentation.common.spacer.SpH
-import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_upload_image
-import com.project.giunne.icon_upload_video
 import org.jetbrains.compose.resources.painterResource
+import com.project.giunne.common.presentation.common.picker.PlatformFile
 
 @Composable
 fun RunningCertBox(
     modifier: Modifier = Modifier,
     weekText: String,
-    image: Any? = null,
+    image: PlatformFile? = null,
     onUploadButtonClicked: () -> Unit,
     onCertButtonClicked: () -> Unit,
+    onExpandButtonClicked: () -> Unit,
+    onResetButtonClicked: () -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -73,14 +72,15 @@ fun RunningCertBox(
         ) {
             if (image != null) {
                 Spacer(modifier = Modifier.weight(1f))
-                AsyncImage(
+                ImageUploadBox(
                     modifier = Modifier
                         .height(130.gdp)
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.gdp)),
-                    model = "https://picsum.photos/200/300",
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
+//                    image = image,
+                    image = image,
+                    onExpandButtonClicked = { onExpandButtonClicked() },
+                    onResetButtonClicked = { onResetButtonClicked() },
                 )
                 SpH(16.gdp)
                 GPButton(
