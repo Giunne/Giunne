@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.button.GPIconButton
+import com.project.giunne.common.presentation.common.picker.PlatformFile
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.ui.theme.GPColor
@@ -28,7 +29,6 @@ import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_upload_image
 import org.jetbrains.compose.resources.painterResource
-import com.project.giunne.common.presentation.common.picker.PlatformFile
 
 @Composable
 fun RunningCertBox(
@@ -77,7 +77,6 @@ fun RunningCertBox(
                         .height(130.gdp)
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.gdp)),
-//                    image = image,
                     image = image,
                     onExpandButtonClicked = { onExpandButtonClicked() },
                     onResetButtonClicked = { onResetButtonClicked() },
