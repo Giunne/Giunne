@@ -1,19 +1,12 @@
 package com.project.giunne.common.presentation.community.student
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -24,35 +17,17 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
-import com.project.giunne.Res
-import com.project.giunne.common.presentation.certification.student.content.PageSelectRow
-import com.project.giunne.common.presentation.certification.student.content.RoadMapCertScreen
-import com.project.giunne.common.presentation.certification.student.content.RoadmapCertConfirmDialog
-import com.project.giunne.common.presentation.certification.student.content.RunningCertConfirmDialog
-import com.project.giunne.common.presentation.certification.student.content.RunningCertScreen
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.addFocusCleaner
-import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
-import com.project.giunne.common.presentation.common.shape.GPSquircleShape
-import com.project.giunne.common.presentation.common.spacer.SpW
-import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.community.student.content.EmptyBox
 import com.project.giunne.common.presentation.community.student.content.SearchRow
-import com.project.giunne.common.presentation.friend.dummy.friendList
-import com.project.giunne.common.presentation.friend.student.StudentFriendComponent
+import com.project.giunne.common.presentation.community.student.content.SelectableDialog
+import com.project.giunne.common.presentation.community.student.state.DatePriority
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GLog
-import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
-import com.project.giunne.common.util.gsp
-import com.project.giunne.icon_arrow_right
-import com.project.giunne.icon_back_arrow
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 
 private const val TAG = "StudentCommunityScreen"
 @Composable
@@ -64,6 +39,8 @@ internal fun StudentCommunityScreen(
 
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
+
+    val communityState by component.uiState.collectAsState()
 
     ///// test /////
     var page by remember { mutableStateOf(CertPage.RoadMap) }
@@ -87,9 +64,74 @@ internal fun StudentCommunityScreen(
             SearchRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(64.gdp)
+                    .height(52.gdp),
+                pageType = page,
+                datePriority = communityState.datePriority,
+                roadmapFilter = communityState.roadmapFilter,
+                runningFilter = communityState.runningFilter,
+                onSearchButtonClicked = {
+                    component.onClickSearchButton(it)
+                },
+                onDatePriorityButtonClicked = { component.onClickDatePriorityButton() },
+                onRoadmapFilterButtonClicked = { component.onClickRoadmapFilterButton() },
+                onRunningFilterButtonClicked = { component.onClickRunningFilterButton() },
             )
             EmptyBox()
+        }
+    }
+
+    with(communityState.roadmapFilterDialog) {
+        if (this) {
+            SelectableDialog(
+                dismiss = { component.dismissRoadmapFilterDialog() },
+                onSelect = { text ->
+                    component.onSelectRoadmapFilter(text)
+                    component.dismissRoadmapFilterDialog()
+                },
+                filterList = listOf( /* TODO API */
+                    "1단계 버드독", "2단계 데드버그", "3단계 비스트", "4-a단계 하이플랭크", "4-b단계 플랭크", "5-c단계 플랭크 앤 플랭크",
+                    "1단계 버드독", "2단계 데드버그", "3단계 비스트", "4-a단계 하이플랭크", "4-b단계 플랭크", "5-c단계 플랭크 앤 플랭크",
+                    "1단계 버드독", "2단계 데드버그", "3단계 비스트", "4-a단계 하이플랭크", "4-b단계 플랭크", "5-c단계 플랭크 앤 플랭크",
+                    "1단계 버드독", "2단계 데드버그", "3단계 비스트", "4-a단계 하이플랭크", "4-b단계 플랭크", "5-c단계 플랭크 앤 플랭크",
+                    "1단계 버드독", "2단계 데드버그", "3단계 비스트", "4-a단계 하이플랭크", "4-b단계 플랭크", "5-c단계 플랭크 앤 플랭크",
+                    "1단계 버드독", "2단계 데드버그", "3단계 비스트", "4-a단계 하이플랭크", "4-b단계 플랭크", "5-c단계 플랭크 앤 플랭크",
+                    "1단계 버드독", "2단계 데드버그", "3단계 비스트", "4-a단계 하이플랭크", "4-b단계 플랭크", "5-c단계 플랭크 앤 플랭크",
+                    "1단계 버드독", "2단계 데드버그", "3단계 비스트", "4-a단계 하이플랭크", "4-b단계 플랭크", "5-c단계 플랭크 앤 플랭크",
+                    "1단계 버드독", "2단계 데드버그", "3단계 비스트", "4-a단계 하이플랭크", "4-b단계 플랭크", "5-c단계 플랭크 앤 플랭크",
+                    "1단계 버드독", "2단계 데드버그", "3단계 비스트", "4-a단계 하이플랭크", "4-b단계 플랭크", "5-c단계 플랭크 앤 플랭크",
+                ),
+            )
+        }
+    }
+
+    with(communityState.runningFilterDialog) {
+        if (this) {
+            SelectableDialog(
+                dismiss = { component.dismissRunningFilterDialog() },
+                onSelect = { text ->
+                    component.onSelectRunningFilter(text)
+                    component.dismissRunningFilterDialog()
+                },
+                filterList = listOf( /* TODO API */
+                    "1주차", "2주차", "3주차", "4주차", "5주차"
+                ),
+            )
+        }
+    }
+
+    with(communityState.datePrioritySelectDialog) {
+        if (this) {
+            SelectableDialog(
+                dismiss = { component.dismissDatePriorityDialog() },
+                onSelect = { text ->
+                    component.onSelectDatePriority(
+                        if (text == "최신순") DatePriority.NEWEST
+                        else DatePriority.OLDEST
+                    )
+                    component.dismissDatePriorityDialog()
+                },
+                filterList = listOf("최신순", "오래된순"),
+            )
         }
     }
 
