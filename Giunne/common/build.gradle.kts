@@ -65,6 +65,7 @@ kotlin {
 //                api(libs.coil.compose)
 //                api(libs.coil.compose.core)
 //                api(libs.coil.network.ktor)
+                implementation(libs.compottie)
             }
         }
         val androidMain by getting {

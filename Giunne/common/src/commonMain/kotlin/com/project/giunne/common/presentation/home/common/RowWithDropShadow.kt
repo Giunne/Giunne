@@ -2,6 +2,7 @@ package com.project.giunne.common.presentation.home.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -16,7 +17,7 @@ import com.project.giunne.common.util.gdp
 @Composable
 fun RowWithDropShadow(
     modifier: Modifier,
-    content: @Composable () -> Unit = {}
+    content: @Composable RowScope.() -> Unit = {}
 ) {
     Row(
         modifier = modifier

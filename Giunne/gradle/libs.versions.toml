@@ -27,7 +27,7 @@ kotlinx-coroutines = "1.9.0"
 javafx = "0.0.13"
 permissions = "0.32.0"
 androidMedia = "1.2.0"
-
+compottie="2.0.0-rc02"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -140,6 +140,8 @@ androidx-media3-exoplayer = { module  = "androidx.media3:media3-exoplayer", vers
 androidx-media3-exoplayer-dash = { module  = "androidx.media3:media3-exoplayer-dash", version.ref = "androidMedia" }
 androidx-media3-ui = { module  = "androidx.media3:media3-ui", version.ref = "androidMedia" }
 
+# compottie
+compottie = { module = "io.github.alexzhirkevich:compottie", version.ref = "compottie" }
 
 [plugins]
 #compose-desktop = { id = "org.jetbrains.compose", version.ref = "compose" }

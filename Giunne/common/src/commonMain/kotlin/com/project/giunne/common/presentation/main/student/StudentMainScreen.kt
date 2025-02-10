@@ -60,6 +60,8 @@ import com.project.giunne.common.presentation.main.common.NotificationScreen
 import com.project.giunne.common.presentation.main.dummy.notiList
 import com.project.giunne.common.presentation.mypage.student.StudentMyPageScreen
 import com.project.giunne.common.presentation.roadmap.student.StudentRoadmapScreen
+import com.project.giunne.common.presentation.shop.GachaScreen
+import com.project.giunne.common.presentation.shop.ShopScreen
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.BackHandler
 import com.project.giunne.common.util.GPFontFamily
@@ -133,10 +135,14 @@ fun StudentMainScreen(
                         is StudentMainComponent.StudentChild.StudentCommunityChild -> "게시판"
                         is StudentMainComponent.StudentChild.StudentFriendsChild -> "친구"
                         is StudentMainComponent.StudentChild.StudentMyPageChild -> "내정보"
+                        is StudentMainComponent.StudentChild.StudentShopChild -> "꾸미기"
+                        is StudentMainComponent.StudentChild.StudentGachaChild -> ""
                     },
                     leftIcon = {
                         when(activeComponent) {
-                            is StudentMainComponent.StudentChild.StudentCommunityChild -> {
+                            is StudentMainComponent.StudentChild.StudentCommunityChild,
+                            is StudentMainComponent.StudentChild.StudentShopChild,
+                            is StudentMainComponent.StudentChild.StudentGachaChild -> {
                                 GPBackButton(
                                     onClick = {
                                         component.navigateBack()
@@ -291,7 +297,9 @@ fun StudentBottomNav(
                 .weight(1f),
             title = "내정보",
             icon = painterResource(Res.drawable.icon_mypage),
-            onTop = activeComponent is StudentMainComponent.StudentChild.StudentMyPageChild,
+            onTop = activeComponent is StudentMainComponent.StudentChild.StudentMyPageChild
+                    || activeComponent is StudentMainComponent.StudentChild.StudentShopChild
+                    || activeComponent is StudentMainComponent.StudentChild.StudentGachaChild,
             onClick = {
                 if (activeComponent !is StudentMainComponent.StudentChild.StudentMyPageChild)
                     component.navigateToMyPage()
@@ -365,7 +373,13 @@ private fun StudentChildren(component: StudentMainComponent, modifier: Modifier 
             )
             is StudentMainComponent.StudentChild.StudentCommunityChild -> StudentCommunityScreen(component = child.component)
             is StudentMainComponent.StudentChild.StudentFriendsChild -> StudentFriendScreen(component = child.component)
-            is StudentMainComponent.StudentChild.StudentMyPageChild -> StudentMyPageScreen(component = child.component)
+            is StudentMainComponent.StudentChild.StudentMyPageChild -> StudentMyPageScreen(
+                component = child.component,
+                navigateToShop = { component.navigateToShop() },
+                navigateToGacha = { component.navigateToGacha() }
+            )
+            is StudentMainComponent.StudentChild.StudentShopChild -> ShopScreen()
+            is StudentMainComponent.StudentChild.StudentGachaChild -> GachaScreen()
         }
     }
 }
@@ -389,6 +403,8 @@ private val StudentMainComponent.StudentChild.index: Int
             is StudentMainComponent.StudentChild.StudentCommunityChild -> 3
             is StudentMainComponent.StudentChild.StudentFriendsChild -> 4
             is StudentMainComponent.StudentChild.StudentMyPageChild -> 5
+            is StudentMainComponent.StudentChild.StudentShopChild -> 6
+            is StudentMainComponent.StudentChild.StudentGachaChild -> 7
         }
 
 private fun StackAnimator.flipSide(): StackAnimator =

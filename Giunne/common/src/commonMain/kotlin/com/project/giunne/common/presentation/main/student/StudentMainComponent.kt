@@ -40,6 +40,8 @@ class StudentMainComponent(
         class StudentCommunityChild(val component: StudentCommunityComponent) : StudentChild()
         class StudentFriendsChild(val component: StudentFriendComponent) : StudentChild()
         class StudentMyPageChild(val component: StudentMyPageComponent) : StudentChild()
+        class StudentShopChild(val component: StudentMyPageComponent) : StudentChild()
+        class StudentGachaChild(val component: StudentMyPageComponent) : StudentChild()
     }
 
     private fun child(config: StudentMainConfig, componentContext: ComponentContext): StudentChild =
@@ -50,6 +52,8 @@ class StudentMainComponent(
             is StudentMainConfig.Community -> StudentChild.StudentCommunityChild(StudentCommunityComponent(componentContext))
             is StudentMainConfig.Friends -> StudentChild.StudentFriendsChild(StudentFriendComponent(componentContext))
             is StudentMainConfig.MyPage -> StudentChild.StudentMyPageChild(StudentMyPageComponent(componentContext))
+            is StudentMainConfig.Shop -> StudentChild.StudentShopChild(StudentMyPageComponent(componentContext))
+            is StudentMainConfig.Gacha -> StudentChild.StudentGachaChild(StudentMyPageComponent(componentContext))
         }
 
     @Serializable
@@ -71,6 +75,12 @@ class StudentMainComponent(
 
         @Serializable
         data object MyPage : StudentMainConfig
+
+        @Serializable
+        data object Shop : StudentMainConfig
+
+        @Serializable
+        data object Gacha : StudentMainConfig
     }
 
     fun navigateToHome() {
@@ -101,6 +111,16 @@ class StudentMainComponent(
     fun navigateToMyPage() {
 //        navigation.replaceCurrent(StudentMainConfig.MyPage)
         navigation.replaceAll(StudentMainConfig.MyPage)
+    }
+
+    fun navigateToShop() {
+//        navigation.replaceCurrent(StudentMainConfig.Community)
+        navigation.push(StudentMainConfig.Shop)
+    }
+
+    fun navigateToGacha() {
+//        navigation.replaceCurrent(StudentMainConfig.Community)
+        navigation.push(StudentMainConfig.Gacha)
     }
 
     fun navigateBack() {
