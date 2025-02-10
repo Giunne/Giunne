@@ -38,6 +38,8 @@ private const val TAG = "StudentMyPageScreen"
 internal fun StudentMyPageScreen(
     component: StudentMyPageComponent,
     modifier: Modifier = Modifier,
+    navigateToShop: () -> Unit,
+    navigateToGacha: () -> Unit
 ) {
     GLog.d(TAG, "onCreate")
 
@@ -82,7 +84,10 @@ internal fun StudentMyPageScreen(
                     normalColor = GPColor.ButtonLightGray,
                     pressColor = GPColor.ButtonPressLightGray,
                     hoverColor = GPColor.ButtonHoverLightGray,
-                    onClick = { /*TODO(상점 들어가기)*/ },
+                    onClick = {
+                    /*TODO(상점 들어가기)*/
+                        navigateToGacha()
+                    },
                 ) {
                     GPText(
                         text = "상점",
@@ -99,7 +104,10 @@ internal fun StudentMyPageScreen(
                     normalColor = GPColor.ButtonOrange,
                     pressColor = GPColor.ButtonPressOrange,
                     hoverColor = GPColor.ButtonHoverOrange,
-                    onClick = { /*TODO(꾸미기)*/ },
+                    onClick = {
+                    /*TODO(꾸미기)*/
+                        navigateToShop()
+                    },
                 ) {
                     GPText(
                         text = "꾸미기",

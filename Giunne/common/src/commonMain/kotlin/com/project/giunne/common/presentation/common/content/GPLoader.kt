@@ -4,8 +4,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -14,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.project.giunne.Res
@@ -72,32 +78,36 @@ fun Loader(
             usePlatformDefaultWidth = false
         ),
     ) {
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-                .background(GPColor.BackgroundLoading)
-                .noRippleClickableWithoutHover{},
-            contentAlignment = Alignment.Center,
+        Card(
+            modifier = Modifier
+                .clip(CircleShape),
         ) {
             Box(
-                modifier = Modifier
-                    .size(52.gdp)
-                    .background(GPColor.White, CircleShape),
+                modifier = modifier
+                    .clip(CircleShape)
+                    .noRippleClickableWithoutHover{},
                 contentAlignment = Alignment.Center,
             ) {
-                Image(
-                    modifier = Modifier.size(40.gdp),
-                    painter = image,
-                    contentDescription = null
-                )
+                Box(
+                    modifier = Modifier
+                        .size(52.gdp)
+                        .background(GPColor.White, CircleShape),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Image(
+                        modifier = Modifier.size(40.gdp),
+                        painter = image,
+                        contentDescription = null
+                    )
+                }
+    //            CircularProgressIndicator(
+    //                modifier = Modifier
+    //                    .width(40.gdp),
+    //                color = GPColor.White,
+    //                trackColor = GPColor.ButtonGray,
+    //                strokeWidth = 6.gdp
+    //            )
             }
-//            CircularProgressIndicator(
-//                modifier = Modifier
-//                    .width(40.gdp),
-//                color = GPColor.White,
-//                trackColor = GPColor.ButtonGray,
-//                strokeWidth = 6.gdp
-//            )
         }
     }
 }

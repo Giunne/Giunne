@@ -43,6 +43,7 @@ import com.project.giunne.common.presentation.login.LoginComponent.Companion.NON
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
+import com.project.giunne.common.util.PermissionController
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_lock
@@ -61,6 +62,8 @@ internal fun LoginScreen(
 
     val focusManager = LocalFocusManager.current
     val loginFailEffect by component.loginFailEffect.collectAsState(NON_FAIL)
+
+    PermissionController()
 
     Scaffold(
         modifier = Modifier

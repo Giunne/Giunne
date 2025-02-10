@@ -103,7 +103,7 @@ fun GPTextField(
                         } else {
                             BorderStroke(
                                 0.gdp,
-                                textFieldBorderColor
+                                GPColor.Transparent
                             )
                         },
                         shape = shape
