@@ -45,11 +45,11 @@ internal fun GPButton(
                 },
                 shape = shape
             )
-            .padding(horizontal = 16.gdp)
             .pointerHoverIcon(icon = PointerIcon.Hand)
             .noRippleClickable(
                 interactionSource = interactionSource
-            ) { onClick() },
+            ) { onClick() }
+            .padding(horizontal = 16.gdp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {

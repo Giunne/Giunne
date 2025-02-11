@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.javafx)
 }
 
 kotlin {
@@ -22,6 +23,12 @@ kotlin {
                 implementation(compose.desktop.currentOs)
                 implementation(libs.skiko.macos)
                 implementation(libs.slf4j)
+
+                api("org.openjfx:javafx-base:22")
+                api("org.openjfx:javafx-swing:22")
+                api("org.openjfx:javafx-media:22")
+                api("org.openjfx:javafx-controls:22")
+                api("org.openjfx:javafx-graphics:22")
             }
         }
         val jvmTest by getting
@@ -41,6 +48,11 @@ compose.desktop {
             "-Xmx2G"
         )
     }
+}
+
+javafx {
+    version = "22"
+    modules("javafx.base", "javafx.media", "javafx.swing", "javafx.controls", "javafx.graphics")
 }
 
 //buildscript {

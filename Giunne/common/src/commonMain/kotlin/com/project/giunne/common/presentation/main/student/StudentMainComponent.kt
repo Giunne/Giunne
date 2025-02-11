@@ -5,9 +5,12 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
+import com.arkivanov.decompose.router.stack.push
+import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.router.stack.replaceCurrent
 import com.arkivanov.decompose.value.Value
 import com.project.giunne.common.presentation.certification.student.StudentCertificationComponent
+import com.project.giunne.common.presentation.community.student.StudentCommunityComponent
 import com.project.giunne.common.presentation.friend.student.StudentFriendComponent
 import com.project.giunne.common.presentation.home.student.StudentHomeComponent
 import com.project.giunne.common.presentation.mypage.student.StudentMyPageComponent
@@ -34,8 +37,11 @@ class StudentMainComponent(
         class StudentHomeChild(val component: StudentHomeComponent): StudentChild()
         class StudentRoadmapChild(val component: StudentRoadmapComponent) : StudentChild()
         class StudentCertificationChild(val component: StudentCertificationComponent) : StudentChild()
+        class StudentCommunityChild(val component: StudentCommunityComponent) : StudentChild()
         class StudentFriendsChild(val component: StudentFriendComponent) : StudentChild()
         class StudentMyPageChild(val component: StudentMyPageComponent) : StudentChild()
+        class StudentShopChild(val component: StudentMyPageComponent) : StudentChild()
+        class StudentGachaChild(val component: StudentMyPageComponent) : StudentChild()
     }
 
     private fun child(config: StudentMainConfig, componentContext: ComponentContext): StudentChild =
@@ -43,8 +49,11 @@ class StudentMainComponent(
             is StudentMainConfig.Home -> StudentChild.StudentHomeChild(StudentHomeComponent(componentContext))
             is StudentMainConfig.Roadmap -> StudentChild.StudentRoadmapChild(StudentRoadmapComponent(componentContext))
             is StudentMainConfig.Certification -> StudentChild.StudentCertificationChild(StudentCertificationComponent(componentContext))
+            is StudentMainConfig.Community -> StudentChild.StudentCommunityChild(StudentCommunityComponent(componentContext))
             is StudentMainConfig.Friends -> StudentChild.StudentFriendsChild(StudentFriendComponent(componentContext))
             is StudentMainConfig.MyPage -> StudentChild.StudentMyPageChild(StudentMyPageComponent(componentContext))
+            is StudentMainConfig.Shop -> StudentChild.StudentShopChild(StudentMyPageComponent(componentContext))
+            is StudentMainConfig.Gacha -> StudentChild.StudentGachaChild(StudentMyPageComponent(componentContext))
         }
 
     @Serializable
@@ -59,30 +68,59 @@ class StudentMainComponent(
         data object Certification : StudentMainConfig
 
         @Serializable
+        data object Community : StudentMainConfig
+
+        @Serializable
         data object Friends : StudentMainConfig
 
         @Serializable
         data object MyPage : StudentMainConfig
+
+        @Serializable
+        data object Shop : StudentMainConfig
+
+        @Serializable
+        data object Gacha : StudentMainConfig
     }
 
     fun navigateToHome() {
-        navigation.replaceCurrent(StudentMainConfig.Home)
+//        navigation.replaceCurrent(StudentMainConfig.Home)
+        navigation.replaceAll(StudentMainConfig.Home)
     }
 
     fun navigateToRoadmap() {
-        navigation.replaceCurrent(StudentMainConfig.Roadmap)
+//        navigation.replaceCurrent(StudentMainConfig.Roadmap)
+        navigation.replaceAll(StudentMainConfig.Roadmap)
     }
 
     fun navigateToCertification() {
-        navigation.replaceCurrent(StudentMainConfig.Certification)
+//        navigation.replaceCurrent(StudentMainConfig.Certification)
+        navigation.replaceAll(StudentMainConfig.Certification)
+    }
+
+    fun navigateToCommunity() {
+//        navigation.replaceCurrent(StudentMainConfig.Community)
+        navigation.push(StudentMainConfig.Community)
     }
 
     fun navigateToFriends() {
-        navigation.replaceCurrent(StudentMainConfig.Friends)
+//        navigation.replaceCurrent(StudentMainConfig.Friends)
+        navigation.replaceAll(StudentMainConfig.Friends)
     }
 
     fun navigateToMyPage() {
-        navigation.replaceCurrent(StudentMainConfig.MyPage)
+//        navigation.replaceCurrent(StudentMainConfig.MyPage)
+        navigation.replaceAll(StudentMainConfig.MyPage)
+    }
+
+    fun navigateToShop() {
+//        navigation.replaceCurrent(StudentMainConfig.Community)
+        navigation.push(StudentMainConfig.Shop)
+    }
+
+    fun navigateToGacha() {
+//        navigation.replaceCurrent(StudentMainConfig.Community)
+        navigation.push(StudentMainConfig.Gacha)
     }
 
     fun navigateBack() {

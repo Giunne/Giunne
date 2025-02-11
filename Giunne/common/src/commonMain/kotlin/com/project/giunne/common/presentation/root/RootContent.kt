@@ -32,6 +32,7 @@ private const val TAG = "RootContent"
 fun RootContent(
     component: RootComponent,
     modifier: Modifier = Modifier,
+    exitProgram: () -> Unit
 ) {
     /* settings init */
     NanumRound.initFont()
@@ -70,13 +71,20 @@ fun RootContent(
 //                    else -> null
 //                }
 //            )
-            Children(component = component)
+            Children(
+                component = component,
+                exitProgram = exitProgram
+            )
         }
     }
 }
 
 @Composable
-private fun Children(component: RootComponent, modifier: Modifier = Modifier) {
+private fun Children(
+    component: RootComponent,
+    modifier: Modifier = Modifier,
+    exitProgram: () -> Unit
+) {
     Children(
         stack = component.childStack,
         modifier = modifier,
@@ -100,7 +108,10 @@ private fun Children(component: RootComponent, modifier: Modifier = Modifier) {
                 onClickBackButton = { component.navigateBack() },
                 signupType = child.type
             )
-            is RootComponent.Child.StudentMainChild -> StudentMainScreen(component = child.component)
+            is RootComponent.Child.StudentMainChild -> StudentMainScreen(
+                component = child.component,
+                exitProgram = { exitProgram() }
+            )
             is RootComponent.Child.TeacherMainChild -> TeacherMainScreen(component = child.component)
         }
     }

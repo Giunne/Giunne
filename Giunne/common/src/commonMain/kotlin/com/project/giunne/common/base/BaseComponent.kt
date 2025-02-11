@@ -1,6 +1,7 @@
 package com.project.giunne.common.base
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -8,7 +9,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 abstract class BaseComponent<UI_STATE, SIDE_EFFECT>(
-    val scope: CoroutineScope,
+    val scope: CoroutineScope = CoroutineScope(Dispatchers.IO),
     initialState: UI_STATE
 ) {
 

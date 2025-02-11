@@ -24,6 +24,9 @@ coil = "3.0.3"
 androidx-lifecycle = "2.8.3"
 androidx-collection = "1.4.4"
 kotlinx-coroutines = "1.9.0"
+javafx = "0.0.13"
+permissions = "0.32.0"
+androidMedia = "1.2.0"
 compottie="2.0.0-rc02"
 
 [libraries]
@@ -129,6 +132,14 @@ androidx-collection = { module = "androidx.collection:collection", version.ref =
 
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 
+# permission
+permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "permissions" }
+
+# android-media3
+androidx-media3-exoplayer = { module  = "androidx.media3:media3-exoplayer", version.ref = "androidMedia" }
+androidx-media3-exoplayer-dash = { module  = "androidx.media3:media3-exoplayer-dash", version.ref = "androidMedia" }
+androidx-media3-ui = { module  = "androidx.media3:media3-ui", version.ref = "androidMedia" }
+
 # compottie
 compottie = { module = "io.github.alexzhirkevich:compottie", version.ref = "compottie" }
 
@@ -144,6 +155,7 @@ kotlin-jvm = { id = 'org.jetbrains.kotlin.jvm', version.ref = 'kotlin' }
 ksp = { id = 'com.google.devtools.ksp', version.ref = 'ksp' }
 serialization = { id = "plugin.serialization", version.ref = "kotlin" }
 sqlDelght = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
+javafx = { id = "org.openjfx.javafxplugin", version.ref = "javafx" }
 
 [bundles]
 ktor = [

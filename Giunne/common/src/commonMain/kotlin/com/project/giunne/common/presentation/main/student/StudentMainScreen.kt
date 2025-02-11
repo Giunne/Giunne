@@ -1,6 +1,10 @@
 package com.project.giunne.common.presentation.main.student
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -13,9 +17,11 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,20 +45,25 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stac
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.certification.student.StudentCertificationScreen
+import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.badge.GPNotificationBadge
 import com.project.giunne.common.presentation.common.button.GPBackButton
 import com.project.giunne.common.presentation.common.dropdown.GPDropdownMenu
 import com.project.giunne.common.presentation.common.noRippleClickable
+import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.common.topbar.GPMainTopBar
+import com.project.giunne.common.presentation.community.student.StudentCommunityScreen
 import com.project.giunne.common.presentation.friend.student.StudentFriendScreen
 import com.project.giunne.common.presentation.home.student.StudentHomeScreen
 import com.project.giunne.common.presentation.main.common.NotificationScreen
 import com.project.giunne.common.presentation.main.dummy.notiList
 import com.project.giunne.common.presentation.mypage.student.StudentMyPageScreen
 import com.project.giunne.common.presentation.roadmap.student.StudentRoadmapScreen
+import com.project.giunne.common.presentation.shop.GachaScreen
 import com.project.giunne.common.presentation.shop.ShopScreen
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.BackHandler
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
@@ -63,12 +74,15 @@ import com.project.giunne.icon_home
 import com.project.giunne.icon_mypage
 import com.project.giunne.icon_roadmap
 import com.project.giunne.image_giunne
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun StudentMainScreen(
     modifier: Modifier = Modifier,
-    component: StudentMainComponent
+    component: StudentMainComponent,
+    exitProgram: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val snackbarState =  remember { SnackbarHostState() }
@@ -80,70 +94,92 @@ fun StudentMainScreen(
 
     //// TEST ////
     var noti by remember { mutableStateOf(false) }
+    var notiAnim by remember { mutableStateOf(false) }
+    val animatedDP by animateDpAsState(
+        targetValue = if (notiAnim) 0.gdp else 400.gdp,
+        animationSpec = tween(durationMillis = 150, easing = LinearEasing)
+    )
     //////////////
+    BackHandler {
+        scope.launch {
+            if (backPress == false) {
+                backPress = true
+                snackbarState.showSnackbar("뒤로가기를 한번 더 누르면 종료됩니다.")
+                backPress = false
+            } else {
+                exitProgram()
+            }
+        }
+    }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize(),
+        snackbarHost = {
+            SnackbarHost(
+                snackbarState
+            )
+        }
     ) {
         Box {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(GPColor.BackgroundLightGray)
             ) {
                 GPMainTopBar(
-                    titleText = if (noti) { "알림" } else {
-                        when (activeComponent) {
-                            is StudentMainComponent.StudentChild.StudentHomeChild -> ""
-                            is StudentMainComponent.StudentChild.StudentRoadmapChild -> "로드맵"
-                            is StudentMainComponent.StudentChild.StudentCertificationChild -> "인증"
-                            is StudentMainComponent.StudentChild.StudentFriendsChild -> "친구"
-                            is StudentMainComponent.StudentChild.StudentMyPageChild -> "내정보"
-                        }
+                    titleText = when (activeComponent) {
+                        is StudentMainComponent.StudentChild.StudentHomeChild -> ""
+                        is StudentMainComponent.StudentChild.StudentRoadmapChild -> "로드맵"
+                        is StudentMainComponent.StudentChild.StudentCertificationChild -> "인증"
+                        is StudentMainComponent.StudentChild.StudentCommunityChild -> "게시판"
+                        is StudentMainComponent.StudentChild.StudentFriendsChild -> "친구"
+                        is StudentMainComponent.StudentChild.StudentMyPageChild -> "내정보"
+                        is StudentMainComponent.StudentChild.StudentShopChild -> "꾸미기"
+                        is StudentMainComponent.StudentChild.StudentGachaChild -> ""
                     },
                     leftIcon = {
-                        if (noti) {
-                            GPBackButton(
-                                onClick = {
-                                    noti = false
-                                }
-                            )
-                        } else {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxHeight()
-                                    .aspectRatio(1f),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Image(
-                                    modifier = Modifier.size(32.gdp),
-                                    painter = painterResource(Res.drawable.image_giunne),
-                                    contentDescription = null
+                        when(activeComponent) {
+                            is StudentMainComponent.StudentChild.StudentCommunityChild,
+                            is StudentMainComponent.StudentChild.StudentShopChild,
+                            is StudentMainComponent.StudentChild.StudentGachaChild -> {
+                                GPBackButton(
+                                    onClick = {
+                                        component.navigateBack()
+                                    }
                                 )
+                            }
+                            else -> {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .aspectRatio(1f),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Image(
+                                        modifier = Modifier.size(32.gdp),
+                                        painter = painterResource(Res.drawable.image_giunne),
+                                        contentDescription = null
+                                    )
+                                }
                             }
                         }
                     },
                     rightIcon = {
-                        if (!noti) {
-                            GPNotificationBadge(
-                                count = notiList.filter { !it.isRead }.size,
-                                onClick = {
-                                    noti = true
-                                }
-                            )
-                        }
+                        GPNotificationBadge(
+                            count = notiList.filter { !it.isRead }.size,
+                            onClick = {
+                                noti = true
+                                notiAnim = true
+                            }
+                        )
                     }
                 )
-                if (noti) {
-                    NotificationScreen(
-                        notificationItemList = notiList
-                    )
-                } else {
-                    StudentChildren(
-                        modifier = Modifier
-                            .weight(1f),
-                        component = component
-                    )
-                }
+                StudentChildren(
+                    modifier = Modifier
+                        .weight(1f),
+                    component = component
+                )
                 StudentBottomNav(
                     component = component,
                     activeComponent = activeComponent
@@ -161,6 +197,32 @@ fun StudentMainScreen(
                         testOptionItem = it
                     }
                 )
+            }
+
+            if (noti) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .offset(x = animatedDP)
+                ) {
+                    GPMainTopBar(
+                        titleText = "알림",
+                        leftIcon = {
+                            GPBackButton(
+                                onClick = {
+                                    scope.launch {
+                                        notiAnim = false
+                                        delay(150)
+                                        noti = false
+                                    }
+                                }
+                            )
+                        },
+                    )
+                    NotificationScreen(
+                        notificationItemList = notiList
+                    )
+                }
             }
         }
     }
@@ -210,7 +272,8 @@ fun StudentBottomNav(
                 .weight(1f),
             title = "인증",
             icon = painterResource(Res.drawable.icon_certification),
-            onTop = activeComponent is StudentMainComponent.StudentChild.StudentCertificationChild,
+            onTop = activeComponent is StudentMainComponent.StudentChild.StudentCertificationChild
+                    || activeComponent is StudentMainComponent.StudentChild.StudentCommunityChild,
             onClick = {
                 if (activeComponent !is StudentMainComponent.StudentChild.StudentCertificationChild)
                     component.navigateToCertification()
@@ -234,7 +297,9 @@ fun StudentBottomNav(
                 .weight(1f),
             title = "내정보",
             icon = painterResource(Res.drawable.icon_mypage),
-            onTop = activeComponent is StudentMainComponent.StudentChild.StudentMyPageChild,
+            onTop = activeComponent is StudentMainComponent.StudentChild.StudentMyPageChild
+                    || activeComponent is StudentMainComponent.StudentChild.StudentShopChild
+                    || activeComponent is StudentMainComponent.StudentChild.StudentGachaChild,
             onClick = {
                 if (activeComponent !is StudentMainComponent.StudentChild.StudentMyPageChild)
                     component.navigateToMyPage()
@@ -276,6 +341,7 @@ fun NavItem(
                 colorFilter = ColorFilter.tint(color = iconColor)
             )
             if (onTop) {
+                SpH(4.gdp)
                 GPText(
                     modifier = Modifier,
                     text = title,
@@ -299,10 +365,21 @@ private fun StudentChildren(component: StudentMainComponent, modifier: Modifier 
         when (val child = it.instance) {
             is StudentMainComponent.StudentChild.StudentHomeChild -> StudentHomeScreen(component = child.component)
             is StudentMainComponent.StudentChild.StudentRoadmapChild -> StudentRoadmapScreen(component = child.component)
-            is StudentMainComponent.StudentChild.StudentCertificationChild -> StudentCertificationScreen(component = child.component)
+            is StudentMainComponent.StudentChild.StudentCertificationChild -> StudentCertificationScreen(
+                component = child.component,
+                onCommunityButtonClicked = {
+                    component.navigateToCommunity()
+                }
+            )
+            is StudentMainComponent.StudentChild.StudentCommunityChild -> StudentCommunityScreen(component = child.component)
             is StudentMainComponent.StudentChild.StudentFriendsChild -> StudentFriendScreen(component = child.component)
-//            is StudentMainComponent.StudentChild.StudentMyPageChild -> StudentMyPageScreen(component = child.component)
-            is StudentMainComponent.StudentChild.StudentMyPageChild -> ShopScreen()
+            is StudentMainComponent.StudentChild.StudentMyPageChild -> StudentMyPageScreen(
+                component = child.component,
+                navigateToShop = { component.navigateToShop() },
+                navigateToGacha = { component.navigateToGacha() }
+            )
+            is StudentMainComponent.StudentChild.StudentShopChild -> ShopScreen()
+            is StudentMainComponent.StudentChild.StudentGachaChild -> GachaScreen()
         }
     }
 }
@@ -323,8 +400,11 @@ private val StudentMainComponent.StudentChild.index: Int
             is StudentMainComponent.StudentChild.StudentHomeChild -> 0
             is StudentMainComponent.StudentChild.StudentRoadmapChild -> 1
             is StudentMainComponent.StudentChild.StudentCertificationChild -> 2
-            is StudentMainComponent.StudentChild.StudentFriendsChild -> 3
-            is StudentMainComponent.StudentChild.StudentMyPageChild -> 4
+            is StudentMainComponent.StudentChild.StudentCommunityChild -> 3
+            is StudentMainComponent.StudentChild.StudentFriendsChild -> 4
+            is StudentMainComponent.StudentChild.StudentMyPageChild -> 5
+            is StudentMainComponent.StudentChild.StudentShopChild -> 6
+            is StudentMainComponent.StudentChild.StudentGachaChild -> 7
         }
 
 private fun StackAnimator.flipSide(): StackAnimator =
