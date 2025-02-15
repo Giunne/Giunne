@@ -75,6 +75,8 @@ internal fun StudentRoadmapScreen(
                     modifier = Modifier
                         .width(120.gdp)
                         .height(44.gdp),
+                    titleLeft = "운동",
+                    titleRight = "조깅",
                     isSelected = isSelected,
                     onExerciseClick = {
                         isSelected = false

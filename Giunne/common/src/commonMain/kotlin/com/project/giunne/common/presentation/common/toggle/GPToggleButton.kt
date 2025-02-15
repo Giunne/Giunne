@@ -27,6 +27,8 @@ import com.project.giunne.common.util.gsp
 @Composable
 fun GPToggleButton(
     modifier: Modifier,
+    titleLeft: String,
+    titleRight: String,
     isSelected: Boolean,
     onExerciseClick: () -> Unit,
     onJoggingClick: () -> Unit
@@ -68,7 +70,7 @@ fun GPToggleButton(
                 contentAlignment = Alignment.Center
             ) {
                 GPText(
-                    text = "운동",
+                    text = titleLeft,
                     textSize = 12.gsp,
                     textColor = GPColor.White,
                     fontFamily = GPFontFamily.Bold
@@ -82,7 +84,7 @@ fun GPToggleButton(
                 contentAlignment = Alignment.Center
             ) {
                 GPText(
-                    text = "조깅",
+                    text = titleRight,
                     textSize = 12.gsp,
                     textColor = GPColor.White,
                     fontFamily = GPFontFamily.Bold
