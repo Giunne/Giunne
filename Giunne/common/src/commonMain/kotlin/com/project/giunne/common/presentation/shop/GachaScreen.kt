@@ -5,10 +5,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.shop.content.GachaButtonView
 import com.project.giunne.common.presentation.shop.content.GachaItemList
@@ -20,7 +23,7 @@ import com.project.giunne.common.util.gsp
 
 @Composable
 fun GachaScreen(
-    /* TODO(API 나오면 전체 아이템 목록으로 변경) */
+    onGachaClick: () -> Unit
 ) {
     Column (
         modifier = Modifier.fillMaxWidth(),
@@ -66,7 +69,9 @@ fun GachaScreen(
                 .padding(horizontal = 16.gdp, vertical = 8.gdp),
             gachaCost = 100,
             remainPoint = 240,
-            onGachaClick = {}
+            onGachaClick = {
+                onGachaClick()
+            }
         )
     }
 }

@@ -23,21 +23,6 @@ import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import org.jetbrains.compose.resources.painterResource
 
-val gradientBrush = Brush.linearGradient(
-    colors = listOf(
-        GPColor.SRankItemColor1,
-        GPColor.SRankItemColor2,
-        GPColor.SRankItemColor3,
-        GPColor.SRankItemColor4,
-    )
-)
-val aRankColorBrush = Brush.linearGradient(
-    colors = listOf(
-        GPColor.ARankItemColor1,
-        GPColor.ARankItemColor2
-    )
-)
-
 @Composable
 fun ItemBox(
     modifier: Modifier = Modifier,
@@ -57,10 +42,10 @@ fun ItemBox(
                 width = 3.gdp,
                 shape = RoundedCornerShape(16.gdp),
                 brush = when (item.rank) {
-                    "S" -> gradientBrush
+                    "S" -> sRankColorBrush
                     "A" -> aRankColorBrush
-                    "B" -> Brush.linearGradient(listOf(GPColor.MainOrangeColor, GPColor.MainOrangeColor))
-                    else -> Brush.linearGradient(listOf(GPColor.ButtonLightGray, GPColor.ButtonLightGray))
+                    "B" -> bRankColorBrush
+                    else -> cRankColorBrush
                 },
             )
             .noRippleClickable { onItemClick(item) },
