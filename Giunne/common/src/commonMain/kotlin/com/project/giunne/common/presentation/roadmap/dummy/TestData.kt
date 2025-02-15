@@ -5,10 +5,10 @@ import com.project.giunne.common.presentation.roadmap.state.ExerciseUiState
 import com.project.giunne.common.presentation.roadmap.state.JoggingUiState
 
 val exerciseList = listOf(
-    ExerciseUiState(NodeStatus.CONFIRM, "1", "스쿼트"),
-    ExerciseUiState(NodeStatus.CONFIRM, "2", "스쿼트"),
-    ExerciseUiState(NodeStatus.CONFIRM, "3", "스쿼트"),
-    ExerciseUiState(NodeStatus.CONFIRM, "4-a", "스쿼트"),
+    ExerciseUiState(NodeStatus.LOCK, "1", "스쿼트"),
+    ExerciseUiState(NodeStatus.LOCK, "2", "스쿼트"),
+    ExerciseUiState(NodeStatus.LOCK, "3", "스쿼트"),
+    ExerciseUiState(NodeStatus.UNCHECK, "4-a", "스쿼트"),
     ExerciseUiState(NodeStatus.CONFIRM, "4-b", "스쿼트"),
     ExerciseUiState(NodeStatus.CONFIRM, "4-c", "스쿼트", true),
     ExerciseUiState(NodeStatus.CONFIRM, "5-a", "스쿼트"),

@@ -1,5 +1,6 @@
 package com.project.giunne.common.presentation.roadmap.student
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import com.project.giunne.common.presentation.common.text.GPAnnotatedText
+import com.project.giunne.common.presentation.roadmap.content.RoadMapDialog
 import com.project.giunne.common.presentation.roadmap.content.RoadMapExerciseStage
 import com.project.giunne.common.presentation.roadmap.dummy.exerciseList
 import com.project.giunne.common.presentation.roadmap.node.roadMap1
@@ -36,10 +38,12 @@ fun ExerciseRoadmapScreen(
 ) {
     var offsetX by remember { mutableStateOf(0f) }
     var offsetY by remember { mutableStateOf(0f) }
+    var isShow by remember { mutableStateOf(false) }
 
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
+            .background(GPColor.BackgroundLightGray)
             .pointerInput(Unit) {
                 detectDragGestures { _, dragAmount ->
                     offsetX += dragAmount.x
@@ -47,6 +51,15 @@ fun ExerciseRoadmapScreen(
                 }
             }
     ) {
+
+        if (isShow) {
+            RoadMapDialog(
+                onDismissDialog = {
+                    isShow = false
+                }
+            )
+        }
+
         val width = maxWidth.value
         val height = maxHeight.value
 
@@ -75,35 +88,50 @@ fun ExerciseRoadmapScreen(
             offset = Offset(offsetX, offsetY),
             exerciseList = exerciseList,
             node = node1,
-            connect = connect1
+            connect = connect1,
+            onExerciseClicked = {
+                isShow = true
+            }
         )
 
         RoadMapExerciseStage(
             offset = Offset(offsetX, offsetY - height),
             node = node2,
             exerciseList = exerciseList,
-            connect = connect2
+            connect = connect2,
+            onExerciseClicked = { step ->
+                isShow = true
+            }
         )
 
         RoadMapExerciseStage(
             offset = Offset(offsetX, offsetY - height * 2),
             node = node3,
             exerciseList = exerciseList,
-            connect = connect3
+            connect = connect3,
+            onExerciseClicked = { step ->
+                isShow = true
+            }
         )
 
         RoadMapExerciseStage(
             offset = Offset(offsetX + width, offsetY - height),
             node = node4,
             exerciseList = exerciseList,
-            connect = connect4
+            connect = connect4,
+            onExerciseClicked = { step ->
+                isShow = true
+            }
         )
 
         RoadMapExerciseStage(
             offset = Offset(offsetX + width, offsetY - height * 2),
             node = node5,
             exerciseList = exerciseList,
-            connect = connect5
+            connect = connect5,
+            onExerciseClicked = { step ->
+                isShow = true
+            }
         )
 
         GPAnnotatedText(
