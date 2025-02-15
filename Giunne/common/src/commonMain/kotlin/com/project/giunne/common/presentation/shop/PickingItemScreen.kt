@@ -22,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -36,9 +35,7 @@ import com.project.giunne.common.presentation.shop.content.aRankColorBrush
 import com.project.giunne.common.presentation.shop.content.bRankColorBrush
 import com.project.giunne.common.presentation.shop.content.cRankColorBrush
 import com.project.giunne.common.presentation.shop.content.sRankColorBrush
-import com.project.giunne.common.presentation.shop.dummy.gachaItems
 import com.project.giunne.common.presentation.shop.intent.GachaStore
-import com.project.giunne.common.presentation.shop.state.Item
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
