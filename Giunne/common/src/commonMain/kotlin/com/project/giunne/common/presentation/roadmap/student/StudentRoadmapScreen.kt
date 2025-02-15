@@ -78,10 +78,10 @@ internal fun StudentRoadmapScreen(
                     titleLeft = "운동",
                     titleRight = "조깅",
                     isSelected = isSelected,
-                    onExerciseClick = {
+                    onLeftButtonClick = {
                         isSelected = false
                     },
-                    onJoggingClick = {
+                    onRightButtonClick = {
                         isSelected = true
                     }
                 )

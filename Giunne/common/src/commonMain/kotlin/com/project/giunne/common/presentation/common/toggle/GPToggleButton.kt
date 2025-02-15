@@ -30,8 +30,8 @@ fun GPToggleButton(
     titleLeft: String,
     titleRight: String,
     isSelected: Boolean,
-    onExerciseClick: () -> Unit,
-    onJoggingClick: () -> Unit
+    onLeftButtonClick: () -> Unit,
+    onRightButtonClick: () -> Unit
 ) {
     BoxWithConstraints(
         modifier = modifier
@@ -66,7 +66,7 @@ fun GPToggleButton(
                 modifier = Modifier
                     .fillMaxHeight()
                     .weight(0.5f)
-                    .noRippleClickable { onExerciseClick() },
+                    .noRippleClickable { onLeftButtonClick() },
                 contentAlignment = Alignment.Center
             ) {
                 GPText(
@@ -80,7 +80,7 @@ fun GPToggleButton(
                 modifier = Modifier
                     .fillMaxHeight()
                     .weight(0.5f)
-                    .noRippleClickable { onJoggingClick() },
+                    .noRippleClickable { onRightButtonClick() },
                 contentAlignment = Alignment.Center
             ) {
                 GPText(
