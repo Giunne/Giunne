@@ -10,10 +10,14 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import com.project.giunne.common.presentation.roadmap.node.Connect
 import com.project.giunne.common.presentation.roadmap.node.ConnectNode
+import com.project.giunne.common.presentation.roadmap.node.NodeStatus
+import com.project.giunne.common.presentation.roadmap.state.ExerciseUiState
+import com.project.giunne.common.ui.theme.GPColor
 
 @Composable
 fun DrawExerciseLine(
     density: Float,
+    exerciseState: List<ExerciseUiState>,
     connect: List<ConnectNode>
 ) {
     Box(
@@ -26,6 +30,14 @@ fun DrawExerciseLine(
                 val from = it.from
                 val to = it.to
                 val connection = it.connect
+                val defaultColor = if (from.boxSize == 30f) GPColor.MainOrangeColor else GPColor.ButtonLightGray
+                val color = if (exerciseState.find { it.step == from.step }?.status == NodeStatus.CONFIRM) {
+                    GPColor.Green
+                } else if (exerciseState.find { it.step == to.step }?.status == NodeStatus.CONFIRM && from.boxSize != 30f) {
+                    GPColor.Green
+                } else {
+                    defaultColor
+                }
                 when (connection) {
                     Connect.BOTTOM_CURVE, Connect.TOP_CURVE -> {
                         Path().apply {
@@ -39,14 +51,14 @@ fun DrawExerciseLine(
                         }.also { path ->
                             drawPath(
                                 path = path,
-                                color = it.from.color,
+                                color = color,
                                 style = Stroke(width = from.boxSize * 0.2f * density)
                             )
                         }
                     }
                     else -> {
                         drawLine(
-                            color = it.from.color,
+                            color = color,
                             start = Offset(from.centerOffset.x * density, from.centerOffset.y * density),
                             end = Offset(to.centerOffset.x * density, to.centerOffset.y * density),
                             strokeWidth = from.boxSize * 0.2f * density

@@ -19,6 +19,7 @@ import com.project.giunne.Res
 import com.project.giunne.common.presentation.common.shape.GPSquircleShapeWithBorder
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.roadmap.content.DrawJoggingLine
+import com.project.giunne.common.presentation.roadmap.dummy.joggingUiState
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.gdp
 import com.project.giunne.icon_check
@@ -27,9 +28,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun JoggingRoadmapScreen(
     modifier: Modifier,
-    joggingWeeks: List<String>,
-    successWeekIndexSet: HashSet<Int>,
-    currentWeek: Int,
+    joggingWeek: List<Int>,
 ) {
     val density = LocalDensity.current.density
 
@@ -49,8 +48,8 @@ fun JoggingRoadmapScreen(
                 .width(360.gdp)
                 .height(500.gdp)
                 .padding(48.gdp),
-            weeks = joggingWeeks,
-            successWeekIndexSet = successWeekIndexSet,
+            joggingUiState = joggingUiState,
+            weeks = joggingWeek,
             boxSize = 64.gdp.value * density,
             spacing = 16.gdp.value * density
         )
@@ -64,13 +63,19 @@ fun JoggingRoadmapScreen(
             horizontalArrangement = Arrangement.spacedBy(16.gdp),
             verticalArrangement = Arrangement.spacedBy(16.gdp),
         ) {
-            itemsIndexed(joggingWeeks) { index, title ->
+            itemsIndexed(joggingWeek) { index, week ->
                 GPSquircleShapeWithBorder(
                     modifier = Modifier.size(64.gdp),
-                    backgroundColor = if (successWeekIndexSet.contains(index)) GPColor.Green else GPColor.White,
-                    borderColor = if (successWeekIndexSet.contains(index) || index == currentWeek) GPColor.Green else GPColor.BorderLightGray,
+                    backgroundColor = if (week < joggingUiState.week) GPColor.Green else GPColor.White,
+                    borderColor = if (week <= joggingUiState.week) {
+                        GPColor.Green
+                    } else if (joggingUiState.bonusWeek.contains(week)) {
+                        GPColor.MainOrangeColor
+                    } else {
+                        GPColor.BorderLightGray
+                    },
                 ) {
-                    if (successWeekIndexSet.contains(index)) {
+                    if (week < joggingUiState.week) {
                         Icon(
                             painter = painterResource(Res.drawable.icon_check),
                             contentDescription = "성공",
@@ -78,7 +83,7 @@ fun JoggingRoadmapScreen(
                         )
                     } else {
                         GPText(
-                            text = title,
+                            text = "${week}주차",
                         )
                     }
                 }

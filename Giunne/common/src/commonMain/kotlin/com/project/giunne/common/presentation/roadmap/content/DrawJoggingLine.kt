@@ -7,13 +7,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import com.project.giunne.common.presentation.roadmap.state.JoggingUiState
 import com.project.giunne.common.ui.theme.GPColor
 
 @Composable
 fun DrawJoggingLine(
     modifier: Modifier,
-    weeks: List<String>,
-    successWeekIndexSet: HashSet<Int>,
+    joggingUiState: JoggingUiState,
+    weeks: List<Int>,
     boxSize: Float,
     spacing: Float
 ) {
@@ -33,7 +34,7 @@ fun DrawJoggingLine(
              * 라인 그리기
              * 1. 성공한 Line의 색상은 다르게 그려야함
              */
-            weeks.indices.forEach { index ->
+            weeks.withIndex().forEach { (index, week) ->
                 val colIndex = index % 3
                 val rowIndex = index / 3
 
@@ -50,12 +51,30 @@ fun DrawJoggingLine(
                     val rightCenterX = rightBoxLeft + boxSize / 2
 
                     drawLine(
-                        color = if (successWeekIndexSet.contains(index)) GPColor.Green else GPColor.BorderLightGray,
+                        color = if (week < joggingUiState.week) GPColor.Green else GPColor.BorderLightGray,
                         start = Offset(centerX + boxSize * 0.5f, centerY),
                         end = Offset(rightCenterX - boxSize * 0.5f, centerY),
                         strokeWidth = boxSize * 0.2f
                     )
                 }
+
+                /**
+                 * 아래 박스와 연결
+                 * 1. 왼쪽과 오른쪽 번갈아 가며 하나씩 연결 해야함
+                 * 2. ex) 12-13, 10-9, 7-6 ...
+                 */
+
+                /**
+                 * 아래 박스와 연결
+                 * 1. 왼쪽과 오른쪽 번갈아 가며 하나씩 연결 해야함
+                 * 2. ex) 12-13, 10-9, 7-6 ...
+                 */
+
+                /**
+                 * 아래 박스와 연결
+                 * 1. 왼쪽과 오른쪽 번갈아 가며 하나씩 연결 해야함
+                 * 2. ex) 12-13, 10-9, 7-6 ...
+                 */
 
                 /**
                  * 아래 박스와 연결
@@ -68,7 +87,7 @@ fun DrawJoggingLine(
                     val bottomCenterY = bottomBoxTop + boxSize / 2
 
                     drawLine(
-                        color = if (successWeekIndexSet.contains(index)) GPColor.Green else GPColor.BorderLightGray,
+                        color = if (week < joggingUiState.week) GPColor.Green else GPColor.BorderLightGray,
                         start = Offset(centerX, centerY + boxSize * 0.5f),
                         end = Offset(centerX, bottomCenterY - boxSize * 0.5f),
                         strokeWidth = boxSize * 0.2f
@@ -80,7 +99,7 @@ fun DrawJoggingLine(
                     val bottomBoxTop = startY + (rowIndex + 1) * (boxSize + spacing)
                     val bottomCenterY = bottomBoxTop + boxSize / 2
                     drawLine(
-                        color = if (successWeekIndexSet.contains(index)) GPColor.Green else GPColor.BorderLightGray,
+                        color = if (week < joggingUiState.week) GPColor.Green else GPColor.BorderLightGray,
                         start = Offset(centerX, centerY + boxSize * 0.5f),
                         end = Offset(centerX, bottomCenterY - boxSize * 0.5f),
                         strokeWidth = boxSize * 0.2f

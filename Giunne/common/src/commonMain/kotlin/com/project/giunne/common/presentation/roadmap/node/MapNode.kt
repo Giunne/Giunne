@@ -17,7 +17,7 @@ data class Node(
     val boxSize: Float,
     val spacing: Float,
     val status: NodeStatus = NodeStatus.LOCK,
-    val color: Color = GPColor.ButtonLightGray,
+    val step: String = ""
 ) {
     val drawOffset: Offset
         get() = Offset(centerOffset.x - boxSize / 2, centerOffset.y - boxSize / 2)

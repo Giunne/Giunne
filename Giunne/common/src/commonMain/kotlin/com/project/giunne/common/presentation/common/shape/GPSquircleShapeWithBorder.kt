@@ -71,7 +71,7 @@ fun GPSquircleShapeWithBorder(
             drawPath(
                 path = path,
                 color = borderColor,
-                style = Stroke(width / 20)
+                style = Stroke(width / 18)
             )
         }
         content()
