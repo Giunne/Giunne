@@ -1,4 +1,4 @@
-package com.project.giunne.common.presentation.roadmap.content
+package com.project.giunne.common.presentation.common.toggle
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateOffsetAsState
@@ -25,7 +25,7 @@ import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 
 @Composable
-fun RoadMapToggle(
+fun GPToggleButton(
     modifier: Modifier,
     isSelected: Boolean,
     onExerciseClick: () -> Unit,

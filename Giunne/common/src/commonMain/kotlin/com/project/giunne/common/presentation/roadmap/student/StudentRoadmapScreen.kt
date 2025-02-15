@@ -17,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import com.project.giunne.common.presentation.common.addFocusCleaner
-import com.project.giunne.common.presentation.roadmap.content.RoadMapToggle
+import com.project.giunne.common.presentation.common.toggle.GPToggleButton
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.gdp
 
@@ -71,7 +71,7 @@ internal fun StudentRoadmapScreen(
                     .padding(16.gdp)
                     .align(Alignment.BottomEnd)
             ) {
-                RoadMapToggle(
+                GPToggleButton(
                     modifier = Modifier
                         .width(120.gdp)
                         .height(44.gdp),
