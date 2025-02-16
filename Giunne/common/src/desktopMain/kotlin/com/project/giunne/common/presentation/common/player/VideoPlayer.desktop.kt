@@ -45,6 +45,7 @@ actual fun VideoPlayer(
 //            val media = Media(videoPath) // 파일 경로 설정
 //            mediaPlayer = MediaPlayer(media)
         frameController.load("file://$videoPath")
+//        frameController.load("file:///Users/heeung/Desktop/기운내 이미지/giwoonnae_intro.mp4")
 //        frameController.load("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")
         println("3: ${frameController.player}")
 //            val mediaView = MediaView(mediaPlayer)

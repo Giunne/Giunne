@@ -12,6 +12,7 @@ object GPColor {
 
     // Text
     @Stable val TextBlack = Color(0xFF3A3A3A)
+    @Stable val TextBlack_232323 = Color(0xFF232323)
     @Stable val TextLightGray = Color(0xffaeaeae)
     @Stable val TextGray = Color(0xff5e5c5c)
 
@@ -27,7 +28,8 @@ object GPColor {
     @Stable val ButtonLightGray = Color(0xFFC0C0C0)
     @Stable val ButtonPressLightGray = Color(0xffa0a0a0)
     @Stable val ButtonHoverLightGray = Color(0xffbcbcbc)
-    @Stable val ButtonPressWhite = Color(0xffefefef)
+    @Stable val ButtonPressWhite = Color(0xffededed)
+    @Stable val ButtonHoverWhite = Color(0xffefefef)
 
     // Background
     @Stable val BackgroundLightGray = Color(0xFFFBFBFB)

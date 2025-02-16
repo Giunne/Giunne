@@ -1,12 +1,16 @@
 package com.project.giunne.common.presentation.community.student
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -18,28 +22,38 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.unit.dp
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.content.Loader
+import com.project.giunne.common.presentation.common.scrollbar.VerticalScrollbar
+import com.project.giunne.common.presentation.common.spacer.SpH
+import com.project.giunne.common.presentation.community.student.content.CommunityItemRow
 import com.project.giunne.common.presentation.community.student.content.EmptyBox
 import com.project.giunne.common.presentation.community.student.content.SearchRow
 import com.project.giunne.common.presentation.community.student.content.SelectableDialog
+import com.project.giunne.common.presentation.community.student.dummy.CommunityDto
+import com.project.giunne.common.presentation.community.student.dummy.roadmapCommunityList
 import com.project.giunne.common.presentation.community.student.state.DatePriority
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.gdp
+import kotlinx.serialization.json.JsonNull.content
+import org.jetbrains.compose.resources.painterResource
 
 private const val TAG = "StudentCommunityScreen"
 @Composable
 internal fun StudentCommunityScreen(
     component: StudentCommunityComponent,
     modifier: Modifier = Modifier,
+    navigateToDetail: (CommunityDto) -> Unit
 ) {
     GLog.d(TAG, "onCreate")
 
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
 
+    val scrollState = rememberLazyListState()
     val communityState by component.uiState.collectAsState()
 
     ///// test /////
@@ -57,13 +71,13 @@ internal fun StudentCommunityScreen(
         Column(
             modifier = Modifier
                 .background(GPColor.BackgroundLightGray)
-                .fillMaxSize()
-                .padding(horizontal = 16.gdp),
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             SearchRow(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(horizontal = 16.gdp)
                     .height(52.gdp),
                 pageType = page,
                 datePriority = communityState.datePriority,
@@ -76,7 +90,33 @@ internal fun StudentCommunityScreen(
                 onRoadmapFilterButtonClicked = { component.onClickRoadmapFilterButton() },
                 onRunningFilterButtonClicked = { component.onClickRunningFilterButton() },
             )
-            EmptyBox()
+//            EmptyBox()
+            Box {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.gdp),
+                    state = scrollState
+                ) {
+                    items(
+                        count = roadmapCommunityList.size
+                    ) {
+                        CommunityItemRow(
+                            name = roadmapCommunityList[it].name,
+                            painter = painterResource(roadmapCommunityList[it].character),
+                            date = roadmapCommunityList[it].date,
+                            commentCount = roadmapCommunityList[it].commentCount,
+                            content = roadmapCommunityList[it].content,
+                            type = page,
+                            onClick = { navigateToDetail(roadmapCommunityList[it]) },
+                        )
+                    }
+                }
+                VerticalScrollbar(
+                    modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
+                    state = scrollState
+                )
+            }
         }
     }
 

@@ -82,6 +82,9 @@ fun RunningCertScreen(
                 onCertButtonClicked = { onCertButtonClicked() },
                 onExpandButtonClicked = { imageUploadStore.onClickImageExpandButton() },
                 onResetButtonClicked = { imageUploadStore.onClickImageResetButton() },
+                dragAndDropFile = { file ->
+                    if (file != null) imageUploadStore.initImageFile(file)
+                }
             )
         }
         SpH(10.gdp)

@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
@@ -25,6 +27,7 @@ import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import com.project.giunne.common.presentation.common.scrollbar.VerticalScrollbar
 
 @Composable
 fun SelectableDialog(
@@ -33,6 +36,8 @@ fun SelectableDialog(
     onSelect: (String) -> Unit,
     filterList: List<String>
 ) {
+    val scrollState = rememberLazyListState()
+
     Dialog(
         onDismissRequest = { dismiss() },
         properties = DialogProperties(
@@ -54,12 +59,17 @@ fun SelectableDialog(
                     .wrapContentHeight(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Box {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = 400.gdp)
+                ) {
                     LazyColumn(
                         modifier = Modifier
                             .padding(vertical = 16.gdp)
                             .fillMaxWidth()
-                            .heightIn(max = 400.gdp)
+                            .heightIn(max = 400.gdp),
+                        state = scrollState
                     ) {
                         items(
                             count = filterList.size
@@ -83,6 +93,10 @@ fun SelectableDialog(
                             }
                         }
                     }
+                    VerticalScrollbar(
+                        modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
+                        state = scrollState
+                    )
                 }
                 Row(
                     modifier = Modifier
