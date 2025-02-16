@@ -91,49 +91,40 @@ class StudentMainComponent(
     }
 
     fun navigateToHome() {
-//        navigation.replaceCurrent(StudentMainConfig.Home)
         navigation.replaceAll(StudentMainConfig.Home)
     }
 
     fun navigateToRoadmap() {
-//        navigation.replaceCurrent(StudentMainConfig.Roadmap)
         navigation.replaceAll(StudentMainConfig.Roadmap)
     }
 
     fun navigateToCertification() {
-//        navigation.replaceCurrent(StudentMainConfig.Certification)
         navigation.replaceAll(StudentMainConfig.Certification)
     }
 
     fun navigateToCommunity() {
-//        navigation.replaceCurrent(StudentMainConfig.Community)
         navigation.push(StudentMainConfig.Community)
     }
 
     fun navigateToCommunityDetail(
         communityDto: CommunityDto
     ) {
-//        navigation.replaceCurrent(StudentMainConfig.Community)
         navigation.push(StudentMainConfig.CommunityDetail(communityDto))
     }
 
     fun navigateToFriends() {
-//        navigation.replaceCurrent(StudentMainConfig.Friends)
         navigation.replaceAll(StudentMainConfig.Friends)
     }
 
     fun navigateToMyPage() {
-//        navigation.replaceCurrent(StudentMainConfig.MyPage)
         navigation.replaceAll(StudentMainConfig.MyPage)
     }
 
     fun navigateToShop() {
-//        navigation.replaceCurrent(StudentMainConfig.Community)
         navigation.push(StudentMainConfig.Shop)
     }
 
     fun navigateToGacha() {
-//        navigation.replaceCurrent(StudentMainConfig.Community)
         navigation.push(StudentMainConfig.Gacha)
     }
 
