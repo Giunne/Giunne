@@ -1,5 +1,6 @@
 package com.project.giunne.common.presentation.home.student
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -46,26 +47,31 @@ internal fun StudentHomeScreen(
         modifier = Modifier
             .addFocusCleaner(focusManager)
             .fillMaxSize()
+            .background(GPColor.BackgroundLightGray)
             .imePadding(),
     ) {
         Column (
             modifier = Modifier
                 .fillMaxSize()
+                .background(GPColor.BackgroundLightGray)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.gdp)
         ) {
             StudentCharacter(
                 level = 3,
-                percent = 0.6f,
+                currentExp = 6,
+                totalExp = 10,
                 character = Res.drawable.test_character,
                 items = listOf()
             )
             TeacherCheckingBox(
                 modifier = Modifier.fillMaxWidth(),
+                /*TODO(나중에 API나오면 상태에 따라 문구 변경)*/
                 teacherStateTitle = "확인중"
             )
             StudentRoadMapLevelBox(
                 modifier = Modifier.fillMaxWidth(),
+                /*TODO(나중에 API나오면 상태에 따라 문구 변경)*/
                 roadMapLevel = "3"
             )
 
