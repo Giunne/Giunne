@@ -11,10 +11,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -38,18 +42,22 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.slid
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.project.giunne.Res
-import com.project.giunne.common.presentation.certification.student.StudentCertificationScreen
+import com.project.giunne.common.presentation.certification.teacher.TeacherCertificationScreen
+import com.project.giunne.common.presentation.common.badge.GPNotificationBadge
+import com.project.giunne.common.presentation.common.button.GPBackButton
+import com.project.giunne.common.presentation.common.dropdown.GPDropdownMenu
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.text.GPText
-import com.project.giunne.common.presentation.community.student.StudentCommunityDetailScreen
-import com.project.giunne.common.presentation.community.student.StudentCommunityScreen
-import com.project.giunne.common.presentation.friend.student.StudentFriendScreen
-import com.project.giunne.common.presentation.home.student.StudentHomeScreen
-import com.project.giunne.common.presentation.home.teacher.TeacherEmptyHomeScreen
-import com.project.giunne.common.presentation.main.student.StudentMainComponent
-import com.project.giunne.common.presentation.mypage.student.StudentMyPageScreen
-import com.project.giunne.common.presentation.roadmap.student.StudentRoadmapScreen
+import com.project.giunne.common.presentation.common.topbar.GPMainTopBar
+import com.project.giunne.common.presentation.community.teacher.TeacherCommunityDetailScreen
+import com.project.giunne.common.presentation.community.teacher.TeacherCommunityScreen
+import com.project.giunne.common.presentation.friend.teacher.TeacherFriendScreen
+import com.project.giunne.common.presentation.home.teacher.TeacherHomeScreen
+import com.project.giunne.common.presentation.main.common.NotificationScreen
+import com.project.giunne.common.presentation.main.dummy.notiList
+import com.project.giunne.common.presentation.mypage.teacher.TeacherMyPageScreen
+import com.project.giunne.common.presentation.roadmap.teacher.TeacherRoadmapScreen
 import com.project.giunne.common.presentation.shop.GachaScreen
 import com.project.giunne.common.presentation.shop.ShopScreen
 import com.project.giunne.common.ui.theme.GPColor
@@ -63,6 +71,8 @@ import com.project.giunne.icon_friends
 import com.project.giunne.icon_home
 import com.project.giunne.icon_mypage
 import com.project.giunne.icon_roadmap
+import com.project.giunne.image_giunne
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
@@ -110,12 +120,119 @@ fun TeacherMainScreen(
         }
     ) {
         /* TODO("Default 화면 나중에 API 통신 후 구현") */
-        TeacherEmptyHomeScreen(
-            modifier = Modifier.fillMaxSize(),
-            roadMapTitle = "",
-            onValueChange = {},
-            onCreateRoadMapClick = {}
-        )
+//        TeacherEmptyHomeScreen(
+//            modifier = Modifier.fillMaxSize(),
+//            roadMapTitle = "",
+//            onValueChange = {},
+//            onCreateRoadMapClick = {}
+//        )
+        Box {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(GPColor.BackgroundLightGray)
+            ) {
+                GPMainTopBar(
+                    titleText = when (activeComponent) {
+                        is TeacherMainComponent.TeacherChild.TeacherHomeChild -> ""
+                        is TeacherMainComponent.TeacherChild.TeacherRoadmapChild -> "로드맵"
+                        is TeacherMainComponent.TeacherChild.TeacherCertificationChild -> "인증"
+                        is TeacherMainComponent.TeacherChild.TeacherCommunityChild -> "게시판"
+                        is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild -> activeComponent.communityDto.content
+                        is TeacherMainComponent.TeacherChild.TeacherFriendsChild -> "친구"
+                        is TeacherMainComponent.TeacherChild.TeacherMyPageChild -> "내정보"
+                        is TeacherMainComponent.TeacherChild.TeacherShopChild -> "꾸미기"
+                        is TeacherMainComponent.TeacherChild.TeacherGachaChild -> ""
+                    },
+                    leftIcon = {
+                        when(activeComponent) {
+                            is TeacherMainComponent.TeacherChild.TeacherCommunityChild,
+                            is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild,
+                            is TeacherMainComponent.TeacherChild.TeacherShopChild,
+                            is TeacherMainComponent.TeacherChild.TeacherGachaChild -> {
+                                GPBackButton(
+                                    onClick = {
+                                        component.navigateBack()
+                                    }
+                                )
+                            }
+                            else -> {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .aspectRatio(1f),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Image(
+                                        modifier = Modifier.size(32.gdp),
+                                        painter = painterResource(Res.drawable.image_giunne),
+                                        contentDescription = null
+                                    )
+                                }
+                            }
+                        }
+                    },
+                    rightIcon = {
+                        GPNotificationBadge(
+                            count = notiList.filter { !it.isRead }.size,
+                            onClick = {
+                                noti = true
+                                notiAnim = true
+                            }
+                        )
+                    }
+                )
+                TeacherChildren(
+                    modifier = Modifier
+                        .weight(1f),
+                    component = component,
+                    activeComponent = activeComponent
+                )
+                TeacherBottomNav(
+                    component = component,
+                    activeComponent = activeComponent
+                )
+            }
+            if (activeComponent is TeacherMainComponent.TeacherChild.TeacherHomeChild && !noti) {
+                /* TODO(추후 API에서 불러오도록 변경) */
+                GPDropdownMenu(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(top = 8.gdp),
+                    options = listOf("Option 1기", "Option 2", "Option 3", "Option 4", "Option 5", "Option 6", "Option 7"),
+                    selectedOption = testOptionItem,
+                    onOptionSelected = {
+                        testOptionItem = it
+                    }
+                )
+            }
+
+            if (noti) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .offset(x = animatedDP)
+                ) {
+                    GPMainTopBar(
+                        titleText = "알림",
+                        leftIcon = {
+                            GPBackButton(
+                                onClick = {
+                                    scope.launch {
+                                        notiAnim = false
+                                        delay(150)
+                                        noti = false
+                                    }
+                                }
+                            )
+                        },
+                    )
+                    NotificationScreen(
+                        notificationItemList = notiList
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -246,49 +363,48 @@ fun NavItem(
     }
 }
 
-//@Composable
-//private fun TeacherChildren(
-//    component: TeacherMainComponent,
-//    modifier: Modifier = Modifier,
-//    activeComponent: TeacherMainComponent.TeacherChild
-//) {
-//    Children(
-//        stack = component.childStack,
-//        modifier = modifier,
-////        animation = stackAnimation(fade()),
-//        animation = tabAnimation()
-//    ) {
-//        when (val child = it.instance) {
-//            is TeacherMainComponent.TeacherChild.TeacherHomeChild -> TeacherHomeScreen(component = child.component)
-//            is TeacherMainComponent.TeacherChild.TeacherRoadmapChild -> TeacherRoadmapScreen(component = child.component)
-//            is TeacherMainComponent.TeacherChild.TeacherCertificationChild -> TeacherCertificationScreen(
-//                component = child.component,
-//                onCommunityButtonClicked = {
-//                    component.navigateToCommunity()
-//                }
-//            )
-//            is TeacherMainComponent.TeacherChild.TeacherCommunityChild -> TeacherCommunityScreen(
-//                component = child.component,
-//                navigateToDetail = { communityDto ->
-//                    component.navigateToCommunityDetail(communityDto)
-//                }
-//            )
-//            is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild -> TeacherCommunityDetailScreen(
-////                communityDto = (activeComponent as TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild).communityDto
-//                communityDto = if (activeComponent is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild)
-//                    activeComponent.communityDto else null
-//            )
-//            is TeacherMainComponent.TeacherChild.TeacherFriendsChild -> TeacherFriendScreen(component = child.component)
-//            is TeacherMainComponent.TeacherChild.TeacherMyPageChild -> TeacherMyPageScreen(
-//                component = child.component,
-//                navigateToShop = { component.navigateToShop() },
-//                navigateToGacha = { component.navigateToGacha() }
-//            )
-//            is TeacherMainComponent.TeacherChild.TeacherShopChild -> ShopScreen()
-//            is TeacherMainComponent.TeacherChild.TeacherGachaChild -> GachaScreen()
-//        }
-//    }
-//}
+@Composable
+private fun TeacherChildren(
+    component: TeacherMainComponent,
+    modifier: Modifier = Modifier,
+    activeComponent: TeacherMainComponent.TeacherChild
+) {
+    Children(
+        stack = component.childStack,
+        modifier = modifier,
+//        animation = stackAnimation(fade()),
+        animation = tabAnimation()
+    ) {
+        when (val child = it.instance) {
+            is TeacherMainComponent.TeacherChild.TeacherHomeChild -> TeacherHomeScreen(component = child.component)
+            is TeacherMainComponent.TeacherChild.TeacherRoadmapChild -> TeacherRoadmapScreen(component = child.component)
+            is TeacherMainComponent.TeacherChild.TeacherCertificationChild -> TeacherCertificationScreen(
+                component = child.component,
+                onCommunityButtonClicked = {
+                    component.navigateToCommunity()
+                }
+            )
+            is TeacherMainComponent.TeacherChild.TeacherCommunityChild -> TeacherCommunityScreen(
+                component = child.component,
+                navigateToDetail = { communityDto ->
+                    component.navigateToCommunityDetail(communityDto)
+                }
+            )
+            is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild -> TeacherCommunityDetailScreen(
+                communityDto = if (activeComponent is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild)
+                    activeComponent.communityDto else null
+            )
+            is TeacherMainComponent.TeacherChild.TeacherFriendsChild -> TeacherFriendScreen(component = child.component)
+            is TeacherMainComponent.TeacherChild.TeacherMyPageChild -> TeacherMyPageScreen(
+                component = child.component,
+                navigateToShop = { component.navigateToShop() },
+                navigateToGacha = { component.navigateToGacha() }
+            )
+            is TeacherMainComponent.TeacherChild.TeacherShopChild -> ShopScreen()
+            is TeacherMainComponent.TeacherChild.TeacherGachaChild -> GachaScreen()
+        }
+    }
+}
 
 @OptIn(FaultyDecomposeApi::class)
 @Composable

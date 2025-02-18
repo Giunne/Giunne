@@ -9,12 +9,18 @@ import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.value.Value
 import com.project.giunne.common.presentation.certification.student.StudentCertificationComponent
+import com.project.giunne.common.presentation.certification.teacher.TeacherCertificationComponent
 import com.project.giunne.common.presentation.community.student.StudentCommunityComponent
 import com.project.giunne.common.presentation.community.student.dummy.CommunityDto
+import com.project.giunne.common.presentation.community.teacher.TeacherCommunityComponent
 import com.project.giunne.common.presentation.friend.student.StudentFriendComponent
+import com.project.giunne.common.presentation.friend.teacher.TeacherFriendComponent
 import com.project.giunne.common.presentation.home.student.StudentHomeComponent
+import com.project.giunne.common.presentation.home.teacher.TeacherHomeComponent
 import com.project.giunne.common.presentation.mypage.student.StudentMyPageComponent
+import com.project.giunne.common.presentation.mypage.teacher.TeacherMyPageComponent
 import com.project.giunne.common.presentation.roadmap.student.StudentRoadmapComponent
+import com.project.giunne.common.presentation.roadmap.teacher.TeacherRoadmapComponent
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 
@@ -34,32 +40,32 @@ class TeacherMainComponent(
     val childStack: Value<ChildStack<*, TeacherChild>> = stack
 
     sealed class TeacherChild {
-        class TeacherHomeChild(val component: StudentHomeComponent): TeacherChild()
-        class TeacherRoadmapChild(val component: StudentRoadmapComponent) : TeacherChild()
-        class TeacherCertificationChild(val component: StudentCertificationComponent) : TeacherChild()
-        class TeacherCommunityChild(val component: StudentCommunityComponent) : TeacherChild()
+        class TeacherHomeChild(val component: TeacherHomeComponent): TeacherChild()
+        class TeacherRoadmapChild(val component: TeacherRoadmapComponent) : TeacherChild()
+        class TeacherCertificationChild(val component: TeacherCertificationComponent) : TeacherChild()
+        class TeacherCommunityChild(val component: TeacherCommunityComponent) : TeacherChild()
         class TeacherCommunityDetailChild(val communityDto: CommunityDto) : TeacherChild()
-        class TeacherFriendsChild(val component: StudentFriendComponent) : TeacherChild()
-        class TeacherMyPageChild(val component: StudentMyPageComponent) : TeacherChild()
-        class TeacherShopChild(val component: StudentMyPageComponent) : TeacherChild()
-        class TeacherGachaChild(val component: StudentMyPageComponent) : TeacherChild()
+        class TeacherFriendsChild(val component: TeacherFriendComponent) : TeacherChild()
+        class TeacherMyPageChild(val component: TeacherMyPageComponent) : TeacherChild()
+        class TeacherShopChild(val component: TeacherMyPageComponent) : TeacherChild()
+        class TeacherGachaChild(val component: TeacherMyPageComponent) : TeacherChild()
     }
 
     private fun child(config: TeacherMainConfig, componentContext: ComponentContext): TeacherChild =
         when (config) {
-            is TeacherMainConfig.Home -> TeacherChild.TeacherHomeChild(StudentHomeComponent(componentContext))
-            is TeacherMainConfig.Roadmap -> TeacherChild.TeacherRoadmapChild(StudentRoadmapComponent(componentContext))
+            is TeacherMainConfig.Home -> TeacherChild.TeacherHomeChild(TeacherHomeComponent(componentContext))
+            is TeacherMainConfig.Roadmap -> TeacherChild.TeacherRoadmapChild(TeacherRoadmapComponent(componentContext))
             is TeacherMainConfig.Certification -> TeacherChild.TeacherCertificationChild(
-                StudentCertificationComponent(componentContext)
+                TeacherCertificationComponent(componentContext)
             )
             is TeacherMainConfig.Community -> TeacherChild.TeacherCommunityChild(
-                StudentCommunityComponent(componentContext)
+                TeacherCommunityComponent(componentContext)
             )
             is TeacherMainConfig.CommunityDetail -> TeacherChild.TeacherCommunityDetailChild(config.communityDto)
-            is TeacherMainConfig.Friends -> TeacherChild.TeacherFriendsChild(StudentFriendComponent(componentContext))
-            is TeacherMainConfig.MyPage -> TeacherChild.TeacherMyPageChild(StudentMyPageComponent(componentContext))
-            is TeacherMainConfig.Shop -> TeacherChild.TeacherShopChild(StudentMyPageComponent(componentContext))
-            is TeacherMainConfig.Gacha -> TeacherChild.TeacherGachaChild(StudentMyPageComponent(componentContext))
+            is TeacherMainConfig.Friends -> TeacherChild.TeacherFriendsChild(TeacherFriendComponent(componentContext))
+            is TeacherMainConfig.MyPage -> TeacherChild.TeacherMyPageChild(TeacherMyPageComponent(componentContext))
+            is TeacherMainConfig.Shop -> TeacherChild.TeacherShopChild(TeacherMyPageComponent(componentContext))
+            is TeacherMainConfig.Gacha -> TeacherChild.TeacherGachaChild(TeacherMyPageComponent(componentContext))
         }
 
     @Serializable
