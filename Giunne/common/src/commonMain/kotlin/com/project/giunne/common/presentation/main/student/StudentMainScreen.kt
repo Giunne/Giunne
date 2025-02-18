@@ -2,7 +2,6 @@ package com.project.giunne.common.presentation.main.student
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -33,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.FaultyDecomposeApi
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.Direction
@@ -45,7 +43,6 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stac
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.certification.student.StudentCertificationScreen
-import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.badge.GPNotificationBadge
 import com.project.giunne.common.presentation.common.button.GPBackButton
 import com.project.giunne.common.presentation.common.dropdown.GPDropdownMenu
@@ -55,7 +52,8 @@ import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.common.topbar.GPMainTopBar
 import com.project.giunne.common.presentation.community.student.StudentCommunityScreen
 import com.project.giunne.common.presentation.friend.student.StudentFriendScreen
-import com.project.giunne.common.presentation.home.student.StudentHomeScreen
+import com.project.giunne.common.presentation.home.student.home.StudentHomeScreen
+import com.project.giunne.common.presentation.home.student.search.SearchRoadMapScreen
 import com.project.giunne.common.presentation.main.common.NotificationScreen
 import com.project.giunne.common.presentation.main.dummy.notiList
 import com.project.giunne.common.presentation.mypage.student.StudentMyPageScreen
@@ -130,6 +128,7 @@ fun StudentMainScreen(
                 GPMainTopBar(
                     titleText = when (activeComponent) {
                         is StudentMainComponent.StudentChild.StudentHomeChild -> ""
+                        is StudentMainComponent.StudentChild.SearchRoadMapChild -> "수강신청"
                         is StudentMainComponent.StudentChild.StudentSelectCharacterChild -> "내 정보👋🏼"
                         is StudentMainComponent.StudentChild.StudentRoadmapChild -> "로드맵"
                         is StudentMainComponent.StudentChild.StudentCertificationChild -> "인증"
@@ -144,7 +143,8 @@ fun StudentMainScreen(
                             is StudentMainComponent.StudentChild.StudentCommunityChild,
                             is StudentMainComponent.StudentChild.StudentSelectCharacterChild,
                             is StudentMainComponent.StudentChild.StudentShopChild,
-                            is StudentMainComponent.StudentChild.StudentGachaChild -> {
+                            is StudentMainComponent.StudentChild.StudentGachaChild,
+                            is StudentMainComponent.StudentChild.SearchRoadMapChild -> {
                                 GPBackButton(
                                     onClick = {
                                         component.navigateBack()
@@ -222,6 +222,7 @@ fun StudentMainScreen(
                     is StudentMainComponent.StudentChild.StudentShopChild -> Unit
                     is StudentMainComponent.StudentChild.StudentSelectCharacterChild -> Unit
                     is StudentMainComponent.StudentChild.StudentGachaChild -> Unit
+                    is StudentMainComponent.StudentChild.SearchRoadMapChild -> Unit
                 }
             }
             if (activeComponent is StudentMainComponent.StudentChild.StudentHomeChild && !noti) {
@@ -403,7 +404,7 @@ private fun StudentChildren(component: StudentMainComponent, modifier: Modifier 
     ) {
         when (val child = it.instance) {
             is StudentMainComponent.StudentChild.StudentHomeChild -> StudentHomeScreen(component = child.component) {
-                component.navigateToSelectedCharacter()
+                component.navigateToSearchRoadMap()
             }
             is StudentMainComponent.StudentChild.StudentRoadmapChild -> StudentRoadmapScreen(component = child.component)
             is StudentMainComponent.StudentChild.StudentCertificationChild -> StudentCertificationScreen(
@@ -422,6 +423,15 @@ private fun StudentChildren(component: StudentMainComponent, modifier: Modifier 
             is StudentMainComponent.StudentChild.StudentShopChild -> ShopScreen()
             is StudentMainComponent.StudentChild.StudentGachaChild -> GachaScreen()
             is StudentMainComponent.StudentChild.StudentSelectCharacterChild -> StudentCharacterSelectScreen(component = child.component)
+            is StudentMainComponent.StudentChild.SearchRoadMapChild -> SearchRoadMapScreen(
+                component = child.component,
+                onBackClick = {
+                    component.navigateBack()
+                },
+                navigateToHome = {
+                    component.navigateToHome()
+                }
+            )
         }
     }
 }
@@ -448,6 +458,7 @@ private val StudentMainComponent.StudentChild.index: Int
             is StudentMainComponent.StudentChild.StudentShopChild -> 6
             is StudentMainComponent.StudentChild.StudentGachaChild -> 7
             is StudentMainComponent.StudentChild.StudentSelectCharacterChild -> 8
+            is StudentMainComponent.StudentChild.SearchRoadMapChild -> 9
         }
 
 private fun StackAnimator.flipSide(): StackAnimator =
