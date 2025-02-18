@@ -8,7 +8,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,10 +18,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.gdp
+import com.project.giunne.common.util.gsp
 
 @Composable
 fun GPTextFieldWithClose(
@@ -39,12 +38,12 @@ fun GPTextFieldWithClose(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(12.gdp))
             .background(GPColor.White)
             .border(
-                width = 2.dp,
+                width = 2.gdp,
                 color = GPColor.BorderLightGray,
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.gdp)
             ),
         maxLines = 1,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -75,7 +74,7 @@ fun GPTextFieldWithClose(
         placeholder = {
             GPText(
                 text = placeHolder,
-                textSize = 14.sp
+                textSize = 14.gsp
             )
         }
     )
