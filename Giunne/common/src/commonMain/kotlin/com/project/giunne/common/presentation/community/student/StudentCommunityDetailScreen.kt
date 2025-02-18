@@ -28,6 +28,7 @@ import coil3.compose.AsyncImagePainter.State.Empty.painter
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.addFocusCleaner
+import com.project.giunne.common.presentation.common.player.VideoPlayer
 import com.project.giunne.common.presentation.common.shape.GPSquircleShape
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.spacer.SpW
@@ -80,14 +81,18 @@ fun StudentCommunityDetailScreen(
                         .aspectRatio(1f),
                     contentAlignment = Alignment.Center
                 ) {
-                    AsyncImage( // TODO API
-                        modifier = Modifier
-                            .clip(shape = RoundedCornerShape(12.gdp))
-                            .fillMaxSize(),
-                        model = "https://picsum.photos/200/300",
-                        placeholder = painterResource(Res.drawable.image_loader_1),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop
+//                    AsyncImage( // TODO API
+//                        modifier = Modifier
+//                            .clip(shape = RoundedCornerShape(12.gdp))
+//                            .fillMaxSize(),
+//                        model = "https://picsum.photos/200/300",
+//                        placeholder = painterResource(Res.drawable.image_loader_1),
+//                        contentDescription = null,
+//                        contentScale = ContentScale.Crop
+//                    )
+                    VideoPlayer(
+                        videoPath = "",
+                        dismiss = {  }
                     )
                 }
                 SpH(4.gdp)

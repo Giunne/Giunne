@@ -1,5 +1,8 @@
-package com.project.giunne.common.presentation.common.player
+package com.project.giunne.common.presentation.common.player.video.javafx
 
+import com.project.giunne.common.presentation.common.player.video.source.PlayerController
+import com.project.giunne.common.presentation.common.player.video.source.PlayerState
+import com.project.giunne.common.presentation.common.player.video.source.catch
 import javafx.beans.value.ChangeListener
 import javafx.scene.media.Media
 import javafx.scene.media.MediaPlayer
@@ -83,5 +86,3 @@ class JfxController : PlayerController {
         }
     }
 }
-
-fun catch(body: () -> Unit): Unit = runCatching { body() }.onFailure { println(it.localizedMessage) }.getOrNull() ?: Unit
