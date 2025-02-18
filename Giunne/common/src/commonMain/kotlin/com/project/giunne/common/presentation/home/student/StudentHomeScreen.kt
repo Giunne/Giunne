@@ -37,6 +37,7 @@ private const val TAG = "StudentRoadmapScreen"
 internal fun StudentHomeScreen(
     component: StudentHomeComponent,
     modifier: Modifier = Modifier,
+    navigateToSelectCharacter: () -> Unit
 ) {
     GLog.d(TAG, "onCreate")
 
@@ -75,44 +76,22 @@ internal fun StudentHomeScreen(
                 roadMapLevel = "3"
             )
 
-            Row(
+            GPButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.gdp)
+                    .height(56.gdp)
+                    .padding(horizontal = 16.gdp),
+                normalColor = GPColor.ButtonOrange,
+                pressColor = GPColor.ButtonPressOrange,
+                hoverColor = GPColor.ButtonHoverOrange,
+                onClick = navigateToSelectCharacter,
             ) {
-                GPButton(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(56.gdp),
-                    normalColor = GPColor.ButtonOrange,
-                    pressColor = GPColor.ButtonPressOrange,
-                    hoverColor = GPColor.ButtonHoverOrange,
-                    onClick = { /*TODO(친구들 보러가기)*/ },
-                ) {
-                    GPText(
-                        text = "친구들 보러가기",
-                        textSize = 14.gsp,
-                        fontFamily = GPFontFamily.Bold,
-                        textColor = GPColor.White
-                    )
-                }
-                Spacer(modifier = Modifier.width(8.gdp))
-                GPButton(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(56.gdp),
-                    normalColor = GPColor.ButtonOrange,
-                    pressColor = GPColor.ButtonPressOrange,
-                    hoverColor = GPColor.ButtonHoverOrange,
-                    onClick = { /*TODO(로그맵 보러가기)*/ },
-                ) {
-                    GPText(
-                        text = "로그맵 보러가기",
-                        textSize = 14.gsp,
-                        fontFamily = GPFontFamily.Bold,
-                        textColor = GPColor.White
-                    )
-                }
+                GPText(
+                    text = "로그맵 찾아보기",
+                    textSize = 14.gsp,
+                    fontFamily = GPFontFamily.Bold,
+                    textColor = GPColor.White
+                )
             }
             Spacer(modifier = Modifier.height(16.gdp))
         }

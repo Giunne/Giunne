@@ -60,6 +60,7 @@ import com.project.giunne.common.presentation.main.common.NotificationScreen
 import com.project.giunne.common.presentation.main.dummy.notiList
 import com.project.giunne.common.presentation.mypage.student.StudentMyPageScreen
 import com.project.giunne.common.presentation.roadmap.student.StudentRoadmapScreen
+import com.project.giunne.common.presentation.select.StudentCharacterSelectScreen
 import com.project.giunne.common.presentation.shop.GachaScreen
 import com.project.giunne.common.presentation.shop.ShopScreen
 import com.project.giunne.common.ui.theme.GPColor
@@ -67,7 +68,6 @@ import com.project.giunne.common.util.BackHandler
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
-import com.project.giunne.icon_back_arrow
 import com.project.giunne.icon_certification
 import com.project.giunne.icon_friends
 import com.project.giunne.icon_home
@@ -130,6 +130,7 @@ fun StudentMainScreen(
                 GPMainTopBar(
                     titleText = when (activeComponent) {
                         is StudentMainComponent.StudentChild.StudentHomeChild -> ""
+                        is StudentMainComponent.StudentChild.StudentSelectCharacterChild -> "내 정보👋🏼"
                         is StudentMainComponent.StudentChild.StudentRoadmapChild -> "로드맵"
                         is StudentMainComponent.StudentChild.StudentCertificationChild -> "인증"
                         is StudentMainComponent.StudentChild.StudentCommunityChild -> "게시판"
@@ -141,6 +142,7 @@ fun StudentMainScreen(
                     leftIcon = {
                         when(activeComponent) {
                             is StudentMainComponent.StudentChild.StudentCommunityChild,
+                            is StudentMainComponent.StudentChild.StudentSelectCharacterChild,
                             is StudentMainComponent.StudentChild.StudentShopChild,
                             is StudentMainComponent.StudentChild.StudentGachaChild -> {
                                 GPBackButton(
@@ -180,10 +182,47 @@ fun StudentMainScreen(
                         .weight(1f),
                     component = component
                 )
-                StudentBottomNav(
-                    component = component,
-                    activeComponent = activeComponent
-                )
+                when (activeComponent) {
+                    is StudentMainComponent.StudentChild.StudentCertificationChild -> {
+                        StudentBottomNav(
+                            component = component,
+                            activeComponent = activeComponent
+                        )
+                    }
+                    is StudentMainComponent.StudentChild.StudentCommunityChild -> {
+                        StudentBottomNav(
+                            component = component,
+                            activeComponent = activeComponent
+                        )
+                    }
+                    is StudentMainComponent.StudentChild.StudentFriendsChild -> {
+                        StudentBottomNav(
+                            component = component,
+                            activeComponent = activeComponent
+                        )
+                    }
+                    is StudentMainComponent.StudentChild.StudentHomeChild -> {
+                        StudentBottomNav(
+                            component = component,
+                            activeComponent = activeComponent
+                        )
+                    }
+                    is StudentMainComponent.StudentChild.StudentMyPageChild -> {
+                        StudentBottomNav(
+                            component = component,
+                            activeComponent = activeComponent
+                        )
+                    }
+                    is StudentMainComponent.StudentChild.StudentRoadmapChild -> {
+                        StudentBottomNav(
+                            component = component,
+                            activeComponent = activeComponent
+                        )
+                    }
+                    is StudentMainComponent.StudentChild.StudentShopChild -> Unit
+                    is StudentMainComponent.StudentChild.StudentSelectCharacterChild -> Unit
+                    is StudentMainComponent.StudentChild.StudentGachaChild -> Unit
+                }
             }
             if (activeComponent is StudentMainComponent.StudentChild.StudentHomeChild && !noti) {
                 /* TODO(추후 API에서 불러오도록 변경) */
@@ -363,7 +402,9 @@ private fun StudentChildren(component: StudentMainComponent, modifier: Modifier 
         animation = tabAnimation()
     ) {
         when (val child = it.instance) {
-            is StudentMainComponent.StudentChild.StudentHomeChild -> StudentHomeScreen(component = child.component)
+            is StudentMainComponent.StudentChild.StudentHomeChild -> StudentHomeScreen(component = child.component) {
+                component.navigateToSelectedCharacter()
+            }
             is StudentMainComponent.StudentChild.StudentRoadmapChild -> StudentRoadmapScreen(component = child.component)
             is StudentMainComponent.StudentChild.StudentCertificationChild -> StudentCertificationScreen(
                 component = child.component,
@@ -380,6 +421,7 @@ private fun StudentChildren(component: StudentMainComponent, modifier: Modifier 
             )
             is StudentMainComponent.StudentChild.StudentShopChild -> ShopScreen()
             is StudentMainComponent.StudentChild.StudentGachaChild -> GachaScreen()
+            is StudentMainComponent.StudentChild.StudentSelectCharacterChild -> StudentCharacterSelectScreen(component = child.component)
         }
     }
 }
@@ -405,6 +447,7 @@ private val StudentMainComponent.StudentChild.index: Int
             is StudentMainComponent.StudentChild.StudentMyPageChild -> 5
             is StudentMainComponent.StudentChild.StudentShopChild -> 6
             is StudentMainComponent.StudentChild.StudentGachaChild -> 7
+            is StudentMainComponent.StudentChild.StudentSelectCharacterChild -> 8
         }
 
 private fun StackAnimator.flipSide(): StackAnimator =

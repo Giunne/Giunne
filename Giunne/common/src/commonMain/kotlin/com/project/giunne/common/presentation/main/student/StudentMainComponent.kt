@@ -15,6 +15,7 @@ import com.project.giunne.common.presentation.friend.student.StudentFriendCompon
 import com.project.giunne.common.presentation.home.student.StudentHomeComponent
 import com.project.giunne.common.presentation.mypage.student.StudentMyPageComponent
 import com.project.giunne.common.presentation.roadmap.student.StudentRoadmapComponent
+import com.project.giunne.common.presentation.select.StudentSelectCharacterComponent
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 
@@ -35,6 +36,7 @@ class StudentMainComponent(
 
     sealed class StudentChild {
         class StudentHomeChild(val component: StudentHomeComponent): StudentChild()
+        class StudentSelectCharacterChild(val component: StudentSelectCharacterComponent): StudentChild()
         class StudentRoadmapChild(val component: StudentRoadmapComponent) : StudentChild()
         class StudentCertificationChild(val component: StudentCertificationComponent) : StudentChild()
         class StudentCommunityChild(val component: StudentCommunityComponent) : StudentChild()
@@ -54,12 +56,16 @@ class StudentMainComponent(
             is StudentMainConfig.MyPage -> StudentChild.StudentMyPageChild(StudentMyPageComponent(componentContext))
             is StudentMainConfig.Shop -> StudentChild.StudentShopChild(StudentMyPageComponent(componentContext))
             is StudentMainConfig.Gacha -> StudentChild.StudentGachaChild(StudentMyPageComponent(componentContext))
+            is StudentMainConfig.SelectedCharacter -> StudentChild.StudentSelectCharacterChild(StudentSelectCharacterComponent(componentContext))
         }
 
     @Serializable
     sealed interface StudentMainConfig {
         @Serializable
         data object Home : StudentMainConfig
+
+        @Serializable
+        data object SelectedCharacter : StudentMainConfig
 
         @Serializable
         data object Roadmap : StudentMainConfig
@@ -121,6 +127,10 @@ class StudentMainComponent(
     fun navigateToGacha() {
 //        navigation.replaceCurrent(StudentMainConfig.Community)
         navigation.push(StudentMainConfig.Gacha)
+    }
+
+    fun navigateToSelectedCharacter() {
+        navigation.push(StudentMainConfig.SelectedCharacter)
     }
 
     fun navigateBack() {
