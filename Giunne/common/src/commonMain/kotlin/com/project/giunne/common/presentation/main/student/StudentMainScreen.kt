@@ -403,9 +403,15 @@ private fun StudentChildren(component: StudentMainComponent, modifier: Modifier 
         animation = tabAnimation()
     ) {
         when (val child = it.instance) {
-            is StudentMainComponent.StudentChild.StudentHomeChild -> StudentHomeScreen(component = child.component) {
-                component.navigateToSearchRoadMap()
-            }
+            is StudentMainComponent.StudentChild.StudentHomeChild -> StudentHomeScreen(
+                component = child.component,
+                navigateToCommunity = {
+                    component.navigateToCommunity()
+                },
+                navigateToSearchRoadMap = {
+                    component.navigateToSearchRoadMap()
+                }
+            )
             is StudentMainComponent.StudentChild.StudentRoadmapChild -> StudentRoadmapScreen(component = child.component)
             is StudentMainComponent.StudentChild.StudentCertificationChild -> StudentCertificationScreen(
                 component = child.component,

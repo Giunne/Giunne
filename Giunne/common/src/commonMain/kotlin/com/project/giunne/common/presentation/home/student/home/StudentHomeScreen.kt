@@ -35,6 +35,7 @@ private const val TAG = "StudentRoadmapScreen"
 internal fun StudentHomeScreen(
     component: StudentHomeComponent,
     modifier: Modifier = Modifier,
+    navigateToCommunity: () -> Unit,
     navigateToSearchRoadMap: () -> Unit
 ) {
     GLog.d(TAG, "onCreate")
@@ -66,7 +67,8 @@ internal fun StudentHomeScreen(
             TeacherCheckingBox(
                 modifier = Modifier.fillMaxWidth(),
                 /*TODO(나중에 API나오면 상태에 따라 문구 변경)*/
-                teacherStateTitle = "확인중"
+                teacherStateTitle = "확인중",
+                onClickCommunity = navigateToCommunity
             )
             StudentRoadMapLevelBox(
                 modifier = Modifier.fillMaxWidth(),
