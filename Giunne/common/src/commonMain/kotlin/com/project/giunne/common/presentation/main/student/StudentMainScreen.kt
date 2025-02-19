@@ -63,6 +63,7 @@ import com.project.giunne.common.presentation.main.dummy.notiList
 import com.project.giunne.common.presentation.mypage.student.StudentMyPageScreen
 import com.project.giunne.common.presentation.roadmap.student.StudentRoadmapScreen
 import com.project.giunne.common.presentation.shop.GachaScreen
+import com.project.giunne.common.presentation.shop.PickingItemScreen
 import com.project.giunne.common.presentation.shop.ShopScreen
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.BackHandler
@@ -141,6 +142,7 @@ fun StudentMainScreen(
                         is StudentMainComponent.StudentChild.StudentMyPageChild -> "내정보"
                         is StudentMainComponent.StudentChild.StudentShopChild -> "꾸미기"
                         is StudentMainComponent.StudentChild.StudentGachaChild -> ""
+                        is StudentMainComponent.StudentChild.StudentPickingItemChild -> ""
                     },
                     leftIcon = {
                         when(activeComponent) {
@@ -400,7 +402,16 @@ private fun StudentChildren(
                 navigateToGacha = { component.navigateToGacha() }
             )
             is StudentMainComponent.StudentChild.StudentShopChild -> ShopScreen()
-            is StudentMainComponent.StudentChild.StudentGachaChild -> GachaScreen()
+            is StudentMainComponent.StudentChild.StudentGachaChild -> GachaScreen(
+                onGachaClick = {
+                    component.navigateToPickingItem()
+                },
+            )
+            is StudentMainComponent.StudentChild.StudentPickingItemChild -> PickingItemScreen(
+                onWearingItemClick = {
+                    component.navigateFromPickingItemToShop()
+                }
+            )
         }
     }
 }
@@ -427,6 +438,7 @@ private val StudentMainComponent.StudentChild.index: Int
             is StudentMainComponent.StudentChild.StudentMyPageChild -> 6
             is StudentMainComponent.StudentChild.StudentShopChild -> 7
             is StudentMainComponent.StudentChild.StudentGachaChild -> 8
+            is StudentMainComponent.StudentChild.StudentPickingItemChild -> 9
         }
 
 private fun StackAnimator.flipSide(): StackAnimator =

@@ -1,7 +1,6 @@
 package com.project.giunne.common.presentation.shop.intent
 
 import com.project.giunne.common.base.BaseComponent
-import com.project.giunne.common.presentation.shop.dummy.TestItem
 import com.project.giunne.common.presentation.shop.dummy.bodyItemWithOffset1
 import com.project.giunne.common.presentation.shop.dummy.bodyItemWithOffset2
 import com.project.giunne.common.presentation.shop.dummy.bodyItemWithOffset3
@@ -12,6 +11,7 @@ import com.project.giunne.common.presentation.shop.dummy.faceItemWithOffset2
 import com.project.giunne.common.presentation.shop.dummy.headItemWithOffset1
 import com.project.giunne.common.presentation.shop.dummy.headItemWithOffset2
 import com.project.giunne.common.presentation.shop.state.CharacterState
+import com.project.giunne.common.presentation.shop.state.Item
 import com.project.giunne.common.presentation.shop.state.ItemType
 import com.project.giunne.common.presentation.shop.state.ShopEvent
 import kotlinx.coroutines.CoroutineScope
@@ -22,7 +22,7 @@ class ShopStore: BaseComponent<CharacterState, ShopEvent>(
     initialState = CharacterState()
 ) {
     /* TODO(API에 따라 DTO 변경 필요) */
-    fun onChangeItem(item: TestItem) {
+    fun onChangeItem(item: Item) {
         setState {
             copy(
                 selectedCharacter = if (item.type == ItemType.CHARACTER) {
@@ -84,7 +84,7 @@ class ShopStore: BaseComponent<CharacterState, ShopEvent>(
         }
     }
 
-    private fun getDuplicateTypeItemOrNull(type: ItemType): TestItem? {
+    private fun getDuplicateTypeItemOrNull(type: ItemType): Item? {
         return uiState.value.selectedItems.find { it.type == type }
     }
 }
