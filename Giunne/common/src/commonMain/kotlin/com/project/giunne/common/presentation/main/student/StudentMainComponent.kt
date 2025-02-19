@@ -5,7 +5,10 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
+import com.arkivanov.decompose.router.stack.popTo
+import com.arkivanov.decompose.router.stack.popWhile
 import com.arkivanov.decompose.router.stack.push
+import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.router.stack.replaceCurrent
 import com.arkivanov.decompose.value.Value
@@ -42,6 +45,7 @@ class StudentMainComponent(
         class StudentMyPageChild(val component: StudentMyPageComponent) : StudentChild()
         class StudentShopChild(val component: StudentMyPageComponent) : StudentChild()
         class StudentGachaChild(val component: StudentMyPageComponent) : StudentChild()
+        class StudentPickingItemChild(val component: StudentMyPageComponent) : StudentChild()
     }
 
     private fun child(config: StudentMainConfig, componentContext: ComponentContext): StudentChild =
@@ -54,6 +58,7 @@ class StudentMainComponent(
             is StudentMainConfig.MyPage -> StudentChild.StudentMyPageChild(StudentMyPageComponent(componentContext))
             is StudentMainConfig.Shop -> StudentChild.StudentShopChild(StudentMyPageComponent(componentContext))
             is StudentMainConfig.Gacha -> StudentChild.StudentGachaChild(StudentMyPageComponent(componentContext))
+            is StudentMainConfig.PickingItem -> StudentChild.StudentPickingItemChild(StudentMyPageComponent(componentContext))
         }
 
     @Serializable
@@ -81,6 +86,9 @@ class StudentMainComponent(
 
         @Serializable
         data object Gacha : StudentMainConfig
+
+        @Serializable
+        data object PickingItem : StudentMainConfig
     }
 
     fun navigateToHome() {
@@ -121,6 +129,17 @@ class StudentMainComponent(
     fun navigateToGacha() {
 //        navigation.replaceCurrent(StudentMainConfig.Community)
         navigation.push(StudentMainConfig.Gacha)
+    }
+
+    fun navigateToPickingItem() {
+        navigation.push(StudentMainConfig.PickingItem)
+    }
+
+    fun navigateFromPickingItemToShop() {
+        navigation.popWhile { config ->
+            config !is StudentMainConfig.MyPage
+        }
+        navigation.push(StudentMainConfig.Shop)
     }
 
     fun navigateBack() {

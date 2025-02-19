@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.project.giunne.Res
-import com.project.giunne.common.presentation.shop.dummy.TestItem
+import com.project.giunne.common.presentation.shop.state.Item
 import com.project.giunne.common.presentation.shop.state.ItemType
 import com.project.giunne.common.util.gdp
 import com.project.giunne.test_character
@@ -18,7 +18,7 @@ import org.jetbrains.compose.resources.painterResource
 fun GPCharacter(
     modifier: Modifier = Modifier,
     character: DrawableResource = Res.drawable.test_character,
-    items: List<TestItem> = listOf()
+    items: List<Item> = listOf()
 ) {
     Box {
         Image(

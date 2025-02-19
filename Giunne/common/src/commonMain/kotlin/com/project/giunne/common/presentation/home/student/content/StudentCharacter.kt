@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.project.giunne.common.presentation.common.charactor.GPCharacter
 import com.project.giunne.common.presentation.common.progress.GPLevelProgressBar
-import com.project.giunne.common.presentation.shop.dummy.TestItem
+import com.project.giunne.common.presentation.shop.state.Item
 import com.project.giunne.common.util.gdp
 import org.jetbrains.compose.resources.DrawableResource
 
@@ -23,7 +23,7 @@ fun StudentCharacter(
     level: Int,
     percent: Float,
     character: DrawableResource,
-    items: List<TestItem>
+    items: List<Item>
 ) {
     Column(
         modifier = Modifier

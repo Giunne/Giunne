@@ -12,9 +12,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.project.giunne.common.presentation.shop.dummy.TestItem
 import com.project.giunne.common.presentation.shop.intent.ShopStore
 import com.project.giunne.common.presentation.shop.state.CharacterState
+import com.project.giunne.common.presentation.shop.state.Item
 import com.project.giunne.common.presentation.shop.state.ItemType
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.gdp
@@ -25,7 +25,7 @@ fun ItemBottomView(
     types: List<ItemType>,
     shopStore: ShopStore,
     state: CharacterState,
-    onItemClick: (TestItem) -> Unit,
+    onItemClick: (Item) -> Unit,
     onTypeSelected: (ItemType) -> Unit,
 ) {
     Box(
