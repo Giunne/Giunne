@@ -2,7 +2,9 @@ package com.project.giunne.common.presentation.community.student
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -15,11 +17,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import coil3.compose.AsyncImage
@@ -39,8 +45,10 @@ import com.project.giunne.common.presentation.community.student.dummy.CommunityD
 import com.project.giunne.common.presentation.community.student.dummy.commentTestList
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
+import com.project.giunne.common.util.ZoomStore
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import com.project.giunne.common.util.rememberZoomState
 import com.project.giunne.icon_roadmap
 import com.project.giunne.icon_running
 import com.project.giunne.image_loader_1
@@ -53,6 +61,9 @@ fun StudentCommunityDetailScreen(
 ) {
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
+
+    val zoomStore = remember { ZoomStore() }
+    val zoomUiState by zoomStore.uiState.collectAsState()
 
     Scaffold(
         modifier = Modifier
@@ -81,19 +92,33 @@ fun StudentCommunityDetailScreen(
                         .aspectRatio(1f),
                     contentAlignment = Alignment.Center
                 ) {
-//                    AsyncImage( // TODO API
-//                        modifier = Modifier
-//                            .clip(shape = RoundedCornerShape(12.gdp))
-//                            .fillMaxSize(),
-//                        model = "https://picsum.photos/200/300",
-//                        placeholder = painterResource(Res.drawable.image_loader_1),
-//                        contentDescription = null,
-//                        contentScale = ContentScale.Crop
+                    BoxWithConstraints(
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        val state = rememberZoomState(zoomStore, constraints)
+
+                        AsyncImage( // TODO API
+                            modifier = Modifier
+                                .clip(shape = RoundedCornerShape(12.gdp))
+                                .fillMaxSize()
+                                .graphicsLayer(
+                                    scaleX = zoomUiState.scale,
+                                    scaleY = zoomUiState.scale,
+                                    translationX = zoomUiState.offsetX,
+                                    translationY = zoomUiState.offsetY
+                                )
+                                .transformable(state),
+                            model = "https://picsum.photos/200/300",
+                            placeholder = painterResource(Res.drawable.image_loader_1),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+//                    VideoPlayer(
+//                        videoPath = "",
+//                        dismiss = {  }
 //                    )
-                    VideoPlayer(
-                        videoPath = "",
-                        dismiss = {  }
-                    )
                 }
                 SpH(4.gdp)
                 Row(
