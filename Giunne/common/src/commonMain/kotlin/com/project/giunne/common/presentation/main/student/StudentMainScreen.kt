@@ -53,7 +53,9 @@ import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.common.topbar.GPMainTopBar
+import com.project.giunne.common.presentation.community.student.StudentCommunityDetailScreen
 import com.project.giunne.common.presentation.community.student.StudentCommunityScreen
+import com.project.giunne.common.presentation.community.student.dummy.CommunityDto
 import com.project.giunne.common.presentation.friend.student.StudentFriendScreen
 import com.project.giunne.common.presentation.home.student.StudentHomeScreen
 import com.project.giunne.common.presentation.main.common.NotificationScreen
@@ -77,6 +79,7 @@ import com.project.giunne.icon_roadmap
 import com.project.giunne.image_giunne
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.JsonNull.content
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -134,6 +137,7 @@ fun StudentMainScreen(
                         is StudentMainComponent.StudentChild.StudentRoadmapChild -> "로드맵"
                         is StudentMainComponent.StudentChild.StudentCertificationChild -> "인증"
                         is StudentMainComponent.StudentChild.StudentCommunityChild -> "게시판"
+                        is StudentMainComponent.StudentChild.StudentCommunityDetailChild -> activeComponent.communityDto.content
                         is StudentMainComponent.StudentChild.StudentFriendsChild -> "친구"
                         is StudentMainComponent.StudentChild.StudentMyPageChild -> "내정보"
                         is StudentMainComponent.StudentChild.StudentShopChild -> "꾸미기"
@@ -143,6 +147,7 @@ fun StudentMainScreen(
                     leftIcon = {
                         when(activeComponent) {
                             is StudentMainComponent.StudentChild.StudentCommunityChild,
+                            is StudentMainComponent.StudentChild.StudentCommunityDetailChild,
                             is StudentMainComponent.StudentChild.StudentShopChild,
                             is StudentMainComponent.StudentChild.StudentGachaChild -> {
                                 GPBackButton(
@@ -180,7 +185,8 @@ fun StudentMainScreen(
                 StudentChildren(
                     modifier = Modifier
                         .weight(1f),
-                    component = component
+                    component = component,
+                    activeComponent = activeComponent
                 )
                 StudentBottomNav(
                     component = component,
@@ -275,7 +281,8 @@ fun StudentBottomNav(
             title = "인증",
             icon = painterResource(Res.drawable.icon_certification),
             onTop = activeComponent is StudentMainComponent.StudentChild.StudentCertificationChild
-                    || activeComponent is StudentMainComponent.StudentChild.StudentCommunityChild,
+                    || activeComponent is StudentMainComponent.StudentChild.StudentCommunityChild
+                    || activeComponent is StudentMainComponent.StudentChild.StudentCommunityDetailChild,
             onClick = {
                 if (activeComponent !is StudentMainComponent.StudentChild.StudentCertificationChild)
                     component.navigateToCertification()
@@ -357,7 +364,11 @@ fun NavItem(
 }
 
 @Composable
-private fun StudentChildren(component: StudentMainComponent, modifier: Modifier = Modifier) {
+private fun StudentChildren(
+    component: StudentMainComponent,
+    modifier: Modifier = Modifier,
+    activeComponent: StudentMainComponent.StudentChild
+) {
     Children(
         stack = component.childStack,
         modifier = modifier,
@@ -373,7 +384,17 @@ private fun StudentChildren(component: StudentMainComponent, modifier: Modifier 
                     component.navigateToCommunity()
                 }
             )
-            is StudentMainComponent.StudentChild.StudentCommunityChild -> StudentCommunityScreen(component = child.component)
+            is StudentMainComponent.StudentChild.StudentCommunityChild -> StudentCommunityScreen(
+                component = child.component,
+                navigateToDetail = { communityDto ->
+                    component.navigateToCommunityDetail(communityDto)
+                }
+            )
+            is StudentMainComponent.StudentChild.StudentCommunityDetailChild -> StudentCommunityDetailScreen(
+//                communityDto = (activeComponent as StudentMainComponent.StudentChild.StudentCommunityDetailChild).communityDto
+                communityDto = if (activeComponent is StudentMainComponent.StudentChild.StudentCommunityDetailChild)
+                    activeComponent.communityDto else null
+            )
             is StudentMainComponent.StudentChild.StudentFriendsChild -> StudentFriendScreen(component = child.component)
             is StudentMainComponent.StudentChild.StudentMyPageChild -> StudentMyPageScreen(
                 component = child.component,
@@ -412,11 +433,12 @@ private val StudentMainComponent.StudentChild.index: Int
             is StudentMainComponent.StudentChild.StudentRoadmapChild -> 1
             is StudentMainComponent.StudentChild.StudentCertificationChild -> 2
             is StudentMainComponent.StudentChild.StudentCommunityChild -> 3
-            is StudentMainComponent.StudentChild.StudentFriendsChild -> 4
-            is StudentMainComponent.StudentChild.StudentMyPageChild -> 5
-            is StudentMainComponent.StudentChild.StudentShopChild -> 6
-            is StudentMainComponent.StudentChild.StudentGachaChild -> 7
-            is StudentMainComponent.StudentChild.StudentPickingItemChild -> 8
+            is StudentMainComponent.StudentChild.StudentCommunityDetailChild -> 4
+            is StudentMainComponent.StudentChild.StudentFriendsChild -> 5
+            is StudentMainComponent.StudentChild.StudentMyPageChild -> 6
+            is StudentMainComponent.StudentChild.StudentShopChild -> 7
+            is StudentMainComponent.StudentChild.StudentGachaChild -> 8
+            is StudentMainComponent.StudentChild.StudentPickingItemChild -> 9
         }
 
 private fun StackAnimator.flipSide(): StackAnimator =

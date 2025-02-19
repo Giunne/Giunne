@@ -16,9 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import coil3.compose.AsyncImage
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.button.GPIconButton
@@ -32,7 +29,6 @@ import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_upload_video
 import org.jetbrains.compose.resources.painterResource
-import java.io.File
 
 @Composable
 fun RoadmapCertBox(
@@ -44,6 +40,7 @@ fun RoadmapCertBox(
     onCertButtonClicked: () -> Unit,
     onPlayButtonClicked: () -> Unit,
     onResetButtonClicked: () -> Unit,
+    dragAndDropFile: (PlatformFile?) -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -84,7 +81,7 @@ fun RoadmapCertBox(
         ) {
             if (video != null) {
                 Spacer(modifier = Modifier.weight(1f))
-                VideoUploadBox(
+                VideoPlayBox(
                     modifier = Modifier
                         .height(130.gdp)
                         .fillMaxWidth()
@@ -114,58 +111,13 @@ fun RoadmapCertBox(
                 }
             } else {
                 Spacer(modifier = Modifier.weight(1f))
-                Column(
+                VideoUploadBox(
                     modifier = Modifier
                         .height(130.gdp)
                         .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    GPIconButton(
-                        modifier = Modifier.size(72.gdp),
-                        icon = {
-                            Image(
-                                modifier = Modifier.size(52.gdp),
-                                painter = painterResource(Res.drawable.icon_upload_video),
-                                contentDescription = null,
-                            )
-                        },
-                        normalColor = GPColor.White,
-                        pressColor = GPColor.ButtonPressWhite,
-                        onClick = {
-                            onUploadButtonClicked()
-                        },
-                    )
-                    SpH(16.gdp)
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-                        GPText(
-                            text = "인증에 필요한 ",
-                            textColor = GPColor.TextBlack,
-                            textSize = 14.gsp,
-                            fontFamily = GPFontFamily.Bold
-                        )
-                        GPText(
-                            text = "동영상",
-                            textColor = GPColor.MainOrangeColor,
-                            textSize = 14.gsp,
-                            fontFamily = GPFontFamily.Bold
-                        )
-                        GPText(
-                            text = "을 촬영해 올려주세요",
-                            textColor = GPColor.TextBlack,
-                            textSize = 14.gsp,
-                            fontFamily = GPFontFamily.Bold
-                        )
-                    }
-                    SpH(6.gdp)
-                    GPText(
-                        text = "선생님이 확인해줄거에요!",
-                        textColor = GPColor.TextBlack,
-                        textSize = 14.gsp,
-                        fontFamily = GPFontFamily.Bold
-                    )
-                }
+                    onUploadButtonClicked = onUploadButtonClicked,
+                    dragAndDropFile = dragAndDropFile
+                )
                 SpH(16.gdp)
                 Box(
                     modifier = Modifier

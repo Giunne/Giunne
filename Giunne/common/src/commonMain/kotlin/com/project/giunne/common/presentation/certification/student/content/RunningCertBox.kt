@@ -39,6 +39,7 @@ fun RunningCertBox(
     onCertButtonClicked: () -> Unit,
     onExpandButtonClicked: () -> Unit,
     onResetButtonClicked: () -> Unit,
+    dragAndDropFile: (PlatformFile?) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -72,7 +73,7 @@ fun RunningCertBox(
         ) {
             if (image != null) {
                 Spacer(modifier = Modifier.weight(1f))
-                ImageUploadBox(
+                ImagePlayBox(
                     modifier = Modifier
                         .height(130.gdp)
                         .fillMaxWidth()
@@ -100,58 +101,13 @@ fun RunningCertBox(
                 }
             } else {
                 Spacer(modifier = Modifier.weight(1f))
-                Column(
+                ImageUploadBox(
                     modifier = Modifier
                         .height(130.gdp)
                         .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    GPIconButton(
-                        modifier = Modifier.size(72.gdp),
-                        icon = {
-                            Image(
-                                modifier = Modifier.size(52.gdp),
-                                painter = painterResource(Res.drawable.icon_upload_image),
-                                contentDescription = null,
-                            )
-                        },
-                        normalColor = GPColor.White,
-                        pressColor = GPColor.ButtonPressWhite,
-                        onClick = {
-                            onUploadButtonClicked()
-                        },
-                    )
-                    SpH(16.gdp)
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-                        GPText(
-                            text = "인증에 필요한 ",
-                            textColor = GPColor.TextBlack,
-                            textSize = 14.gsp,
-                            fontFamily = GPFontFamily.Bold
-                        )
-                        GPText(
-                            text = "사진",
-                            textColor = GPColor.MainOrangeColor,
-                            textSize = 14.gsp,
-                            fontFamily = GPFontFamily.Bold
-                        )
-                        GPText(
-                            text = "을 촬영해 올려주세요",
-                            textColor = GPColor.TextBlack,
-                            textSize = 14.gsp,
-                            fontFamily = GPFontFamily.Bold
-                        )
-                    }
-                    SpH(6.gdp)
-                    GPText(
-                        text = "선생님이 확인해줄거에요!", /* TODO String */
-                        textColor = GPColor.TextBlack,
-                        textSize = 14.gsp,
-                        fontFamily = GPFontFamily.Bold
-                    )
-                }
+                    onUploadButtonClicked = onUploadButtonClicked,
+                    dragAndDropFile = dragAndDropFile,
+                )
                 SpH(16.gdp)
                 Box(
                     modifier = Modifier

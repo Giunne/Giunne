@@ -1,4 +1,4 @@
-package com.project.giunne.common.presentation.common.player
+package com.project.giunne.common.presentation.common.player.video.source
 
 data class PlayerState(
     val isPlaying: Boolean = false,
