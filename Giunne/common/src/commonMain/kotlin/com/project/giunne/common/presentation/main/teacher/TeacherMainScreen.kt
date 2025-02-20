@@ -401,7 +401,9 @@ private fun TeacherChildren(
                 navigateToGacha = { component.navigateToGacha() }
             )
             is TeacherMainComponent.TeacherChild.TeacherShopChild -> ShopScreen()
-            is TeacherMainComponent.TeacherChild.TeacherGachaChild -> GachaScreen()
+            is TeacherMainComponent.TeacherChild.TeacherGachaChild -> GachaScreen {
+
+            }
         }
     }
 }
