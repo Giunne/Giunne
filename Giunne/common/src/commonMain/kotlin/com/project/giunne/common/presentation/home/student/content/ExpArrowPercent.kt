@@ -20,7 +20,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.common.text.GPText
@@ -34,6 +35,7 @@ import org.jetbrains.compose.resources.painterResource
 fun ExpArrowPercent(
     percent: Float
 ) {
+    val density = LocalDensity.current.density
     var progress by remember { mutableFloatStateOf(0f) }
     var width by remember { mutableStateOf(0f) }
     val size by animateFloatAsState(
@@ -57,11 +59,10 @@ fun ExpArrowPercent(
         Column(
             modifier = Modifier
                 .wrapContentSize()
-                .onGloballyPositioned { coordinates ->
-                    width = coordinates.size.width.toFloat() / 6
-                    println(width)
+                .onSizeChanged { intSize ->
+                    width = intSize.width.toFloat() / 2
                 }
-                .offset(x = -(width).dp),
+                .offset(x = -(width / density).dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             GPText(
