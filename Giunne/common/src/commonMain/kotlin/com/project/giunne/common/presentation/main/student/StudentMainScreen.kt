@@ -380,15 +380,17 @@ private fun StudentChildren(
             is StudentMainComponent.StudentChild.StudentRoadmapChild -> StudentRoadmapScreen(component = child.component)
             is StudentMainComponent.StudentChild.StudentCertificationChild -> StudentCertificationScreen(
                 component = child.component,
-                onCommunityButtonClicked = {
-                    component.navigateToCommunity()
+                onCommunityButtonClicked = { pageType ->
+                    component.navigateToCommunity(pageType)
                 }
             )
             is StudentMainComponent.StudentChild.StudentCommunityChild -> StudentCommunityScreen(
                 component = child.component,
                 navigateToDetail = { communityDto ->
                     component.navigateToCommunityDetail(communityDto)
-                }
+                },
+                pageType = if (activeComponent is StudentMainComponent.StudentChild.StudentCommunityChild)
+                    activeComponent.pageType else CertPage.RoadMap
             )
             is StudentMainComponent.StudentChild.StudentCommunityDetailChild -> StudentCommunityDetailScreen(
 //                communityDto = (activeComponent as StudentMainComponent.StudentChild.StudentCommunityDetailChild).communityDto

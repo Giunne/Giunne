@@ -30,7 +30,7 @@ import com.project.giunne.common.util.BackHandler
 import kotlinx.coroutines.delay
 
 @Composable
-actual fun VideoPlayer(
+actual fun VideoWindowPlayer(
     modifier: Modifier,
     dismiss: () -> Unit,
     videoPath: String,
@@ -77,5 +77,35 @@ actual fun VideoPlayer(
                 update = {}
             )
         }
+    }
+}
+
+@Composable
+actual fun VideoPlayer(
+    modifier: Modifier,
+    videoPath: String,
+    onFullScreenClicked: () -> Unit
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        AndroidView(
+            modifier = modifier
+                .fillMaxHeight()
+                .wrapContentWidth(),
+            factory = { context ->
+                PlayerView(context).apply {
+                    val exoPlayer = ExoPlayer.Builder(context).build()
+                    exoPlayer.setMediaItem(androidx.media3.common.MediaItem.fromUri(videoPath))
+                    player = exoPlayer
+                    exoPlayer.prepare()
+
+                    useController = true
+                }
+            },
+            update = {}
+        )
     }
 }

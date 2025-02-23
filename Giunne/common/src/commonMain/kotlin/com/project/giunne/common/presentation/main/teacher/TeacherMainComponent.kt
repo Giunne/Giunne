@@ -9,6 +9,7 @@ import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.value.Value
 import com.project.giunne.common.presentation.certification.student.StudentCertificationComponent
+import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.certification.teacher.TeacherCertificationComponent
 import com.project.giunne.common.presentation.community.student.StudentCommunityComponent
 import com.project.giunne.common.presentation.community.student.dummy.CommunityDto
@@ -43,7 +44,7 @@ class TeacherMainComponent(
         class TeacherHomeChild(val component: TeacherHomeComponent): TeacherChild()
         class TeacherRoadmapChild(val component: TeacherRoadmapComponent) : TeacherChild()
         class TeacherCertificationChild(val component: TeacherCertificationComponent) : TeacherChild()
-        class TeacherCommunityChild(val component: TeacherCommunityComponent) : TeacherChild()
+        class TeacherCommunityChild(val component: TeacherCommunityComponent, val pageType: CertPage) : TeacherChild()
         class TeacherCommunityDetailChild(val communityDto: CommunityDto) : TeacherChild()
         class TeacherFriendsChild(val component: TeacherFriendComponent) : TeacherChild()
         class TeacherMyPageChild(val component: TeacherMyPageComponent) : TeacherChild()
@@ -56,10 +57,11 @@ class TeacherMainComponent(
             is TeacherMainConfig.Home -> TeacherChild.TeacherHomeChild(TeacherHomeComponent(componentContext))
             is TeacherMainConfig.Roadmap -> TeacherChild.TeacherRoadmapChild(TeacherRoadmapComponent(componentContext))
             is TeacherMainConfig.Certification -> TeacherChild.TeacherCertificationChild(
-                TeacherCertificationComponent(componentContext)
+                component = TeacherCertificationComponent(componentContext)
             )
             is TeacherMainConfig.Community -> TeacherChild.TeacherCommunityChild(
-                TeacherCommunityComponent(componentContext)
+                component = TeacherCommunityComponent(componentContext),
+                pageType = config.pageType
             )
             is TeacherMainConfig.CommunityDetail -> TeacherChild.TeacherCommunityDetailChild(config.communityDto)
             is TeacherMainConfig.Friends -> TeacherChild.TeacherFriendsChild(TeacherFriendComponent(componentContext))
@@ -80,7 +82,7 @@ class TeacherMainComponent(
         data object Certification : TeacherMainConfig
 
         @Serializable
-        data object Community : TeacherMainConfig
+        data class Community(val pageType: CertPage) : TeacherMainConfig
 
         @Serializable
         data class CommunityDetail(val communityDto: CommunityDto) : TeacherMainConfig
@@ -110,8 +112,10 @@ class TeacherMainComponent(
         navigation.replaceAll(TeacherMainConfig.Certification)
     }
 
-    fun navigateToCommunity() {
-        navigation.push(TeacherMainConfig.Community)
+    fun navigateToCommunity(
+        pageType: CertPage
+    ) {
+        navigation.push(TeacherMainConfig.Community(pageType))
     }
 
     fun navigateToCommunityDetail(

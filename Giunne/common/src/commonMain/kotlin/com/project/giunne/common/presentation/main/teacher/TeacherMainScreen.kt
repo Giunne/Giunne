@@ -139,7 +139,7 @@ fun TeacherMainScreen(
                         is TeacherMainComponent.TeacherChild.TeacherCertificationChild -> "인증"
                         is TeacherMainComponent.TeacherChild.TeacherCommunityChild -> "게시판"
                         is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild -> activeComponent.communityDto.content
-                        is TeacherMainComponent.TeacherChild.TeacherFriendsChild -> "친구"
+                        is TeacherMainComponent.TeacherChild.TeacherFriendsChild -> "학생들"
                         is TeacherMainComponent.TeacherChild.TeacherMyPageChild -> "내정보"
                         is TeacherMainComponent.TeacherChild.TeacherShopChild -> "꾸미기"
                         is TeacherMainComponent.TeacherChild.TeacherGachaChild -> ""
@@ -292,7 +292,7 @@ fun TeacherBottomNav(
             modifier = Modifier
                 .fillMaxHeight()
                 .weight(1f),
-            title = "친구",
+            title = "학생들",
             icon = painterResource(Res.drawable.icon_friends),
             onTop = activeComponent is TeacherMainComponent.TeacherChild.TeacherFriendsChild,
             onClick = {
@@ -380,8 +380,8 @@ private fun TeacherChildren(
             is TeacherMainComponent.TeacherChild.TeacherRoadmapChild -> TeacherRoadmapScreen(component = child.component)
             is TeacherMainComponent.TeacherChild.TeacherCertificationChild -> TeacherCertificationScreen(
                 component = child.component,
-                onCommunityButtonClicked = {
-                    component.navigateToCommunity()
+                onCommunityButtonClicked = { type ->
+                    component.navigateToCommunity(type)
                 }
             )
             is TeacherMainComponent.TeacherChild.TeacherCommunityChild -> TeacherCommunityScreen(
@@ -401,7 +401,9 @@ private fun TeacherChildren(
                 navigateToGacha = { component.navigateToGacha() }
             )
             is TeacherMainComponent.TeacherChild.TeacherShopChild -> ShopScreen()
-            is TeacherMainComponent.TeacherChild.TeacherGachaChild -> GachaScreen()
+            is TeacherMainComponent.TeacherChild.TeacherGachaChild -> GachaScreen(
+                onGachaClick = {  }
+            )
         }
     }
 }
