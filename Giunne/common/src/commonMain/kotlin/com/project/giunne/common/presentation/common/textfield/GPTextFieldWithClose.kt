@@ -27,6 +27,7 @@ import com.project.giunne.common.util.gsp
 fun GPTextFieldWithClose(
     modifier: Modifier,
     focusManager: FocusManager = LocalFocusManager.current,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     placeHolder: String,
     text: String,
     leadingIcon: @Composable () -> Unit = {},
@@ -46,7 +47,7 @@ fun GPTextFieldWithClose(
                 shape = RoundedCornerShape(12.gdp)
             ),
         maxLines = 1,
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        keyboardOptions = keyboardOptions.copy(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(
             onDone = {
                 focusManager.clearFocus()
@@ -74,6 +75,7 @@ fun GPTextFieldWithClose(
         placeholder = {
             GPText(
                 text = placeHolder,
+                textColor = GPColor.TextLightGray,
                 textSize = 14.gsp
             )
         }
