@@ -5,23 +5,21 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
-import com.arkivanov.decompose.router.stack.popTo
 import com.arkivanov.decompose.router.stack.popWhile
 import com.arkivanov.decompose.router.stack.push
-import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.stack.replaceAll
-import com.arkivanov.decompose.router.stack.replaceCurrent
 import com.arkivanov.decompose.value.Value
 import com.project.giunne.common.presentation.certification.student.StudentCertificationComponent
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.community.student.StudentCommunityComponent
 import com.project.giunne.common.presentation.community.student.dummy.CommunityDto
 import com.project.giunne.common.presentation.friend.student.StudentFriendComponent
-import com.project.giunne.common.presentation.home.student.StudentHomeComponent
+import com.project.giunne.common.presentation.home.student.home.StudentHomeComponent
+import com.project.giunne.common.presentation.home.student.search.SearchRoadMapComponent
 import com.project.giunne.common.presentation.mypage.student.StudentMyPageComponent
 import com.project.giunne.common.presentation.roadmap.student.StudentRoadmapComponent
+import com.project.giunne.common.presentation.select.StudentSelectCharacterComponent
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonNull.content
 import org.koin.core.component.KoinComponent
 
 class StudentMainComponent(
@@ -41,6 +39,8 @@ class StudentMainComponent(
 
     sealed class StudentChild {
         class StudentHomeChild(val component: StudentHomeComponent): StudentChild()
+        class SearchRoadMapChild(val component: SearchRoadMapComponent): StudentChild()
+        class StudentSelectCharacterChild(val component: StudentSelectCharacterComponent): StudentChild()
         class StudentRoadmapChild(val component: StudentRoadmapComponent) : StudentChild()
         class StudentCertificationChild(val component: StudentCertificationComponent) : StudentChild()
         class StudentCommunityChild(val component: StudentCommunityComponent, val pageType: CertPage) : StudentChild()
@@ -55,6 +55,7 @@ class StudentMainComponent(
     private fun child(config: StudentMainConfig, componentContext: ComponentContext): StudentChild =
         when (config) {
             is StudentMainConfig.Home -> StudentChild.StudentHomeChild(StudentHomeComponent(componentContext))
+            is StudentMainConfig.SearchRoadMap -> StudentChild.SearchRoadMapChild(SearchRoadMapComponent(componentContext))
             is StudentMainConfig.Roadmap -> StudentChild.StudentRoadmapChild(StudentRoadmapComponent(componentContext))
             is StudentMainConfig.Certification -> StudentChild.StudentCertificationChild(StudentCertificationComponent(componentContext))
             is StudentMainConfig.Community -> StudentChild.StudentCommunityChild(StudentCommunityComponent(componentContext), config.pageType)
@@ -63,6 +64,7 @@ class StudentMainComponent(
             is StudentMainConfig.MyPage -> StudentChild.StudentMyPageChild(StudentMyPageComponent(componentContext))
             is StudentMainConfig.Shop -> StudentChild.StudentShopChild(StudentMyPageComponent(componentContext))
             is StudentMainConfig.Gacha -> StudentChild.StudentGachaChild(StudentMyPageComponent(componentContext))
+            is StudentMainConfig.SelectedCharacter -> StudentChild.StudentSelectCharacterChild(StudentSelectCharacterComponent(componentContext))
             is StudentMainConfig.PickingItem -> StudentChild.StudentPickingItemChild(StudentMyPageComponent(componentContext))
         }
 
@@ -70,6 +72,12 @@ class StudentMainComponent(
     sealed interface StudentMainConfig {
         @Serializable
         data object Home : StudentMainConfig
+
+        @Serializable
+        data object SearchRoadMap : StudentMainConfig
+
+        @Serializable
+        data object SelectedCharacter : StudentMainConfig
 
         @Serializable
         data object Roadmap : StudentMainConfig
@@ -137,6 +145,14 @@ class StudentMainComponent(
 
     fun navigateToGacha() {
         navigation.push(StudentMainConfig.Gacha)
+    }
+
+    fun navigateToSearchRoadMap() {
+        navigation.push(StudentMainConfig.SearchRoadMap)
+    }
+
+    fun navigateToSelectedCharacter() {
+        navigation.push(StudentMainConfig.SelectedCharacter)
     }
 
     fun navigateToPickingItem() {

@@ -1,15 +1,14 @@
-package com.project.giunne.common.presentation.home.student
+package com.project.giunne.common.presentation.home.student.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
@@ -36,6 +35,8 @@ private const val TAG = "StudentRoadmapScreen"
 internal fun StudentHomeScreen(
     component: StudentHomeComponent,
     modifier: Modifier = Modifier,
+    navigateToCommunity: () -> Unit,
+    navigateToSearchRoadMap: () -> Unit
 ) {
     GLog.d(TAG, "onCreate")
 
@@ -46,67 +47,51 @@ internal fun StudentHomeScreen(
         modifier = Modifier
             .addFocusCleaner(focusManager)
             .fillMaxSize()
+            .background(GPColor.BackgroundLightGray)
             .imePadding(),
     ) {
         Column (
             modifier = Modifier
                 .fillMaxSize()
+                .background(GPColor.BackgroundLightGray)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.gdp)
         ) {
             StudentCharacter(
                 level = 3,
-                percent = 0.6f,
+                currentExp = 6,
+                totalExp = 10,
                 character = Res.drawable.test_character,
                 items = listOf()
             )
             TeacherCheckingBox(
                 modifier = Modifier.fillMaxWidth(),
-                teacherStateTitle = "확인중"
+                /*TODO(나중에 API나오면 상태에 따라 문구 변경)*/
+                teacherStateTitle = "확인중",
+                onClickCommunity = navigateToCommunity
             )
             StudentRoadMapLevelBox(
                 modifier = Modifier.fillMaxWidth(),
+                /*TODO(나중에 API나오면 상태에 따라 문구 변경)*/
                 roadMapLevel = "3"
             )
 
-            Row(
+            GPButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.gdp)
+                    .height(56.gdp)
+                    .padding(horizontal = 16.gdp),
+                normalColor = GPColor.ButtonOrange,
+                pressColor = GPColor.ButtonPressOrange,
+                hoverColor = GPColor.ButtonHoverOrange,
+                onClick = navigateToSearchRoadMap,
             ) {
-                GPButton(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(56.gdp),
-                    normalColor = GPColor.ButtonOrange,
-                    pressColor = GPColor.ButtonPressOrange,
-                    hoverColor = GPColor.ButtonHoverOrange,
-                    onClick = { /*TODO(친구들 보러가기)*/ },
-                ) {
-                    GPText(
-                        text = "친구들 보러가기",
-                        textSize = 14.gsp,
-                        fontFamily = GPFontFamily.Bold,
-                        textColor = GPColor.White
-                    )
-                }
-                Spacer(modifier = Modifier.width(8.gdp))
-                GPButton(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(56.gdp),
-                    normalColor = GPColor.ButtonOrange,
-                    pressColor = GPColor.ButtonPressOrange,
-                    hoverColor = GPColor.ButtonHoverOrange,
-                    onClick = { /*TODO(로그맵 보러가기)*/ },
-                ) {
-                    GPText(
-                        text = "로그맵 보러가기",
-                        textSize = 14.gsp,
-                        fontFamily = GPFontFamily.Bold,
-                        textColor = GPColor.White
-                    )
-                }
+                GPText(
+                    text = "로그맵 찾아보기",
+                    textSize = 14.gsp,
+                    fontFamily = GPFontFamily.Bold,
+                    textColor = GPColor.White
+                )
             }
             Spacer(modifier = Modifier.height(16.gdp))
         }

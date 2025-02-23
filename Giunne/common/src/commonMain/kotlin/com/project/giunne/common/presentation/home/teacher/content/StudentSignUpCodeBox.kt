@@ -86,7 +86,8 @@ fun StudentSignUpCodeBox(
             )
             BorderButton(
                 modifier = Modifier.wrapContentSize(),
-                title = "복사하기"
+                title = "복사하기",
+                onClick = {}
             )
         }
     }

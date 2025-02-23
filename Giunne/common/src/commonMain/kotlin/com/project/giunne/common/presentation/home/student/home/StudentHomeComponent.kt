@@ -1,4 +1,4 @@
-package com.project.giunne.common.presentation.home.student
+package com.project.giunne.common.presentation.home.student.home
 
 import com.arkivanov.decompose.ComponentContext
 import com.project.giunne.common.util.GLog
