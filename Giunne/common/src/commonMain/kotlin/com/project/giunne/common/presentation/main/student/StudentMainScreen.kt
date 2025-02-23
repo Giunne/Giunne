@@ -43,6 +43,7 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stac
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.certification.student.StudentCertificationScreen
+import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.badge.GPNotificationBadge
 import com.project.giunne.common.presentation.common.button.GPBackButton
 import com.project.giunne.common.presentation.common.dropdown.GPDropdownMenu
@@ -52,7 +53,6 @@ import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.common.topbar.GPMainTopBar
 import com.project.giunne.common.presentation.community.student.StudentCommunityDetailScreen
 import com.project.giunne.common.presentation.community.student.StudentCommunityScreen
-import com.project.giunne.common.presentation.community.student.dummy.CommunityDto
 import com.project.giunne.common.presentation.friend.student.StudentFriendScreen
 import com.project.giunne.common.presentation.home.student.home.StudentHomeScreen
 import com.project.giunne.common.presentation.home.student.search.SearchRoadMapScreen
@@ -77,7 +77,6 @@ import com.project.giunne.icon_roadmap
 import com.project.giunne.image_giunne
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.JsonNull.content
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -231,6 +230,8 @@ fun StudentMainScreen(
                     is StudentMainComponent.StudentChild.StudentSelectCharacterChild -> Unit
                     is StudentMainComponent.StudentChild.StudentGachaChild -> Unit
                     is StudentMainComponent.StudentChild.SearchRoadMapChild -> Unit
+                    is StudentMainComponent.StudentChild.StudentCommunityDetailChild -> Unit
+                    is StudentMainComponent.StudentChild.StudentPickingItemChild -> Unit
                 }
             }
             if (activeComponent is StudentMainComponent.StudentChild.StudentHomeChild && !noti) {
@@ -419,7 +420,7 @@ private fun StudentChildren(
             is StudentMainComponent.StudentChild.StudentHomeChild -> StudentHomeScreen(
                 component = child.component,
                 navigateToCommunity = {
-                    component.navigateToCommunity()
+                    component.navigateToCommunity(CertPage.RoadMap)
                 },
                 navigateToSearchRoadMap = {
                     component.navigateToSearchRoadMap()

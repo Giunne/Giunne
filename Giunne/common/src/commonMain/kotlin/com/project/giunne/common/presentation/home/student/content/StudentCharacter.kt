@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.project.giunne.common.presentation.common.charactor.GPCharacter
 import com.project.giunne.common.presentation.common.progress.GPLevelProgressBar
 import com.project.giunne.common.presentation.common.text.GPText
-import com.project.giunne.common.presentation.shop.dummy.TestItem
+import com.project.giunne.common.presentation.shop.state.Item
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import org.jetbrains.compose.resources.DrawableResource
@@ -28,7 +28,7 @@ fun StudentCharacter(
     currentExp: Int,
     totalExp: Int,
     character: DrawableResource,
-    items: List<TestItem>
+    items: List<Item>
 ) {
     val percent = currentExp.toFloat() / totalExp.toFloat()
     Column(

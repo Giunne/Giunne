@@ -16,7 +16,6 @@ import androidx.compose.ui.text.withStyle
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.common.shape.GPSquircleShape
 import com.project.giunne.common.presentation.common.text.GPAnnotatedText
-import com.project.giunne.common.presentation.community.student.dummy.Community
 import com.project.giunne.common.presentation.home.common.BorderButton
 import com.project.giunne.common.presentation.home.common.RowWithDropShadow
 import com.project.giunne.common.ui.theme.GPColor
