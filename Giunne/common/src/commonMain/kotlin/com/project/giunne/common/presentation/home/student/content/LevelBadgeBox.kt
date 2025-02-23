@@ -11,10 +11,11 @@ import androidx.compose.ui.Modifier
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.gdp
+import com.project.giunne.common.util.gsp
 
 @Composable
 fun LevelBadgeBox(
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     level: Int,
 ) {
     Row(
@@ -23,16 +24,18 @@ fun LevelBadgeBox(
                 color = GPColor.MainOrangeColor,
                 shape = RoundedCornerShape(8.gdp)
             )
-            .padding(horizontal = 14.gdp, vertical = 8.gdp),
+            .padding(horizontal = 12.gdp, vertical = 6.gdp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.gdp)
     ) {
         GPText(
             text = "레벨",
+            textSize = 12.gsp,
             textColor = GPColor.White,
         )
         GPText(
             text = "$level",
+            textSize = 12.gsp,
             textColor = GPColor.White
         )
     }

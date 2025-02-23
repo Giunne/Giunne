@@ -73,7 +73,7 @@ fun GPDropdownMenu(
         Row(
             modifier = Modifier
                 .wrapContentSize()
-                .background(GPColor.White, RoundedCornerShape(12.gdp))
+                .clip(RoundedCornerShape(12.gdp))
                 .border(1.gdp, GPColor.BorderLightGray, shape = RoundedCornerShape(12.gdp))
                 .clickable { expanded = !expanded }
                 .onGloballyPositioned { coordinates ->
