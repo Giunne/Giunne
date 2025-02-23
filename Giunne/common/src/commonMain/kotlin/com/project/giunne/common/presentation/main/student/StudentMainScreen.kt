@@ -231,6 +231,8 @@ fun StudentMainScreen(
                     is StudentMainComponent.StudentChild.StudentSelectCharacterChild -> Unit
                     is StudentMainComponent.StudentChild.StudentGachaChild -> Unit
                     is StudentMainComponent.StudentChild.SearchRoadMapChild -> Unit
+                    is StudentMainComponent.StudentChild.StudentCommunityDetailChild -> Unit
+                    is StudentMainComponent.StudentChild.StudentPickingItemChild -> Unit
                 }
             }
             if (activeComponent is StudentMainComponent.StudentChild.StudentHomeChild && !noti) {
