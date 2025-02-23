@@ -38,31 +38,27 @@ fun GachaScreen(
     val gachaState by gachaStore.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
-        gachaStore.getPickingItemList(isAdvanced)
+        gachaStore.getPickingItemList()
     }
 
     Column (
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-
         Row {
             Spacer(modifier = Modifier.weight(1f))
             GPToggleButton(
                 modifier = Modifier.width(120.gdp)
                     .height(56.gdp)
                     .padding(horizontal = 16.gdp, vertical = 8.gdp),
-                titleLeft = "일반",
-                titleRight = "고급",
+                titleLeft = gachaState.gachaInfo[0].codeName,
+                titleRight = gachaState.gachaInfo[1].codeName,
                 isSelected = isAdvanced,
                 onLeftButtonClick = {
                     isAdvanced = false
-                    gachaStore.getPickingItemList(false)
                 },
                 onRightButtonClick = {
                     isAdvanced = true
-                    gachaStore.getPickingItemList(true)
                 }
             )
         }
@@ -126,7 +122,7 @@ fun GachaScreen(
             modifier = Modifier.fillMaxWidth()
                 .wrapContentHeight()
                 .padding(horizontal = 16.gdp, vertical = 8.gdp),
-            gachaCost = gachaState.gachaCost,
+            gachaCost = if (isAdvanced) gachaState.gachaInfo[1].price else gachaState.gachaInfo[0].price,
             remainPoint = gachaState.remainPoint,
             onGachaClick = {
                 onGachaClick()

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_title">기운내 프로젝트</string>
+    <!-- Error Message 정의-->
+    <string name="network_illegal_state_error_message">예상하지 못한 값 에러입니다.</string>
+    <string name="network_error_message">네트워크 연결중 에러가 발생했습니다.</string>
+    <string name="network_timeout_message">네트워크 연결시간이 오래되었습니다.</string>
+    <string name="unknown_error_message">서버의 예상하지 못한 에러가 발생했습니다.</string>
 </resources>
