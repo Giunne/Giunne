@@ -86,6 +86,9 @@ fun RoadMapCertScreen(
                 onCertButtonClicked = { onCertButtonClicked() },
                 onPlayButtonClicked = { videoUploadStore.onClickVideoPlayButton() },
                 onResetButtonClicked = { videoUploadStore.onClickVideoResetButton() },
+                dragAndDropFile = { file ->
+                    if (file != null) videoUploadStore.initVideoFile(file)
+                }
             )
         }
         SpH(10.gdp)

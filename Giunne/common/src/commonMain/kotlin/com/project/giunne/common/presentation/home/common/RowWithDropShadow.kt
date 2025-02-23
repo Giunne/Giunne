@@ -23,8 +23,8 @@ fun RowWithDropShadow(
         modifier = modifier
             .shadow(
                 shape = RoundedCornerShape(16.gdp),
-                ambientColor = GPColor.TextBlack.copy(alpha = 0.1f),
-                elevation = 4.gdp
+                ambientColor = GPColor.TextBlack.copy(alpha = 0.05f),
+                elevation = 1.gdp
             )
             .clip(RoundedCornerShape(16.gdp))
             .background(Color.White)

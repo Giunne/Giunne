@@ -30,7 +30,7 @@ private const val SCROLL_X = 1f
 fun GachaItemList(
     gachaItems: List<DrawableResource>
 ) {
-    var itemListState by remember { mutableStateOf(gachaItems) }
+    var itemListState = gachaItems
     val lazyListState = rememberLazyListState()
 
     LaunchedEffect(Unit) {

@@ -5,15 +5,15 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
-import com.project.giunne.common.presentation.shop.dummy.TestItem
+import com.project.giunne.common.presentation.shop.state.Item
 import com.project.giunne.common.util.gdp
 
 @Composable
 fun ItemGridList(
-    items: List<TestItem>,
-    purchasedItems: List<TestItem>,
-    selectedItems: List<TestItem>,
-    onItemClick: (TestItem) -> Unit
+    items: List<Item>,
+    purchasedItems: List<Item>,
+    selectedItems: List<Item>,
+    onItemClick: (Item) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),

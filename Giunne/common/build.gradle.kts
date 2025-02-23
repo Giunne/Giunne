@@ -1,5 +1,12 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import com.codingfeline.buildkonfig.compiler.FieldSpec
+
 group = "com.project.giunne"
 version = "1.0-SNAPSHOT"
+
+fun getMappingValue(key: String): String {
+    return gradleLocalProperties(rootDir).getProperty(key)
+}
 
 plugins {
     alias(libs.plugins.composeMultiplatform)
@@ -8,7 +15,9 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.ksp)
     alias(libs.plugins.sqlDelght)
-    kotlin("plugin.serialization")
+    alias(libs.plugins.serialization)
+    alias(libs.plugins.ktorfit)
+    alias(libs.plugins.buildkonfig)
 }
 
 sqldelight {
@@ -42,7 +51,6 @@ kotlin {
 
                 api(libs.koin.core)
                 api(libs.napier)
-                api(libs.bundles.ktor)
                 api(libs.kotlinx.serialization.json)
 
                 api(libs.decompose)
@@ -66,6 +74,8 @@ kotlin {
 //                api(libs.coil.compose.core)
 //                api(libs.coil.network.ktor)
                 implementation(libs.compottie)
+                implementation(libs.ktorfit)
+                implementation(libs.bundles.ktor)
             }
         }
         val androidMain by getting {
@@ -73,7 +83,6 @@ kotlin {
                 api(libs.androidx.activity.compose)
                 api(libs.androidx.appcompat)
                 api(libs.androidx.core)
-                api(libs.ktor.okHttp)
                 api(libs.koin.core)
                 api(libs.koin.android)
                 api(libs.sqlDelight.android)
@@ -131,4 +140,13 @@ compose.resources {
     publicResClass = true
     generateResClass = auto
     packageOfResClass = "com.project.giunne"
+}
+
+buildkonfig {
+    packageName = "com.project.giunne"
+
+    // default config is required
+    defaultConfigs {
+        buildConfigField(FieldSpec.Type.STRING, "BASE_URL", getMappingValue("BASE_URL"), const = true)
+    }
 }

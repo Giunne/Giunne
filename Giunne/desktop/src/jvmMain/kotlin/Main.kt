@@ -12,6 +12,7 @@ import com.badoo.reaktive.coroutinesinterop.asScheduler
 import com.badoo.reaktive.scheduler.overrideSchedulers
 import com.project.giunne.Res
 import com.project.giunne.app_title
+import com.project.giunne.common.data.util.ErrorMessages
 import com.project.giunne.common.di.sharedModule
 import com.project.giunne.common.presentation.root.RootComponent
 import com.project.giunne.common.presentation.root.RootContent
@@ -19,8 +20,10 @@ import com.project.giunne.common.ui.theme.GiunnaeTheme
 import com.project.giunne.common.util.PreferencesUtil
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.core.context.startKoin
 import util.runOnUiThread
@@ -37,6 +40,9 @@ fun main() {
     }
 
     Napier.base(DebugAntilog())
+    CoroutineScope(Dispatchers.IO).launch {
+        ErrorMessages.init()
+    }
 
     overrideSchedulers(main = Dispatchers.Main::asScheduler)
 

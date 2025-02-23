@@ -1,5 +1,6 @@
 package com.project.giunne.common.presentation.mypage.student
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -55,6 +56,7 @@ internal fun StudentMyPageScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(GPColor.BackgroundLightGray)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.gdp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -85,12 +87,11 @@ internal fun StudentMyPageScreen(
                     pressColor = GPColor.ButtonPressLightGray,
                     hoverColor = GPColor.ButtonHoverLightGray,
                     onClick = {
-                    /*TODO(상점 들어가기)*/
                         navigateToGacha()
                     },
                 ) {
                     GPText(
-                        text = "상점",
+                        text = "뽑기",
                         textSize = 14.gsp,
                         fontFamily = GPFontFamily.Bold,
                         textColor = GPColor.White
@@ -105,7 +106,6 @@ internal fun StudentMyPageScreen(
                     pressColor = GPColor.ButtonPressOrange,
                     hoverColor = GPColor.ButtonHoverOrange,
                     onClick = {
-                    /*TODO(꾸미기)*/
                         navigateToShop()
                     },
                 ) {
