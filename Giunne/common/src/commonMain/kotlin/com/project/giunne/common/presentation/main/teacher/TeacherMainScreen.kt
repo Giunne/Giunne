@@ -376,7 +376,12 @@ private fun TeacherChildren(
         animation = tabAnimation()
     ) {
         when (val child = it.instance) {
-            is TeacherMainComponent.TeacherChild.TeacherHomeChild -> TeacherHomeScreen(component = child.component)
+            is TeacherMainComponent.TeacherChild.TeacherHomeChild -> TeacherHomeScreen(
+                component = child.component,
+                navigateToCommunity = {
+                    component.navigateToCommunity()
+                }
+            )
             is TeacherMainComponent.TeacherChild.TeacherRoadmapChild -> TeacherRoadmapScreen(component = child.component)
             is TeacherMainComponent.TeacherChild.TeacherCertificationChild -> TeacherCertificationScreen(
                 component = child.component,

@@ -1,6 +1,7 @@
 package com.project.giunne.common.presentation.home.teacher.content
 
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -20,17 +21,19 @@ import com.project.giunne.common.presentation.home.common.RowWithDropShadow
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import com.project.giunne.icon_next
 import com.project.giunne.icon_student_check
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun RemainCheckingStudentBox(
     modifier: Modifier,
-    studentCount: Int
+    studentCount: Int,
+    onClickCommunity: () -> Unit
 ) {
     RowWithDropShadow(
         modifier = modifier
-            .padding(16.gdp)
+            .padding(horizontal = 16.gdp)
     ) {
         GPSquircleShape(
             modifier = Modifier
@@ -67,10 +70,16 @@ fun RemainCheckingStudentBox(
 
         BorderButton(
             modifier = Modifier.wrapContentSize(),
-            title = "복사하기",
-            onClick = {
-
-            }
+            title = "게시판 보러가기",
+            content = {
+                Icon(
+                    modifier = Modifier.height(12.gdp),
+                    painter = painterResource(Res.drawable.icon_next),
+                    contentDescription = "게시판 보러가기",
+                    tint = GPColor.MainOrangeColor
+                )
+            },
+            onClick = onClickCommunity
         )
     }
 }
