@@ -35,8 +35,9 @@ import com.project.giunne.common.presentation.common.player.VideoPlayer
 import com.project.giunne.common.presentation.common.player.VideoWindowPlayer
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.text.GPText
-import com.project.giunne.common.presentation.community.student.content.CommunityCommentColumn
+import com.project.giunne.common.presentation.community.student.content.CommentInputRow
 import com.project.giunne.common.presentation.community.student.content.CommunityDetailInfoRow
+import com.project.giunne.common.presentation.community.student.content.StudentCommunityCommentColumn
 import com.project.giunne.common.presentation.community.student.dummy.CommunityDto
 import com.project.giunne.common.presentation.community.student.dummy.commentTestList
 import com.project.giunne.common.ui.theme.GPColor
@@ -145,11 +146,16 @@ fun StudentCommunityDetailScreen(
                         textColor = GPColor.TextBlack
                     )
                 }
-                CommunityCommentColumn(
+                StudentCommunityCommentColumn(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
                     commentList = commentTestList
+                )
+                CommentInputRow(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    onSendButtonClicked = {  }, // TODO API
                 )
             }
         }

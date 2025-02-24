@@ -3,6 +3,7 @@ package com.project.giunne.common.presentation.community.student.dummy
 data class CommentDto(
     val name: String,
     val content: String,
+    var like: Boolean = false,
 )
 
 val commentTestList = listOf(

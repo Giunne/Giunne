@@ -16,7 +16,7 @@ import com.project.giunne.common.presentation.community.student.dummy.CommentDto
 import com.project.giunne.common.util.gdp
 
 @Composable
-fun CommunityCommentColumn(
+fun StudentCommunityCommentColumn(
     modifier: Modifier = Modifier,
     commentList: List<CommentDto>
 ) {
@@ -34,7 +34,7 @@ fun CommunityCommentColumn(
             items(
                 commentList.size
             ) {
-                CommentItemRow(
+                StudentCommentItemRow(
                     modifier = Modifier
                         .padding(vertical = 8.gdp)
                         .fillMaxWidth()

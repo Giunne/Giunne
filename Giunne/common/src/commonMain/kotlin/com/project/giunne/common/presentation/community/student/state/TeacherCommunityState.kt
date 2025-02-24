@@ -1,6 +1,6 @@
 package com.project.giunne.common.presentation.community.student.state
 
-data class StudentCommunityState(
+data class TeacherCommunityState(
     val datePriority: DatePriority = DatePriority.NEWEST,
     val datePrioritySelectDialog: Boolean = false,
     val roadmapFilter: String = "전체",

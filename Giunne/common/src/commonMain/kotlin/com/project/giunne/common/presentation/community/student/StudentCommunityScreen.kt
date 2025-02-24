@@ -55,8 +55,6 @@ internal fun StudentCommunityScreen(
     val communityState by component.uiState.collectAsState()
 
     ///// test /////
-    var loading by remember { mutableStateOf(false) }
-
     var list by remember { mutableStateOf(
         when(pageType) {
             CertPage.RoadMap -> roadmapCommunityList
@@ -178,7 +176,7 @@ internal fun StudentCommunityScreen(
         }
     }
 
-    if (loading) {
+    if (communityState.loading) {
         Loader()
     }
 }
