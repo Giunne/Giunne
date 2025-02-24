@@ -15,6 +15,10 @@ actual object DpUtil {
         return num.toFloat() * ((systemHeight.toFloat() / 1080f))
     }
 
+    actual fun convert(num: Float): Float {
+        return num * ((systemHeight.toFloat() / 1080f))
+    }
+
     actual fun wConvert(num: Int): Float {
 //        return num.toFloat() * (0.76f * (systemHeight.toFloat() / 1080f))
 //        return num.toFloat() * (0.76f * (systemWidth.toFloat() / 1920f))

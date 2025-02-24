@@ -20,6 +20,11 @@ actual object DpUtil {
         else { num * 1.2f } // 720 초과
     }
 
+    actual fun convert(num: Float): Float {
+        return if (sw <= 720) { num * 1.14f } // 최소 너비 720 이하일 때
+        else { num * 1.2f } // 720 초과
+    }
+
     actual fun wConvert(num: Int): Float {
         return if (sw <= 720) { num * 0.43f } // 최소 너비 720 이하일 때
         else { num * 0.4715f } // 720 초과

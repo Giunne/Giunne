@@ -10,6 +10,7 @@ expect object DpUtil {
 
     var sw: Int
     fun convert(num: Int): Float
+    fun convert(num: Float): Float
     fun wConvert(num: Int): Float
 }
 
@@ -18,6 +19,12 @@ inline val Int.gdp: Dp
     get() = Dp(
     value = DpUtil.convert(this)
 )
+
+@Stable
+inline val Float.gdp: Dp
+    get() = Dp(
+        value = DpUtil.convert(this)
+    )
 
 @Stable
 inline val Int.wGdp: Dp
