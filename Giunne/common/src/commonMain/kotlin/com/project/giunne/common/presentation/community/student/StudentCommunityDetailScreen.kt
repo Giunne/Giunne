@@ -35,9 +35,9 @@ import com.project.giunne.common.presentation.common.player.VideoPlayer
 import com.project.giunne.common.presentation.common.player.VideoWindowPlayer
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.text.GPText
-import com.project.giunne.common.presentation.community.student.content.CommentInputRow
-import com.project.giunne.common.presentation.community.student.content.CommunityDetailInfoRow
-import com.project.giunne.common.presentation.community.student.content.StudentCommunityCommentColumn
+import com.project.giunne.common.presentation.community.content.CommentInputRow
+import com.project.giunne.common.presentation.community.content.CommunityDetailInfoRow
+import com.project.giunne.common.presentation.community.content.StudentCommunityCommentColumn
 import com.project.giunne.common.presentation.community.student.dummy.CommunityDto
 import com.project.giunne.common.presentation.community.student.dummy.commentTestList
 import com.project.giunne.common.ui.theme.GPColor
@@ -68,8 +68,7 @@ fun StudentCommunityDetailScreen(
     Scaffold(
         modifier = Modifier
             .addFocusCleaner(focusManager)
-            .fillMaxSize()
-            .imePadding(),
+            .fillMaxSize(),
     ) {
         Column(
             modifier = Modifier

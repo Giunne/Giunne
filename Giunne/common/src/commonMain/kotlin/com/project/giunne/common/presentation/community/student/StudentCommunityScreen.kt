@@ -26,9 +26,9 @@ import com.project.giunne.common.presentation.certification.student.state.CertPa
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.scrollbar.VerticalScrollbar
-import com.project.giunne.common.presentation.community.student.content.CommunityItemRow
-import com.project.giunne.common.presentation.community.student.content.SearchRow
-import com.project.giunne.common.presentation.community.student.content.SelectableDialog
+import com.project.giunne.common.presentation.community.content.CommunityItemRow
+import com.project.giunne.common.presentation.community.content.SearchRow
+import com.project.giunne.common.presentation.community.content.SelectableDialog
 import com.project.giunne.common.presentation.community.student.dummy.CommunityDto
 import com.project.giunne.common.presentation.community.student.dummy.roadmapCommunityList
 import com.project.giunne.common.presentation.community.student.dummy.runningCommunityList

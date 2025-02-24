@@ -1,4 +1,4 @@
-package com.project.giunne.common.presentation.community.student.content
+package com.project.giunne.common.presentation.community.content
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
@@ -21,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.shape.GPSquircleShape
@@ -34,22 +33,17 @@ import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_delete
 import com.project.giunne.icon_edit
-import com.project.giunne.icon_like
-import com.project.giunne.icon_like_fill
 import com.project.giunne.icon_more
 import com.project.giunne.test_character
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun TeacherCommentItemRow(
+fun StudentCommentItemRow(
     modifier: Modifier = Modifier,
     commentDto: CommentDto,
-    like: Boolean,
     onMenuButtonClicked: () -> Unit,
-    onLikeButtonClicked: (Boolean) -> Unit
 ) {
     var isMenuOpen by remember { mutableStateOf(false) }
-    var isLike by remember { mutableStateOf(like) } // TODO API
 
     val animatedDP by animateDpAsState(
         targetValue = if (isMenuOpen) (-28).gdp else 0.gdp
@@ -93,23 +87,6 @@ fun TeacherCommentItemRow(
                     textSize = 8.gsp,
                     fontFamily = GPFontFamily.Bold
                 )
-                Box(
-                    modifier = Modifier
-                        .size(28.gdp)
-                        .noRippleClickable {
-                            onLikeButtonClicked(like)
-                            isLike = !isLike
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        modifier = Modifier.size(12.gdp),
-                        painter = if (isLike) painterResource(Res.drawable.icon_like_fill)
-                            else painterResource(Res.drawable.icon_like),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(GPColor.Red)
-                    )
-                }
                 Box(
                     modifier = Modifier
                         .size(28.gdp)

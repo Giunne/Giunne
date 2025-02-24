@@ -1,4 +1,4 @@
-package com.project.giunne.common.presentation.community.student.content
+package com.project.giunne.common.presentation.community.content
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,10 +18,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -34,7 +32,6 @@ import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_arrow_up
-import com.project.giunne.icon_search
 import org.jetbrains.compose.resources.painterResource
 
 @Composable

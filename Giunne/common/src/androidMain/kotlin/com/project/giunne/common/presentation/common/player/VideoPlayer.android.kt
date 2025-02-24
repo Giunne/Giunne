@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.project.giunne.common.presentation.common.noRippleClickable
@@ -86,6 +87,21 @@ actual fun VideoPlayer(
     videoPath: String,
     onFullScreenClicked: () -> Unit
 ) {
+    val context = LocalContext.current
+    val exoPlayer = remember {
+        ExoPlayer.Builder(context).build().apply {
+            val mediaItem = MediaItem.fromUri(videoPath)
+            setMediaItem(mediaItem)
+            prepare()
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            exoPlayer.release()
+        }
+    }
+
     Box(
         modifier = modifier
             .fillMaxSize(),
@@ -95,14 +111,9 @@ actual fun VideoPlayer(
             modifier = modifier
                 .fillMaxHeight()
                 .wrapContentWidth(),
-            factory = { context ->
-                PlayerView(context).apply {
-                    val exoPlayer = ExoPlayer.Builder(context).build()
-                    exoPlayer.setMediaItem(androidx.media3.common.MediaItem.fromUri(videoPath))
+            factory = { ctx ->
+                PlayerView(ctx).apply {
                     player = exoPlayer
-                    exoPlayer.prepare()
-
-                    useController = true
                 }
             },
             update = {}

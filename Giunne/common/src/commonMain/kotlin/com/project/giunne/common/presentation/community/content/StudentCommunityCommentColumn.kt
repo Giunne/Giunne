@@ -1,4 +1,4 @@
-package com.project.giunne.common.presentation.community.student.content
+package com.project.giunne.common.presentation.community.content
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -16,7 +16,7 @@ import com.project.giunne.common.presentation.community.student.dummy.CommentDto
 import com.project.giunne.common.util.gdp
 
 @Composable
-fun TeacherCommunityCommentColumn(
+fun StudentCommunityCommentColumn(
     modifier: Modifier = Modifier,
     commentList: List<CommentDto>
 ) {
@@ -34,17 +34,13 @@ fun TeacherCommunityCommentColumn(
             items(
                 commentList.size
             ) {
-                TeacherCommentItemRow(
+                StudentCommentItemRow(
                     modifier = Modifier
                         .padding(vertical = 8.gdp)
                         .fillMaxWidth()
                         .wrapContentHeight(),
                     commentDto = commentList[it],
-                    like = commentList[it].like,
-                    onMenuButtonClicked = {  },
-                    onLikeButtonClicked = { like ->
-                        commentList[it].like = !like
-                    }
+                    onMenuButtonClicked = {  }, // TODO 동작
                 )
             }
         }
