@@ -61,7 +61,7 @@ internal fun StudentHomeScreen(
                 level = 3,
                 currentExp = 6,
                 totalExp = 10,
-                character = Res.drawable.test_character,
+                character = "",
                 items = listOf()
             )
             TeacherCheckingBox(

@@ -1,15 +1,15 @@
 package com.project.giunne.common.domain.usecase.shop
 
-import com.project.giunne.common.data.remote.response.GachaResponse
+import com.project.giunne.common.data.remote.response.CategoryTypeResponse
 import com.project.giunne.common.data.util.successOr
 import com.project.giunne.common.domain.repository.ShopRepository
 
-class GetGachaTypeUseCase(
+class GetCategoryMapUseCase(
     private val shopRepository: ShopRepository
 ) {
-    suspend operator fun invoke(): List<GachaResponse> {
+    suspend operator fun invoke(): Map<Long, List<CategoryTypeResponse>> {
         return shopRepository
-            .getGachaType()
-            .successOr(listOf())
+            .getCategoryMap()
+            .successOr(mapOf())
     }
 }

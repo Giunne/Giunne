@@ -2,6 +2,7 @@ package com.project.giunne.common.di
 
 import com.project.giunne.common.data.util.DefineUrl
 import de.jensklingenberg.ktorfit.ktorfit
+import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpTimeout
@@ -54,6 +55,14 @@ fun createHttpClient(
                 },
                 contentType = ContentType.Application.Json
             )
+        }
+        install(Logging) {
+            level = LogLevel.BODY
+            logger = object : Logger {
+                override fun log(message: String) {
+                    Napier.d("HTTP Client", null, message)
+                }
+            }
         }
         install(DefaultRequest) {
             url(DefineUrl.BASE_URL)

@@ -148,5 +148,6 @@ buildkonfig {
     // default config is required
     defaultConfigs {
         buildConfigField(FieldSpec.Type.STRING, "BASE_URL", getMappingValue("BASE_URL"), const = true)
+        buildConfigField(FieldSpec.Type.STRING, "IMAGE_BASE_URL", getMappingValue("IMAGE_BASE_URL"), const = true)
     }
 }

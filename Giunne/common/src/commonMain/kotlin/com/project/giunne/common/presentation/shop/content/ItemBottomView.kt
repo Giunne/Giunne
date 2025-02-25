@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.project.giunne.common.data.remote.response.CategoryTypeResponse
 import com.project.giunne.common.data.remote.response.Item
@@ -22,6 +22,7 @@ import com.project.giunne.common.util.gdp
 @Composable
 fun ItemBottomView(
     modifier: Modifier,
+    lazyGridState: LazyGridState,
     types: List<CategoryTypeResponse>,
     shopStore: ShopStore,
     state: CharacterState,
@@ -48,15 +49,23 @@ fun ItemBottomView(
                     onTypeSelected(id)
                 }
             )
-            ItemGridList(
-                modifier = Modifier.weight(1f),
-                items = state.categoryItem,
-                selectedItems = state.selectedItems,
-                purchasedItems = state.purchasedItems,
-                onItemClick = { item ->
-                    onItemClick(item)
-                }
-            )
+            if (state.categoryItem.isEmpty()) {
+                EmptyItemList(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                )
+            } else {
+                ItemGridList(
+                    modifier = Modifier.weight(1f),
+                    lazyGridState = lazyGridState,
+                    items = state.categoryItem,
+                    selectedItems = state.selectedItems,
+                    onItemClick = { item ->
+                        onItemClick(item)
+                    }
+                )
+            }
             if (state.wearingItems != state.selectedItems) {
                 ItemModifyBottomView(
                     modifier = Modifier

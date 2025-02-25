@@ -9,17 +9,21 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.charactor.GPCharacter
+import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.shop.content.ItemBottomView
 import com.project.giunne.common.presentation.shop.content.StudentRemainPoint
 import com.project.giunne.common.presentation.shop.intent.ShopStore
@@ -32,9 +36,26 @@ internal fun ShopScreen(
     modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
-    /* TODO(API Spec에 따라 DTO 변경 해야함 -> 현재 Local Test Data) */
+    val lazyGridState = rememberLazyGridState()
     val shopStore by remember { mutableStateOf(ShopStore()) }
     val state by shopStore.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        shopStore.getCategoryMap()
+        shopStore.onChangeType(1)
+    }
+
+    LaunchedEffect(lazyGridState) {
+        snapshotFlow { lazyGridState.layoutInfo }
+            .collect { layoutInfo ->
+                val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+                val totalItemsCount = layoutInfo.totalItemsCount
+
+                if (state.paginationInfo.hasNextPage && lastVisibleItemIndex >= totalItemsCount - 1) {
+                    shopStore.loadNextPage(state.selectedType, state.paginationInfo.currentPage + 1)
+                }
+            }
+    }
 
     Scaffold(
         modifier = Modifier
@@ -75,21 +96,25 @@ internal fun ShopScreen(
                 }
             }
 
-            ItemBottomView(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                types = ItemType.entries.toList(),
-                shopStore = shopStore,
-                state = state,
-                onItemClick = { item ->
-                    shopStore.onChangeItem(item)
-                },
-                onTypeSelected = { itemType ->
-                    /* TODO(API 나오면 Spec에 맞게 변경) */
-                    shopStore.onChangeType(itemType)
-                }
-            )
+            if (state.categoryMap.isEmpty()) {
+                Loader()
+            } else {
+                ItemBottomView(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    lazyGridState = lazyGridState,
+                    types = state.categoryMap[0] ?: listOf(),
+                    shopStore = shopStore,
+                    state = state,
+                    onItemClick = { item ->
+                        shopStore.onChangeItem(item)
+                    },
+                    onTypeSelected = { itemType ->
+                        shopStore.onChangeType(itemType)
+                    }
+                )
+            }
         }
     }
 }
