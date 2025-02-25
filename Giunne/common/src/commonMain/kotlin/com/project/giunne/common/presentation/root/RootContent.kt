@@ -106,7 +106,8 @@ private fun Children(
             is RootComponent.Child.SignupChild -> SignupScreen(
                 component = child.component,
                 onClickBackButton = { component.navigateBack() },
-                signupType = child.type
+                signupType = child.type,
+                navigateToLogin = { component.navigateToLogin() }
             )
             is RootComponent.Child.StudentMainChild -> StudentMainScreen(
                 component = child.component,

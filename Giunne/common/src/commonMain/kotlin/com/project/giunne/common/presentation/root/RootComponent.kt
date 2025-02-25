@@ -6,6 +6,7 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.navigate
 import com.arkivanov.decompose.router.stack.pop
+import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.router.stack.replaceCurrent
 import com.arkivanov.decompose.value.Value
 import com.project.giunne.common.presentation.login.LoginComponent
@@ -83,7 +84,7 @@ public class RootComponent(
     }
 
     fun navigateToLogin() {
-        navigation.replaceCurrent(Config.Login)
+        navigation.replaceAll(Config.Login)
     }
 
     fun navigateToSignupType() {

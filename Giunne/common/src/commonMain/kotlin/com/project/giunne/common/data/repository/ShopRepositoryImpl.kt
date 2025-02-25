@@ -6,14 +6,13 @@ import com.project.giunne.common.data.util.NetworkResult
 import com.project.giunne.common.data.util.handleApi
 import com.project.giunne.common.domain.repository.ShopRepository
 
+private const val TAG = "ShopRepositoryImpl"
 class ShopRepositoryImpl(
     private val shopService: ShopService
 ): ShopRepository {
     override suspend fun getCategoryMap(): NetworkResult<List<GachaResponse>> {
-        return handleApi {
+        return handleApi(TAG) {
             shopService.getCategoryList()
-        }.also {
-
         }
     }
 }

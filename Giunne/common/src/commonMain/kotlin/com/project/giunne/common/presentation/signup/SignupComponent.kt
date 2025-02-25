@@ -21,7 +21,7 @@ class SignupComponent(
 
     companion object {
         const val TYPE_NONE = ""
-        const val TYPE_TEACHER = "teacher"
-        const val TYPE_STUDENT = "student"
+        const val TYPE_TEACHER = "ROLE_TEACHER"
+        const val TYPE_STUDENT = "ROLE_STUDENT"
     }
 }
