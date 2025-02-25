@@ -27,6 +27,7 @@ class ShopStore(
             }.onSuccess { response ->
                 setState {
                     copy(
+                        currentLevel = 6,
                         categoryMap = response
                     )
                 }
@@ -39,7 +40,7 @@ class ShopStore(
         setState {
             copy(
                 selectedCharacter = if (item.categoryId == 6) {
-                    IMAGE_BASE_URL + item.itemImages.first()
+                    (IMAGE_BASE_URL + item.itemImages.find { it.level == currentLevel }?.fileUrl)
                 } else this.selectedCharacter,
                 selectedItems = if (selectedItems.contains(item)) {
                     selectedItems.toMutableList().apply {
@@ -97,6 +98,7 @@ class ShopStore(
     }
 
     fun onModifyWearingItems() {
+        /* TODO(API -> 현재 로드맵에서의 캐릭터 상태 변경 호출) */
         setState {
             copy(
                 character = selectedCharacter,

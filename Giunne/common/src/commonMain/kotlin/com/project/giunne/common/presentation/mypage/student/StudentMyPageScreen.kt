@@ -63,6 +63,7 @@ internal fun StudentMyPageScreen(
         ) {
             GPCharacter(
                 modifier = Modifier.size(256.gdp),
+                currentLevel = 6,
                 character = ""
             )
 

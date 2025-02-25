@@ -52,6 +52,7 @@ fun StudentCharacter(
             GPCharacter(
                 modifier = Modifier.size(256.gdp),
                 character = character,
+                currentLevel = level,
                 items = items
             )
 

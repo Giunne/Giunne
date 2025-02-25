@@ -26,6 +26,7 @@ data class Item(
 data class ItemImage(
     val fileUrl: String,
     val id: Int,
+    val level: Int,
     val isRepresent: Boolean,
     val itemImagePositions: List<ItemImagePosition>
 )

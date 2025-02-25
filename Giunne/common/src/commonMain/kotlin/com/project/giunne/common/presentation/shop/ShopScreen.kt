@@ -42,7 +42,7 @@ internal fun ShopScreen(
 
     LaunchedEffect(Unit) {
         shopStore.getCategoryMap()
-        shopStore.onChangeType(1)
+        shopStore.onChangeType(2)
     }
 
     LaunchedEffect(lazyGridState) {
@@ -90,6 +90,7 @@ internal fun ShopScreen(
                     GPCharacter(
                         modifier = Modifier
                             .size(256.gdp),
+                        currentLevel = state.currentLevel,
                         character = state.selectedCharacter,
                         items = state.selectedItems
                     )
@@ -104,7 +105,7 @@ internal fun ShopScreen(
                         .fillMaxWidth()
                         .weight(1f),
                     lazyGridState = lazyGridState,
-                    types = state.categoryMap[0] ?: listOf(),
+                    types = state.categoryMap[0]?.drop(1) ?: listOf(),
                     shopStore = shopStore,
                     state = state,
                     onItemClick = { item ->
