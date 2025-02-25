@@ -98,9 +98,14 @@ internal fun SearchRoadMapScreen(
                 ResultRoadMapItem(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     isSelected = selectedItem == index,
+                    teacherName = "홍길동",
                     description = "Test $index",
                     onItemSelected = {
-                        selectedItem = index
+                        selectedItem = if (selectedItem == index) {
+                            -1
+                        } else {
+                            index
+                        }
                         focusManager.clearFocus()
                     }
                 )
@@ -109,7 +114,7 @@ internal fun SearchRoadMapScreen(
 
         GPButton(
             modifier = Modifier
-                .padding(vertical = 8.gdp, horizontal = 16.gdp)
+                .padding(16.gdp)
                 .fillMaxWidth()
                 .height(56.gdp),
             normalColor = if (isEnabled) GPColor.ButtonOrange else GPColor.ButtonLightGray,
