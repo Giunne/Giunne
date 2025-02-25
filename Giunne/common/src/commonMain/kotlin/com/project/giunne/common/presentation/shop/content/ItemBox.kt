@@ -50,13 +50,23 @@ fun ItemBox(
         contentAlignment = Alignment.Center
     ) {
 
-        AsyncImage(
-            modifier = Modifier
-                .width(maxWidth / 2)
-                .wrapContentHeight(),
-            model = BuildKonfig.IMAGE_BASE_URL + item.itemImages.first().fileUrl,
-            contentDescription = "아이템"
-        )
+        item.thumbnailUrl?.let { thumbnailUrl ->
+            AsyncImage(
+                modifier = Modifier
+                    .width(maxWidth / 2)
+                    .wrapContentHeight(),
+                model = BuildKonfig.IMAGE_BASE_URL + thumbnailUrl,
+                contentDescription = "아이템"
+            )
+        } ?: run {
+            AsyncImage(
+                modifier = Modifier
+                    .width(maxWidth / 2)
+                    .wrapContentHeight(),
+                model = BuildKonfig.IMAGE_BASE_URL + item.itemImages.first().fileUrl,
+                contentDescription = "아이템"
+            )
+        }
 
         if (selectedItems.contains(item)) {
             Box(

@@ -14,6 +14,7 @@ data class Item(
     val categoryId: Int,
     val itemDescription: String,
     val itemGrade: String,
+    val thumbnailUrl: String?,
     val itemImages: List<ItemImage>,
     val itemName: String,
     val needLevel: Int,
