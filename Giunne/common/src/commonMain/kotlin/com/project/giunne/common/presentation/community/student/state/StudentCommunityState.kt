@@ -7,4 +7,5 @@ data class StudentCommunityState(
     val runningFilter: String = "전체",
     val roadmapFilterDialog: Boolean = false,
     val runningFilterDialog: Boolean = false,
+    val loading: Boolean = false,
 )

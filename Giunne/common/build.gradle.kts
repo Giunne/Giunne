@@ -73,9 +73,9 @@ kotlin {
 //                api(libs.coil.compose)
 //                api(libs.coil.compose.core)
 //                api(libs.coil.network.ktor)
-                implementation(libs.compottie)
-                implementation(libs.ktorfit)
-                implementation(libs.bundles.ktor)
+                api(libs.compottie)
+                api(libs.ktorfit)
+                api(libs.bundles.ktor)
             }
         }
         val androidMain by getting {
@@ -134,6 +134,9 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     buildToolsVersion = "34.0.0"
+}
+dependencies {
+    implementation(libs.androidx.foundation.android)
 }
 
 compose.resources {

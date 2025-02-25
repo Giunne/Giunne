@@ -1,15 +1,12 @@
-package com.project.giunne.common.presentation.community.student.content
+package com.project.giunne.common.presentation.community.content
 
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -24,9 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import coil3.compose.AsyncImagePainter.State.Empty.painter
 import com.project.giunne.Res
-import com.project.giunne.common.presentation.common.button.GPIconButton
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.shape.GPSquircleShape
 import com.project.giunne.common.presentation.common.spacer.SpW
@@ -39,12 +34,11 @@ import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_delete
 import com.project.giunne.icon_edit
 import com.project.giunne.icon_more
-import com.project.giunne.icon_upload_video
 import com.project.giunne.test_character
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun CommentItemRow(
+fun StudentCommentItemRow(
     modifier: Modifier = Modifier,
     commentDto: CommentDto,
     onMenuButtonClicked: () -> Unit,

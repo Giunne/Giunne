@@ -1,5 +1,6 @@
 package com.project.giunne.common.presentation.common.player
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -17,7 +18,7 @@ import java.io.File
 import java.net.URI
 
 @Composable
-actual fun VideoPlayer(
+actual fun VideoWindowPlayer(
     modifier: Modifier,
     dismiss: () -> Unit,
     videoPath: String,
@@ -49,7 +50,39 @@ actual fun VideoPlayer(
                 IntSize(first, second)
             } ?: IntSize.Zero,
             bytes = frameController.bytes.collectAsState(null).value,
-            frameController = frameController
+            frameController = frameController,
+            onFullScreenClicked = {  },
+            isFullScreen = true
+        )
+    }
+}
+
+@Composable
+actual fun VideoPlayer(
+    modifier: Modifier,
+    videoPath: String,
+    onFullScreenClicked: () -> Unit
+) {
+    val componentController = remember(videoPath) { JfxComponentController() }
+    val frameController = remember(videoPath) { JfxFrameController() }
+
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        PlayerSource(
+            url = videoPath.run {
+                (runCatching(URI::create).getOrNull() ?: File(this).toURI()).toString()
+            },
+            component = componentController.component,
+            componentController = componentController,
+            size = frameController.size.collectAsState(null).value?.run {
+                IntSize(first, second)
+            } ?: IntSize.Zero,
+            bytes = frameController.bytes.collectAsState(null).value,
+            frameController = frameController,
+            onFullScreenClicked = onFullScreenClicked,
+            isFullScreen = false
         )
     }
 }

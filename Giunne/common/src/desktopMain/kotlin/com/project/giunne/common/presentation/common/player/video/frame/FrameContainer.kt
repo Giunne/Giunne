@@ -2,8 +2,10 @@ package com.project.giunne.common.presentation.common.player.video.frame
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,6 +17,9 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.asComposeImageBitmap
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
+import com.project.giunne.common.presentation.common.player.video.source.PlayerController
+import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.gdp
 import org.jetbrains.skia.Bitmap
 
 @Composable
@@ -22,9 +27,12 @@ fun FrameContainer(
     modifier: Modifier = Modifier,
     size: IntSize,
     bytes: ByteArray?,
+    controller: PlayerController
 ) {
     var viewSize by remember { mutableStateOf(IntSize.Zero) }
     val ratio = size.width.toFloat() / size.height.toFloat()
+
+    val state by controller.state.collectAsState()
 
     val bitmap by remember(size) {
         derivedStateOf {
@@ -48,7 +56,8 @@ fun FrameContainer(
                     modifier = Modifier
 //                        .fillMaxHeight()
 //                        .aspectRatio(ratio)
-                        .align(Alignment.Center), // TODO 화면 회전 구현
+                        .align(Alignment.Center)
+                        .rotate(state.rotate),
                     bitmap = bitmap.run {
                         installPixels(bytes)
                         asComposeImageBitmap()
@@ -56,6 +65,12 @@ fun FrameContainer(
                     contentDescription = "frame"
                 )
             }
-        } ?: CircularProgressIndicator()
+        } ?: CircularProgressIndicator(
+            modifier = Modifier
+                .width(40.gdp),
+            color = GPColor.White,
+            trackColor = GPColor.MainOrangeColor,
+            strokeWidth = 6.gdp
+        )
     }
 }

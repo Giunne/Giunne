@@ -3,8 +3,18 @@ package com.project.giunne.common.util
 import androidx.compose.foundation.gestures.TransformableState
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.Constraints
 import com.project.giunne.common.base.BaseStore
+import kotlinx.coroutines.CoroutineScope
+
+@Composable
+expect fun Modifier.onZoomEvent(
+    scope: CoroutineScope,
+    state: TransformableState,
+    onSingleTapEvent: (Offset) -> Unit
+): Modifier
 
 class ZoomStore : BaseStore<ZoomUiState>(ZoomUiState()) {
 

@@ -18,6 +18,8 @@ fun PlayerSource(
     size: IntSize,
     bytes: ByteArray?,
     frameController: PlayerController,
+    onFullScreenClicked: () -> Unit,
+    isFullScreen: Boolean = false
 ) {
     Column(
         Modifier.fillMaxSize(),
@@ -29,7 +31,9 @@ fun PlayerSource(
             url = url,
             size = size,
             bytes = bytes,
-            controller = frameController
+            controller = frameController,
+            onFullScreenClicked = onFullScreenClicked,
+            isFullScreen = isFullScreen
         )
     }
 }

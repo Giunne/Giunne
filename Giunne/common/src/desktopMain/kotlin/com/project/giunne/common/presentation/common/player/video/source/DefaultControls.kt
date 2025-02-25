@@ -1,114 +1,186 @@
 package com.project.giunne.common.presentation.common.player.video.source
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Slider
 import androidx.compose.material.SliderDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Call
+import androidx.compose.material.icons.rounded.Phone
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
-import com.project.giunne.common.presentation.common.button.GPButton
+import com.project.giunne.Res
+import com.project.giunne.common.presentation.common.button.GPIconButton
+import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import com.project.giunne.icon_pause
+import com.project.giunne.icon_play
+import com.project.giunne.icon_roadmap
+import com.project.giunne.icon_rotate
+import org.jetbrains.compose.resources.painterResource
 import kotlin.math.roundToLong
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DefaultControls(modifier: Modifier = Modifier, controller: PlayerController) {
-
+fun DefaultControls(
+    modifier: Modifier = Modifier,
+    controller: PlayerController,
+    isHovered: Boolean = false
+) {
     val state by controller.state.collectAsState()
 
     val animatedTimestamp by animateFloatAsState(state.timestamp.toFloat())
+    val animatedAlpha by animateFloatAsState(
+        targetValue = if (isHovered) 1f else 0f
+    )
 
-    Column(
-        modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Slider(
-            colors = SliderDefaults.colors(
-                thumbColor = GPColor.White
-            ),
-            value = animatedTimestamp,
-            onValueChange = { controller.seekTo(it.roundToLong()) },
-            valueRange = 0f..state.duration.toFloat(),
-            modifier = Modifier.fillMaxWidth().padding(4.dp)
-        )
+    if (state.duration >= 100) {
         Row(
-            Modifier.fillMaxWidth(),
+            modifier = modifier
+                .alpha(animatedAlpha)
+                .padding(4.gdp)
+                .background(
+                    color = GPColor.BackgroundLoading,
+                    shape = RoundedCornerShape(12.gdp)
+                )
+                .fillMaxWidth()
+                .padding(horizontal = 12.gdp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            GPText(
-                text = state.timestamp.formatTimestamp(),
-                textSize = 20.gsp,
-            )
-            Spacer(modifier = Modifier.width(80.gdp))
             if (state.isPlaying) {
-                GPButton(
-                    modifier = modifier
-                        .width(160.gdp)
-                        .height(80.gdp),
+                GPIconButton(
+                    modifier = Modifier
+                        .width(24.gdp)
+                        .aspectRatio(1f),
                     normalColor = GPColor.ButtonBlack,
                     pressColor = GPColor.ButtonPressBlack,
-                    shape = RoundedCornerShape(12.gdp),
-                    onClick = controller::pause
-                ) {
-                    GPText(
-                        text = "PAUSE",
-                        textSize = 14.gsp,
-                    )
-                }
+                    shape = CircleShape,
+                    onClick = controller::pause,
+                    icon = {
+                        Image(
+                            modifier = Modifier.size(12.gdp),
+                            painter = painterResource(Res.drawable.icon_pause),
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(GPColor.White)
+                        )
+                    }
+                )
             } else {
-                GPButton(
-                    modifier = modifier
-                        .width(160.gdp)
-                        .height(80.gdp),
+                GPIconButton(
+                    modifier = Modifier
+                        .width(24.gdp)
+                        .aspectRatio(1f),
                     normalColor = GPColor.ButtonOrange,
                     pressColor = GPColor.ButtonPressOrange,
-                    shape = RoundedCornerShape(12.gdp),
-                    onClick = controller::play
-                ) {
-                    GPText(
-                        text = "Play",
-                        textSize = 14.gsp,
+                    shape = CircleShape,
+                    onClick = controller::play,
+                    icon = {
+                        Image(
+                            modifier = Modifier.size(12.gdp),
+                            painter = painterResource(Res.drawable.icon_play),
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(GPColor.White)
+                        )
+                    }
+                )
+            }
+            Slider(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 6.gdp),
+                value = animatedTimestamp,
+                onValueChange = { controller.seekTo(it.roundToLong()) },
+                valueRange = 0f..state.duration.toFloat(),
+                thumb = {
+                    Box(
+                        modifier = Modifier
+                            .size(16.gdp)
+                            .background(
+                                color = GPColor.White,
+                                shape = CircleShape
+                            )
+                    )
+                },
+                track = { sliderState ->
+                    val fraction by remember {
+                        derivedStateOf {
+                            (sliderState.value - sliderState.valueRange.start) / (sliderState.valueRange.endInclusive - sliderState.valueRange.start)
+                        }
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(fraction)
+                                .align(Alignment.CenterStart)
+                                .height(6.gdp)
+                                .padding(end = 6.gdp)
+                                .background(GPColor.BackgroundFrameOrange, CircleShape)
+                        )
+                        Box(
+                            Modifier
+                                .fillMaxWidth(1f - fraction)
+                                .align(Alignment.CenterEnd)
+                                .height(2.dp)
+                                .padding(start = 6.dp)
+                                .background(GPColor.White, CircleShape)
+                        )
+                    }
+                }
+            )
+            GPText(
+                text = state.timestamp.formatTimestamp(),
+                textSize = 12.gsp,
+                textColor = GPColor.BackgroundFrameOrange
+            )
+            SpW(8.gdp)
+            GPIconButton(
+                modifier = Modifier
+                    .width(24.gdp)
+                    .aspectRatio(1f),
+                normalColor = GPColor.Transparent,
+                pressColor = GPColor.Transparent,
+                shape = CircleShape,
+                onClick = { controller.rotate(state.rotate + 90f) },
+                icon = {
+                    Image(
+                        modifier = Modifier.size(12.gdp),
+                        painter = painterResource(Res.drawable.icon_rotate),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(GPColor.White)
                     )
                 }
-            }
-//            Box(Modifier.weight(1f), contentAlignment = Alignment.CenterStart) {
-//                Row(
-//                    horizontalArrangement = Arrangement.Center,
-//                    verticalAlignment = Alignment.CenterVertically
-//                ) {
-//                    if (state.isMuted || state.volume == 0f) IconButton(controller::toggleSound) {
-//                        Icon(Icons.Rounded.Add, "volume off")
-//                    }
-//                    else {
-//                        if (state.volume < .5f) IconButton(controller::toggleSound) {
-//                            Icon(Icons.Rounded.Call, "volume low")
-//                        } else IconButton(controller::toggleSound) {
-//                            Icon(Icons.Rounded.Phone, "volume high")
-//                        }
-//                    }
-//                    Slider(
-//                        value = state.volume,
-//                        onValueChange = controller::setVolume,
-//                        modifier = Modifier.width(128.dp)
-//                    )
-//                }
-//            }
+            )
         }
     }
 }

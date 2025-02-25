@@ -25,9 +25,9 @@ actual fun VerticalScrollbar(
     modifier: Modifier,
     state: LazyListState
 ) {
-    Box(
-        modifier.verticalListScrollbar(state)
-    )
+//    Box(
+//        modifier.verticalListScrollbar(state)
+//    )
 }
 
 @Composable
@@ -35,9 +35,9 @@ actual fun VerticalScrollbar(
     modifier: Modifier,
     state: LazyGridState
 ) {
-    Box(
-        modifier.verticalListScrollbar(state)
-    )
+//    Box(
+//        modifier.verticalListScrollbar(state)
+//    )
 }
 
 @Composable
@@ -45,9 +45,9 @@ actual fun VerticalScrollbar(
     modifier: Modifier,
     state: ScrollState
 ) {
-    Box(
-        modifier.verticalScrollbar(state)
-    )
+//    Box(
+//        modifier.verticalScrollbar(state)
+//    )
 }
 
 @Composable
@@ -55,9 +55,9 @@ actual fun HorizontalScrollbar(
     modifier: Modifier,
     state: LazyListState
 ) {
-    Box(
-        modifier.horizontalListScrollbar(state)
-    )
+//    Box(
+//        modifier.horizontalListScrollbar(state)
+//    )
 }
 
 @Composable

@@ -42,6 +42,7 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.slid
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.project.giunne.Res
+import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.certification.teacher.TeacherCertificationScreen
 import com.project.giunne.common.presentation.common.badge.GPNotificationBadge
 import com.project.giunne.common.presentation.common.button.GPBackButton
@@ -56,6 +57,8 @@ import com.project.giunne.common.presentation.friend.teacher.TeacherFriendScreen
 import com.project.giunne.common.presentation.home.teacher.TeacherHomeScreen
 import com.project.giunne.common.presentation.main.common.NotificationScreen
 import com.project.giunne.common.presentation.main.dummy.notiList
+import com.project.giunne.common.presentation.main.student.StudentBottomNav
+import com.project.giunne.common.presentation.main.student.StudentMainComponent
 import com.project.giunne.common.presentation.mypage.teacher.TeacherMyPageScreen
 import com.project.giunne.common.presentation.roadmap.teacher.TeacherRoadmapScreen
 import com.project.giunne.common.presentation.shop.GachaScreen
@@ -139,7 +142,7 @@ fun TeacherMainScreen(
                         is TeacherMainComponent.TeacherChild.TeacherCertificationChild -> "인증"
                         is TeacherMainComponent.TeacherChild.TeacherCommunityChild -> "게시판"
                         is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild -> activeComponent.communityDto.content
-                        is TeacherMainComponent.TeacherChild.TeacherFriendsChild -> "친구"
+                        is TeacherMainComponent.TeacherChild.TeacherFriendsChild -> "학생들"
                         is TeacherMainComponent.TeacherChild.TeacherMyPageChild -> "내정보"
                         is TeacherMainComponent.TeacherChild.TeacherShopChild -> "꾸미기"
                         is TeacherMainComponent.TeacherChild.TeacherGachaChild -> ""
@@ -188,10 +191,23 @@ fun TeacherMainScreen(
                     component = component,
                     activeComponent = activeComponent
                 )
-                TeacherBottomNav(
-                    component = component,
-                    activeComponent = activeComponent
-                )
+
+                when (activeComponent) {
+                    is TeacherMainComponent.TeacherChild.TeacherCertificationChild,
+                    is TeacherMainComponent.TeacherChild.TeacherCommunityChild,
+                    is TeacherMainComponent.TeacherChild.TeacherFriendsChild,
+                    is TeacherMainComponent.TeacherChild.TeacherHomeChild,
+                    is TeacherMainComponent.TeacherChild.TeacherMyPageChild,
+                    is TeacherMainComponent.TeacherChild.TeacherRoadmapChild -> {
+                        TeacherBottomNav(
+                            component = component,
+                            activeComponent = activeComponent
+                        )
+                    }
+                    is TeacherMainComponent.TeacherChild.TeacherShopChild -> Unit
+                    is TeacherMainComponent.TeacherChild.TeacherGachaChild -> Unit
+                    is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild -> Unit
+                }
             }
             if (activeComponent is TeacherMainComponent.TeacherChild.TeacherHomeChild && !noti) {
                 /* TODO(추후 API에서 불러오도록 변경) */
@@ -292,7 +308,7 @@ fun TeacherBottomNav(
             modifier = Modifier
                 .fillMaxHeight()
                 .weight(1f),
-            title = "친구",
+            title = "학생들",
             icon = painterResource(Res.drawable.icon_friends),
             onTop = activeComponent is TeacherMainComponent.TeacherChild.TeacherFriendsChild,
             onClick = {
@@ -380,15 +396,17 @@ private fun TeacherChildren(
             is TeacherMainComponent.TeacherChild.TeacherRoadmapChild -> TeacherRoadmapScreen(component = child.component)
             is TeacherMainComponent.TeacherChild.TeacherCertificationChild -> TeacherCertificationScreen(
                 component = child.component,
-                onCommunityButtonClicked = {
-                    component.navigateToCommunity()
+                onCommunityButtonClicked = { type ->
+                    component.navigateToCommunity(type)
                 }
             )
             is TeacherMainComponent.TeacherChild.TeacherCommunityChild -> TeacherCommunityScreen(
                 component = child.component,
                 navigateToDetail = { communityDto ->
                     component.navigateToCommunityDetail(communityDto)
-                }
+                },
+                pageType = if (activeComponent is TeacherMainComponent.TeacherChild.TeacherCommunityChild)
+                    activeComponent.pageType else CertPage.RoadMap
             )
             is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild -> TeacherCommunityDetailScreen(
                 communityDto = if (activeComponent is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild)

@@ -31,8 +31,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import com.project.giunne.Res
+import com.project.giunne.common.data.remote.request.LoginRequest
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
+import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.spacer.SpH
@@ -62,6 +64,7 @@ internal fun LoginScreen(
 
     val focusManager = LocalFocusManager.current
     val loginFailEffect by component.loginFailEffect.collectAsState(NON_FAIL)
+    val loginState by component.uiState.collectAsState()
 
     PermissionController()
 
@@ -111,8 +114,8 @@ internal fun LoginScreen(
                             fontSize = 12.gsp,
                             fontFamily = GPFontFamily.Medium
                         ),
-                        value = component.id,
-                        onValueChange = { component.id = it },
+                        value = loginState.idText,
+                        onValueChange = { component.onIdTextChanged(it) },
                         border = true,
                         paddingHorizontal = 14.gdp,
                         placeholder = {
@@ -158,8 +161,8 @@ internal fun LoginScreen(
                             fontSize = 12.gsp,
                             fontFamily = GPFontFamily.Medium
                         ),
-                        value = component.pass,
-                        onValueChange = { component.pass = it },
+                        value = loginState.passText,
+                        onValueChange = { component.onPassTextChanged(it) },
                         border = true,
                         visualTransformation = PasswordVisualTransformation(),
                         paddingHorizontal = 14.gdp,
@@ -185,7 +188,12 @@ internal fun LoginScreen(
                         ),
                         keyboardActions = KeyboardActions(
                             onDone = {
-                                component.onLoginButtonClick()
+                                component.onLoginButtonClick(
+                                    loginRequest = LoginRequest(
+                                        loginId = loginState.idText,
+                                        password = loginState.passText,
+                                    )
+                                )
                             }
                         ),
                     )
@@ -200,7 +208,12 @@ internal fun LoginScreen(
                     pressColor = GPColor.ButtonPressOrange,
                     hoverColor = GPColor.ButtonHoverOrange,
                     onClick = {
-                        component.onLoginButtonClick()
+                        component.onLoginButtonClick(
+                            loginRequest = LoginRequest(
+                                loginId = loginState.idText,
+                                password = loginState.passText,
+                            )
+                        )
                     },
                 ) {
                     GPText(
@@ -238,6 +251,7 @@ internal fun LoginScreen(
             }
         }
     }
+
     with(loginFailEffect) {
         if (this == LOGIN_FAIL) {
             GPAlertDialog(
@@ -246,6 +260,20 @@ internal fun LoginScreen(
                 content = "로그인에 실패하였습니다. 확인해주세요.",
             )
         }
+    }
+
+    with(loginState.error) {
+        if (this != null) {
+            GPAlertDialog(
+                title = "로그인 에러",
+                content = this.message.toString(),
+                dismiss = { component.dismissErrorDialog() }
+            )
+        }
+    }
+
+    if (loginState.loading) {
+        Loader()
     }
 }
 

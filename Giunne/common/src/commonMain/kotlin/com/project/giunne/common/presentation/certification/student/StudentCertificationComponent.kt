@@ -3,6 +3,7 @@ package com.project.giunne.common.presentation.certification.student
 import com.arkivanov.decompose.ComponentContext
 import com.project.giunne.common.base.BaseComponent
 import com.project.giunne.common.presentation.certification.student.intent.StudentCertificationEvent
+import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.certification.student.state.StudentCertificationState
 import com.project.giunne.common.util.GLog
 import kotlinx.coroutines.CoroutineScope
@@ -14,6 +15,18 @@ class StudentCertificationComponent(
     componentContext: ComponentContext,
 ): KoinComponent, ComponentContext by componentContext,
     BaseComponent<StudentCertificationState, StudentCertificationEvent>(initialState = StudentCertificationState()) {
+
+    fun onClickRoadmapTap() {
+        setState{
+            copy(pageType = CertPage.RoadMap)
+        }
+    }
+
+    fun onClickRunningTap() {
+        setState{
+            copy(pageType = CertPage.Running)
+        }
+    }
 
     fun onClickRoadmapCertButton() {
         setState {

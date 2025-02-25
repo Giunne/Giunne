@@ -6,4 +6,5 @@ data class PlayerState(
     val volume: Float = .5f,
     val timestamp: Long = 0L,
     val duration: Long = 0L,
+    val rotate: Float = 0f,
 )
