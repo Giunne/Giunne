@@ -56,14 +56,6 @@ fun createHttpClient(
                 contentType = ContentType.Application.Json
             )
         }
-        install(Logging) {
-            level = LogLevel.BODY
-            logger = object : Logger {
-                override fun log(message: String) {
-                    Napier.d("HTTP Client", null, message)
-                }
-            }
-        }
         install(DefaultRequest) {
             url(DefineUrl.BASE_URL)
             headers.apply {
