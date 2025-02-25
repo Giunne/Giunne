@@ -125,7 +125,7 @@ fun GachaScreen(
             GachaButtonView(
                 modifier = Modifier.fillMaxWidth()
                     .wrapContentHeight()
-                    .padding(horizontal = 16.gdp, vertical = 8.gdp),
+                    .padding(16.gdp),
                 gachaCost = if (isAdvanced) gachaState.gachaInfo[1].price else gachaState.gachaInfo[0].price,
                 remainPoint = gachaState.remainPoint,
                 onGachaClick = {

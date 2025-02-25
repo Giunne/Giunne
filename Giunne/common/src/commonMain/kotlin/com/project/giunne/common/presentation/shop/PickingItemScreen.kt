@@ -68,6 +68,7 @@ fun PickingItemScreen(
             )
         } else {
             Box(
+                modifier = Modifier.weight(1f),
                 contentAlignment = Alignment.Center
             ) {
                 LottieBox(
@@ -118,11 +119,9 @@ fun PickingItemScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.weight(1f))
-
             GPButton(
                 modifier = Modifier
-                    .padding(horizontal = 16.gdp)
+                    .padding(16.gdp)
                     .fillMaxWidth()
                     .height(48.gdp),
                 normalColor = GPColor.ButtonOrange,
