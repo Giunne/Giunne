@@ -46,7 +46,6 @@ import com.project.giunne.common.presentation.certification.student.state.CertPa
 import com.project.giunne.common.presentation.certification.teacher.TeacherCertificationScreen
 import com.project.giunne.common.presentation.common.badge.GPNotificationBadge
 import com.project.giunne.common.presentation.common.button.GPBackButton
-import com.project.giunne.common.presentation.common.dropdown.GPDropdownMenu
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.text.GPText
@@ -57,8 +56,6 @@ import com.project.giunne.common.presentation.friend.teacher.TeacherFriendScreen
 import com.project.giunne.common.presentation.home.teacher.TeacherHomeScreen
 import com.project.giunne.common.presentation.main.common.NotificationScreen
 import com.project.giunne.common.presentation.main.dummy.notiList
-import com.project.giunne.common.presentation.main.student.StudentBottomNav
-import com.project.giunne.common.presentation.main.student.StudentMainComponent
 import com.project.giunne.common.presentation.mypage.teacher.TeacherMyPageScreen
 import com.project.giunne.common.presentation.roadmap.teacher.TeacherRoadmapScreen
 import com.project.giunne.common.presentation.shop.GachaScreen
@@ -208,19 +205,6 @@ fun TeacherMainScreen(
                     is TeacherMainComponent.TeacherChild.TeacherGachaChild -> Unit
                     is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild -> Unit
                 }
-            }
-            if (activeComponent is TeacherMainComponent.TeacherChild.TeacherHomeChild && !noti) {
-                /* TODO(추후 API에서 불러오도록 변경) */
-                GPDropdownMenu(
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(top = 8.gdp),
-                    options = listOf("Option 1기", "Option 2", "Option 3", "Option 4", "Option 5", "Option 6", "Option 7"),
-                    selectedOption = testOptionItem,
-                    onOptionSelected = {
-                        testOptionItem = it
-                    }
-                )
             }
 
             if (noti) {
@@ -395,7 +379,7 @@ private fun TeacherChildren(
             is TeacherMainComponent.TeacherChild.TeacherHomeChild -> TeacherHomeScreen(
                 component = child.component,
                 navigateToCommunity = {
-                    component.navigateToCommunity()
+                    component.navigateToCommunity(CertPage.RoadMap)
                 }
             )
             is TeacherMainComponent.TeacherChild.TeacherRoadmapChild -> TeacherRoadmapScreen(component = child.component)

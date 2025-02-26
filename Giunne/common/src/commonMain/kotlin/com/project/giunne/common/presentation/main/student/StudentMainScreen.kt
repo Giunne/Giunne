@@ -46,7 +46,6 @@ import com.project.giunne.common.presentation.certification.student.StudentCerti
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.badge.GPNotificationBadge
 import com.project.giunne.common.presentation.common.button.GPBackButton
-import com.project.giunne.common.presentation.common.dropdown.GPDropdownMenu
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.text.GPText
@@ -233,19 +232,6 @@ fun StudentMainScreen(
                     is StudentMainComponent.StudentChild.StudentCommunityDetailChild -> Unit
                     is StudentMainComponent.StudentChild.StudentPickingItemChild -> Unit
                 }
-            }
-            if (activeComponent is StudentMainComponent.StudentChild.StudentHomeChild && !noti) {
-                /* TODO(추후 API에서 불러오도록 변경) */
-                GPDropdownMenu(
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(top = 8.gdp),
-                    options = listOf("Option 1기", "Option 2", "Option 3", "Option 4", "Option 5", "Option 6", "Option 7"),
-                    selectedOption = testOptionItem,
-                    onOptionSelected = {
-                        testOptionItem = it
-                    }
-                )
             }
 
             if (noti) {
