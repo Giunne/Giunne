@@ -1,6 +1,7 @@
 package com.project.giunne.common.di
 
 import com.project.giunne.common.data.util.DefineUrl
+import com.project.giunne.common.util.Define
 import de.jensklingenberg.ktorfit.ktorfit
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.DefaultRequest
@@ -60,7 +61,7 @@ fun createHttpClient(
             headers.apply {
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
                 if (auth) {
-                    header(HttpHeaders.Authorization, "Bearer TOKEN")
+                    header(HttpHeaders.Authorization, "Bearer ${Define.authInfo.accessToken}")
                 }
             }
         }
