@@ -3,8 +3,10 @@ package com.project.giunne.common.presentation.signup.content
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -30,8 +33,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.project.giunne.Res
+import com.project.giunne.common.data.remote.response.SchoolInfo
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.button.GPIconButton
+import com.project.giunne.common.presentation.common.scrollbar.VerticalScrollbar
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
@@ -43,16 +48,36 @@ import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_search
 import org.jetbrains.compose.resources.painterResource
 
+private const val TAG = "SchoolSearchDialog"
 @Composable
 fun SchoolSearchDialog(
     modifier: Modifier = Modifier,
     dismiss: () -> Unit,
-    onClickConfirmButton: (String) -> Unit,
+    onClickConfirmButton: (SchoolInfo) -> Unit,
     onClickSearchButton: (String) -> Unit,
-    searchList: List<String> = emptyList(),
+    searchList: List<SchoolInfo> = emptyList(),
+//    pageNationInfo: PageNationInfo,
+//    callSchoolList: (searchText: String, pageIndex: Int, pageSize: Int) -> Unit
 ) {
     var searchText by remember { mutableStateOf("") }
     var selectedItemIndex by remember { mutableStateOf<Int?>(null) }
+
+    val listState = rememberLazyListState()
+
+//    val endOfListReached by remember(pageNationInfo) {
+//        derivedStateOf {
+//            val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
+//            lastVisibleItem != null && pageNationInfo.hasNextPage
+//        }
+//    }
+//
+//    LaunchedEffect(endOfListReached) {
+//        GLog.d(TAG, "$pageNationInfo")
+//
+//        if (endOfListReached && pageNationInfo.currentPage != pageNationInfo.totalPage) {
+//            callSchoolList(searchText, pageNationInfo.currentPage + 1, pageNationInfo.pageSize)
+//        }
+//    }
 
     Dialog(
         onDismissRequest = { dismiss() },
@@ -114,7 +139,7 @@ fun SchoolSearchDialog(
                         ),
                         placeholder = {
                             GPText(
-                                text = "ex) 동탄",
+                                text = "ex) 성남초",
                                 textColor = GPColor.TextLightGray,
                                 textSize = 14.gsp,
                                 fontFamily = GPFontFamily.Medium
@@ -145,22 +170,28 @@ fun SchoolSearchDialog(
                     )
                     SpH(10.gdp)
                     if (searchList.isNotEmpty()) {
-                        LazyColumn(
-
-                        ) {
-                            items(
-                                count = searchList.size
+                        Box {
+                            LazyColumn(
+                                state = listState
                             ) {
-                                SearchItem(
-                                    content = searchList[it],
-                                    onClickItem = { selectedItemIndex = it },
-                                    isSelected = if (selectedItemIndex != null) it == selectedItemIndex else false
-                                )
+                                items(
+                                    count = searchList.size
+                                ) {
+                                    SearchItem(
+                                        schoolInfo = searchList[it],
+                                        onClickItem = { selectedItemIndex = it },
+                                        isSelected = if (selectedItemIndex != null) it == selectedItemIndex else false
+                                    )
+                                }
                             }
+                            VerticalScrollbar(
+                                modifier = Modifier.align(Alignment.CenterEnd),
+                                state = listState
+                            )
                         }
                     } else {
                         GPText(
-                            text = "도로명, 시도명, 학교명으로 검색하세요.",
+                            text = "학교명으로 검색하세요. 공백 없이 검색해주세요.",
                             textColor = GPColor.TextGray,
                             textSize = 12.gsp,
                             fontFamily = GPFontFamily.Medium

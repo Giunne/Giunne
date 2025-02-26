@@ -1,10 +1,15 @@
 package com.project.giunne.common.data.util
 
+import com.project.giunne.common.util.GLog
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import java.net.ConnectException
 
-internal inline fun <T> handleApi(transform: () -> BaseResponse<T>): NetworkResult<T> = try {
+internal inline fun <T> handleApi(
+    tag: String,
+    transform: () -> BaseResponse<T>
+): NetworkResult<T> = try {
     val response = transform()
+    GLog.d(tag, "response => $response")
 
     if (response.code == 200) {
         NetworkResult.Success(response.value)

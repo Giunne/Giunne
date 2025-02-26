@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.project.giunne.common.presentation.common.noRippleClickable
@@ -30,7 +31,7 @@ import com.project.giunne.common.util.BackHandler
 import kotlinx.coroutines.delay
 
 @Composable
-actual fun VideoPlayer(
+actual fun VideoWindowPlayer(
     modifier: Modifier,
     dismiss: () -> Unit,
     videoPath: String,
@@ -77,5 +78,45 @@ actual fun VideoPlayer(
                 update = {}
             )
         }
+    }
+}
+
+@Composable
+actual fun VideoPlayer(
+    modifier: Modifier,
+    videoPath: String,
+    onFullScreenClicked: () -> Unit
+) {
+    val context = LocalContext.current
+    val exoPlayer = remember {
+        ExoPlayer.Builder(context).build().apply {
+            val mediaItem = MediaItem.fromUri(videoPath)
+            setMediaItem(mediaItem)
+            prepare()
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            exoPlayer.release()
+        }
+    }
+
+    Box(
+        modifier = modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        AndroidView(
+            modifier = modifier
+                .fillMaxHeight()
+                .wrapContentWidth(),
+            factory = { ctx ->
+                PlayerView(ctx).apply {
+                    player = exoPlayer
+                }
+            },
+            update = {}
+        )
     }
 }

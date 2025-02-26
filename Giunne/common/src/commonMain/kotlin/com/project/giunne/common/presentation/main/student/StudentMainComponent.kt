@@ -10,6 +10,7 @@ import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.value.Value
 import com.project.giunne.common.presentation.certification.student.StudentCertificationComponent
+import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.community.student.StudentCommunityComponent
 import com.project.giunne.common.presentation.community.student.dummy.CommunityDto
 import com.project.giunne.common.presentation.friend.student.StudentFriendComponent
@@ -42,7 +43,7 @@ class StudentMainComponent(
         class StudentSelectCharacterChild(val component: StudentSelectCharacterComponent): StudentChild()
         class StudentRoadmapChild(val component: StudentRoadmapComponent) : StudentChild()
         class StudentCertificationChild(val component: StudentCertificationComponent) : StudentChild()
-        class StudentCommunityChild(val component: StudentCommunityComponent) : StudentChild()
+        class StudentCommunityChild(val component: StudentCommunityComponent, val pageType: CertPage) : StudentChild()
         class StudentCommunityDetailChild(val communityDto: CommunityDto) : StudentChild()
         class StudentFriendsChild(val component: StudentFriendComponent) : StudentChild()
         class StudentMyPageChild(val component: StudentMyPageComponent) : StudentChild()
@@ -57,7 +58,7 @@ class StudentMainComponent(
             is StudentMainConfig.SearchRoadMap -> StudentChild.SearchRoadMapChild(SearchRoadMapComponent(componentContext))
             is StudentMainConfig.Roadmap -> StudentChild.StudentRoadmapChild(StudentRoadmapComponent(componentContext))
             is StudentMainConfig.Certification -> StudentChild.StudentCertificationChild(StudentCertificationComponent(componentContext))
-            is StudentMainConfig.Community -> StudentChild.StudentCommunityChild(StudentCommunityComponent(componentContext))
+            is StudentMainConfig.Community -> StudentChild.StudentCommunityChild(StudentCommunityComponent(componentContext), config.pageType)
             is StudentMainConfig.CommunityDetail -> StudentChild.StudentCommunityDetailChild(config.communityDto)
             is StudentMainConfig.Friends -> StudentChild.StudentFriendsChild(StudentFriendComponent(componentContext))
             is StudentMainConfig.MyPage -> StudentChild.StudentMyPageChild(StudentMyPageComponent(componentContext))
@@ -85,7 +86,7 @@ class StudentMainComponent(
         data object Certification : StudentMainConfig
 
         @Serializable
-        data object Community : StudentMainConfig
+        data class Community(val pageType: CertPage) : StudentMainConfig
 
         @Serializable
         data class CommunityDetail(val communityDto: CommunityDto) : StudentMainConfig
@@ -118,9 +119,10 @@ class StudentMainComponent(
         navigation.replaceAll(StudentMainConfig.Certification)
     }
 
-    fun navigateToCommunity() {
-//        navigation.replaceCurrent(StudentMainConfig.Community)
-        navigation.push(StudentMainConfig.Community)
+    fun navigateToCommunity(
+        pageType: CertPage
+    ) {
+        navigation.push(StudentMainConfig.Community(pageType))
     }
 
     fun navigateToCommunityDetail(

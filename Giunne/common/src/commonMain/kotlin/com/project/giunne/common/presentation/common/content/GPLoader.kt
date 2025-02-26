@@ -100,13 +100,6 @@ fun Loader(
                         contentDescription = null
                     )
                 }
-    //            CircularProgressIndicator(
-    //                modifier = Modifier
-    //                    .width(40.gdp),
-    //                color = GPColor.White,
-    //                trackColor = GPColor.ButtonGray,
-    //                strokeWidth = 6.gdp
-    //            )
             }
         }
     }

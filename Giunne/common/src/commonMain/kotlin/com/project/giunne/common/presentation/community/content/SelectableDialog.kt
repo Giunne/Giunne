@@ -1,4 +1,4 @@
-package com.project.giunne.common.presentation.community.student.content
+package com.project.giunne.common.presentation.community.content
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

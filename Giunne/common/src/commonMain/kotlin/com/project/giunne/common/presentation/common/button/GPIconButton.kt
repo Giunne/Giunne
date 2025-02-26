@@ -31,6 +31,7 @@ fun GPIconButton(
     hoverColor: Color? = null,
     shape: Shape = RoundedCornerShape(8.gdp),
     onClick: () -> Unit,
+    shadow: Boolean = true,
 ) {
     val isPressed by interactionSource.collectIsPressedAsState()
     val isHovered by interactionSource.collectIsHoveredAsState()
@@ -46,7 +47,9 @@ fun GPIconButton(
     Box(
         modifier = modifier
             .shadow(
-                elevation = if(isPressed) 0.gdp else 2.gdp,
+                elevation = if (shadow) {
+                    if(isPressed) 0.gdp else 2.gdp
+                } else 0.gdp,
                 shape = shape,
             )
             .background(
