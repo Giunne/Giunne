@@ -24,12 +24,10 @@ object TokenHandler {
     private val scope = CoroutineScope(Dispatchers.IO)
     private val _expireEffects = Channel<Boolean>()
     val expireEffects: Flow<Boolean> = _expireEffects.receiveAsFlow()
-    private val _anotherLoginDetectedEffects = Channel<Boolean>()
-    val anotherLoginDetectedEffects: Flow<Boolean> = _anotherLoginDetectedEffects.receiveAsFlow()
 
     private val logoutUseCase: LogoutUseCase = KoinJavaComponent.get(LogoutUseCase::class.java)
 
-    suspend fun <T> handleTokenForUroResponse(block: suspend () -> BaseResponse<T>): BaseResponse<T> {
+    suspend fun <T> handleTokenForResponse(block: suspend () -> BaseResponse<T>): BaseResponse<T> {
         val response = block()
 
         if (response.code == 401) {
