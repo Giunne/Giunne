@@ -28,15 +28,17 @@ fun ItemGridList(
         horizontalArrangement = Arrangement.spacedBy(8.gdp)
     ) {
         items.forEach { item ->
-            item {
-                ItemBox(
-                    currentLevel = currentLevel,
-                    item = item,
-                    selectedItems = selectedItems,
-                    onItemClick = { item ->
-                        onItemClick(item)
-                    }
-                )
+            if (item.needLevel <= currentLevel) {
+                item {
+                    ItemBox(
+                        currentLevel = currentLevel,
+                        item = item,
+                        selectedItems = selectedItems,
+                        onItemClick = { item ->
+                            onItemClick(item)
+                        }
+                    )
+                }
             }
         }
     }
