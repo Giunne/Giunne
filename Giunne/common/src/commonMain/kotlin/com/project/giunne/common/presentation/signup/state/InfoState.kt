@@ -11,6 +11,7 @@ data class InfoState(
     val codeText: String = "",
     val schoolInfo: SchoolInfo = SchoolInfo(),
     val schoolSearchDialog: Boolean = false,
+    val signupValidate: String? = null,
 
     val pageNationInfo: PageNationInfo = PageNationInfo(),
 
