@@ -85,4 +85,8 @@ class JfxController : PlayerController {
             _state.update { it.copy(isMuted = isMute) }
         }
     }
+
+    override fun rotate(value: Float) {
+        _state.update { it.copy(rotate = value) }
+    }
 }

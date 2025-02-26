@@ -85,5 +85,4 @@ class StudentCommunityComponent(
             copy(runningFilterDialog = false)
         }
     }
-
 }

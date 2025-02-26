@@ -30,6 +30,7 @@ androidMedia = "1.2.0"
 compottie="2.0.0-rc02"
 buildkonfig = "0.14.0"
 ktorfit = "2.0.0"
+foundationAndroid = "1.7.8"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -153,6 +154,7 @@ ktorfit-ksp = { module = "de.jensklingenberg.ktorfit:ktorfit-ksp", version.ref =
 
 # BuildKonfig
 buildkonfig = { module = "com.codingfeline.buildkonfig:buildkonfig-gradle-plugin", version.ref = "buildkonfig" }
+androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
 
 [plugins]
 #compose-desktop = { id = "org.jetbrains.compose", version.ref = "compose" }

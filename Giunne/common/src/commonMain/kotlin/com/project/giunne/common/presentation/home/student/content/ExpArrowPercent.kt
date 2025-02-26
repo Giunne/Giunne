@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.common.text.GPText
@@ -29,6 +30,7 @@ import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_point_arrow
 import org.jetbrains.compose.resources.painterResource
+import kotlin.math.roundToInt
 
 @Composable
 fun ExpArrowPercent(
@@ -57,11 +59,14 @@ fun ExpArrowPercent(
         Column(
             modifier = Modifier
                 .wrapContentSize()
-                .onGloballyPositioned { coordinates ->
-                    width = coordinates.size.width.toFloat() / 6
-                    println(width)
+                .onSizeChanged {
+                    width = it.width.toFloat() / 2
                 }
-                .offset(x = -(width).dp),
+//                .onGloballyPositioned { coordinates ->
+//                    width = coordinates.size.width.toFloat() / 2
+////                    println(width)
+//                }
+                .offset(x = -(width).roundToInt().gdp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             GPText(

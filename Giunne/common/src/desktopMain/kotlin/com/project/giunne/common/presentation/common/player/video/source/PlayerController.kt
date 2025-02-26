@@ -12,4 +12,5 @@ interface PlayerController {
     fun seekTo(timestamp: Long)
     fun setVolume(value: Float)
     fun toggleSound()
+    fun rotate(value: Float)
 }

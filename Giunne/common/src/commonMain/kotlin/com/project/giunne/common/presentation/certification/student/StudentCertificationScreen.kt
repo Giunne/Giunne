@@ -51,7 +51,7 @@ private const val TAG = "StudentCertificationScreen"
 internal fun StudentCertificationScreen(
     component: StudentCertificationComponent,
     modifier: Modifier = Modifier,
-    onCommunityButtonClicked: () -> Unit
+    onCommunityButtonClicked: (CertPage) -> Unit
 ) {
     GLog.d(TAG, "onCreate")
 
@@ -59,8 +59,6 @@ internal fun StudentCertificationScreen(
     val scope = rememberCoroutineScope()
 
     ///// test /////
-    var page by remember { mutableStateOf(CertPage.RoadMap) }
-
     var loading by remember { mutableStateOf(false) }
     var roadmapStep by remember { mutableStateOf<Int?>(null) }
     var runningStep by remember { mutableStateOf<Int?>(null) }
@@ -81,7 +79,7 @@ internal fun StudentCertificationScreen(
                 normalColor = GPColor.ButtonOrange,
                 pressColor = GPColor.ButtonPressOrange,
                 hoverColor = GPColor.ButtonHoverOrange,
-                onClick = { onCommunityButtonClicked() },
+                onClick = { onCommunityButtonClicked(certificationState.pageType) },
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
@@ -120,13 +118,13 @@ internal fun StudentCertificationScreen(
                     .fillMaxWidth()
                     .height(64.gdp)
                     .padding(horizontal = 8.gdp),
-                page = page,
+                page = certificationState.pageType,
                 onRoadmapClicked = {
                     scope.launch { /* TODO API */
                         loading = true
                         delay(1000)
                         loading = false
-                        page = CertPage.RoadMap
+                        component.onClickRoadmapTap()
                     }
                 },
                 onRunningClicked = {
@@ -134,11 +132,11 @@ internal fun StudentCertificationScreen(
                         loading = true
                         delay(1000)
                         loading = false
-                        page = CertPage.Running
+                        component.onClickRunningTap()
                     }
                 }
             )
-            when(page) {
+            when(certificationState.pageType) {
                 CertPage.RoadMap -> {
                     RoadMapCertScreen(
                         modifier = Modifier.fillMaxSize(),

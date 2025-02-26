@@ -26,11 +26,12 @@ import com.project.giunne.common.presentation.certification.student.state.CertPa
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.scrollbar.VerticalScrollbar
-import com.project.giunne.common.presentation.community.student.content.CommunityItemRow
-import com.project.giunne.common.presentation.community.student.content.SearchRow
-import com.project.giunne.common.presentation.community.student.content.SelectableDialog
+import com.project.giunne.common.presentation.community.content.CommunityItemRow
+import com.project.giunne.common.presentation.community.content.SearchRow
+import com.project.giunne.common.presentation.community.content.SelectableDialog
 import com.project.giunne.common.presentation.community.student.dummy.CommunityDto
 import com.project.giunne.common.presentation.community.student.dummy.roadmapCommunityList
+import com.project.giunne.common.presentation.community.student.dummy.runningCommunityList
 import com.project.giunne.common.presentation.community.student.state.DatePriority
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GLog
@@ -42,7 +43,8 @@ private const val TAG = "StudentCommunityScreen"
 internal fun StudentCommunityScreen(
     component: StudentCommunityComponent,
     modifier: Modifier = Modifier,
-    navigateToDetail: (CommunityDto) -> Unit
+    navigateToDetail: (CommunityDto) -> Unit,
+    pageType: CertPage
 ) {
     GLog.d(TAG, "onCreate")
 
@@ -53,9 +55,12 @@ internal fun StudentCommunityScreen(
     val communityState by component.uiState.collectAsState()
 
     ///// test /////
-    var page by remember { mutableStateOf(CertPage.RoadMap) }
-
-    var loading by remember { mutableStateOf(false) }
+    var list by remember { mutableStateOf(
+        when(pageType) {
+            CertPage.RoadMap -> roadmapCommunityList
+            else -> runningCommunityList
+        }
+    ) }
     ////////////////
 
     Scaffold(
@@ -75,7 +80,7 @@ internal fun StudentCommunityScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.gdp)
                     .height(52.gdp),
-                pageType = page,
+                pageType = pageType,
                 datePriority = communityState.datePriority,
                 roadmapFilter = communityState.roadmapFilter,
                 runningFilter = communityState.runningFilter,
@@ -95,16 +100,16 @@ internal fun StudentCommunityScreen(
                     state = scrollState
                 ) {
                     items(
-                        count = roadmapCommunityList.size
+                        count = list.size
                     ) {
                         CommunityItemRow(
-                            name = roadmapCommunityList[it].name,
-                            painter = painterResource(roadmapCommunityList[it].character),
-                            date = roadmapCommunityList[it].date,
-                            commentCount = roadmapCommunityList[it].commentCount,
-                            content = roadmapCommunityList[it].content,
-                            type = page,
-                            onClick = { navigateToDetail(roadmapCommunityList[it]) },
+                            name = list[it].name,
+                            painter = painterResource(list[it].character),
+                            date = list[it].date,
+                            commentCount = list[it].commentCount,
+                            content = list[it].content,
+                            type = pageType,
+                            onClick = { navigateToDetail(list[it]) },
                         )
                     }
                 }
@@ -171,7 +176,7 @@ internal fun StudentCommunityScreen(
         }
     }
 
-    if (loading) {
+    if (communityState.loading) {
         Loader()
     }
 }
