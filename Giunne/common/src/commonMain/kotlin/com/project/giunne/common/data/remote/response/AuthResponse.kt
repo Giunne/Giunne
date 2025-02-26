@@ -18,3 +18,13 @@ data class AuthResponse(
     @SerialName("role")
     val role: String = ""
 )
+
+@Serializable
+data class RefreshResponse(
+    @SerialName("grantType")
+    val grantType: String = "",
+    @SerialName("accessToken")
+    val accessToken: String = "",
+    @SerialName("accessTokenExpireTime")
+    val accessTokenExpireTime: String = "",
+)

@@ -104,10 +104,10 @@ public class RootComponent(
     }
 
     fun navigateToStudentMain() {
-        navigation.replaceCurrent(Config.StudentMain)
+        navigation.replaceAll(Config.StudentMain)
     }
 
     fun navigateToTeacherMain() {
-        navigation.replaceCurrent(Config.TeacherMain)
+        navigation.replaceAll(Config.TeacherMain)
     }
 }
