@@ -12,7 +12,7 @@ internal inline fun <T> handleApi(
     GLog.d(tag, "response => $response")
 
     if (response.code == 200) {
-        NetworkResult.Success(response.value)
+        NetworkResult.Success(response.value!!)
     } else {
         throw throwValue(response.code)
     }

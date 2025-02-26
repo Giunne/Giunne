@@ -13,8 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import coil3.compose.AsyncImage
-import com.project.giunne.BuildKonfig
 import com.project.giunne.common.data.remote.response.Item
+import com.project.giunne.common.data.util.DefineUrl.IMAGE_BASE_URL
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.ui.theme.GPColor
@@ -25,6 +25,7 @@ import com.project.giunne.common.util.gsp
 @Composable
 fun ItemBox(
     modifier: Modifier = Modifier,
+    currentLevel: Int,
     item: Item,
     selectedItems: List<Item>,
     onItemClick: (Item) -> Unit,
@@ -55,15 +56,21 @@ fun ItemBox(
                 modifier = Modifier
                     .width(maxWidth / 2)
                     .wrapContentHeight(),
-                model = BuildKonfig.IMAGE_BASE_URL + thumbnailUrl,
+                model = IMAGE_BASE_URL + thumbnailUrl,
                 contentDescription = "아이템"
             )
         } ?: run {
+            // 아이템이 2개 인건 레벨별로 이미지가 다름
+            val imageUrl = if (1 < item.itemImages.size) {
+                IMAGE_BASE_URL + item.itemImages.find { it.level == currentLevel }?.fileUrl
+            } else {
+                IMAGE_BASE_URL + item.itemImages.first().fileUrl
+            }
             AsyncImage(
                 modifier = Modifier
                     .width(maxWidth / 2)
                     .wrapContentHeight(),
-                model = BuildKonfig.IMAGE_BASE_URL + item.itemImages.first().fileUrl,
+                model = imageUrl,
                 contentDescription = "아이템"
             )
         }

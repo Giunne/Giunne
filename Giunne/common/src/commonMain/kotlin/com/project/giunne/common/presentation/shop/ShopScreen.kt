@@ -24,10 +24,10 @@ import androidx.compose.ui.platform.LocalFocusManager
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.charactor.GPCharacter
 import com.project.giunne.common.presentation.common.content.Loader
+import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.shop.content.ItemBottomView
 import com.project.giunne.common.presentation.shop.content.StudentRemainPoint
 import com.project.giunne.common.presentation.shop.intent.ShopStore
-import com.project.giunne.common.presentation.shop.state.ItemType
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.gdp
 
@@ -116,6 +116,16 @@ internal fun ShopScreen(
                     }
                 )
             }
+        }
+
+        if (state.error != null) {
+            GPAlertDialog(
+                title = "꾸미기 에러",
+                content = state.error!!.message.toString(),
+                dismiss = {
+                    shopStore.dismissErrorDialog()
+                }
+            )
         }
     }
 }

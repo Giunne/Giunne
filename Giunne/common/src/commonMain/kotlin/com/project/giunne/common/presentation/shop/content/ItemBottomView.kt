@@ -58,6 +58,7 @@ fun ItemBottomView(
             } else {
                 ItemGridList(
                     modifier = Modifier.weight(1f),
+                    currentLevel = state.currentLevel,
                     lazyGridState = lazyGridState,
                     items = state.categoryItem,
                     selectedItems = state.selectedItems,

@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.IntSize
 import coil3.compose.AsyncImage
 import com.project.giunne.BuildKonfig
 import com.project.giunne.common.data.remote.response.Item
+import com.project.giunne.common.data.util.DefineUrl.IMAGE_BASE_URL
 import com.project.giunne.common.util.gdp
 
 @Composable
@@ -48,7 +49,6 @@ fun GPCharacter(
                     AsyncImage(
                         modifier = Modifier.onSizeChanged {
                             itemSize = it
-                            println("Measured Image Size: ${itemSize.width} x ${itemSize.height}")
                         }
                             .alpha(0.1f),
                         model = BuildKonfig.IMAGE_BASE_URL + item.itemImages.first().fileUrl,
@@ -57,6 +57,12 @@ fun GPCharacter(
                 }.first().measure(unconstrainedConstraints)
 
                 val contentMeasure = subcompose("content") {
+                    // 아이템이 2개 인건 레벨별로 이미지가 다름 -> 매핑
+                    val imageUrl = if (1 < item.itemImages.size) {
+                        IMAGE_BASE_URL + item.itemImages.find { it.level == currentLevel }?.fileUrl
+                    } else {
+                        IMAGE_BASE_URL + item.itemImages.first().fileUrl
+                    }
                     AsyncImage(
                         modifier = Modifier
                             .size(
@@ -67,7 +73,7 @@ fun GPCharacter(
                                 x = item.itemImages.first().itemImagePositions.find { it.level == currentLevel }?.positionX?.gdp ?: 0.gdp,
                                 y = item.itemImages.first().itemImagePositions.find { it.level == currentLevel }?.positionY?.gdp ?: 0.gdp
                             ),
-                        model = BuildKonfig.IMAGE_BASE_URL + item.itemImages.first().fileUrl,
+                        model = imageUrl,
                         contentDescription = null
                     )
                 }.first().measure(constraints)

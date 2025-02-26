@@ -14,6 +14,7 @@ import com.project.giunne.common.util.gdp
 fun ItemGridList(
     modifier: Modifier = Modifier,
     lazyGridState: LazyGridState,
+    currentLevel: Int,
     items: List<Item>,
     selectedItems: List<Item>,
     onItemClick: (Item) -> Unit
@@ -29,6 +30,7 @@ fun ItemGridList(
         items.forEach { item ->
             item {
                 ItemBox(
+                    currentLevel = currentLevel,
                     item = item,
                     selectedItems = selectedItems,
                     onItemClick = { item ->

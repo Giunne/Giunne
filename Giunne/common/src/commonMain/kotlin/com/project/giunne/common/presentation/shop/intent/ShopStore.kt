@@ -3,6 +3,7 @@ package com.project.giunne.common.presentation.shop.intent
 import com.project.giunne.common.base.BaseComponent
 import com.project.giunne.common.data.remote.response.Item
 import com.project.giunne.common.data.util.DefineUrl.IMAGE_BASE_URL
+import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.shop.GetCategoryItemListUseCase
 import com.project.giunne.common.domain.usecase.shop.GetCategoryMapUseCase
 import com.project.giunne.common.presentation.shop.state.CharacterState
@@ -32,7 +33,7 @@ class ShopStore(
                     )
                 }
             }.onFailure {
-
+                setState { copy(error = it.asDataThrowable()) }
             }
         }
     }
@@ -69,6 +70,8 @@ class ShopStore(
                         paginationInfo = response.paginationInfo
                     )
                 }
+            }.onFailure {
+                setState { copy(error = it.asDataThrowable()) }
             }
         }
     }
@@ -98,12 +101,15 @@ class ShopStore(
     }
 
     fun onModifyWearingItems() {
-        /* TODO(API -> 현재 로드맵에서의 캐릭터 상태 변경 호출) */
         setState {
             copy(
                 character = selectedCharacter,
                 wearingItems = selectedItems
             )
         }
+    }
+
+    fun dismissErrorDialog() {
+        setState { copy(error = null) }
     }
 }
