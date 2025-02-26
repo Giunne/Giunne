@@ -82,7 +82,8 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun TeacherMainScreen(
     modifier: Modifier = Modifier,
-    component: TeacherMainComponent
+    component: TeacherMainComponent,
+    onLogout: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val snackbarState =  remember { SnackbarHostState() }
@@ -189,7 +190,8 @@ fun TeacherMainScreen(
                     modifier = Modifier
                         .weight(1f),
                     component = component,
-                    activeComponent = activeComponent
+                    activeComponent = activeComponent,
+                    onLogout = { onLogout() }
                 )
 
                 when (activeComponent) {
@@ -383,7 +385,8 @@ fun NavItem(
 private fun TeacherChildren(
     component: TeacherMainComponent,
     modifier: Modifier = Modifier,
-    activeComponent: TeacherMainComponent.TeacherChild
+    activeComponent: TeacherMainComponent.TeacherChild,
+    onLogout: () -> Unit
 ) {
     Children(
         stack = component.childStack,
@@ -416,7 +419,8 @@ private fun TeacherChildren(
             is TeacherMainComponent.TeacherChild.TeacherMyPageChild -> TeacherMyPageScreen(
                 component = child.component,
                 navigateToShop = { component.navigateToShop() },
-                navigateToGacha = { component.navigateToGacha() }
+                navigateToGacha = { component.navigateToGacha() },
+                onLogout = { onLogout() }
             )
             is TeacherMainComponent.TeacherChild.TeacherShopChild -> ShopScreen()
             is TeacherMainComponent.TeacherChild.TeacherGachaChild -> GachaScreen {

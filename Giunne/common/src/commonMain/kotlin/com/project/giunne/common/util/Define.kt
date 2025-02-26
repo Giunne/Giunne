@@ -8,5 +8,6 @@ object Define {
 
     fun clearInfo() {
         authInfo = AuthResponse()
+        playerId = 0
     }
 }

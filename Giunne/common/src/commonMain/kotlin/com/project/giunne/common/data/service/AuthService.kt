@@ -12,7 +12,9 @@ import com.project.giunne.common.data.util.DefineUrl.URL_LOGOUT
 import com.project.giunne.common.data.util.DefineUrl.URL_REFRESH
 import com.project.giunne.common.data.util.DefineUrl.URL_STUDENT_SIGNUP
 import com.project.giunne.common.data.util.DefineUrl.URL_TEACHER_SIGNUP
+import com.project.giunne.common.util.Define
 import de.jensklingenberg.ktorfit.http.Body
+import de.jensklingenberg.ktorfit.http.Header
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Url
 
@@ -35,6 +37,7 @@ interface AuthService {
 
     @POST(URL_LOGOUT)
     suspend fun logout(
+        @Header("Authorization") accessToken: String = "Bearer ${Define.authInfo.accessToken}"
     ): BaseResponse<String>
 
     @POST(URL_REFRESH)

@@ -130,9 +130,13 @@ private fun Children(
             )
             is RootComponent.Child.StudentMainChild -> StudentMainScreen(
                 component = child.component,
-                exitProgram = { exitProgram() }
+                exitProgram = { exitProgram() },
+                onLogout = { component.navigateToLogin() }
             )
-            is RootComponent.Child.TeacherMainChild -> TeacherMainScreen(component = child.component)
+            is RootComponent.Child.TeacherMainChild -> TeacherMainScreen(
+                component = child.component,
+                onLogout = { component.navigateToLogin() }
+            )
         }
     }
 }

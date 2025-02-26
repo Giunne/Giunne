@@ -25,6 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.java.KoinJavaComponent
 
@@ -60,8 +61,16 @@ BaseComponent<LoginState, LoginEvent>(
                 saveLoginInfo(loginRequest.loginId)
                 setState { copy(loading = false) }
                 when(Define.authInfo.role) {
-                    TYPE_TEACHER -> { goToTeacherMain() }
-                    TYPE_STUDENT -> { goToStudentMain() }
+                    TYPE_TEACHER -> {
+                        withContext(Dispatchers.Main) {
+                            goToTeacherMain()
+                        }
+                    }
+                    TYPE_STUDENT -> {
+                        withContext(Dispatchers.Main) {
+                            goToStudentMain()
+                        }
+                    }
                 }
             }.onFailure {
                 setState { copy(loading = false, error = it.asDataThrowable()) }
