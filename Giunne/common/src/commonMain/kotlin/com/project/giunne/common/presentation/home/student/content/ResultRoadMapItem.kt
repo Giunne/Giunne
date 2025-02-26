@@ -24,10 +24,10 @@ import com.project.giunne.common.util.gsp
 @Composable
 fun ResultRoadMapItem(
     modifier: Modifier,
-    isSelected: Boolean,
+    isSelected: Boolean = true,
     teacherName: String,
     description: String,
-    onItemSelected: () -> Unit
+    onItemSelected: () -> Unit = {}
 ) {
     Column (
         modifier = modifier

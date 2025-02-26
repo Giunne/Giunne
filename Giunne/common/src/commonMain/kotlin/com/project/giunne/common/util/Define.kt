@@ -4,4 +4,6 @@ import com.project.giunne.common.data.remote.response.AuthResponse
 
 object Define {
     var authInfo: AuthResponse = AuthResponse()
+    
+    var recreationId = 0
 }
