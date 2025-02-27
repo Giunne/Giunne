@@ -37,7 +37,7 @@ interface AuthService {
 
     @POST(URL_LOGOUT)
     suspend fun logout(
-        @Header("Authorization") accessToken: String = "Bearer ${Define.authInfo.accessToken}"
+        @Header("Authorization") accessToken: String = "Bearer ${Define.accessToken}"
     ): BaseResponse<String>
 
     @POST(URL_REFRESH)

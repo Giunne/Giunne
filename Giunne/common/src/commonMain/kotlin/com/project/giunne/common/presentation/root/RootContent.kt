@@ -25,6 +25,8 @@ import com.project.giunne.common.presentation.login.LoginScreen
 import com.project.giunne.common.presentation.main.splash.SplashScreen
 import com.project.giunne.common.presentation.main.student.StudentMainScreen
 import com.project.giunne.common.presentation.main.teacher.TeacherMainScreen
+import com.project.giunne.common.presentation.signup.SignupComponent.Companion.TYPE_STUDENT
+import com.project.giunne.common.presentation.signup.SignupComponent.Companion.TYPE_TEACHER
 import com.project.giunne.common.presentation.signup.SignupScreen
 import com.project.giunne.common.presentation.signup.SignupTypeSelectScreen
 import com.project.giunne.common.util.Define
@@ -46,8 +48,16 @@ fun RootContent(
     //****//
 
     LaunchedEffect(Unit) {
-        delay(1000)
-        component.navigateToLogin()
+        delay(1000) // TODO Intro
+        if (Define.accessToken.isNotEmpty() && Define.userRole.isNotEmpty()) { // TODO 구현
+            if (Define.userRole == TYPE_TEACHER) {
+                component.navigateToTeacherMain()
+            } else if (Define.userRole == TYPE_STUDENT) {
+                component.navigateToStudentMain()
+            }
+        } else {
+            component.navigateToLogin()
+        }
     }
 
     val childStack by component.childStack.subscribeAsState()

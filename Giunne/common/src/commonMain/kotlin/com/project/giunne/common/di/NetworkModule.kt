@@ -61,7 +61,7 @@ fun createHttpClient(
             headers.apply {
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
                 if (auth) {
-                    header(HttpHeaders.Authorization, "Bearer ${Define.authInfo.accessToken}")
+                    header(HttpHeaders.Authorization, "Bearer ${Define.accessToken}")
                 }
             }
         }

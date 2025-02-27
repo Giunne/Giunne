@@ -39,7 +39,7 @@ object TokenHandler {
                     refresh()
                 }.onSuccess {
                     val token = it.accessToken
-                    Define.authInfo = Define.authInfo.copy(accessToken = token)
+                    Define.changeAccessToken(token)
                     tokenFlow.emit(token) // 새로운 토큰을 SharedFlow에 emit
                     GLog.d(TAG, "갱신 됨 - ${Define.authInfo.accessToken}")
                 }.onFailure {
