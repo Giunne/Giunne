@@ -6,6 +6,7 @@ import com.project.giunne.common.domain.usecase.auth.StudentSignupUseCase
 import com.project.giunne.common.domain.usecase.auth.TeacherSignupUseCase
 import com.project.giunne.common.domain.usecase.common.GetSchoolListUseCase
 import com.project.giunne.common.domain.usecase.roadmap.CreateRecreationUseCase
+import com.project.giunne.common.domain.usecase.roadmap.GetRecreationStudentJoinUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetSearchRecreationUseCase
 import com.project.giunne.common.domain.usecase.shop.GetGachaMapUseCase
 import org.koin.core.module.Module
@@ -20,4 +21,5 @@ val useCaseModule: Module = module {
     single { GetSchoolListUseCase(get()) }
     single { CreateRecreationUseCase(get()) }
     single { GetSearchRecreationUseCase(get()) }
+    single { GetRecreationStudentJoinUseCase(get()) }
 }

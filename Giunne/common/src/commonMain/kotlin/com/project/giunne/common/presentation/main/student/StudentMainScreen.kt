@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -54,6 +53,7 @@ import com.project.giunne.common.presentation.community.student.StudentCommunity
 import com.project.giunne.common.presentation.community.student.StudentCommunityScreen
 import com.project.giunne.common.presentation.friend.student.StudentFriendScreen
 import com.project.giunne.common.presentation.home.student.home.StudentHomeScreen
+import com.project.giunne.common.presentation.home.student.join.StudentJoinRecreationScreen
 import com.project.giunne.common.presentation.home.student.search.SearchRoadMapScreen
 import com.project.giunne.common.presentation.main.common.NotificationScreen
 import com.project.giunne.common.presentation.main.dummy.notiList
@@ -141,6 +141,7 @@ fun StudentMainScreen(
                         is StudentMainComponent.StudentChild.StudentShopChild -> "꾸미기"
                         is StudentMainComponent.StudentChild.StudentGachaChild -> ""
                         is StudentMainComponent.StudentChild.StudentPickingItemChild -> ""
+                        is StudentMainComponent.StudentChild.StudentJoinRecreationChild -> "진행할 로드맵 변경"
                     },
                     leftIcon = {
                         when(activeComponent) {
@@ -149,7 +150,8 @@ fun StudentMainScreen(
                             is StudentMainComponent.StudentChild.StudentCommunityDetailChild,
                             is StudentMainComponent.StudentChild.StudentShopChild,
                             is StudentMainComponent.StudentChild.StudentGachaChild,
-                            is StudentMainComponent.StudentChild.SearchRoadMapChild -> {
+                            is StudentMainComponent.StudentChild.SearchRoadMapChild,
+                            is StudentMainComponent.StudentChild.StudentJoinRecreationChild -> {
                                 GPBackButton(
                                     onClick = {
                                         component.navigateBack()
@@ -231,6 +233,7 @@ fun StudentMainScreen(
                     is StudentMainComponent.StudentChild.SearchRoadMapChild -> Unit
                     is StudentMainComponent.StudentChild.StudentCommunityDetailChild -> Unit
                     is StudentMainComponent.StudentChild.StudentPickingItemChild -> Unit
+                    is StudentMainComponent.StudentChild.StudentJoinRecreationChild -> Unit
                 }
             }
 
@@ -410,6 +413,9 @@ private fun StudentChildren(
                 },
                 navigateToSearchRoadMap = {
                     component.navigateToSearchRoadMap()
+                },
+                navigateToJoinRoadMap = {
+                    component.navigateToJoinRecreation()
                 }
             )
             is StudentMainComponent.StudentChild.StudentRoadmapChild -> StudentRoadmapScreen(component = child.component)
@@ -459,6 +465,13 @@ private fun StudentChildren(
                     component.navigateFromPickingItemToShop()
                 }
             )
+
+            is StudentMainComponent.StudentChild.StudentJoinRecreationChild -> StudentJoinRecreationScreen(
+                component = child.component,
+                onBackClick = {
+                    component.navigateBack()
+                }
+            )
         }
     }
 }
@@ -488,6 +501,7 @@ private val StudentMainComponent.StudentChild.index: Int
             is StudentMainComponent.StudentChild.StudentSelectCharacterChild -> 9
             is StudentMainComponent.StudentChild.SearchRoadMapChild -> 10
             is StudentMainComponent.StudentChild.StudentPickingItemChild -> 11
+            is StudentMainComponent.StudentChild.StudentJoinRecreationChild -> 12
         }
 
 private fun StackAnimator.flipSide(): StackAnimator =

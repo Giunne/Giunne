@@ -42,7 +42,8 @@ internal fun StudentHomeScreen(
     component: StudentHomeComponent,
     modifier: Modifier = Modifier,
     navigateToCommunity: () -> Unit,
-    navigateToSearchRoadMap: () -> Unit
+    navigateToSearchRoadMap: () -> Unit,
+    navigateToJoinRoadMap: () -> Unit,
 ) {
     GLog.d(TAG, "onCreate")
 
@@ -112,7 +113,7 @@ internal fun StudentHomeScreen(
                         normalColor = GPColor.ButtonOrange,
                         pressColor = GPColor.ButtonPressOrange,
                         hoverColor = GPColor.ButtonHoverOrange,
-                        onClick = {},
+                        onClick = navigateToJoinRoadMap,
                     ) {
                         GPText(
                             text = "진행할 로드맵 선택",
