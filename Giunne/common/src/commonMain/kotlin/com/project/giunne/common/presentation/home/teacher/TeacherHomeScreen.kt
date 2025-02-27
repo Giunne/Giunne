@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,14 +27,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.project.giunne.common.data.remote.request.RecreationRequest
+import com.project.giunne.common.data.remote.response.Recreation
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
+import com.project.giunne.common.presentation.common.content.Loader
+import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.home.common.EmptyResult
 import com.project.giunne.common.presentation.home.student.content.ResultRoadMapItem
 import com.project.giunne.common.presentation.home.teacher.content.RemainCheckingStudentBox
 import com.project.giunne.common.presentation.home.teacher.content.StudentSignUpCodeBox
 import com.project.giunne.common.presentation.home.teacher.content.TeacherCreateRoadmapDialog
+import com.project.giunne.common.presentation.home.teacher.state.TeacherHomeEvent
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.GLog
@@ -57,14 +63,27 @@ internal fun TeacherHomeScreen(
     val clipboardManager = LocalClipboardManager.current
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    val teacherState by component.uiState.collectAsStateWithLifecycle()
     var roadMapName by remember { mutableStateOf("") }
     var roadMapNumber by remember { mutableStateOf("") }
-    var showDialog by remember { mutableStateOf(false) }
     val isEnabled by remember {
         derivedStateOf {
             roadMapName.isNotEmpty() && roadMapNumber.isNotEmpty()
         }
     }
+
+    LaunchedEffect(Unit) {
+        component.sideEffect.collect { event ->
+            when (event) {
+                is TeacherHomeEvent.ShowSnackBar -> {
+                    snackbarHostState.showSnackbar(
+                        message = event.message
+                    )
+                }
+            }
+        }
+    }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -119,8 +138,7 @@ internal fun TeacherHomeScreen(
                     ResultRoadMapItem(
                         modifier = Modifier.fillMaxWidth()
                             .padding(horizontal = 16.gdp),
-                        teacherName = "홍길동",
-                        description = "Test"
+                        recreation = Recreation()
                     )
                 }
             }
@@ -154,7 +172,7 @@ internal fun TeacherHomeScreen(
                     pressColor = GPColor.ButtonPressOrange,
                     hoverColor = GPColor.ButtonHoverOrange,
                     onClick = {
-                        showDialog = true
+                        component.showDialog()
                     },
                 ) {
                     GPText(
@@ -166,7 +184,7 @@ internal fun TeacherHomeScreen(
                 }
             }
         }
-        if (showDialog) {
+        if (teacherState.showDialog) {
             TeacherCreateRoadmapDialog(
                 focusManager = focusManager,
                 isEnabled = isEnabled,
@@ -187,12 +205,20 @@ internal fun TeacherHomeScreen(
                     roadMapNumber = ""
                 },
                 onDismiss = {
-                    showDialog = false
+                    component.dismissDialog()
                 },
                 onConfirm = {
-
+                    component.createRecreation(
+                        RecreationRequest(
+                            baseNumber = roadMapNumber.toInt(),
+                            recreationName = roadMapName
+                        )
+                    )
                 }
             )
+        }
+        if (teacherState.isLoading) {
+            Loader()
         }
     }
 }

@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import com.project.giunne.common.data.remote.response.Recreation
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.ui.theme.GPColor
@@ -25,8 +26,7 @@ import com.project.giunne.common.util.gsp
 fun ResultRoadMapItem(
     modifier: Modifier,
     isSelected: Boolean = true,
-    teacherName: String,
-    description: String,
+    recreation: Recreation,
     onItemSelected: () -> Unit = {}
 ) {
     Column (
@@ -50,7 +50,7 @@ fun ResultRoadMapItem(
             textColor = GPColor.TextGray
         )
         GPText(
-            text = teacherName,
+            text = recreation.teacherName,
             textSize = 14.gsp,
             fontFamily = GPFontFamily.Bold
         )
@@ -63,7 +63,7 @@ fun ResultRoadMapItem(
             textColor = GPColor.TextGray
         )
         GPText(
-            text = description,
+            text = recreation.recreationName,
             textSize = 14.gsp,
             fontFamily = GPFontFamily.Bold
         )

@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import com.project.giunne.Res
+import com.project.giunne.common.data.remote.response.Recreation
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.text.GPText
@@ -82,8 +83,7 @@ internal fun StudentHomeScreen(
                     ResultRoadMapItem(
                         modifier = Modifier.fillMaxWidth()
                             .padding(horizontal = 16.gdp),
-                        teacherName = "홍길동",
-                        description = "Test"
+                        recreation = Recreation()
                     )
                     TeacherCheckingBox(
                         modifier = Modifier.fillMaxWidth(),
@@ -115,7 +115,7 @@ internal fun StudentHomeScreen(
                         onClick = {},
                     ) {
                         GPText(
-                            text = "로드맵 선택",
+                            text = "진행할 로드맵 선택",
                             textSize = 14.gsp,
                             fontFamily = GPFontFamily.Bold,
                             textColor = GPColor.White

@@ -13,4 +13,8 @@ object DefineUrl {
 
     /* Common */
     const val URL_SCHOOL_LIST = "member/school"
+
+    /* Recreation */
+    const val URL_SEARCH_RECREATION = "member/recreation"
+    const val URL_CREATE_RECREATION = "member/recreation"
 }
