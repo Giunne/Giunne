@@ -15,6 +15,7 @@ import com.project.giunne.common.presentation.login.state.LoginState
 import com.project.giunne.common.presentation.signup.SignupComponent.Companion.TYPE_STUDENT
 import com.project.giunne.common.presentation.signup.SignupComponent.Companion.TYPE_TEACHER
 import com.project.giunne.common.util.Define
+import com.project.giunne.common.util.Define.savePrefAuthInfo
 import com.project.giunne.common.util.studentID
 import com.project.giunne.common.util.studentPass
 import com.project.giunne.common.util.teacherID
@@ -58,6 +59,7 @@ BaseComponent<LoginState, LoginEvent>(
                 loginUseCase.invoke(loginRequest)
             }.onSuccess { response ->
                 Define.authInfo = response
+                savePrefAuthInfo(response)
                 saveLoginInfo(loginRequest.loginId)
                 setState { copy(loading = false) }
                 when(Define.authInfo.role) {

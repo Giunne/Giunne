@@ -53,19 +53,21 @@ fun GPConfirmDialog(
                     .wrapContentHeight(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.gdp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    GPText(
-                        text = title,
-                        textSize = 18.gsp,
-                        textColor = GPColor.ButtonBlack,
-                        fontFamily = GPFontFamily.Regular
-                    )
+                if (title.isNotEmpty()) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.gdp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        GPText(
+                            text = title,
+                            textSize = 17.gsp,
+                            textColor = GPColor.ButtonBlack,
+                            fontFamily = GPFontFamily.Regular
+                        )
+                    }
                 }
                 Row(
                     modifier = Modifier
@@ -77,7 +79,7 @@ fun GPConfirmDialog(
                 ) {
                     GPText(
                         text = content,
-                        textSize = 12.gsp,
+                        textSize = 13.gsp,
                         textColor = GPColor.TextGray,
                         fontFamily = GPFontFamily.Regular
                     )

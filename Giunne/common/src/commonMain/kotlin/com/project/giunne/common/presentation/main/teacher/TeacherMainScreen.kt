@@ -401,6 +401,9 @@ private fun TeacherChildren(
                 component = child.component,
                 onCommunityButtonClicked = { type ->
                     component.navigateToCommunity(type)
+                },
+                navigateToDetail = {communityDto ->
+                    component.navigateToCommunityDetail(communityDto)
                 }
             )
             is TeacherMainComponent.TeacherChild.TeacherCommunityChild -> TeacherCommunityScreen(
