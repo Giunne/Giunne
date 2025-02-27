@@ -51,11 +51,11 @@ internal fun SearchRoadMapScreen(
     val focusManager = LocalFocusManager.current
     val lazyListState = rememberLazyListState()
     val searchState by component.uiState.collectAsStateWithLifecycle()
-    var selectedItemId by remember { mutableIntStateOf(-1) }
+    var selectedItemIndex by remember { mutableIntStateOf(-1) }
     var searchText by remember { mutableStateOf("") }
     val isEnabled by remember {
         derivedStateOf {
-            selectedItemId != -1
+            selectedItemIndex != -1
         }
     }
 
@@ -107,10 +107,10 @@ internal fun SearchRoadMapScreen(
             items(searchState.searchRecreationList.size) { index ->
                 ResultRoadMapItem(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    isSelected = selectedItemId == index,
+                    isSelected = selectedItemIndex == index,
                     recreation = searchState.searchRecreationList[index],
                     onItemSelected = {
-                        selectedItemId = if (selectedItemId == index) {
+                        selectedItemIndex = if (selectedItemIndex == index) {
                             -1
                         } else {
                             index
