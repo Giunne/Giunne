@@ -3,8 +3,6 @@ package com.project.giunne.common.util
 import com.project.giunne.common.data.remote.response.AuthResponse
 
 object Define {
-    var authInfo: AuthResponse = AuthResponse()
-
     var playerId: Long
         get() = PreferencesUtil.settingsRepository!!.playerPref.get().toLong()
         set(value) { PreferencesUtil.settingsRepository!!.playerPref.set(value.toString()) }

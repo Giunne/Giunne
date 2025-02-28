@@ -106,7 +106,7 @@ fun CommentInputRow(
             )
         }
         SpW(6.gdp)
-        if (Define.authInfo.role == TYPE_TEACHER) {
+        if (Define.userRole == TYPE_TEACHER) {
             GPButton(
                 modifier = Modifier
                     .height(24.gdp),
