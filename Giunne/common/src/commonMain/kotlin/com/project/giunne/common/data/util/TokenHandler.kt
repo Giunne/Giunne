@@ -33,7 +33,7 @@ object TokenHandler {
         if (response.code == 401) {
             if (!isRefreshing) {
                 isRefreshing = true
-                GLog.d(TAG, "토큰 만료 신호 - ${Define.authInfo.accessToken}")
+                GLog.d(TAG, "토큰 만료 신호 - ${Define.accessToken}")
 
                 runCatching {
                     refresh()
@@ -41,7 +41,7 @@ object TokenHandler {
                     val token = it.accessToken
                     Define.changeAccessToken(token)
                     tokenFlow.emit(token) // 새로운 토큰을 SharedFlow에 emit
-                    GLog.d(TAG, "갱신 됨 - ${Define.authInfo.accessToken}")
+                    GLog.d(TAG, "갱신 됨 - ${Define.accessToken}")
                 }.onFailure {
                     _expireEffects.send(true)
                     isRefreshing = false
@@ -50,7 +50,7 @@ object TokenHandler {
 
                 isRefreshing = false
             } else {
-                GLog.d(TAG, "토큰 갱신 대기 중 - ${Define.authInfo.accessToken}")
+                GLog.d(TAG, "토큰 갱신 대기 중 - ${Define.accessToken}")
             }
 
             // SharedFlow에서 최신 토큰을 받아서 사용

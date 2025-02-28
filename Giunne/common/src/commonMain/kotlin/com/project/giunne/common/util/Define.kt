@@ -3,8 +3,9 @@ package com.project.giunne.common.util
 import com.project.giunne.common.data.remote.response.AuthResponse
 
 object Define {
-    var authInfo: AuthResponse = AuthResponse()
-    var playerId: Long = 0
+    var playerId: Long
+        get() = PreferencesUtil.settingsRepository!!.playerPref.get().toLong()
+        set(value) { PreferencesUtil.settingsRepository!!.playerPref.set(value.toString()) }
 
     var userRole: String
         get() = PreferencesUtil.settingsRepository!!.rolePref.get()
@@ -27,13 +28,14 @@ object Define {
     }
 
     fun changeAccessToken(
-        accessToken: String
+        value: String
     ) {
-        authInfo = authInfo.copy(accessToken = accessToken)
+        accessToken = value
+//        authInfo = authInfo.copy(accessToken = accessToken)
     }
 
     fun clearInfo() {
-        authInfo = AuthResponse()
+//        authInfo = AuthResponse()
         userRole = ""
         accessToken = ""
         refreshToken = ""

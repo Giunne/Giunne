@@ -58,11 +58,11 @@ BaseComponent<LoginState, LoginEvent>(
             runCatching {
                 loginUseCase.invoke(loginRequest)
             }.onSuccess { response ->
-                Define.authInfo = response
+//                Define.authInfo = response
                 savePrefAuthInfo(response)
                 saveLoginInfo(loginRequest.loginId)
                 setState { copy(loading = false) }
-                when(Define.authInfo.role) {
+                when(response.role) {
                     TYPE_TEACHER -> {
                         withContext(Dispatchers.Main) {
                             goToTeacherMain()
