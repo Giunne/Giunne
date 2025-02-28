@@ -15,6 +15,7 @@ import com.project.giunne.common.presentation.community.student.StudentCommunity
 import com.project.giunne.common.presentation.community.student.dummy.CommunityDto
 import com.project.giunne.common.presentation.friend.student.StudentFriendComponent
 import com.project.giunne.common.presentation.home.student.home.StudentHomeComponent
+import com.project.giunne.common.presentation.home.student.join.StudentJoinRecreationComponent
 import com.project.giunne.common.presentation.home.student.search.SearchRoadMapComponent
 import com.project.giunne.common.presentation.mypage.student.StudentMyPageComponent
 import com.project.giunne.common.presentation.roadmap.student.StudentRoadmapComponent
@@ -40,7 +41,7 @@ class StudentMainComponent(
     sealed class StudentChild {
         class StudentHomeChild(val component: StudentHomeComponent): StudentChild()
         class SearchRoadMapChild(val component: SearchRoadMapComponent): StudentChild()
-        class StudentSelectCharacterChild(val component: StudentSelectCharacterComponent): StudentChild()
+        class StudentSelectCharacterChild(val component: StudentSelectCharacterComponent, val recreationId: Int): StudentChild()
         class StudentRoadmapChild(val component: StudentRoadmapComponent) : StudentChild()
         class StudentCertificationChild(val component: StudentCertificationComponent) : StudentChild()
         class StudentCommunityChild(val component: StudentCommunityComponent, val pageType: CertPage) : StudentChild()
@@ -50,6 +51,7 @@ class StudentMainComponent(
         class StudentShopChild(val component: StudentMyPageComponent) : StudentChild()
         class StudentGachaChild(val component: StudentMyPageComponent) : StudentChild()
         class StudentPickingItemChild(val component: StudentMyPageComponent) : StudentChild()
+        class StudentJoinRecreationChild(val component: StudentJoinRecreationComponent) : StudentChild()
     }
 
     private fun child(config: StudentMainConfig, componentContext: ComponentContext): StudentChild =
@@ -64,8 +66,9 @@ class StudentMainComponent(
             is StudentMainConfig.MyPage -> StudentChild.StudentMyPageChild(StudentMyPageComponent(componentContext))
             is StudentMainConfig.Shop -> StudentChild.StudentShopChild(StudentMyPageComponent(componentContext))
             is StudentMainConfig.Gacha -> StudentChild.StudentGachaChild(StudentMyPageComponent(componentContext))
-            is StudentMainConfig.SelectedCharacter -> StudentChild.StudentSelectCharacterChild(StudentSelectCharacterComponent(componentContext))
+            is StudentMainConfig.SelectedCharacter -> StudentChild.StudentSelectCharacterChild(StudentSelectCharacterComponent(componentContext), config.recreationId)
             is StudentMainConfig.PickingItem -> StudentChild.StudentPickingItemChild(StudentMyPageComponent(componentContext))
+            is StudentMainConfig.JoinRecreation -> StudentChild.StudentJoinRecreationChild(StudentJoinRecreationComponent(componentContext))
         }
 
     @Serializable
@@ -77,7 +80,7 @@ class StudentMainComponent(
         data object SearchRoadMap : StudentMainConfig
 
         @Serializable
-        data object SelectedCharacter : StudentMainConfig
+        data class SelectedCharacter(val recreationId: Int) : StudentMainConfig
 
         @Serializable
         data object Roadmap : StudentMainConfig
@@ -105,6 +108,9 @@ class StudentMainComponent(
 
         @Serializable
         data object PickingItem : StudentMainConfig
+
+        @Serializable
+        data object JoinRecreation : StudentMainConfig
     }
 
     fun navigateToHome() {
@@ -151,8 +157,10 @@ class StudentMainComponent(
         navigation.push(StudentMainConfig.SearchRoadMap)
     }
 
-    fun navigateToSelectedCharacter() {
-        navigation.push(StudentMainConfig.SelectedCharacter)
+    fun navigateToSelectedCharacter(
+        recreationId: Int
+    ) {
+        navigation.push(StudentMainConfig.SelectedCharacter(recreationId))
     }
 
     fun navigateToPickingItem() {
@@ -164,6 +172,10 @@ class StudentMainComponent(
             config !is StudentMainConfig.MyPage
         }
         navigation.push(StudentMainConfig.Shop)
+    }
+
+    fun navigateToJoinRecreation() {
+        navigation.push(StudentMainConfig.JoinRecreation)
     }
 
     fun navigateBack() {

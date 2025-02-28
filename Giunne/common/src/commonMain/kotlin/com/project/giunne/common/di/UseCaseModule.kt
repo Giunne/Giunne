@@ -4,7 +4,12 @@ import com.project.giunne.common.domain.usecase.auth.LoginUseCase
 import com.project.giunne.common.domain.usecase.auth.LogoutUseCase
 import com.project.giunne.common.domain.usecase.auth.StudentSignupUseCase
 import com.project.giunne.common.domain.usecase.auth.TeacherSignupUseCase
+import com.project.giunne.common.domain.usecase.avatar.CreateAvatarUseCase
+import com.project.giunne.common.domain.usecase.avatar.GetUserAvatarListUseCase
+import com.project.giunne.common.domain.usecase.avatar.LoginRecreationUseCase
 import com.project.giunne.common.domain.usecase.common.GetSchoolListUseCase
+import com.project.giunne.common.domain.usecase.roadmap.CreateRecreationUseCase
+import com.project.giunne.common.domain.usecase.roadmap.GetSearchRecreationUseCase
 import com.project.giunne.common.domain.usecase.shop.GetGachaMapUseCase
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -16,4 +21,9 @@ val useCaseModule: Module = module {
     single { StudentSignupUseCase(get()) }
     single { TeacherSignupUseCase(get()) }
     single { GetSchoolListUseCase(get()) }
+    single { CreateRecreationUseCase(get()) }
+    single { GetSearchRecreationUseCase(get()) }
+    single { CreateAvatarUseCase(get()) }
+    single { LoginRecreationUseCase(get()) }
+    single { GetUserAvatarListUseCase(get()) }
 }

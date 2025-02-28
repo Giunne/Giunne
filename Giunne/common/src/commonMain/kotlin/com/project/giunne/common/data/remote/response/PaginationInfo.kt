@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PageNationInfo(
+data class PaginationInfo(
     @SerialName("currentPage")
     val currentPage: Int = 0,
     @SerialName("hasNextPage")
