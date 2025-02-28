@@ -38,6 +38,7 @@ object GPColor {
     @Stable val BackgroundGray_EBEBEB = Color(0xFFEBEBEB)
     @Stable val BackgroundLoading = Color(0x80000000)
     @Stable val BackgroundFrameOrange = Color(0xFFFF9C73)
+    @Stable val BackgroundIntroOrange = Color(0xFFFB7145)
 
     @Stable val BorderLightGray = Color(0xFFD9D9D9)
 

@@ -48,7 +48,7 @@ fun RootContent(
     //****//
 
     LaunchedEffect(Unit) {
-        delay(1000) // TODO Intro
+        delay(3000) // TODO Intro
         if (Define.accessToken.isNotEmpty() && Define.userRole.isNotEmpty()) { // TODO 구현
             if (Define.userRole == TYPE_TEACHER) {
                 component.navigateToTeacherMain()

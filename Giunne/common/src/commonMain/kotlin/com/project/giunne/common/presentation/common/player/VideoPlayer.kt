@@ -16,3 +16,10 @@ expect fun VideoPlayer(
     videoPath: String,
     onFullScreenClicked: () -> Unit
 )
+
+@Composable
+expect fun IntroVideoPlayer(
+    modifier: Modifier,
+    videoPath: String,
+    onFullScreenClicked: () -> Unit
+)

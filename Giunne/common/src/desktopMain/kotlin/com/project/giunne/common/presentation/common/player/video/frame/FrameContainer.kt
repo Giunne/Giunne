@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -27,7 +28,8 @@ fun FrameContainer(
     modifier: Modifier = Modifier,
     size: IntSize,
     bytes: ByteArray?,
-    controller: PlayerController
+    controller: PlayerController,
+    isIntro: Boolean
 ) {
     var viewSize by remember { mutableStateOf(IntSize.Zero) }
     val ratio = size.width.toFloat() / size.height.toFloat()
@@ -65,12 +67,16 @@ fun FrameContainer(
                     contentDescription = "frame"
                 )
             }
-        } ?: CircularProgressIndicator(
-            modifier = Modifier
-                .width(40.gdp),
-            color = GPColor.White,
-            trackColor = GPColor.MainOrangeColor,
-            strokeWidth = 6.gdp
-        )
+        } ?: if (!isIntro) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .width(40.gdp),
+                color = GPColor.White,
+                trackColor = GPColor.MainOrangeColor,
+                strokeWidth = 6.gdp
+            )
+        } else {
+
+        }
     }
 }

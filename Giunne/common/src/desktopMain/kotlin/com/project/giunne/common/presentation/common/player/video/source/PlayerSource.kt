@@ -19,7 +19,8 @@ fun PlayerSource(
     bytes: ByteArray?,
     frameController: PlayerController,
     onFullScreenClicked: () -> Unit,
-    isFullScreen: Boolean = false
+    isFullScreen: Boolean = false,
+    isIntro: Boolean = false
 ) {
     Column(
         Modifier.fillMaxSize(),
@@ -33,7 +34,8 @@ fun PlayerSource(
             bytes = bytes,
             controller = frameController,
             onFullScreenClicked = onFullScreenClicked,
-            isFullScreen = isFullScreen
+            isFullScreen = isFullScreen,
+            isIntro = isIntro
         )
     }
 }
