@@ -38,6 +38,35 @@ class SearchRoadMapComponent(
                 setState {
                     copy(
                         isLoading = false,
+                        searchRecreationList = response.data
+                    )
+                }
+            }.onFailure {
+                setState {
+                    copy(
+                        isLoading = false,
+                        error = it.asDataThrowable()
+                    )
+                }
+            }
+        }
+    }
+
+    fun loadMore(
+        searchQuery: String,
+        pageIndex: Int
+    ) {
+        scope.launch {
+            setState { copy(isLoading = true) }
+            runCatching {
+                getSearchRecreationUseCase(
+                    searchQuery = searchQuery,
+                    pageIndex = pageIndex
+                )
+            }.onSuccess { response ->
+                setState {
+                    copy(
+                        isLoading = false,
                         searchRecreationList = (searchRecreationList + response.data).distinctBy { it.id }
                     )
                 }

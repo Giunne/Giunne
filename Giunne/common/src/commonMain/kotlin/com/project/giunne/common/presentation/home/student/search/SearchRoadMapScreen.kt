@@ -23,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
@@ -32,6 +33,7 @@ import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.search.GPSearchBar
 import com.project.giunne.common.presentation.common.text.GPText
+import com.project.giunne.common.presentation.home.common.EmptyResult
 import com.project.giunne.common.presentation.home.student.content.ResultRoadMapItem
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
@@ -66,7 +68,7 @@ internal fun SearchRoadMapScreen(
                 val totalItemsCount = layoutInfo.totalItemsCount
 
                 if (searchState.paginationInfo.hasNextPage && lastVisibleItemIndex >= totalItemsCount - 1) {
-                    component.searchRecreation(searchText, searchState.paginationInfo.currentPage + 1)
+                    component.loadMore(searchText, searchState.paginationInfo.currentPage + 1)
                 }
             }
     }
@@ -76,7 +78,8 @@ internal fun SearchRoadMapScreen(
             .fillMaxSize()
             .background(GPColor.BackgroundLightGray)
             .addFocusCleaner(focusManager)
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (searchState.isLoading) {
             Loader()
@@ -98,26 +101,34 @@ internal fun SearchRoadMapScreen(
             },
             placeHolder = "검색할 로드맵을 입력해주세요."
         )
-        LazyColumn(
-            modifier = Modifier
-                .weight(1f),
-            contentPadding = PaddingValues(vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(searchState.searchRecreationList.size) { index ->
-                ResultRoadMapItem(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    isSelected = selectedItemIndex == index,
-                    recreation = searchState.searchRecreationList[index],
-                    onItemSelected = {
-                        selectedItemIndex = if (selectedItemIndex == index) {
-                            -1
-                        } else {
-                            index
+        if (searchText.isEmpty() && searchState.searchRecreationList.isEmpty()) {
+            EmptyResult(
+                modifier = Modifier.weight(1f),
+                description = "검색할 로드맵을 입력해주세요.",
+                highlightRegex = 4..6
+            )
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f),
+                contentPadding = PaddingValues(vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(searchState.searchRecreationList.size) { index ->
+                    ResultRoadMapItem(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        isSelected = selectedItemIndex == index,
+                        recreation = searchState.searchRecreationList[index],
+                        onItemSelected = {
+                            selectedItemIndex = if (selectedItemIndex == index) {
+                                -1
+                            } else {
+                                index
+                            }
+                            focusManager.clearFocus()
                         }
-                        focusManager.clearFocus()
-                    }
-                )
+                    )
+                }
             }
         }
 
