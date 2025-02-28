@@ -4,20 +4,23 @@ import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.SettingsListener
 
-public class SettingRepository(
+class SettingRepository(
     private val settings: Settings
 ) {
 //    public val mySettings: List<SettingConfig<*>> = listOf(
 //        StringSettingConfig(settings, "MY_STRING", ""),
 //        StringSettingConfig(settings, "EMAIL", "")
 //    )
-    public val idPref: SettingConfig<*> = StringSettingConfig(settings, "ID", "")
-    public val passwordPref: SettingConfig<*> = StringSettingConfig(settings, "PASSWORD", "")
+    val idPref: SettingConfig<*> = StringSettingConfig(settings, "ID", "")
+    val accessTokenPref: SettingConfig<*> = StringSettingConfig(settings, "AC_TOKEN", "")
+    val refreshTokenPref: SettingConfig<*> = StringSettingConfig(settings, "RE_TOKEN", "")
+    val rolePref: SettingConfig<*> = StringSettingConfig(settings, "ROLE", "")
+    val playerPref: SettingConfig<*> = StringSettingConfig(settings, "PLAYER", "")
 
-    public fun clear(): Unit = settings.clear()
+    fun clear(): Unit = settings.clear()
 }
 
-public sealed class SettingConfig<T>(
+sealed class SettingConfig<T>(
     private val settings: Settings,
     public val key: String,
     private val defaultValue: T
@@ -33,11 +36,11 @@ public sealed class SettingConfig<T>(
 
     private var listener: SettingsListener? = null
 
-    public fun remove(): Unit = settings.remove(key)
-    public fun exists(): Boolean = settings.hasKey(key)
+    fun remove(): Unit = settings.remove(key)
+    fun exists(): Boolean = settings.hasKey(key)
 
-    public fun get(): String = getStringValue(settings, key, defaultValue)
-    public fun set(value: String): Boolean {
+    fun get(): String = getStringValue(settings, key, defaultValue)
+    fun set(value: String): Boolean {
         return try {
             setStringValue(settings, key, value)
             true
@@ -46,7 +49,7 @@ public sealed class SettingConfig<T>(
         }
     }
 
-    public var isLoggingEnabled: Boolean
+    var isLoggingEnabled: Boolean
         get() = listener != null
         set(value) {
             val settings = settings as? ObservableSettings ?: return
@@ -62,7 +65,7 @@ public sealed class SettingConfig<T>(
     override fun toString(): String = key
 }
 
-public class StringSettingConfig(settings: Settings, key: String, defaultValue: String) :
+class StringSettingConfig(settings: Settings, key: String, defaultValue: String) :
     SettingConfig<String>(settings, key, defaultValue) {
 
     override fun getStringValue(settings: Settings, key: String, defaultValue: String): String =
@@ -80,7 +83,7 @@ public class StringSettingConfig(settings: Settings, key: String, defaultValue: 
         settings.addStringListener(key, defaultValue, callback)
 }
 
-public class BooleanSettingConfig(settings: Settings, key: String, defaultValue: Boolean) :
+class BooleanSettingConfig(settings: Settings, key: String, defaultValue: Boolean) :
         SettingConfig<Boolean>(settings, key, defaultValue) {
     override fun getStringValue(settings: Settings, key: String, defaultValue: Boolean): String =
         settings.getBoolean(key, defaultValue).toString()

@@ -26,8 +26,8 @@ import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
-import com.project.giunne.image_student_type
-import com.project.giunne.image_teacher_type
+import com.project.giunne.image_loader_3
+import com.project.giunne.image_loader_8
 import org.jetbrains.compose.resources.painterResource
 
 private const val TAG = "SignupTypeSelectScreen"
@@ -88,7 +88,7 @@ internal fun SignupTypeSelectScreen(
                             .padding(horizontal = 16.gdp)
                             .fillMaxWidth()
                             .height(64.gdp),
-                        image = painterResource(Res.drawable.image_student_type),
+                        image = painterResource(Res.drawable.image_loader_3),
                         text = "학생용 계정 만들기",
                         onClick = { onSelected(TYPE_STUDENT) },
                     )
@@ -98,7 +98,7 @@ internal fun SignupTypeSelectScreen(
                             .padding(horizontal = 16.gdp)
                             .fillMaxWidth()
                             .height(64.gdp),
-                        image = painterResource(Res.drawable.image_teacher_type),
+                        image = painterResource(Res.drawable.image_loader_8),
                         text = "선생님용 계정 만들기",
                         onClick = { onSelected(TYPE_TEACHER) },
                     )

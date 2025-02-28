@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import coil3.compose.setSingletonImageLoaderFactory
@@ -17,13 +18,18 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.isEn
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
+import com.project.giunne.common.data.util.TokenHandler
+import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.newImageLoader
 import com.project.giunne.common.presentation.login.LoginScreen
 import com.project.giunne.common.presentation.main.splash.SplashScreen
 import com.project.giunne.common.presentation.main.student.StudentMainScreen
 import com.project.giunne.common.presentation.main.teacher.TeacherMainScreen
+import com.project.giunne.common.presentation.signup.SignupComponent.Companion.TYPE_STUDENT
+import com.project.giunne.common.presentation.signup.SignupComponent.Companion.TYPE_TEACHER
 import com.project.giunne.common.presentation.signup.SignupScreen
 import com.project.giunne.common.presentation.signup.SignupTypeSelectScreen
+import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.NanumRound
 import kotlinx.coroutines.delay
 
@@ -42,12 +48,22 @@ fun RootContent(
     //****//
 
     LaunchedEffect(Unit) {
-        delay(1000)
-        component.navigateToLogin()
+        delay(1000) // TODO Intro
+        if (Define.accessToken.isNotEmpty() && Define.userRole.isNotEmpty()) { // TODO 구현
+            if (Define.userRole == TYPE_TEACHER) {
+                component.navigateToTeacherMain()
+            } else if (Define.userRole == TYPE_STUDENT) {
+                component.navigateToStudentMain()
+            }
+        } else {
+            component.navigateToLogin()
+        }
     }
 
     val childStack by component.childStack.subscribeAsState()
     val activeComponent = childStack.active.instance
+
+    val expireEffects by TokenHandler.expireEffects.collectAsState(false)
 
     Scaffold (
         modifier = modifier
@@ -74,6 +90,19 @@ fun RootContent(
             Children(
                 component = component,
                 exitProgram = exitProgram
+            )
+        }
+    }
+
+    with(expireEffects) {
+        if (this) {
+            GPAlertDialog(
+                dismiss = {
+                    Define.clearInfo()
+                    component.navigateToLogin()
+                },
+                title = "접속 기한 초과",
+                content = "로그인이 만료되었습니다. 다시 로그인 해주세요!",
             )
         }
     }
@@ -111,9 +140,13 @@ private fun Children(
             )
             is RootComponent.Child.StudentMainChild -> StudentMainScreen(
                 component = child.component,
-                exitProgram = { exitProgram() }
+                exitProgram = { exitProgram() },
+                onLogout = { component.navigateToLogin() }
             )
-            is RootComponent.Child.TeacherMainChild -> TeacherMainScreen(component = child.component)
+            is RootComponent.Child.TeacherMainChild -> TeacherMainScreen(
+                component = child.component,
+                onLogout = { component.navigateToLogin() }
+            )
         }
     }
 }

@@ -31,15 +31,18 @@ import coil3.compose.AsyncImage
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.addFocusCleaner
+import com.project.giunne.common.presentation.common.dialog.GPConfirmDialog
 import com.project.giunne.common.presentation.common.player.VideoPlayer
 import com.project.giunne.common.presentation.common.player.VideoWindowPlayer
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.community.content.CommentInputRow
 import com.project.giunne.common.presentation.community.content.CommunityDetailInfoRow
+import com.project.giunne.common.presentation.community.content.GradeDialog
 import com.project.giunne.common.presentation.community.content.TeacherCommunityCommentColumn
 import com.project.giunne.common.presentation.community.student.dummy.CommunityDto
 import com.project.giunne.common.presentation.community.student.dummy.commentTestList
+import com.project.giunne.common.presentation.community.student.intent.GradeStore
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
@@ -64,6 +67,9 @@ internal fun TeacherCommunityDetailScreen(
 
     val zoomStore = remember { ZoomStore() }
     val zoomUiState by zoomStore.uiState.collectAsState()
+
+    val gradeStore = remember { GradeStore() }
+    val gradeState by gradeStore.uiState.collectAsState()
 
     /////test/////
     var full by remember { mutableStateOf(false) }
@@ -159,6 +165,7 @@ internal fun TeacherCommunityDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth(),
                     onSendButtonClicked = {  }, // TODO API
+                    onCertButtonClicked = { gradeStore.onClickGradeButton() }
                 )
             }
         }
@@ -169,6 +176,33 @@ internal fun TeacherCommunityDetailScreen(
             VideoWindowPlayer(
                 videoPath = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
                 dismiss = { full = false }
+            )
+        }
+    }
+
+    with(gradeState.gradeDialog) {
+        if (this) {
+            GradeDialog(
+                rootName = communityDto?.rootName.orEmpty(),
+                questLevel = communityDto?.content.orEmpty(),
+                onCloseButtonClicked = { gradeStore.dismissGradeDialog() },
+                onConfirmButtonClicked = { star, isChecked ->
+                    gradeStore.onClickConfirmButton()
+                }
+            )
+        }
+    }
+
+    with(gradeState.confirmDialog) {
+        if (this) {
+            GPConfirmDialog(
+                title = "",
+                content = "채점할까요?",
+                onConfirmClicked = {
+                    gradeStore.dismissConfirmDialog()
+                    gradeStore.dismissGradeDialog()
+                }, //TODO API
+                onCancelClicked = { gradeStore.dismissConfirmDialog() },
             )
         }
     }

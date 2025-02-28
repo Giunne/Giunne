@@ -10,5 +10,5 @@ data class BaseResponse<T>(
     @SerialName("message")
     val message: String,
     @SerialName("value")
-    val value: T
+    val value: T?
 )

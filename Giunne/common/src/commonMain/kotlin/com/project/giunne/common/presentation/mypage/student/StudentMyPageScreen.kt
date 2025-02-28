@@ -16,14 +16,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import com.project.giunne.Res
+import com.project.giunne.common.data.util.TokenHandler
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.charactor.GPCharacter
+import com.project.giunne.common.presentation.common.dialog.GPConfirmDialog
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.mypage.student.content.MyPageCharacter
 import com.project.giunne.common.presentation.mypage.student.content.MyPageStudentInfoColumn
@@ -40,12 +44,15 @@ internal fun StudentMyPageScreen(
     component: StudentMyPageComponent,
     modifier: Modifier = Modifier,
     navigateToShop: () -> Unit,
-    navigateToGacha: () -> Unit
+    navigateToGacha: () -> Unit,
+    onLogout: () -> Unit
 ) {
     GLog.d(TAG, "onCreate")
 
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
+
+    val myPageState by component.uiState.collectAsState()
 
     Scaffold(
         modifier = Modifier
@@ -122,9 +129,24 @@ internal fun StudentMyPageScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.gdp),
-                onClickLogOut = { }
+                onClickLogOut = { component.onClickLogoutButton() }
             )
             Spacer(modifier = Modifier.height(16.gdp))
+        }
+    }
+
+    with(myPageState.logoutDialog) {
+        if (this) {
+            GPConfirmDialog(
+                title = "로그아웃",
+                content = "로그아웃 할까요?",
+                onConfirmClicked = {
+                    component.dismissLogoutDialog()
+                    TokenHandler.callLogout()
+                    onLogout()
+                },
+                onCancelClicked = { component.dismissLogoutDialog() },
+            )
         }
     }
 }

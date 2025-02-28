@@ -9,8 +9,10 @@ import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.auth.StudentSignupUseCase
 import com.project.giunne.common.domain.usecase.auth.TeacherSignupUseCase
 import com.project.giunne.common.domain.usecase.common.GetSchoolListUseCase
+import com.project.giunne.common.presentation.signup.SignupComponent.Companion.TYPE_STUDENT
 import com.project.giunne.common.presentation.signup.state.InfoState
 import com.project.giunne.common.util.Define
+import com.project.giunne.common.util.isValidPassword
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent
 
@@ -108,6 +110,40 @@ class InfoStore(
                 }
             }
         }
+    }
+
+    fun checkSignUpValidate(
+        signupType: String,
+        onSuccess: () -> Unit
+    ) {
+        when {
+            uiState.value.idText.isEmpty() -> {
+                setState { copy(signupValidate = "아이디를 입력해야 합니다.") }
+            }
+            uiState.value.passText.isEmpty() -> {
+                setState { copy(signupValidate = "비밀번호를 입력해야 합니다.") }
+            }
+            uiState.value.passConfText.isEmpty() -> {
+                setState { copy(signupValidate = "비밀번호 확인을 입력해야 합니다.") }
+            }
+            uiState.value.codeText.isEmpty() && signupType == TYPE_STUDENT -> {
+                setState { copy(signupValidate = "인증코드를 입력해야 합니다.") }
+            }
+            uiState.value.schoolInfo.schoolNm.isEmpty() -> {
+                setState { copy(signupValidate = "학교가 선택되어야 합니다.") }
+            }
+            !uiState.value.passText.isValidPassword() -> {
+                setState { copy(signupValidate = "비밀번호 형식이 잘못되었습니다.\n(영어, 숫자를 포함한 8자리)") }
+            }
+            uiState.value.passText != uiState.value.passConfText -> {
+                setState { copy(signupValidate = "비밀번호, 비밀번호 확인이 서로 다릅니다.") }
+            }
+            else -> { onSuccess() }
+        }
+    }
+
+    fun dismissInValidateDialog() {
+        setState { copy(signupValidate = null) }
     }
 
     fun dismissErrorDialog() {

@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -24,10 +25,13 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import com.project.giunne.Res
+import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.common.textfield.GPTextField
+import com.project.giunne.common.presentation.signup.SignupComponent.Companion.TYPE_TEACHER
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
@@ -38,7 +42,8 @@ import org.jetbrains.compose.resources.painterResource
 fun CommentInputRow(
     modifier: Modifier = Modifier,
     focusManager: FocusManager = LocalFocusManager.current,
-    onSendButtonClicked: (String) -> Unit
+    onSendButtonClicked: (String) -> Unit,
+    onCertButtonClicked: () -> Unit = {}
 ) {
     var text by remember { mutableStateOf("") }
 
@@ -99,6 +104,24 @@ fun CommentInputRow(
                     else GPColor.ButtonGray,
                 )
             )
+        }
+        SpW(6.gdp)
+        if (Define.authInfo.role == TYPE_TEACHER) {
+            GPButton(
+                modifier = Modifier
+                    .height(24.gdp),
+                normalColor = GPColor.ButtonOrange,
+                pressColor = GPColor.ButtonPressOrange,
+                hoverColor = GPColor.ButtonHoverOrange,
+                onClick = { onCertButtonClicked() },
+            ) {
+                GPText(
+                    text = "채점",
+                    textSize = 10.gsp,
+                    fontFamily = GPFontFamily.Bold,
+                    textColor = GPColor.White
+                )
+            }
         }
     }
 }

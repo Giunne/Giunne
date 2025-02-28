@@ -15,6 +15,7 @@ import com.project.giunne.common.presentation.login.state.LoginState
 import com.project.giunne.common.presentation.signup.SignupComponent.Companion.TYPE_STUDENT
 import com.project.giunne.common.presentation.signup.SignupComponent.Companion.TYPE_TEACHER
 import com.project.giunne.common.util.Define
+import com.project.giunne.common.util.Define.savePrefAuthInfo
 import com.project.giunne.common.util.studentID
 import com.project.giunne.common.util.studentPass
 import com.project.giunne.common.util.teacherID
@@ -25,6 +26,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.java.KoinJavaComponent
 
@@ -57,11 +59,20 @@ BaseComponent<LoginState, LoginEvent>(
                 loginUseCase.invoke(loginRequest)
             }.onSuccess { response ->
                 Define.authInfo = response
+                savePrefAuthInfo(response)
                 saveLoginInfo(loginRequest.loginId)
                 setState { copy(loading = false) }
                 when(Define.authInfo.role) {
-                    TYPE_TEACHER -> { goToTeacherMain() }
-                    TYPE_STUDENT -> { goToStudentMain() }
+                    TYPE_TEACHER -> {
+                        withContext(Dispatchers.Main) {
+                            goToTeacherMain()
+                        }
+                    }
+                    TYPE_STUDENT -> {
+                        withContext(Dispatchers.Main) {
+                            goToStudentMain()
+                        }
+                    }
                 }
             }.onFailure {
                 setState { copy(loading = false, error = it.asDataThrowable()) }
