@@ -23,11 +23,11 @@ fun SplashScreen(
                 .fillMaxSize()
                 .background(GPColor.BackgroundBlack)
         ) {
-            IntroVideoPlayer(
-                modifier = Modifier.fillMaxSize(),
-                videoPath = "file:///Users/heeung/Desktop/giwoonnae_intro.mp4",
-                onFullScreenClicked = {  },
-            )
+//            IntroVideoPlayer(
+//                modifier = Modifier.fillMaxSize(),
+//                videoPath = "file:///Users/heeung/Desktop/giwoonnae_intro.mp4",
+//                onFullScreenClicked = {  },
+//            )
         }
     }
 }

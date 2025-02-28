@@ -42,6 +42,7 @@ interface AuthService {
 
     @POST(URL_REFRESH)
     suspend fun refresh(
+        @Header("Authorization") accessToken: String = "Bearer ${Define.refreshToken}",
         @Body playerRequest: PlayerRequest
     ): BaseResponse<RefreshResponse>
 }
