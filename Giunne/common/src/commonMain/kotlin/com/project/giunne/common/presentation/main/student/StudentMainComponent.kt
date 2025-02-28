@@ -41,7 +41,7 @@ class StudentMainComponent(
     sealed class StudentChild {
         class StudentHomeChild(val component: StudentHomeComponent): StudentChild()
         class SearchRoadMapChild(val component: SearchRoadMapComponent): StudentChild()
-        class StudentSelectCharacterChild(val component: StudentSelectCharacterComponent): StudentChild()
+        class StudentSelectCharacterChild(val component: StudentSelectCharacterComponent, val recreationId: Int): StudentChild()
         class StudentRoadmapChild(val component: StudentRoadmapComponent) : StudentChild()
         class StudentCertificationChild(val component: StudentCertificationComponent) : StudentChild()
         class StudentCommunityChild(val component: StudentCommunityComponent, val pageType: CertPage) : StudentChild()
@@ -66,7 +66,7 @@ class StudentMainComponent(
             is StudentMainConfig.MyPage -> StudentChild.StudentMyPageChild(StudentMyPageComponent(componentContext))
             is StudentMainConfig.Shop -> StudentChild.StudentShopChild(StudentMyPageComponent(componentContext))
             is StudentMainConfig.Gacha -> StudentChild.StudentGachaChild(StudentMyPageComponent(componentContext))
-            is StudentMainConfig.SelectedCharacter -> StudentChild.StudentSelectCharacterChild(StudentSelectCharacterComponent(componentContext))
+            is StudentMainConfig.SelectedCharacter -> StudentChild.StudentSelectCharacterChild(StudentSelectCharacterComponent(componentContext), config.recreationId)
             is StudentMainConfig.PickingItem -> StudentChild.StudentPickingItemChild(StudentMyPageComponent(componentContext))
             is StudentMainConfig.JoinRecreation -> StudentChild.StudentJoinRecreationChild(StudentJoinRecreationComponent(componentContext))
         }
@@ -80,7 +80,7 @@ class StudentMainComponent(
         data object SearchRoadMap : StudentMainConfig
 
         @Serializable
-        data object SelectedCharacter : StudentMainConfig
+        data class SelectedCharacter(val recreationId: Int) : StudentMainConfig
 
         @Serializable
         data object Roadmap : StudentMainConfig
@@ -157,8 +157,10 @@ class StudentMainComponent(
         navigation.push(StudentMainConfig.SearchRoadMap)
     }
 
-    fun navigateToSelectedCharacter() {
-        navigation.push(StudentMainConfig.SelectedCharacter)
+    fun navigateToSelectedCharacter(
+        recreationId: Int
+    ) {
+        navigation.push(StudentMainConfig.SelectedCharacter(recreationId))
     }
 
     fun navigateToPickingItem() {

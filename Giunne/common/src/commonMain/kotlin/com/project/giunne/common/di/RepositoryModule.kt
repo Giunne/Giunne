@@ -7,7 +7,9 @@ import com.project.giunne.common.data.repository.ShopRepositoryImpl
 import com.project.giunne.common.data.repository.AuthRepositoryImpl
 import com.project.giunne.common.data.repository.CommonRepositoryImpl
 import com.project.giunne.common.data.repository.RecreationRepositoryImpl
+import com.project.giunne.common.data.repository.AvatarRepositoryImpl
 import com.project.giunne.common.domain.repository.AuthRepository
+import com.project.giunne.common.domain.repository.AvatarRepository
 import com.project.giunne.common.domain.repository.CommonRepository
 import com.project.giunne.common.domain.repository.RecreationRepository
 import com.project.giunne.common.domain.repository.ShopRepository
@@ -18,4 +20,5 @@ val repositoryModule: Module = module {
     singleOf(::AuthRepositoryImpl) bind AuthRepository::class
     singleOf(::CommonRepositoryImpl) bind CommonRepository::class
     singleOf(::RecreationRepositoryImpl) bind RecreationRepository::class
+    singleOf(::AvatarRepositoryImpl) bind AvatarRepository::class
 }

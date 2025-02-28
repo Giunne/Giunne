@@ -1,6 +1,7 @@
 package com.project.giunne.common.di
 
 import com.project.giunne.common.data.service.AuthService
+import com.project.giunne.common.data.service.AvatarService
 import com.project.giunne.common.data.service.CommonService
 import com.project.giunne.common.data.service.RecreationService
 import com.project.giunne.common.data.service.ShopService
@@ -22,6 +23,9 @@ val serviceModule: Module = module {
     }
     single {
         authKtorfit().create<RecreationService>()
+    }
+    single {
+        authKtorfit().create<AvatarService>()
     }
 }
 

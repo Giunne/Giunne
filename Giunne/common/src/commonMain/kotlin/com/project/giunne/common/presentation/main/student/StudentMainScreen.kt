@@ -445,14 +445,27 @@ private fun StudentChildren(
                 navigateToGacha = { component.navigateToGacha() }
             )
             is StudentMainComponent.StudentChild.StudentShopChild -> ShopScreen()
-            is StudentMainComponent.StudentChild.StudentSelectCharacterChild -> StudentCharacterSelectScreen(component = child.component)
-            is StudentMainComponent.StudentChild.SearchRoadMapChild -> SearchRoadMapScreen(
+            is StudentMainComponent.StudentChild.StudentSelectCharacterChild -> StudentCharacterSelectScreen(
                 component = child.component,
+                recreationId = if (activeComponent is StudentMainComponent.StudentChild.StudentSelectCharacterChild) {
+                    activeComponent.recreationId
+                } else {
+                    -1
+                },
                 onBackClick = {
                     component.navigateBack()
                 },
                 navigateToHome = {
                     component.navigateToHome()
+                }
+            )
+            is StudentMainComponent.StudentChild.SearchRoadMapChild -> SearchRoadMapScreen(
+                component = child.component,
+                onBackClick = {
+                    component.navigateBack()
+                },
+                navigateToSelectCharacter = { recreationId ->
+                    component.navigateToSelectedCharacter(recreationId)
                 }
             )
             is StudentMainComponent.StudentChild.StudentGachaChild -> GachaScreen(
@@ -498,10 +511,10 @@ private val StudentMainComponent.StudentChild.index: Int
             is StudentMainComponent.StudentChild.StudentMyPageChild -> 6
             is StudentMainComponent.StudentChild.StudentShopChild -> 7
             is StudentMainComponent.StudentChild.StudentGachaChild -> 8
-            is StudentMainComponent.StudentChild.StudentSelectCharacterChild -> 9
+            is StudentMainComponent.StudentChild.StudentJoinRecreationChild -> 9
             is StudentMainComponent.StudentChild.SearchRoadMapChild -> 10
             is StudentMainComponent.StudentChild.StudentPickingItemChild -> 11
-            is StudentMainComponent.StudentChild.StudentJoinRecreationChild -> 12
+            is StudentMainComponent.StudentChild.StudentSelectCharacterChild -> 12
         }
 
 private fun StackAnimator.flipSide(): StackAnimator =
