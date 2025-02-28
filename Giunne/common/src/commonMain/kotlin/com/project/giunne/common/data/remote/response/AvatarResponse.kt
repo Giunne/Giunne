@@ -8,10 +8,11 @@ data class AvatarResponse(
     val accessTokenExpireTime: String = "",
     val characterNo: Int = 0,
     val exp: Int = 0,
+    val needExp: Int = 10,
     val grantType: String = "",
     val id: Int = 0,
     val level: Int = 0,
     val nickname: String = "",
     val point: Int = 0,
-    val recreationId: Int = 0
+    val recreationId: Long = 0
 )

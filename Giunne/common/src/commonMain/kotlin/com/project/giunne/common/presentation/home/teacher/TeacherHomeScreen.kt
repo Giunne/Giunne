@@ -98,7 +98,7 @@ internal fun TeacherHomeScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (Define.recreationId == 1) {
+            if (Define.playerId == 1L) {
                 EmptyResult(
                     modifier = Modifier.weight(1f),
                     description = "아직 생성한 로드맵이 없습니다.",

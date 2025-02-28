@@ -145,9 +145,7 @@ internal fun StudentJoinRecreationScreen(
                     /* TODO(Token 갈아 끼워줘야함) */
                     if (isEnabled) {
                         component.loginRecreation(
-                            AvatarLoginRequest(
-                                playerId = joinState.recreationStudentJoinList[selectedItemIndex].id
-                            )
+                            playerId = joinState.recreationStudentJoinList[selectedItemIndex].id.toLong()
                         )
                     }
                 },

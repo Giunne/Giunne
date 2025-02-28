@@ -9,6 +9,7 @@ import com.project.giunne.common.domain.usecase.avatar.GetUserAvatarListUseCase
 import com.project.giunne.common.domain.usecase.avatar.LoginRecreationUseCase
 import com.project.giunne.common.presentation.home.student.state.StudentJoinEvent
 import com.project.giunne.common.presentation.home.student.state.StudentJoinState
+import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.GLog
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -51,12 +52,16 @@ class StudentJoinRecreationComponent(
     }
 
     fun loginRecreation(
-        avatarLoginRequest: AvatarLoginRequest
+        playerId: Long
     ) {
         setState { copy(isLoading = false) }
         scope.launch {
             runCatching {
-                loginRecreationUseCase(avatarLoginRequest)
+                loginRecreationUseCase(
+                    AvatarLoginRequest(
+                        playerId = playerId
+                    )
+                )
             }.onSuccess { response ->
                 setState {
                     copy(
@@ -64,6 +69,9 @@ class StudentJoinRecreationComponent(
                         avatarInfo = response
                     )
                 }
+                // playerId, accessToken 업데이트
+                Define.playerId = response.recreationId
+                Define.accessToken = response.accessToken
                 postSideEffect(StudentJoinEvent.SuccessLogin("선택한 로드맵에 연결 되었습니다! 👏🏼"))
             }.onFailure {
                 setState {

@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AvatarLoginRequest(
-    val playerId: Int
+    val playerId: Long
 )

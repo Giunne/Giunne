@@ -13,21 +13,29 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.project.giunne.Res
 import com.project.giunne.common.data.remote.response.Recreation
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
+import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.home.common.EmptyResult
 import com.project.giunne.common.presentation.home.student.content.ResultRoadMapItem
 import com.project.giunne.common.presentation.home.student.content.StudentCharacter
 import com.project.giunne.common.presentation.home.student.content.StudentRoadMapLevelBox
 import com.project.giunne.common.presentation.home.student.content.TeacherCheckingBox
+import com.project.giunne.common.presentation.home.student.state.StudentHomeEvent
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.GLog
@@ -35,6 +43,7 @@ import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.test_character
+import kotlinx.coroutines.launch
 
 private const val TAG = "StudentRoadmapScreen"
 @Composable
@@ -49,6 +58,27 @@ internal fun StudentHomeScreen(
 
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    val homeState by component.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Define.playerId) {
+        if (Define.playerId != 0L) {
+            component.loginRecreation(Define.playerId)
+        }
+
+        component.sideEffect.collect { event ->
+            when (event) {
+                is StudentHomeEvent.ErrorSnackBar -> {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = event.message
+                        )
+                    }
+                }
+            }
+        }
+    }
 
     Scaffold(
         modifier = Modifier
@@ -56,50 +86,64 @@ internal fun StudentHomeScreen(
             .fillMaxSize()
             .background(GPColor.BackgroundLightGray)
             .imePadding(),
+        snackbarHost = {
+            SnackbarHost(
+                snackbarHostState
+            )
+        }
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            if (Define.playerId == 1) {
-                EmptyResult(
-                    modifier = Modifier.weight(1f),
-                    description = "아직 진행중인 로드맵이 없습니다.",
-                    highlightRegex = 8..10
-                )
-            } else {
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .background(GPColor.BackgroundLightGray)
-                        .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(16.gdp)
-                ) {
-                    StudentCharacter(
-                        level = 3,
-                        currentExp = 6,
-                        totalExp = 10,
-                        character = Res.drawable.test_character,
-                        items = listOf()
+        if (Define.playerId != 0L && homeState.isLoading) {
+            Loader()
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(GPColor.BackgroundLightGray),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                if (Define.playerId == 0L) {
+                    EmptyResult(
+                        modifier = Modifier
+                            .weight(1f)
+                            .background(GPColor.BackgroundLightGray),
+                        description = "아직 진행중인 로드맵이 없습니다.",
+                        highlightRegex = 8..10
                     )
-                    ResultRoadMapItem(
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(horizontal = 16.gdp),
-                        recreation = Recreation()
-                    )
-                    TeacherCheckingBox(
-                        modifier = Modifier.fillMaxWidth(),
-                        /*TODO(나중에 API나오면 상태에 따라 문구 변경)*/
-                        teacherStateTitle = "확인중",
-                        onClickCommunity = navigateToCommunity
-                    )
-                    StudentRoadMapLevelBox(
-                        modifier = Modifier.fillMaxWidth(),
-                        /*TODO(나중에 API나오면 상태에 따라 문구 변경)*/
-                        roadMapLevel = "3"
-                    )
-                    Spacer(modifier = Modifier.height(8.gdp))
+                } else {
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .background(GPColor.BackgroundLightGray)
+                            .verticalScroll(rememberScrollState()),
+                        verticalArrangement = Arrangement.spacedBy(16.gdp)
+                    ) {
+                        /* TODO(아이템 및 캐릭터 API 가져오기) */
+                        StudentCharacter(
+                            level = homeState.avatarInfo.level,
+                            currentExp = homeState.avatarInfo.exp,
+                            totalExp = homeState.avatarInfo.needExp,
+                            character = Res.drawable.test_character,
+                            items = listOf()
+                        )
+                        ResultRoadMapItem(
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(horizontal = 16.gdp),
+                            recreation = Recreation()
+                        )
+                        TeacherCheckingBox(
+                            modifier = Modifier.fillMaxWidth(),
+                            /*TODO(나중에 API나오면 상태에 따라 문구 변경)*/
+                            teacherStateTitle = "확인중",
+                            onClickCommunity = navigateToCommunity
+                        )
+                        StudentRoadMapLevelBox(
+                            modifier = Modifier.fillMaxWidth(),
+                            /*TODO(나중에 API나오면 상태에 따라 문구 변경)*/
+                            roadMapLevel = "3"
+                        )
+                        Spacer(modifier = Modifier.height(8.gdp))
+                    }
                 }
-
                 Row(
                     modifier = Modifier
                         .background(GPColor.BackgroundLightGray)
@@ -140,7 +184,6 @@ internal fun StudentHomeScreen(
                     }
                 }
             }
-
         }
     }
 }

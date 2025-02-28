@@ -1,6 +1,7 @@
 package com.project.giunne.common.presentation.common.empty
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -24,7 +25,9 @@ fun GPResultEmpty(
     highlightRange: IntRange
 ) {
     Column(
-        modifier = Modifier.wrapContentSize(),
+        modifier = Modifier
+            .wrapContentSize()
+            .background(GPColor.BackgroundLightGray),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
