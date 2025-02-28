@@ -10,6 +10,7 @@ object DefineUrl {
     const val URL_STUDENT_SIGNUP = "member/auth/signup/student"
     const val URL_LOGIN = "member/auth/login"
     const val URL_LOGOUT = "member/auth/logout"
+    const val URL_REFRESH = "member/auth/access-token/issue"
 
     /* Common */
     const val URL_SCHOOL_LIST = "member/school"

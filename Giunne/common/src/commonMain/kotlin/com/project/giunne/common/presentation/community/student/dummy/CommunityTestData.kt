@@ -24,11 +24,11 @@ val roadmapCommunityList = listOf(
 )
 
 val runningCommunityList = listOf(
-    CommunityDto("공룡이", Res.drawable.test_character,"1주차-1", 1, "25.01.01", CertPage.Running),
-    CommunityDto("공룡이", Res.drawable.test_character,"1주차-2", 2, "25.01.02", CertPage.Running),
-    CommunityDto("금쪽이", Res.drawable.test_character,"2주차-1", 5, "25.01.03", CertPage.Running),
-    CommunityDto("금쪽이", Res.drawable.test_character,"2주차-2", 4, "25.01.04", CertPage.Running),
-    CommunityDto("간달프", Res.drawable.test_character,"3주차-1", 8, "25.01.05", CertPage.Running),
+    CommunityDto("공룡이", Res.drawable.test_character,"1주차-1", 1, "25.01.01", CertPage.Running, "러닝"),
+    CommunityDto("공룡이", Res.drawable.test_character,"1주차-2", 2, "25.01.02", CertPage.Running, "러닝"),
+    CommunityDto("금쪽이", Res.drawable.test_character,"2주차-1", 5, "25.01.03", CertPage.Running, "러닝"),
+    CommunityDto("금쪽이", Res.drawable.test_character,"2주차-2", 4, "25.01.04", CertPage.Running, "러닝"),
+    CommunityDto("간달프", Res.drawable.test_character,"3주차-1", 8, "25.01.05", CertPage.Running, "러닝"),
 )
 
 @Serializable
@@ -38,5 +38,6 @@ data class CommunityDto(
     val content: String,
     val commentCount: Int,
     val date: String = "25.01.02",
-    val type: CertPage
+    val type: CertPage,
+    val rootName: String = "코어",
 )

@@ -36,6 +36,7 @@ import com.project.giunne.common.presentation.community.student.state.DatePriori
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.gdp
+import kotlinx.serialization.json.JsonNull.content
 import org.jetbrains.compose.resources.painterResource
 
 private const val TAG = "StudentCommunityScreen"
@@ -107,6 +108,7 @@ internal fun StudentCommunityScreen(
                             painter = painterResource(list[it].character),
                             date = list[it].date,
                             commentCount = list[it].commentCount,
+                            rootName = list[it].rootName,
                             content = list[it].content,
                             type = pageType,
                             onClick = { navigateToDetail(list[it]) },

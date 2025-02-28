@@ -76,6 +76,8 @@ kotlin {
                 api(libs.compottie)
                 api(libs.ktorfit)
                 api(libs.bundles.ktor)
+
+                api(libs.androidx.graphics.shapes)
             }
         }
         val androidMain by getting {

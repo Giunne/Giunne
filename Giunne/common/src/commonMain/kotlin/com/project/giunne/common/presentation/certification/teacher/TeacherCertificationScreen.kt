@@ -5,12 +5,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -26,12 +28,21 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.certification.student.content.PageSelectRow
+import com.project.giunne.common.presentation.certification.student.content.RoadMapCertScreen
+import com.project.giunne.common.presentation.certification.student.content.RunningCertScreen
+import com.project.giunne.common.presentation.certification.student.content.TeacherRoadMapCertScreen
+import com.project.giunne.common.presentation.certification.student.content.TeacherRunningCertScreen
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
+import com.project.giunne.common.presentation.common.scrollbar.VerticalScrollbar
 import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
+import com.project.giunne.common.presentation.community.content.CommunityItemRow
+import com.project.giunne.common.presentation.community.student.dummy.CommunityDto
+import com.project.giunne.common.presentation.community.student.dummy.roadmapCommunityList
+import com.project.giunne.common.presentation.community.student.dummy.runningCommunityList
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
@@ -47,7 +58,8 @@ private const val TAG = "TeacherCertificationScreen"
 internal fun TeacherCertificationScreen(
     component: TeacherCertificationComponent,
     modifier: Modifier = Modifier,
-    onCommunityButtonClicked: (CertPage) -> Unit
+    onCommunityButtonClicked: (CertPage) -> Unit,
+    navigateToDetail: (CommunityDto) -> Unit,
 ) {
     GLog.d(TAG, "onCreate")
 
@@ -98,13 +110,13 @@ internal fun TeacherCertificationScreen(
         Column(
             modifier = Modifier
                 .background(GPColor.BackgroundLightGray)
-                .fillMaxSize()
-                .padding(horizontal = 16.gdp),
+                .fillMaxSize(),
+//                .padding(horizontal = 16.gdp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             PageSelectRow(
                 modifier = Modifier
-                    .padding(vertical = 10.gdp)
+                    .padding(horizontal = 16.gdp, vertical = 10.gdp)
                     .background(
                         color = GPColor.White,
                         shape = RoundedCornerShape(16.gdp)
@@ -130,6 +142,22 @@ internal fun TeacherCertificationScreen(
                     }
                 }
             )
+            when(certificationState.pageType) {
+                CertPage.RoadMap -> {
+                    TeacherRoadMapCertScreen(
+                        modifier = Modifier.fillMaxSize(),
+                        certWaitingList = roadmapCommunityList,
+                        onItemClicked = { navigateToDetail(it) },
+                    )
+                }
+                CertPage.Running -> {
+                    TeacherRunningCertScreen(
+                        modifier = Modifier.fillMaxSize(),
+                        certWaitingList = runningCommunityList,
+                        onItemClicked = { navigateToDetail(it) }
+                    )
+                }
+            }
         }
     }
 

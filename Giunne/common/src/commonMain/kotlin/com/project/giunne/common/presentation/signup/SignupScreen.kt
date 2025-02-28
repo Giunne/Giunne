@@ -19,12 +19,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import com.project.giunne.common.data.remote.request.StudentSignupRequest
 import com.project.giunne.common.data.remote.request.TeacherSignupRequest
@@ -43,13 +42,10 @@ import com.project.giunne.common.presentation.signup.content.SignupInputColumn
 import com.project.giunne.common.presentation.signup.content.SignupSuccessDialog
 import com.project.giunne.common.presentation.signup.intent.InfoStore
 import com.project.giunne.common.ui.theme.GPColor
-import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 private const val TAG = "SignupScreen"
 @Composable
@@ -69,6 +65,8 @@ internal fun SignupScreen(
     val infoState by infoStore.uiState.collectAsState()
 
     val scrollState = rememberScrollState()
+
+    val focusRequester = remember { FocusRequester() }
 
     Scaffold(
         modifier = Modifier
@@ -226,31 +224,33 @@ internal fun SignupScreen(
                 pressColor = GPColor.ButtonPressOrange,
                 hoverColor = GPColor.ButtonHoverOrange,
                 onClick = {
-                    if (signupType == TYPE_TEACHER) {
-                        infoStore.callTeacherSignup(
-                            teacherSignupRequest = TeacherSignupRequest(
-                                loginId = infoState.idText,
-                                password = infoState.passText,
-                                userName = "",
-                                nickname = "",
-                                birth = "2000-01-01",
-                                phone = "",
-                                email = "",
-                                schoolId = infoState.schoolInfo.id.toLong(),
+                    infoStore.checkSignUpValidate(signupType) {
+                        if (signupType == TYPE_TEACHER) {
+                            infoStore.callTeacherSignup(
+                                teacherSignupRequest = TeacherSignupRequest(
+                                    loginId = infoState.idText,
+                                    password = infoState.passText,
+                                    userName = "",
+                                    nickname = "",
+                                    birth = "2000-01-01",
+                                    phone = "",
+                                    email = "",
+                                    schoolId = infoState.schoolInfo.id.toLong(),
+                                )
                             )
-                        )
-                    } else if (signupType == TYPE_STUDENT) {
-                        infoStore.callStudentSignup(
-                            studentSignupRequest = StudentSignupRequest(
-                                loginId = infoState.idText,
-                                password = infoState.passText,
-                                userName = "",
-                                nickname = "",
-                                birth = "2000-01-01",
-                                recreationCode = infoState.codeText,
-                                schoolId = infoState.schoolInfo.id.toLong(),
+                        } else if (signupType == TYPE_STUDENT) {
+                            infoStore.callStudentSignup(
+                                studentSignupRequest = StudentSignupRequest(
+                                    loginId = infoState.idText,
+                                    password = infoState.passText,
+                                    userName = "",
+                                    nickname = "",
+                                    birth = "2000-01-01",
+                                    recreationCode = infoState.codeText,
+                                    schoolId = infoState.schoolInfo.id.toLong(),
+                                )
                             )
-                        )
+                        }
                     }
                 }, // TODO API
             ) {
@@ -294,10 +294,20 @@ internal fun SignupScreen(
             }
         }
 
+        with(infoState.signupValidate) {
+            if (this != null) {
+                GPAlertDialog(
+                    title = "회원가입 에러",
+                    content = this,
+                    dismiss = { infoStore.dismissInValidateDialog() }
+                )
+            }
+        }
+
         with(infoState.error) {
             if (this != null) {
                 GPAlertDialog(
-                    title = "로그인 에러",
+                    title = "회원가입 에러",
                     content = this.message.toString(),
                     dismiss = { infoStore.dismissErrorDialog() }
                 )

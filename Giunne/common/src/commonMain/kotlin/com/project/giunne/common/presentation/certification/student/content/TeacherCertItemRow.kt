@@ -1,4 +1,4 @@
-package com.project.giunne.common.presentation.community.content
+package com.project.giunne.common.presentation.certification.student.content
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -20,10 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
-import com.project.giunne.Res
-import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.shape.GPSquircleShape
 import com.project.giunne.common.presentation.common.spacer.SpW
@@ -32,20 +28,14 @@ import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
-import com.project.giunne.icon_chat
-import com.project.giunne.icon_roadmap
-import com.project.giunne.icon_running
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun CommunityItemRow(
+fun TeacherCertItemRow(
     name: String,
     painter: Painter,
     date: String,
-    commentCount: Int,
     rootName: String,
     content: String,
-    type: CertPage,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onClick: () -> Unit
 ) {
@@ -110,30 +100,12 @@ fun CommunityItemRow(
                 .fillMaxHeight()
                 .padding(vertical = 8.gdp),
             horizontalAlignment = Alignment.End,
-            verticalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 GPText(
                     text = date,
-                    textColor = GPColor.TextLightGray,
-                    fontFamily = GPFontFamily.Bold,
-                    textSize = 10.gsp
-                )
-            }
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    modifier = Modifier.size(12.gdp),
-                    painter = painterResource(Res.drawable.icon_chat),
-                    colorFilter = ColorFilter.tint(GPColor.TextLightGray),
-                    contentDescription = null
-                )
-                SpW(4.gdp)
-                GPText(
-                    text = commentCount.toString(),
                     textColor = GPColor.TextLightGray,
                     fontFamily = GPFontFamily.Bold,
                     textSize = 10.gsp
