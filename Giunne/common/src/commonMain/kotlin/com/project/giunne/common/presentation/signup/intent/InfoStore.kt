@@ -30,7 +30,6 @@ class InfoStore(
             runCatching {
                 teacherSignupUseCase.invoke(teacherSignupRequest)
             }.onSuccess { response ->
-                Define.authInfo = response
                 setState {
                     copy(
                         signupSuccessDialog = true,
@@ -57,7 +56,6 @@ class InfoStore(
             runCatching {
                 studentSignupUseCase.invoke(studentSignupRequest)
             }.onSuccess { response ->
-                Define.authInfo = response
                 setState {
                     copy(
                         signupSuccessDialog = true,

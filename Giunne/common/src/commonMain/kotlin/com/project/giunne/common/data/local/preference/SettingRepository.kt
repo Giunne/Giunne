@@ -15,7 +15,7 @@ class SettingRepository(
     val accessTokenPref: SettingConfig<*> = StringSettingConfig(settings, "AC_TOKEN", "")
     val refreshTokenPref: SettingConfig<*> = StringSettingConfig(settings, "RE_TOKEN", "")
     val rolePref: SettingConfig<*> = StringSettingConfig(settings, "ROLE", "")
-    val playerPref: SettingConfig<*> = StringSettingConfig(settings, "PLAYER", "")
+    val playerPref: SettingConfig<*> = LongSettingConfig(settings, "PLAYER", 0)
 
     fun clear(): Unit = settings.clear()
 }
@@ -98,4 +98,21 @@ class BooleanSettingConfig(settings: Settings, key: String, defaultValue: Boolea
         callback: (Boolean) -> Unit
     ): SettingsListener =
         settings.addBooleanListener(key, defaultValue, callback)
+}
+
+class LongSettingConfig(settings: Settings, key: String, defaultValue: Long) :
+    SettingConfig<Long>(settings, key, defaultValue) {
+    override fun getStringValue(settings: Settings, key: String, defaultValue: Long): String =
+        settings.getLong(key, defaultValue).toString()
+
+    override fun setStringValue(settings: Settings, key: String, value: String): Unit =
+        settings.putLong(key, value.toLong())
+
+    override fun addListener(
+        settings: ObservableSettings,
+        key: String,
+        defaultValue: Long,
+        callback: (Long) -> Unit
+    ): SettingsListener =
+        settings.addLongListener(key, defaultValue, callback)
 }
