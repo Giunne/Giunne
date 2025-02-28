@@ -12,24 +12,20 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.certification.student.dummy.roadmapDoneList
 import com.project.giunne.common.presentation.certification.student.intent.VideoUploadStore
 import com.project.giunne.common.presentation.common.picker.VideoPicker
-import com.project.giunne.common.presentation.common.player.VideoPlayer
+import com.project.giunne.common.presentation.common.player.VideoWindowPlayer
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.ui.theme.GPColor
-import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.gdp
 import com.project.giunne.roadcon_3_beast
 import org.jetbrains.compose.resources.painterResource
-import java.io.File
 
 private const val TAG = "RoadMapCertScreen"
 @Composable
@@ -86,6 +82,9 @@ fun RoadMapCertScreen(
                 onCertButtonClicked = { onCertButtonClicked() },
                 onPlayButtonClicked = { videoUploadStore.onClickVideoPlayButton() },
                 onResetButtonClicked = { videoUploadStore.onClickVideoResetButton() },
+                dragAndDropFile = { file ->
+                    if (file != null) videoUploadStore.initVideoFile(file)
+                }
             )
         }
         SpH(10.gdp)
@@ -126,7 +125,7 @@ fun RoadMapCertScreen(
 
     with(videoUploadState.videoPlayer) {
         if (this) {
-            VideoPlayer(
+            VideoWindowPlayer(
                 videoPath = videoUploadState.videoFile?.getPath() ?: "",
                 dismiss = { videoUploadStore.dismissVideoPlayer() }
             )

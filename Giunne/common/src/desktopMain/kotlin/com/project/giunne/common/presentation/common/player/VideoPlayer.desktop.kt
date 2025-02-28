@@ -1,100 +1,88 @@
 package com.project.giunne.common.presentation.common.player
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.awt.SwingPanel
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
+import com.project.giunne.common.presentation.common.player.video.javafx.JfxComponentController
+import com.project.giunne.common.presentation.common.player.video.javafx.JfxFrameController
+import com.project.giunne.common.presentation.common.player.video.source.PlayerSource
 import com.project.giunne.common.util.gdp
-import javafx.embed.swing.JFXPanel
-import javafx.scene.Group
-import javafx.scene.Scene
-import javafx.scene.media.MediaView
-import javax.swing.JPanel
+import java.io.File
+import java.net.URI
 
 @Composable
-actual fun VideoPlayer(
+actual fun VideoWindowPlayer(
     modifier: Modifier,
     dismiss: () -> Unit,
     videoPath: String,
 ) {
-    var jfxPanel by remember { mutableStateOf<JFXPanel?>(null) }
-//    var mediaPlayer by remember { mutableStateOf<MediaPlayer?>(null) }
-    val frameController = remember(videoPath) { JfxController() }
-    val width = 700.gdp
-    val height = 500.gdp
+//    val videoPath = "https://hu-sh.synology.me:10004/upload/20250218_231157.mp4"
+    val componentController = remember(videoPath) { JfxComponentController() }
+    val frameController = remember(videoPath) { JfxFrameController() }
 
-    LaunchedEffect(Unit) {
-//        Platform.runLater {
-        println("1")
-        val panel = JFXPanel()
-        println("2 : $panel")
-//            val media = Media(videoPath) // 파일 경로 설정
-//            mediaPlayer = MediaPlayer(media)
-        frameController.load("file://$videoPath")
-//        frameController.load("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")
-        println("3: ${frameController.player}")
-//            val mediaView = MediaView(mediaPlayer)
-        val mediaView = MediaView(frameController.player)
-
-        println("4")
-
-        mediaView.fitWidth = width.value.toDouble()
-        mediaView.fitHeight = height.value.toDouble()
-        mediaView.isPreserveRatio = true
-
-        panel.scene = Scene(Group(mediaView), width.value.toDouble(), height.value.toDouble())
-        frameController.player?.play()
-//        mediaPlayer?.play()
-
-        jfxPanel = panel
-//        }
-    }
-
-    DisposableEffect(videoPath) {
-        onDispose { frameController.dispose() }
-    }
-
-    if (jfxPanel != null) {
-        Window(
-            onCloseRequest = {
-                jfxPanel = null
-                dismiss()
+    Window(
+        onCloseRequest = {
+            dismiss()
+        },
+        title = "VideoPlayer",
+        state = rememberWindowState(
+            width = 600.gdp,
+            height = 900.gdp,
+            position = WindowPosition(Alignment.Center),
+            isMinimized = false,
+        ),
+        resizable = true,
+    ) {
+        PlayerSource(
+            url = videoPath.run {
+                (runCatching(URI::create).getOrNull() ?: File(this).toURI()).toString()
             },
-            title = "VideoPlayer",
-            state = rememberWindowState(
-                width = width,
-                height = height + 200.gdp,
-                position = WindowPosition(Alignment.Center),
-                isMinimized = false,
-            ),
-            resizable = true,
-        ) {
-            Column(modifier = Modifier.fillMaxSize()) {
-                SwingPanel(
-                    factory = {
-                        JPanel().apply { add(jfxPanel) }
-                    },
-                    modifier = Modifier.width(width).height(height)
-                )
-                DefaultControls(
-                    modifier = Modifier.fillMaxWidth(),
-                    controller = frameController
-                )
-            }
-        }
+            component = componentController.component,
+            componentController = componentController,
+            size = frameController.size.collectAsState(null).value?.run {
+                IntSize(first, second)
+            } ?: IntSize.Zero,
+            bytes = frameController.bytes.collectAsState(null).value,
+            frameController = frameController,
+            onFullScreenClicked = {  },
+            isFullScreen = true
+        )
+    }
+}
+
+@Composable
+actual fun VideoPlayer(
+    modifier: Modifier,
+    videoPath: String,
+    onFullScreenClicked: () -> Unit
+) {
+    val componentController = remember(videoPath) { JfxComponentController() }
+    val frameController = remember(videoPath) { JfxFrameController() }
+
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        PlayerSource(
+            url = videoPath.run {
+                (runCatching(URI::create).getOrNull() ?: File(this).toURI()).toString()
+            },
+            component = componentController.component,
+            componentController = componentController,
+            size = frameController.size.collectAsState(null).value?.run {
+                IntSize(first, second)
+            } ?: IntSize.Zero,
+            bytes = frameController.bytes.collectAsState(null).value,
+            frameController = frameController,
+            onFullScreenClicked = onFullScreenClicked,
+            isFullScreen = false
+        )
     }
 }

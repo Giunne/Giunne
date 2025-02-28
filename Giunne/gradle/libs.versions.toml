@@ -1,7 +1,7 @@
 [versions]
 androidx-activity = "1.9.3"
-kotlin = "2.0.20"
-ksp = "2.0.20-1.0.25"
+kotlin = "2.0.0"
+ksp = "2.0.0-1.0.22"
 agp = "8.2.2"
 compose-multiplatform = "1.7.0"
 kotlinInject = "0.6.3"
@@ -28,6 +28,10 @@ javafx = "0.0.13"
 permissions = "0.32.0"
 androidMedia = "1.2.0"
 compottie="2.0.0-rc02"
+buildkonfig = "0.14.0"
+ktorfit = "2.0.0"
+foundationAndroid = "1.7.8"
+shapes = "1.0.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -53,6 +57,8 @@ ktor-okHttp = { module = "io.ktor:ktor-client-okhttp", version.ref= "ktor" }
 ktor-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-json = { module = "io.ktor:ktor-client-json", version.ref = "ktor" }
+ktor-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
 
 # Koin
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
@@ -143,6 +149,17 @@ androidx-media3-ui = { module  = "androidx.media3:media3-ui", version.ref = "and
 # compottie
 compottie = { module = "io.github.alexzhirkevich:compottie", version.ref = "compottie" }
 
+# Ktorfit
+ktorfit = { module = "de.jensklingenberg.ktorfit:ktorfit-lib", version.ref = "ktorfit" }
+ktorfit-ksp = { module = "de.jensklingenberg.ktorfit:ktorfit-ksp", version.ref = "ktorfit" }
+
+# BuildKonfig
+buildkonfig = { module = "com.codingfeline.buildkonfig:buildkonfig-gradle-plugin", version.ref = "buildkonfig" }
+androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
+
+# shapes
+androidx-graphics-shapes = { module = "androidx.graphics:graphics-shapes", version.ref = "shapes" }
+
 [plugins]
 #compose-desktop = { id = "org.jetbrains.compose", version.ref = "compose" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
@@ -153,16 +170,21 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-multiplatform = { id = 'org.jetbrains.kotlin.multiplatform', version.ref = 'kotlin' }
 kotlin-jvm = { id = 'org.jetbrains.kotlin.jvm', version.ref = 'kotlin' }
 ksp = { id = 'com.google.devtools.ksp', version.ref = 'ksp' }
-serialization = { id = "plugin.serialization", version.ref = "kotlin" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqlDelght = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
 javafx = { id = "org.openjfx.javafxplugin", version.ref = "javafx" }
+ktorfit = { id = 'de.jensklingenberg.ktorfit', version.ref = 'ktorfit' }
+buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfig" }
 
 [bundles]
 ktor = [
     "ktor-core",
     "ktor-logging",
     "ktor-serialization",
-    "ktor-negotiation"
+    "ktor-negotiation",
+    "ktor-json",
+    "ktor-okHttp",
+    "ktor-auth",
 ]
 reaktive = [
     "reaktive-reaktive",

@@ -4,8 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,17 +15,27 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import com.project.giunne.common.presentation.common.button.GPButton
+import com.project.giunne.common.presentation.common.text.GPAnnotatedText
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.shop.content.LottieBox
 import com.project.giunne.common.presentation.shop.content.MysteryBox
-import com.project.giunne.common.presentation.shop.dummy.gachaItems
+import com.project.giunne.common.presentation.shop.content.aRankColorBrush
+import com.project.giunne.common.presentation.shop.content.bRankColorBrush
+import com.project.giunne.common.presentation.shop.content.cRankColorBrush
+import com.project.giunne.common.presentation.shop.content.sRankColorBrush
+import com.project.giunne.common.presentation.shop.intent.GachaStore
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
@@ -33,10 +45,11 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun PickingItemScreen(
-    modifier: Modifier,
     onWearingItemClick: () -> Unit = {},
 ) {
     var isProgress by remember { mutableStateOf(true) }
+    val gachaStore by remember { mutableStateOf(GachaStore()) }
+    val gachaState by gachaStore.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
         delay(2000)
@@ -44,7 +57,7 @@ fun PickingItemScreen(
     }
 
     Column(
-        modifier = modifier,
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(84.gdp))
@@ -71,14 +84,37 @@ fun PickingItemScreen(
                 ) {
                     Image(
                         modifier = Modifier.size(120.gdp),
-                        painter = painterResource(gachaItems[3]),
+                        painter = painterResource(gachaState.randomItem.drawable),
                         contentDescription = "이미지"
                     )
 
-                    GPText(
-                        text = "노란색 우비 당첨!",
-                        textSize = 18.gsp,
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.gdp)
+                    ) {
+                        GPAnnotatedText(
+                            text = buildAnnotatedString {
+                                withStyle(
+                                    style = SpanStyle(
+                                        brush = when (gachaState.randomItem.rank) {
+                                            "S" -> sRankColorBrush
+                                            "A" -> aRankColorBrush
+                                            "B" -> bRankColorBrush
+                                            else -> cRankColorBrush
+                                        },
+                                        fontSize = 20.gsp,
+                                        fontWeight = FontWeight.ExtraBold
+                                    )
+                                ) {
+                                    append(gachaState.randomItem.name)
+                                }
+                            },
+                        )
+                        GPText(
+                            text = "당첨!",
+                            textSize = 18.gsp,
+                        )
+                    }
                 }
             }
 

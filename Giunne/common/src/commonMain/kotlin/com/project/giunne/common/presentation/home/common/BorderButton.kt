@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.project.giunne.Res
+import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
@@ -27,12 +28,16 @@ import org.jetbrains.compose.resources.painterResource
 fun BorderButton(
     modifier: Modifier = Modifier,
     title: String,
-    content: @Composable () -> Unit = {}
+    content: @Composable () -> Unit = {},
+    onClick: () -> Unit,
 ) {
     Row(
         modifier = modifier
             .background(color = GPColor.Transparent)
             .border(BorderStroke(1.gdp, GPColor.MainOrangeColor), RoundedCornerShape(12.gdp))
+            .noRippleClickable {
+                onClick()
+            }
             .padding(14.gdp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.gdp)

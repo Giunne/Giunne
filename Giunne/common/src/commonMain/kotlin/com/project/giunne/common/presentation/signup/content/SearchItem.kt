@@ -4,8 +4,11 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -14,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.project.giunne.common.data.remote.response.SchoolInfo
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.ui.theme.GPColor
@@ -25,7 +29,7 @@ import com.project.giunne.common.util.gsp
 fun SearchItem(
     modifier: Modifier = Modifier,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    content: String,
+    schoolInfo: SchoolInfo,
     onClickItem: () -> Unit,
     isSelected: Boolean
 ) {
@@ -48,12 +52,24 @@ fun SearchItem(
             .padding(horizontal = 16.gdp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        GPText(
-            text = content,
-            textColor = if (isSelected) GPColor.White else GPColor.TextBlack,
-            textSize = 14.gsp,
-            fontFamily = GPFontFamily.Medium
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceEvenly
+        ) {
+            GPText(
+                text = schoolInfo.schoolNm,
+                textColor = if (isSelected) GPColor.White else GPColor.TextBlack,
+                textSize = 14.gsp,
+                fontFamily = GPFontFamily.Medium
+            )
+            GPText(
+                text = schoolInfo.rdnmadr,
+                textColor = if (isSelected) GPColor.White else GPColor.TextLightGray,
+                textSize = 11.gsp,
+                fontFamily = GPFontFamily.Medium
+            )
+        }
     }
     Spacer(modifier = Modifier.height(1.gdp).fillMaxWidth().background(GPColor.BorderLightGray))
 }

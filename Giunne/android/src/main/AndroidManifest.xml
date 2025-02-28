@@ -12,11 +12,12 @@
         android:allowBackup="false"
         android:supportsRtl="true"
         android:largeHeap="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         <activity
             android:name="com.project.giunne.android.MainActivity"
-            android:windowSoftInputMode="adjustNothing"
+            android:windowSoftInputMode="adjustPan"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

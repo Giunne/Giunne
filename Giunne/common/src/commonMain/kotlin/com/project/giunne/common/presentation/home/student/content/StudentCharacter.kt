@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -12,19 +13,24 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import com.project.giunne.common.presentation.common.charactor.GPCharacter
 import com.project.giunne.common.presentation.common.progress.GPLevelProgressBar
-import com.project.giunne.common.presentation.shop.dummy.TestItem
+import com.project.giunne.common.presentation.common.text.GPText
+import com.project.giunne.common.presentation.shop.state.Item
 import com.project.giunne.common.util.gdp
+import com.project.giunne.common.util.gsp
 import org.jetbrains.compose.resources.DrawableResource
 
 @Composable
 fun StudentCharacter(
     level: Int,
-    percent: Float,
+    currentExp: Int,
+    totalExp: Int,
     character: DrawableResource,
-    items: List<TestItem>
+    items: List<Item>
 ) {
+    val percent = currentExp.toFloat() / totalExp.toFloat()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -33,6 +39,7 @@ fun StudentCharacter(
     ) {
         Row {
             LevelBadgeBox(
+                modifier = Modifier.padding(top = 8.gdp),
                 level = level
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -51,9 +58,23 @@ fun StudentCharacter(
             )
 
             Spacer(modifier = Modifier.height(10.gdp))
-            GPLevelProgressBar(
-                percent = percent
-            )
+            Column {
+                ExpArrowPercent(
+                    percent = percent
+                )
+                Spacer(modifier = Modifier.height(4.gdp))
+                GPLevelProgressBar(
+                    percent = percent
+                )
+                Spacer(modifier = Modifier.height(4.gdp))
+                GPText(
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(horizontal = 4.gdp),
+                    text = "$currentExp / $totalExp",
+                    textAlign = TextAlign.End,
+                    textSize = 12.gsp
+                )
+            }
         }
     }
 }

@@ -87,7 +87,7 @@ import com.project.giunne.character_tiger_level_6
 import com.project.giunne.character_tiger_level_7
 import org.jetbrains.compose.resources.DrawableResource
 
-val friendList = listOf(
+val avatarList = listOf(
     Avatar(Animal.CharacterBearLevel1, "노얼굴", 1),
     Avatar(Animal.CharacterBearLevel5, "곰퉁이", 5),
     Avatar(Animal.CharacterCatLevel7, "고냥", 7),
@@ -97,6 +97,24 @@ val friendList = listOf(
     Avatar(Animal.CharacterPoodleLevel4, "푸들", 4),
     Avatar(Animal.CharacterRaccoonLevel6, "너굴맨", 6),
     Avatar(Animal.CharacterTigerLevel4, "호랭", 4),
+)
+
+val friendList = listOf(
+    FriendInfo(avatarList[0], "코어 3", "1주차"),
+    FriendInfo(avatarList[1], "코어 3", "1주차"),
+    FriendInfo(avatarList[2], "코어 3", "1주차"),
+    FriendInfo(avatarList[3], "코어 3", "1주차"),
+    FriendInfo(avatarList[4], "코어 3", "1주차"),
+    FriendInfo(avatarList[5], "코어 3", "1주차"),
+    FriendInfo(avatarList[6], "코어 3", "1주차"),
+    FriendInfo(avatarList[7], "코어 3", "1주차"),
+    FriendInfo(avatarList[8], "코어 3", "1주차"),
+)
+
+data class FriendInfo(
+    val avatar: Avatar,
+    val roadmapProcess: String,
+    val runningProcess: String
 )
 
 data class Avatar(

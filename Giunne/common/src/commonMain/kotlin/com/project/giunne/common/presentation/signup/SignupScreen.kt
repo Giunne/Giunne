@@ -17,17 +17,20 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
+import com.project.giunne.common.data.remote.request.StudentSignupRequest
+import com.project.giunne.common.data.remote.request.TeacherSignupRequest
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
+import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.common.text.GPTitleText
@@ -36,14 +39,13 @@ import com.project.giunne.common.presentation.signup.SignupComponent.Companion.T
 import com.project.giunne.common.presentation.signup.SignupComponent.Companion.TYPE_TEACHER
 import com.project.giunne.common.presentation.signup.content.SchoolSearchDialog
 import com.project.giunne.common.presentation.signup.content.SignupInputColumn
+import com.project.giunne.common.presentation.signup.content.SignupSuccessDialog
 import com.project.giunne.common.presentation.signup.intent.InfoStore
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 private const val TAG = "SignupScreen"
 @Composable
@@ -51,6 +53,7 @@ internal fun SignupScreen(
     component: SignupComponent,
     onClickBackButton: () -> Unit,
     signupType: String,
+    navigateToLogin: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     GLog.d(TAG, "onCreate")
@@ -58,15 +61,12 @@ internal fun SignupScreen(
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
 
-    val infoStore = remember { InfoStore(scope) }
-    val infoState by infoStore.infoState
+    val infoStore = remember { InfoStore() }
+    val infoState by infoStore.uiState.collectAsState()
 
     val scrollState = rememberScrollState()
 
-    ///test///
-    var searchList by remember { mutableStateOf(mutableListOf("aaa", "aaaa", "sdgas", "12412rgd", "df", "aaa", "aaaa", "sdgas", "12412rgd", "df")) }
-    var loading by remember { mutableStateOf(false) }
-    //////////
+    val focusRequester = remember { FocusRequester() }
 
     Scaffold(
         modifier = Modifier
@@ -128,7 +128,7 @@ internal fun SignupScreen(
                                 normalColor = GPColor.ButtonOrange,
                                 pressColor = GPColor.ButtonPressOrange,
                                 hoverColor = GPColor.ButtonHoverOrange,
-                                onClick = {  },
+                                onClick = {  }, //TODO API
                             ) {
                                 GPText(
                                     text = "중복확인",
@@ -178,42 +178,39 @@ internal fun SignupScreen(
                             },
                             focusManager = focusManager,
                         )
-                    } else if (signupType == TYPE_TEACHER) {
-                        SignupInputColumn(
-                            titleText = "학교 선택",
-                            text = infoState.schoolText,
-                            onTextChanged = {  },
-                            focusable = false,
-                            hintText = "검색해주세요.",
-                            sideContent = {
-                                GPButton(
-                                    modifier = Modifier
-                                        .width(86.gdp)
-                                        .height(30.gdp),
-                                    shape = RoundedCornerShape(8.gdp),
-                                    normalColor = GPColor.ButtonOrange,
-                                    pressColor = GPColor.ButtonPressOrange,
-                                    hoverColor = GPColor.ButtonHoverOrange,
-                                    onClick = {
-                                        scope.launch {
-                                            loading = true
-                                            delay(2000)
-                                            infoStore.onClickSchoolSearchButton()
-                                            loading = false
-                                        }
-                                    },
-                                ) {
-                                    GPText(
-                                        text = "학교 찾기",
-                                        textSize = 12.gsp,
-                                        fontFamily = GPFontFamily.Bold,
-                                        textColor = GPColor.White
-                                    )
-                                }
-                            },
-                            focusManager = focusManager,
-                        )
+                        SpH(10.gdp)
                     }
+//                    } else if (signupType == TYPE_TEACHER) {
+                    SignupInputColumn(
+                        titleText = "학교 선택",
+                        text = infoState.schoolInfo.schoolNm,
+                        onTextChanged = {  },
+                        focusable = false,
+                        hintText = "검색해주세요.",
+                        sideContent = {
+                            GPButton(
+                                modifier = Modifier
+                                    .width(86.gdp)
+                                    .height(30.gdp),
+                                shape = RoundedCornerShape(8.gdp),
+                                normalColor = GPColor.ButtonOrange,
+                                pressColor = GPColor.ButtonPressOrange,
+                                hoverColor = GPColor.ButtonHoverOrange,
+                                onClick = {
+                                    infoStore.onClickSchoolSearchButton()
+                                },
+                            ) {
+                                GPText(
+                                    text = "학교 찾기",
+                                    textSize = 12.gsp,
+                                    fontFamily = GPFontFamily.Bold,
+                                    textColor = GPColor.White
+                                )
+                            }
+                        },
+                        focusManager = focusManager,
+                    )
+//                    }
                 }
                 Spacer(Modifier.weight(1f))
             }
@@ -226,7 +223,36 @@ internal fun SignupScreen(
                 normalColor = GPColor.ButtonOrange,
                 pressColor = GPColor.ButtonPressOrange,
                 hoverColor = GPColor.ButtonHoverOrange,
-                onClick = {  }, // TODO API
+                onClick = {
+                    infoStore.checkSignUpValidate(signupType) {
+                        if (signupType == TYPE_TEACHER) {
+                            infoStore.callTeacherSignup(
+                                teacherSignupRequest = TeacherSignupRequest(
+                                    loginId = infoState.idText,
+                                    password = infoState.passText,
+                                    userName = "",
+                                    nickname = "",
+                                    birth = "2000-01-01",
+                                    phone = "",
+                                    email = "",
+                                    schoolId = infoState.schoolInfo.id.toLong(),
+                                )
+                            )
+                        } else if (signupType == TYPE_STUDENT) {
+                            infoStore.callStudentSignup(
+                                studentSignupRequest = StudentSignupRequest(
+                                    loginId = infoState.idText,
+                                    password = infoState.passText,
+                                    userName = "",
+                                    nickname = "",
+                                    birth = "2000-01-01",
+                                    recreationCode = infoState.codeText,
+                                    schoolId = infoState.schoolInfo.id.toLong(),
+                                )
+                            )
+                        }
+                    }
+                }, // TODO API
             ) {
                 GPText(
                     text = "회원가입",
@@ -246,16 +272,49 @@ internal fun SignupScreen(
                         infoStore.dismissSchoolSearchDialog()
                     },
                     onClickSearchButton = { searchText ->
-                        searchList = searchList.filter {
-                            searchText == it
-                        }.toMutableList()
+                        infoStore.callSchoolList(searchText, 1, 20000) // TODO 유지보수
                     },
-                    searchList = searchList
+                    searchList = infoState.schoolList,
+//                    pageNationInfo = infoState.pageNationInfo,
+//                    callSchoolList = { searchText, pageIndex, pageSize ->
+//                        infoStore.callSchoolList(searchText, pageIndex, pageSize)
+//                    },
                 )
             }
         }
 
-        if (loading) {
+        with(infoState.signupSuccessDialog) {
+            if (this) {
+                SignupSuccessDialog(
+                    dismiss = {
+                        infoStore.dismissSignupSuccessDialog()
+                        navigateToLogin()
+                    }
+                )
+            }
+        }
+
+        with(infoState.signupValidate) {
+            if (this != null) {
+                GPAlertDialog(
+                    title = "회원가입 에러",
+                    content = this,
+                    dismiss = { infoStore.dismissInValidateDialog() }
+                )
+            }
+        }
+
+        with(infoState.error) {
+            if (this != null) {
+                GPAlertDialog(
+                    title = "회원가입 에러",
+                    content = this.message.toString(),
+                    dismiss = { infoStore.dismissErrorDialog() }
+                )
+            }
+        }
+
+        if (infoState.loading) {
             Loader()
         }
     }

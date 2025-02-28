@@ -28,7 +28,8 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun TeacherCheckingBox(
     modifier: Modifier,
-    teacherStateTitle: String
+    teacherStateTitle: String,
+    onClickCommunity: () -> Unit
 ) {
     RowWithDropShadow(
         modifier = modifier
@@ -65,7 +66,7 @@ fun TeacherCheckingBox(
             },
         )
 
-        Spacer(modifier = Modifier.width(10.gdp))
+        Spacer(modifier = Modifier.weight(1f))
 
         BorderButton(
             modifier = Modifier.wrapContentSize(),
@@ -77,7 +78,8 @@ fun TeacherCheckingBox(
                     contentDescription = "게시판 보러가기",
                     tint = GPColor.MainOrangeColor
                 )
-            }
+            },
+            onClick = onClickCommunity
         )
     }
 }
