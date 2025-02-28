@@ -15,7 +15,7 @@ data class Item(
     val itemDescription: String,
     val itemGrade: String,
     val thumbnailUrl: String?,
-    val itemImages: List<ItemImage>,
+    val itemImages: List<ItemCategoryImage>,
     val itemName: String,
     val needLevel: Int,
     val price: Int,
@@ -23,7 +23,7 @@ data class Item(
 )
 
 @Serializable
-data class ItemImage(
+data class ItemCategoryImage(
     val fileUrl: String,
     val id: Int,
     val level: Int,
@@ -38,14 +38,4 @@ data class ItemImagePosition(
     val positionX: Float,
     val positionY: Float,
     val positionZ: Float
-)
-
-@Serializable
-data class PaginationInfo(
-    val currentPage: Int = 0,
-    val hasNextPage: Boolean = false,
-    val hasPreviousPage: Boolean = false,
-    val pageSize: Int = 0,
-    val totalCount: Int = 0,
-    val totalPage: Int = 0
 )
