@@ -1,5 +1,6 @@
 package com.project.giunne.common.presentation.roadmap.student
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.toggle.GPToggleButton
+import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.gdp
 
@@ -55,6 +57,7 @@ internal fun StudentRoadmapScreen(
                 JoggingRoadmapScreen(
                     modifier = Modifier
                         .fillMaxSize()
+                        .background(GPColor.BackgroundLightGray)
                         .padding(horizontal = 16.gdp, vertical = 8.gdp)
                         .align(Alignment.Center),
                     joggingWeek = joggingWeek,
