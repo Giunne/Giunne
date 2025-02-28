@@ -107,6 +107,7 @@ internal fun TeacherCommunityScreen(
                             painter = painterResource(list[it].character),
                             date = list[it].date,
                             commentCount = list[it].commentCount,
+                            rootName = list[it].rootName,
                             content = list[it].content,
                             type = pageType,
                             onClick = { navigateToDetail(list[it]) },

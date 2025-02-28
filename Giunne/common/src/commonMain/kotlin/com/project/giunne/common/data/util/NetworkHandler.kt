@@ -14,7 +14,7 @@ internal inline fun <T> handleApi(
     if (response.code == 200) {
         NetworkResult.Success(response.value!!)
     } else {
-        throw throwValue(response.code)
+        throw throwValue(response.code, response.message)
     }
 } catch (e: Exception) {
     println(e.stackTraceToString())
@@ -38,12 +38,12 @@ private fun handleCommonException(throwable: Throwable): DataThrowable {
     }
 }
 
-fun throwValue(code: Int): Throwable {
-    val errorType = ApiErrorType.fromCode(code)
-    val message = errorType?.let { ErrorMessages.getMessage(it) } ?: ErrorMessages.getMessage(ApiErrorType.UNKNOWN)
-
-    // 에러 타입에 따라 Throwable 정의
-    return handleDefaultThrowable(code)
+fun throwValue(code: Int, message: String): Throwable {
+    return when (code) {
+        in 400..499 -> DataThrowable.AuthErrorThrowable(code, message)
+        in 500..599 -> DataThrowable.AuthErrorThrowable(code, message)
+        else -> DataThrowable.UnKnownThrowable()
+    }
 }
 
 // 서비스에서 지정하지 않은 Exception Handle

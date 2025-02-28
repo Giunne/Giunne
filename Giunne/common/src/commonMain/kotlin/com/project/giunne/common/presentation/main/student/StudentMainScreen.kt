@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -46,7 +45,6 @@ import com.project.giunne.common.presentation.certification.student.StudentCerti
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.badge.GPNotificationBadge
 import com.project.giunne.common.presentation.common.button.GPBackButton
-import com.project.giunne.common.presentation.common.dropdown.GPDropdownMenu
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.text.GPText
@@ -55,6 +53,7 @@ import com.project.giunne.common.presentation.community.student.StudentCommunity
 import com.project.giunne.common.presentation.community.student.StudentCommunityScreen
 import com.project.giunne.common.presentation.friend.student.StudentFriendScreen
 import com.project.giunne.common.presentation.home.student.home.StudentHomeScreen
+import com.project.giunne.common.presentation.home.student.join.StudentJoinRecreationScreen
 import com.project.giunne.common.presentation.home.student.search.SearchRoadMapScreen
 import com.project.giunne.common.presentation.main.common.NotificationScreen
 import com.project.giunne.common.presentation.main.dummy.notiList
@@ -83,7 +82,8 @@ import org.jetbrains.compose.resources.painterResource
 fun StudentMainScreen(
     modifier: Modifier = Modifier,
     component: StudentMainComponent,
-    exitProgram: () -> Unit
+    exitProgram: () -> Unit,
+    onLogout: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val snackbarState =  remember { SnackbarHostState() }
@@ -142,6 +142,7 @@ fun StudentMainScreen(
                         is StudentMainComponent.StudentChild.StudentShopChild -> "꾸미기"
                         is StudentMainComponent.StudentChild.StudentGachaChild -> ""
                         is StudentMainComponent.StudentChild.StudentPickingItemChild -> ""
+                        is StudentMainComponent.StudentChild.StudentJoinRecreationChild -> "진행할 로드맵 변경"
                     },
                     leftIcon = {
                         when(activeComponent) {
@@ -150,7 +151,8 @@ fun StudentMainScreen(
                             is StudentMainComponent.StudentChild.StudentCommunityDetailChild,
                             is StudentMainComponent.StudentChild.StudentShopChild,
                             is StudentMainComponent.StudentChild.StudentGachaChild,
-                            is StudentMainComponent.StudentChild.SearchRoadMapChild -> {
+                            is StudentMainComponent.StudentChild.SearchRoadMapChild,
+                            is StudentMainComponent.StudentChild.StudentJoinRecreationChild -> {
                                 GPBackButton(
                                     onClick = {
                                         component.navigateBack()
@@ -187,7 +189,8 @@ fun StudentMainScreen(
                     modifier = Modifier
                         .weight(1f),
                     component = component,
-                    activeComponent = activeComponent
+                    activeComponent = activeComponent,
+                    onLogout = { onLogout() }
                 )
                 when (activeComponent) {
                     is StudentMainComponent.StudentChild.StudentCertificationChild -> {
@@ -232,20 +235,8 @@ fun StudentMainScreen(
                     is StudentMainComponent.StudentChild.SearchRoadMapChild -> Unit
                     is StudentMainComponent.StudentChild.StudentCommunityDetailChild -> Unit
                     is StudentMainComponent.StudentChild.StudentPickingItemChild -> Unit
+                    is StudentMainComponent.StudentChild.StudentJoinRecreationChild -> Unit
                 }
-            }
-            if (activeComponent is StudentMainComponent.StudentChild.StudentHomeChild && !noti) {
-                /* TODO(추후 API에서 불러오도록 변경) */
-                GPDropdownMenu(
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(top = 8.gdp),
-                    options = listOf("Option 1기", "Option 2", "Option 3", "Option 4", "Option 5", "Option 6", "Option 7"),
-                    selectedOption = testOptionItem,
-                    onOptionSelected = {
-                        testOptionItem = it
-                    }
-                )
             }
 
             if (noti) {
@@ -408,7 +399,8 @@ fun NavItem(
 private fun StudentChildren(
     component: StudentMainComponent,
     modifier: Modifier = Modifier,
-    activeComponent: StudentMainComponent.StudentChild
+    activeComponent: StudentMainComponent.StudentChild,
+    onLogout: () -> Unit
 ) {
     Children(
         stack = component.childStack,
@@ -424,6 +416,9 @@ private fun StudentChildren(
                 },
                 navigateToSearchRoadMap = {
                     component.navigateToSearchRoadMap()
+                },
+                navigateToJoinRoadMap = {
+                    component.navigateToJoinRecreation()
                 }
             )
             is StudentMainComponent.StudentChild.StudentRoadmapChild -> StudentRoadmapScreen(component = child.component)
@@ -450,17 +445,31 @@ private fun StudentChildren(
             is StudentMainComponent.StudentChild.StudentMyPageChild -> StudentMyPageScreen(
                 component = child.component,
                 navigateToShop = { component.navigateToShop() },
-                navigateToGacha = { component.navigateToGacha() }
+                navigateToGacha = { component.navigateToGacha() },
+                onLogout = { onLogout() }
             )
             is StudentMainComponent.StudentChild.StudentShopChild -> ShopScreen()
-            is StudentMainComponent.StudentChild.StudentSelectCharacterChild -> StudentCharacterSelectScreen(component = child.component)
-            is StudentMainComponent.StudentChild.SearchRoadMapChild -> SearchRoadMapScreen(
+            is StudentMainComponent.StudentChild.StudentSelectCharacterChild -> StudentCharacterSelectScreen(
                 component = child.component,
+                recreationId = if (activeComponent is StudentMainComponent.StudentChild.StudentSelectCharacterChild) {
+                    activeComponent.recreationId
+                } else {
+                    -1
+                },
                 onBackClick = {
                     component.navigateBack()
                 },
                 navigateToHome = {
                     component.navigateToHome()
+                }
+            )
+            is StudentMainComponent.StudentChild.SearchRoadMapChild -> SearchRoadMapScreen(
+                component = child.component,
+                onBackClick = {
+                    component.navigateBack()
+                },
+                navigateToSelectCharacter = { recreationId ->
+                    component.navigateToSelectedCharacter(recreationId)
                 }
             )
             is StudentMainComponent.StudentChild.StudentGachaChild -> GachaScreen(
@@ -471,6 +480,13 @@ private fun StudentChildren(
             is StudentMainComponent.StudentChild.StudentPickingItemChild -> PickingItemScreen(
                 onWearingItemClick = {
                     component.navigateFromPickingItemToShop()
+                }
+            )
+
+            is StudentMainComponent.StudentChild.StudentJoinRecreationChild -> StudentJoinRecreationScreen(
+                component = child.component,
+                onBackClick = {
+                    component.navigateBack()
                 }
             )
         }
@@ -499,9 +515,10 @@ private val StudentMainComponent.StudentChild.index: Int
             is StudentMainComponent.StudentChild.StudentMyPageChild -> 6
             is StudentMainComponent.StudentChild.StudentShopChild -> 7
             is StudentMainComponent.StudentChild.StudentGachaChild -> 8
-            is StudentMainComponent.StudentChild.StudentSelectCharacterChild -> 9
+            is StudentMainComponent.StudentChild.StudentJoinRecreationChild -> 9
             is StudentMainComponent.StudentChild.SearchRoadMapChild -> 10
             is StudentMainComponent.StudentChild.StudentPickingItemChild -> 11
+            is StudentMainComponent.StudentChild.StudentSelectCharacterChild -> 12
         }
 
 private fun StackAnimator.flipSide(): StackAnimator =

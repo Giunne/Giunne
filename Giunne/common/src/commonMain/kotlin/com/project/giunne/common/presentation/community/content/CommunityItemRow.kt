@@ -43,6 +43,7 @@ fun CommunityItemRow(
     painter: Painter,
     date: String,
     commentCount: Int,
+    rootName: String,
     content: String,
     type: CertPage,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
@@ -63,7 +64,7 @@ fun CommunityItemRow(
         modifier = Modifier
             .padding(vertical = 4.gdp)
             .fillMaxWidth()
-            .height(76.gdp)
+            .height(68.gdp)
             .background(
                 color = fillColor,
                 shape = RoundedCornerShape(12.gdp)
@@ -92,6 +93,12 @@ fun CommunityItemRow(
         )
         SpW(16.gdp)
         GPText(
+            text = "$rootName ",
+            textColor = GPColor.MainOrangeColor,
+            textSize = 14.gsp,
+            fontFamily = GPFontFamily.Bold
+        )
+        GPText(
             modifier = Modifier.weight(1f),
             text = content,
             textColor = GPColor.TextBlack,
@@ -108,21 +115,11 @@ fun CommunityItemRow(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    modifier = Modifier.size(12.gdp),
-                    painter = when(type) {
-                        CertPage.RoadMap -> { painterResource(Res.drawable.icon_roadmap) }
-                        else -> { painterResource(Res.drawable.icon_running) }
-                    },
-                    colorFilter = ColorFilter.tint(GPColor.TextLightGray),
-                    contentDescription = null
-                )
-                SpW(2.gdp)
                 GPText(
                     text = date,
                     textColor = GPColor.TextLightGray,
                     fontFamily = GPFontFamily.Bold,
-                    textSize = 12.gsp
+                    textSize = 10.gsp
                 )
             }
             Row(
@@ -139,7 +136,7 @@ fun CommunityItemRow(
                     text = commentCount.toString(),
                     textColor = GPColor.TextLightGray,
                     fontFamily = GPFontFamily.Bold,
-                    textSize = 12.gsp
+                    textSize = 10.gsp
                 )
             }
         }

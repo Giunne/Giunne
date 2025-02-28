@@ -46,7 +46,6 @@ import com.project.giunne.common.presentation.certification.student.state.CertPa
 import com.project.giunne.common.presentation.certification.teacher.TeacherCertificationScreen
 import com.project.giunne.common.presentation.common.badge.GPNotificationBadge
 import com.project.giunne.common.presentation.common.button.GPBackButton
-import com.project.giunne.common.presentation.common.dropdown.GPDropdownMenu
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.text.GPText
@@ -57,8 +56,6 @@ import com.project.giunne.common.presentation.friend.teacher.TeacherFriendScreen
 import com.project.giunne.common.presentation.home.teacher.TeacherHomeScreen
 import com.project.giunne.common.presentation.main.common.NotificationScreen
 import com.project.giunne.common.presentation.main.dummy.notiList
-import com.project.giunne.common.presentation.main.student.StudentBottomNav
-import com.project.giunne.common.presentation.main.student.StudentMainComponent
 import com.project.giunne.common.presentation.mypage.teacher.TeacherMyPageScreen
 import com.project.giunne.common.presentation.roadmap.teacher.TeacherRoadmapScreen
 import com.project.giunne.common.presentation.shop.GachaScreen
@@ -82,7 +79,8 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun TeacherMainScreen(
     modifier: Modifier = Modifier,
-    component: TeacherMainComponent
+    component: TeacherMainComponent,
+    onLogout: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val snackbarState =  remember { SnackbarHostState() }
@@ -189,7 +187,8 @@ fun TeacherMainScreen(
                     modifier = Modifier
                         .weight(1f),
                     component = component,
-                    activeComponent = activeComponent
+                    activeComponent = activeComponent,
+                    onLogout = { onLogout() }
                 )
 
                 when (activeComponent) {
@@ -208,19 +207,6 @@ fun TeacherMainScreen(
                     is TeacherMainComponent.TeacherChild.TeacherGachaChild -> Unit
                     is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild -> Unit
                 }
-            }
-            if (activeComponent is TeacherMainComponent.TeacherChild.TeacherHomeChild && !noti) {
-                /* TODO(추후 API에서 불러오도록 변경) */
-                GPDropdownMenu(
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(top = 8.gdp),
-                    options = listOf("Option 1기", "Option 2", "Option 3", "Option 4", "Option 5", "Option 6", "Option 7"),
-                    selectedOption = testOptionItem,
-                    onOptionSelected = {
-                        testOptionItem = it
-                    }
-                )
             }
 
             if (noti) {
@@ -383,7 +369,8 @@ fun NavItem(
 private fun TeacherChildren(
     component: TeacherMainComponent,
     modifier: Modifier = Modifier,
-    activeComponent: TeacherMainComponent.TeacherChild
+    activeComponent: TeacherMainComponent.TeacherChild,
+    onLogout: () -> Unit
 ) {
     Children(
         stack = component.childStack,
@@ -392,12 +379,20 @@ private fun TeacherChildren(
         animation = tabAnimation()
     ) {
         when (val child = it.instance) {
-            is TeacherMainComponent.TeacherChild.TeacherHomeChild -> TeacherHomeScreen(component = child.component)
+            is TeacherMainComponent.TeacherChild.TeacherHomeChild -> TeacherHomeScreen(
+                component = child.component,
+                navigateToCommunity = {
+                    component.navigateToCommunity(CertPage.RoadMap)
+                }
+            )
             is TeacherMainComponent.TeacherChild.TeacherRoadmapChild -> TeacherRoadmapScreen(component = child.component)
             is TeacherMainComponent.TeacherChild.TeacherCertificationChild -> TeacherCertificationScreen(
                 component = child.component,
                 onCommunityButtonClicked = { type ->
                     component.navigateToCommunity(type)
+                },
+                navigateToDetail = {communityDto ->
+                    component.navigateToCommunityDetail(communityDto)
                 }
             )
             is TeacherMainComponent.TeacherChild.TeacherCommunityChild -> TeacherCommunityScreen(
@@ -416,7 +411,8 @@ private fun TeacherChildren(
             is TeacherMainComponent.TeacherChild.TeacherMyPageChild -> TeacherMyPageScreen(
                 component = child.component,
                 navigateToShop = { component.navigateToShop() },
-                navigateToGacha = { component.navigateToGacha() }
+                navigateToGacha = { component.navigateToGacha() },
+                onLogout = { onLogout() }
             )
             is TeacherMainComponent.TeacherChild.TeacherShopChild -> ShopScreen()
             is TeacherMainComponent.TeacherChild.TeacherGachaChild -> GachaScreen {
