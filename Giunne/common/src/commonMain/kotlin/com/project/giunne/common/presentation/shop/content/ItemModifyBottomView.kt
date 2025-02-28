@@ -25,11 +25,11 @@ fun ItemModifyBottomView(
 ) {
     Row(
         modifier = modifier
-            .padding(top = 8.gdp, bottom = 16.gdp, start = 16.gdp, end = 16.gdp)
             .background(
                 color = GPColor.White,
                 shape = RoundedCornerShape(topStart = 16.gdp, topEnd = 16.gdp)
-            ),
+            )
+            .padding(16.gdp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.gdp)
     ) {

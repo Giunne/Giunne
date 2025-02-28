@@ -8,6 +8,7 @@
 
     <application
         android:name="com.project.giunne.android.MainApplication"
+        android:usesCleartextTraffic="true"
         android:label="giunnae"
         android:allowBackup="false"
         android:supportsRtl="true"

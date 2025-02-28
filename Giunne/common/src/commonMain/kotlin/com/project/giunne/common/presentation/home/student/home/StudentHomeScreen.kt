@@ -122,7 +122,7 @@ internal fun StudentHomeScreen(
                             level = homeState.avatarInfo.level,
                             currentExp = homeState.avatarInfo.exp,
                             totalExp = homeState.avatarInfo.needExp,
-                            character = Res.drawable.test_character,
+                            character = "",
                             items = listOf()
                         )
                         ResultRoadMapItem(

@@ -1,32 +1,47 @@
 package com.project.giunne.common.presentation.shop.intent
 
 import com.project.giunne.common.base.BaseComponent
-import com.project.giunne.common.presentation.shop.dummy.bodyItemWithOffset1
-import com.project.giunne.common.presentation.shop.dummy.bodyItemWithOffset2
-import com.project.giunne.common.presentation.shop.dummy.bodyItemWithOffset3
-import com.project.giunne.common.presentation.shop.dummy.characterItemWithOffset
-import com.project.giunne.common.presentation.shop.dummy.characterItemWithOffsetGacha
-import com.project.giunne.common.presentation.shop.dummy.faceItemWithOffset1
-import com.project.giunne.common.presentation.shop.dummy.faceItemWithOffset2
-import com.project.giunne.common.presentation.shop.dummy.headItemWithOffset1
-import com.project.giunne.common.presentation.shop.dummy.headItemWithOffset2
+import com.project.giunne.common.data.remote.response.Item
+import com.project.giunne.common.data.util.DefineUrl.IMAGE_BASE_URL
+import com.project.giunne.common.data.util.asDataThrowable
+import com.project.giunne.common.domain.usecase.shop.GetCategoryItemListUseCase
+import com.project.giunne.common.domain.usecase.shop.GetCategoryMapUseCase
 import com.project.giunne.common.presentation.shop.state.CharacterState
-import com.project.giunne.common.presentation.shop.state.Item
-import com.project.giunne.common.presentation.shop.state.ItemType
 import com.project.giunne.common.presentation.shop.state.ShopEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.koin.java.KoinJavaComponent
 
-class ShopStore: BaseComponent<CharacterState, ShopEvent>(
+class ShopStore(
+    private val getCategoryMapUseCase: GetCategoryMapUseCase = KoinJavaComponent.get(GetCategoryMapUseCase::class.java),
+    private val getCategoryItemListUseCase: GetCategoryItemListUseCase = KoinJavaComponent.get(GetCategoryItemListUseCase::class.java)
+): BaseComponent<CharacterState, ShopEvent>(
     scope = CoroutineScope(Dispatchers.IO),
     initialState = CharacterState()
 ) {
-    /* TODO(API에 따라 DTO 변경 필요) */
+
+    fun getCategoryMap() {
+        scope.launch {
+            runCatching {
+                getCategoryMapUseCase()
+            }.onSuccess { response ->
+                setState {
+                    copy(
+                        currentLevel = 6,
+                        categoryMap = response
+                    )
+                }
+            }.onFailure {
+                setState { copy(error = it.asDataThrowable()) }
+            }
+        }
+    }
     fun onChangeItem(item: Item) {
         setState {
             copy(
-                selectedCharacter = if (item.type == ItemType.CHARACTER) {
-                    characterItemWithOffset
+                selectedCharacter = if (item.categoryId == 6) {
+                    (IMAGE_BASE_URL + item.itemImages.find { it.level == currentLevel }?.fileUrl)
                 } else this.selectedCharacter,
                 selectedItems = if (selectedItems.contains(item)) {
                     selectedItems.toMutableList().apply {
@@ -34,34 +49,44 @@ class ShopStore: BaseComponent<CharacterState, ShopEvent>(
                     }
                 } else {
                     selectedItems.toMutableList().apply {
-                        removeIf { it.type == item.type }
+                        removeIf { it.categoryId == item.categoryId }
                         add(item)
                     }
                 }
             )
-
         }
     }
 
-    fun onChangeType(type: ItemType) {
-        setState {
-            when (type) {
-                ItemType.HEAD -> copy(
-                    selectedType = type,
-                    selectedTypeItems = listOf(headItemWithOffset1, headItemWithOffset2)
-                )
-                ItemType.BODY -> copy(
-                    selectedType = type,
-                    selectedTypeItems = listOf(bodyItemWithOffset1, bodyItemWithOffset2, bodyItemWithOffset3)
-                )
-                ItemType.FACE -> copy(
-                    selectedType = type,
-                    selectedTypeItems = listOf(faceItemWithOffset1, faceItemWithOffset2)
-                )
-                ItemType.CHARACTER -> copy(
-                    selectedType = type,
-                    selectedTypeItems = listOf(characterItemWithOffsetGacha)
-                )
+
+    fun onChangeType(categoryId: Long) {
+        scope.launch {
+            runCatching {
+                getCategoryItemListUseCase(categoryId, 1)
+            }.onSuccess { response ->
+                setState {
+                    copy(
+                        selectedType = categoryId,
+                        categoryItem = response.data,
+                        paginationInfo = response.paginationInfo
+                    )
+                }
+            }.onFailure {
+                setState { copy(error = it.asDataThrowable()) }
+            }
+        }
+    }
+
+    fun loadNextPage(categoryId: Long, pageIndex: Int) {
+        scope.launch {
+            runCatching {
+                getCategoryItemListUseCase(categoryId, pageIndex)
+            }.onSuccess { response ->
+                setState {
+                    copy(
+                        categoryItem = (categoryItem + response.data).distinctBy { it.id },
+                        paginationInfo = response.paginationInfo
+                    )
+                }
             }
         }
     }
@@ -84,7 +109,7 @@ class ShopStore: BaseComponent<CharacterState, ShopEvent>(
         }
     }
 
-    private fun getDuplicateTypeItemOrNull(type: ItemType): Item? {
-        return uiState.value.selectedItems.find { it.type == type }
+    fun dismissErrorDialog() {
+        setState { copy(error = null) }
     }
 }
