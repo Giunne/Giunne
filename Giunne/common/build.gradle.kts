@@ -67,6 +67,7 @@ kotlin {
                 api(libs.coil.compose)
                 api(libs.coil.core)
                 api(libs.coil.network.ktor2)
+                api(libs.coil.video)
 
 //                implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.3")
 //                api(libs.coil.core)
