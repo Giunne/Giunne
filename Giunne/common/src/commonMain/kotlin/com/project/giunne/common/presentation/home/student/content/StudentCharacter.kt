@@ -14,20 +14,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import com.project.giunne.common.data.remote.response.Item
 import com.project.giunne.common.presentation.common.charactor.GPCharacter
 import com.project.giunne.common.presentation.common.progress.GPLevelProgressBar
 import com.project.giunne.common.presentation.common.text.GPText
-import com.project.giunne.common.presentation.shop.state.Item
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
-import org.jetbrains.compose.resources.DrawableResource
 
 @Composable
 fun StudentCharacter(
     level: Int,
     currentExp: Int,
     totalExp: Int,
-    character: DrawableResource,
+    character: String,
     items: List<Item>
 ) {
     val percent = currentExp.toFloat() / totalExp.toFloat()
@@ -50,10 +49,10 @@ fun StudentCharacter(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.gdp)
         ) {
-            /* TODO(캐릭터 Spec 정해지면 변경) */
             GPCharacter(
                 modifier = Modifier.size(256.gdp),
                 character = character,
+                currentLevel = level,
                 items = items
             )
 

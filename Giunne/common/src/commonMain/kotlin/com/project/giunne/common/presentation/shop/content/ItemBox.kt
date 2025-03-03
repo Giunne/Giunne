@@ -1,6 +1,5 @@
 package com.project.giunne.common.presentation.shop.content
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -13,21 +12,21 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
+import coil3.compose.AsyncImage
+import com.project.giunne.common.data.remote.response.Item
+import com.project.giunne.common.data.util.DefineUrl.IMAGE_BASE_URL
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.text.GPText
-import com.project.giunne.common.presentation.shop.state.Item
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun ItemBox(
     modifier: Modifier = Modifier,
+    currentLevel: Int,
     item: Item,
-    purchasedItems: List<Item>,
     selectedItems: List<Item>,
     onItemClick: (Item) -> Unit,
 ) {
@@ -41,7 +40,7 @@ fun ItemBox(
             .border(
                 width = 3.gdp,
                 shape = RoundedCornerShape(16.gdp),
-                brush = when (item.rank) {
+                brush = when (item.itemGrade) {
                     "S" -> sRankColorBrush
                     "A" -> aRankColorBrush
                     "B" -> bRankColorBrush
@@ -51,13 +50,30 @@ fun ItemBox(
             .noRippleClickable { onItemClick(item) },
         contentAlignment = Alignment.Center
     ) {
-        Image(
-            modifier = Modifier
-                .width(maxWidth / 2)
-                .wrapContentHeight(),
-            painter = painterResource(item.image),
-            contentDescription = "아이템"
-        )
+
+        item.thumbnailUrl?.let { thumbnailUrl ->
+            AsyncImage(
+                modifier = Modifier
+                    .width(maxWidth / 2)
+                    .wrapContentHeight(),
+                model = IMAGE_BASE_URL + thumbnailUrl,
+                contentDescription = "아이템"
+            )
+        } ?: run {
+            // 아이템이 2개 인건 레벨별로 이미지가 다름
+            val imageUrl = if (1 < item.itemImages.size) {
+                IMAGE_BASE_URL + item.itemImages.find { it.level == currentLevel }?.fileUrl
+            } else {
+                IMAGE_BASE_URL + item.itemImages.first().fileUrl
+            }
+            AsyncImage(
+                modifier = Modifier
+                    .width(maxWidth / 2)
+                    .wrapContentHeight(),
+                model = imageUrl,
+                contentDescription = "아이템"
+            )
+        }
 
         if (selectedItems.contains(item)) {
             Box(

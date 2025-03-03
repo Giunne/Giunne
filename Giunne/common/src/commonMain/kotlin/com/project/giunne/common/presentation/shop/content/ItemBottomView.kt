@@ -8,25 +8,26 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.project.giunne.common.data.remote.response.CategoryTypeResponse
+import com.project.giunne.common.data.remote.response.Item
 import com.project.giunne.common.presentation.shop.intent.ShopStore
 import com.project.giunne.common.presentation.shop.state.CharacterState
-import com.project.giunne.common.presentation.shop.state.Item
-import com.project.giunne.common.presentation.shop.state.ItemType
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.gdp
 
 @Composable
 fun ItemBottomView(
     modifier: Modifier,
-    types: List<ItemType>,
+    lazyGridState: LazyGridState,
+    types: List<CategoryTypeResponse>,
     shopStore: ShopStore,
     state: CharacterState,
     onItemClick: (Item) -> Unit,
-    onTypeSelected: (ItemType) -> Unit,
+    onTypeSelected: (Long) -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -44,33 +45,41 @@ fun ItemBottomView(
             ItemChipGroup(
                 types = types,
                 selectedType = state.selectedType,
-                onTypeSelected = { itemType ->
-                    onTypeSelected(itemType)
+                onTypeSelected = { id ->
+                    onTypeSelected(id)
                 }
             )
-            /* TODO(아이템 Type에 따라 보여주는 아이템 정의) */
-            ItemGridList(
-                items = state.selectedTypeItems,
-                selectedItems = state.selectedItems,
-                purchasedItems = state.purchasedItems,
-                onItemClick = { item ->
-                    onItemClick(item)
-                }
-            )
-        }
-        if (state.wearingItems != state.selectedItems) {
-            ItemModifyBottomView(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .align(Alignment.BottomCenter),
-                onUndoClick = {
-                    shopStore.onUndo()
-                },
-                onModifyClick = {
-                    shopStore.onModifyWearingItems()
-                }
-            )
+            if (state.categoryItem.isEmpty()) {
+                EmptyItemList(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                )
+            } else {
+                ItemGridList(
+                    modifier = Modifier.weight(1f),
+                    currentLevel = state.currentLevel,
+                    lazyGridState = lazyGridState,
+                    items = state.categoryItem,
+                    selectedItems = state.selectedItems,
+                    onItemClick = { item ->
+                        onItemClick(item)
+                    }
+                )
+            }
+            if (state.wearingItems != state.selectedItems) {
+                ItemModifyBottomView(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    onUndoClick = {
+                        shopStore.onUndo()
+                    },
+                    onModifyClick = {
+                        shopStore.onModifyWearingItems()
+                    }
+                )
+            }
         }
     }
 }

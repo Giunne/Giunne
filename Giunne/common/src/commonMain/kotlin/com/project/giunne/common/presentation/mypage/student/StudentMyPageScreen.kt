@@ -69,7 +69,9 @@ internal fun StudentMyPageScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             GPCharacter(
-                modifier = Modifier.size(256.gdp)
+                modifier = Modifier.size(256.gdp),
+                currentLevel = 6,
+                character = ""
             )
 
             MyPageCharacter(

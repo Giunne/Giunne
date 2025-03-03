@@ -147,7 +147,6 @@ fun GradeDialog(
                             modifier = Modifier.size(11.gdp),
                             painter = painterResource(Res.drawable.icon_check),
                             contentDescription = null,
-                            colorFilter = ColorFilter.tint(GPColor.White)
                         )
                     }
                 }

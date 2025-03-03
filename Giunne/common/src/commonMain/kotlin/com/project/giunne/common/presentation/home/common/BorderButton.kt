@@ -35,10 +35,10 @@ fun BorderButton(
         modifier = modifier
             .background(color = GPColor.Transparent)
             .border(BorderStroke(1.gdp, GPColor.MainOrangeColor), RoundedCornerShape(12.gdp))
-            .padding(14.gdp)
             .noRippleClickable {
                 onClick()
-            },
+            }
+            .padding(14.gdp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.gdp)
     ) {

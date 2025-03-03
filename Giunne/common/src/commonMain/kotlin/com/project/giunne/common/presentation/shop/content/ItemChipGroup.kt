@@ -11,18 +11,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import com.project.giunne.common.data.remote.response.CategoryTypeResponse
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.text.GPText
-import com.project.giunne.common.presentation.shop.state.ItemType
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 
 @Composable
 fun ItemChipGroup(
-    types: List<ItemType>,
-    selectedType: ItemType,
-    onTypeSelected: (ItemType) -> Unit,
+    types: List<CategoryTypeResponse>,
+    selectedType: Long,
+    onTypeSelected: (Long) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -30,7 +30,7 @@ fun ItemChipGroup(
             .padding(8.gdp)
     ) {
         types.forEach { type ->
-            val isSelected = type == selectedType
+            val isSelected = type.id == selectedType
             ItemChip(
                 type = type,
                 isSelected = isSelected,
@@ -44,9 +44,9 @@ fun ItemChipGroup(
 
 @Composable
 fun ItemChip(
-    type: ItemType,
+    type: CategoryTypeResponse,
     isSelected: Boolean,
-    onSelected: (ItemType) -> Unit,
+    onSelected: (Long) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -56,13 +56,13 @@ fun ItemChip(
                 color = if (isSelected) GPColor.BackgroundGray_EBEBEB else GPColor.Transparent
             )
             .noRippleClickable {
-                onSelected(type)
+                onSelected(type.id)
             }
             .padding(vertical = 4.gdp, horizontal = 12.gdp),
         contentAlignment = Alignment.Center
     ) {
         GPText(
-            text = type.title,
+            text = type.categoryName,
             textSize = 12.gsp
         )
     }

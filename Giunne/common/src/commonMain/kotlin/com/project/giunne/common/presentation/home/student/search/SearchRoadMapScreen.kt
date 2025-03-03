@@ -9,58 +9,73 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.search.GPSearchBar
 import com.project.giunne.common.presentation.common.text.GPText
+import com.project.giunne.common.presentation.home.common.EmptyResult
 import com.project.giunne.common.presentation.home.student.content.ResultRoadMapItem
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun SearchRoadMapScreen(
     component: SearchRoadMapComponent,
     onBackClick: () -> Unit,
-    navigateToHome: () -> Unit
+    navigateToSelectCharacter: (Int) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
-    var selectedItem by remember { mutableIntStateOf(-1) }
+    val lazyListState = rememberLazyListState()
+    val searchState by component.uiState.collectAsStateWithLifecycle()
+    var selectedItemIndex by remember { mutableIntStateOf(-1) }
     var searchText by remember { mutableStateOf("") }
-    var isLoading by remember { mutableStateOf(false) }
     val isEnabled by remember {
         derivedStateOf {
-            selectedItem != -1
+            selectedItemIndex != -1
         }
     }
-    var testSearchList by remember { mutableStateOf(listOf<String>()) }
+
+    LaunchedEffect(lazyListState) {
+        snapshotFlow { lazyListState.layoutInfo }
+            .collect { layoutInfo ->
+                val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+                val totalItemsCount = layoutInfo.totalItemsCount
+
+                if (searchState.paginationInfo.hasNextPage && lastVisibleItemIndex >= totalItemsCount - 1) {
+                    component.loadMore(searchText, searchState.paginationInfo.currentPage + 1)
+                }
+            }
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(GPColor.BackgroundLightGray)
             .addFocusCleaner(focusManager)
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (isLoading) {
+        if (searchState.isLoading) {
             Loader()
         }
         GPSearchBar(
@@ -73,41 +88,47 @@ internal fun SearchRoadMapScreen(
                 searchText = it
             },
             onSearchQuery = {
-                /*TODO(API 나오면 바꾸기)*/
-                CoroutineScope(Dispatchers.IO).launch {
-                    isLoading = true
-                    delay(1000)
-                    testSearchList = List(20) { "Test $it" }
-                    isLoading = false
-                }
+                component.searchRecreation(searchText, 1)
             },
             onClear = {
                 searchText = ""
             },
             placeHolder = "검색할 로드맵을 입력해주세요."
         )
-        LazyColumn(
-            modifier = Modifier
-                .weight(1f),
-            contentPadding = PaddingValues(vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(testSearchList.size) { index ->
-                ResultRoadMapItem(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    isSelected = selectedItem == index,
-                    description = "Test $index",
-                    onItemSelected = {
-                        selectedItem = index
-                        focusManager.clearFocus()
-                    }
-                )
+        if (searchText.isEmpty() && searchState.searchRecreationList.isEmpty()) {
+            EmptyResult(
+                modifier = Modifier.weight(1f),
+                description = "검색할 로드맵을 입력해주세요.",
+                highlightRegex = 4..6
+            )
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f),
+                contentPadding = PaddingValues(vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(searchState.searchRecreationList.size) { index ->
+                    ResultRoadMapItem(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        isSelected = selectedItemIndex == index,
+                        recreation = searchState.searchRecreationList[index],
+                        onItemSelected = {
+                            selectedItemIndex = if (selectedItemIndex == index) {
+                                -1
+                            } else {
+                                index
+                            }
+                            focusManager.clearFocus()
+                        }
+                    )
+                }
             }
         }
 
         GPButton(
             modifier = Modifier
-                .padding(vertical = 8.gdp, horizontal = 16.gdp)
+                .padding(16.gdp)
                 .fillMaxWidth()
                 .height(56.gdp),
             normalColor = if (isEnabled) GPColor.ButtonOrange else GPColor.ButtonLightGray,
@@ -115,12 +136,12 @@ internal fun SearchRoadMapScreen(
             hoverColor = if (isEnabled) GPColor.ButtonHoverOrange else GPColor.ButtonLightGray,
             onClick = {
                 if (isEnabled) {
-                    navigateToHome()
+                    navigateToSelectCharacter(searchState.searchRecreationList[selectedItemIndex].id)
                 }
             },
         ) {
             GPText(
-                text = "참여요청",
+                text = "참여하기",
                 textSize = 14.gsp,
                 fontFamily = GPFontFamily.Bold,
                 textColor = GPColor.White

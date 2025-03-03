@@ -1,5 +1,7 @@
 package com.project.giunne.common.data.repository
 
+import com.project.giunne.common.data.remote.response.CategoryItemResponse
+import com.project.giunne.common.data.remote.response.CategoryTypeResponse
 import com.project.giunne.common.data.remote.response.GachaResponse
 import com.project.giunne.common.data.service.ShopService
 import com.project.giunne.common.data.util.NetworkResult
@@ -10,9 +12,21 @@ private const val TAG = "ShopRepositoryImpl"
 class ShopRepositoryImpl(
     private val shopService: ShopService
 ): ShopRepository {
-    override suspend fun getCategoryMap(): NetworkResult<List<GachaResponse>> {
+    override suspend fun getCategoryMap(): NetworkResult<Map<Long, List<CategoryTypeResponse>>> {
         return handleApi(TAG) {
-            shopService.getCategoryList()
+            shopService.getCategoryMap()
+        }
+    }
+
+    override suspend fun getCategoryItemById(categoryItemId: Long, pageIndex: Int): NetworkResult<CategoryItemResponse> {
+        return handleApi(TAG) {
+            shopService.getCategoryItemById(categoryItemId, pageIndex)
+        }
+    }
+
+    override suspend fun getGachaType(): NetworkResult<List<GachaResponse>> {
+        return handleApi(TAG) {
+            shopService.getGachaType()
         }
     }
 }

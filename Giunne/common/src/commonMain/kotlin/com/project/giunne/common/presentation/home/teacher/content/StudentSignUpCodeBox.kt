@@ -32,24 +32,25 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun StudentSignUpCodeBox(
     modifier: Modifier,
-    signUpCode: String
+    signUpCode: String,
+    onCopyCode: () -> Unit
 ) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
+            .padding(horizontal = 16.gdp)
             .shadow(
                 shape = RoundedCornerShape(16.gdp),
-                ambientColor = GPColor.TextBlack.copy(alpha = 0.1f),
-                elevation = 4.gdp
+                ambientColor = GPColor.TextBlack.copy(alpha = 0.05f),
+                elevation = 1.gdp
             )
             .clip(RoundedCornerShape(16.gdp))
-            .background(Color.White),
+            .background(GPColor.White),
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .background(Color.Black)
+                .background(GPColor.TextBlack)
                 .padding(vertical = 8.gdp),
             contentAlignment = Alignment.Center
         ) {
@@ -87,7 +88,7 @@ fun StudentSignUpCodeBox(
             BorderButton(
                 modifier = Modifier.wrapContentSize(),
                 title = "복사하기",
-                onClick = {}
+                onClick = onCopyCode
             )
         }
     }

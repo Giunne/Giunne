@@ -3,14 +3,11 @@ package com.project.giunne.common.di
 import com.project.giunne.common.data.util.DefineUrl
 import com.project.giunne.common.util.Define
 import de.jensklingenberg.ktorfit.ktorfit
+import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.logging.DEFAULT
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
-import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders

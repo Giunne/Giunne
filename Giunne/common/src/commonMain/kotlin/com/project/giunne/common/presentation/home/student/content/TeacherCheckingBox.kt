@@ -66,7 +66,7 @@ fun TeacherCheckingBox(
             },
         )
 
-        Spacer(modifier = Modifier.width(10.gdp))
+        Spacer(modifier = Modifier.weight(1f))
 
         BorderButton(
             modifier = Modifier.wrapContentSize(),

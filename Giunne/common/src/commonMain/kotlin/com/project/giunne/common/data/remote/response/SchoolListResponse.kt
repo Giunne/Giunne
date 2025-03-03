@@ -8,5 +8,5 @@ data class SchoolListResponse(
     @SerialName("data")
     val data: List<SchoolInfo> = listOf(),
     @SerialName("paginationInfo")
-    val paginationInfo: PageNationInfo = PageNationInfo(),
+    val paginationInfo: PaginationInfo = PaginationInfo(),
 )
