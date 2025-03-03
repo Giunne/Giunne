@@ -4,6 +4,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Matrix
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
@@ -41,6 +43,7 @@ import androidx.graphics.shapes.Morph
 import androidx.graphics.shapes.RoundedPolygon
 import androidx.graphics.shapes.circle
 import androidx.graphics.shapes.star
+import com.project.giunne.Res
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.spacer.SpH
@@ -51,6 +54,9 @@ import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import com.project.giunne.icon_check
+import com.project.giunne.icon_student_check
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun GradeDialog(
@@ -133,8 +139,17 @@ fun GradeDialog(
                         .background(
                             color = animatedColor,
                             shape = RoundedCornerShape(12.gdp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (isChecked) {
+                        Image(
+                            modifier = Modifier.size(11.gdp),
+                            painter = painterResource(Res.drawable.icon_check),
+                            contentDescription = null,
                         )
-                )
+                    }
+                }
                 SpW(10.gdp)
                 GPText(
                     text = "추가 동작 여부",

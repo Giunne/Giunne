@@ -4,11 +4,14 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -23,10 +26,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
+import com.project.giunne.R
 import com.project.giunne.common.presentation.common.noRippleClickable
+import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.BackHandler
 import kotlinx.coroutines.delay
 
@@ -114,6 +122,56 @@ actual fun VideoPlayer(
             factory = { ctx ->
                 PlayerView(ctx).apply {
                     player = exoPlayer
+                }
+            },
+            update = {}
+        )
+    }
+}
+
+@Composable
+actual fun IntroVideoPlayer(
+    modifier: Modifier,
+    videoPath: String,
+    onFullScreenClicked: () -> Unit
+) {
+    val context = LocalContext.current
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    val exoPlayer = remember {
+        ExoPlayer.Builder(context).build().apply {
+            val videoUri = Uri.parse("android.resource://com.project.giunne/${R.raw.giwoonnae_intro}")
+            val mediaItem = MediaItem.fromUri(videoUri)
+            setMediaItem(mediaItem)
+            prepare()
+            playWhenReady = true
+        }
+    }
+
+    DisposableEffect(lifecycle) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) exoPlayer.pause()
+            if (event == Lifecycle.Event.ON_START) exoPlayer.play()
+        }
+        lifecycle.addObserver(observer)
+        onDispose {
+            lifecycle.removeObserver(observer)
+            exoPlayer.release()
+        }
+    }
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(GPColor.BackgroundLightGray),
+        contentAlignment = Alignment.Center
+    ) {
+        AndroidView(
+            modifier = modifier,
+//                .fillMaxSize(),
+            factory = { ctx ->
+                PlayerView(ctx).apply {
+                    player = exoPlayer
+                    useController = false
                 }
             },
             update = {}

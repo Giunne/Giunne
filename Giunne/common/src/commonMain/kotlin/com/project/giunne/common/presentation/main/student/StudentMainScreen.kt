@@ -103,12 +103,20 @@ fun StudentMainScreen(
     //////////////
     BackHandler {
         scope.launch {
-            if (backPress == false) {
-                backPress = true
-                snackbarState.showSnackbar("뒤로가기를 한번 더 누르면 종료됩니다.")
-                backPress = false
+            if (noti) {
+                notiAnim = false
+                delay(150)
+                noti = false
+            } else if (childStack.backStack.isNotEmpty()) {
+                component.navigateBack()
             } else {
-                exitProgram()
+                if (backPress == false) {
+                    backPress = true
+                    snackbarState.showSnackbar("뒤로가기를 한번 더 누르면 종료됩니다.")
+                    backPress = false
+                } else {
+                    com.project.giunne.common.util.exitProgram()
+                }
             }
         }
     }

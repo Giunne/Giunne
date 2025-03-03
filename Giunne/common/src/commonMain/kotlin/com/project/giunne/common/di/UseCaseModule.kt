@@ -1,5 +1,6 @@
 package com.project.giunne.common.di
 
+import com.project.giunne.common.domain.usecase.auth.ChangePasswordUseCase
 import org.koin.core.module.Module
 import com.project.giunne.common.domain.usecase.shop.GetCategoryItemListUseCase
 import com.project.giunne.common.domain.usecase.shop.GetCategoryMapUseCase
@@ -24,6 +25,7 @@ val useCaseModule: Module = module {
     single { LogoutUseCase(get()) }
     single { StudentSignupUseCase(get()) }
     single { TeacherSignupUseCase(get()) }
+    single { ChangePasswordUseCase(get()) }
     single { GetSchoolListUseCase(get()) }
     single { CreateRecreationUseCase(get()) }
     single { GetSearchRecreationUseCase(get()) }

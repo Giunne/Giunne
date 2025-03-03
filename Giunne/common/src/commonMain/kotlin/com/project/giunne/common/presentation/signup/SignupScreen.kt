@@ -141,6 +141,23 @@ internal fun SignupScreen(
                         focusManager = focusManager,
                     )
                     SpH(10.gdp)
+                    if (signupType == TYPE_TEACHER) {
+                        SignupInputColumn(
+                            titleText = "이름",
+                            text = infoState.nameText,
+                            onTextChanged = { infoStore.onNameTextChanged(it) },
+                            sideContent = {
+                                GPText(
+                                    text = "실명으로 입력해주세요!",
+                                    textSize = 10.gsp,
+                                    fontFamily = GPFontFamily.Medium,
+                                    textColor = GPColor.ButtonGray
+                                )
+                            },
+                            focusManager = focusManager,
+                        )
+                        SpH(10.gdp)
+                    }
                     SignupInputColumn(
                         titleText = "비밀번호",
                         text = infoState.passText,
@@ -230,8 +247,8 @@ internal fun SignupScreen(
                                 teacherSignupRequest = TeacherSignupRequest(
                                     loginId = infoState.idText,
                                     password = infoState.passText,
-                                    userName = "",
-                                    nickname = "",
+                                    userName = infoState.nameText,
+                                    nickname = infoState.nameText,
                                     birth = "2000-01-01",
                                     phone = "",
                                     email = "",

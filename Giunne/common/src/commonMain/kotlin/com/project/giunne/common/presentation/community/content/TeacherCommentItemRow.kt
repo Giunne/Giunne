@@ -22,7 +22,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.RectangleShape
 import com.project.giunne.Res
+import com.project.giunne.common.presentation.common.button.GPIconButton
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.shape.GPSquircleShape
 import com.project.giunne.common.presentation.common.spacer.SpW
@@ -45,7 +47,7 @@ fun TeacherCommentItemRow(
     modifier: Modifier = Modifier,
     commentDto: CommentDto,
     like: Boolean,
-    onMenuButtonClicked: () -> Unit,
+    onDeleteButtonClicked: () -> Unit,
     onLikeButtonClicked: (Boolean) -> Unit
 ) {
     var isMenuOpen by remember { mutableStateOf(false) }
@@ -97,24 +99,6 @@ fun TeacherCommentItemRow(
                     modifier = Modifier
                         .size(28.gdp)
                         .noRippleClickable {
-                            onLikeButtonClicked(like)
-                            isLike = !isLike
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        modifier = Modifier.size(12.gdp),
-                        painter = if (isLike) painterResource(Res.drawable.icon_like_fill)
-                            else painterResource(Res.drawable.icon_like),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(GPColor.Red)
-                    )
-                }
-                Box(
-                    modifier = Modifier
-                        .size(28.gdp)
-                        .noRippleClickable {
-                            onMenuButtonClicked()
                             isMenuOpen = !isMenuOpen
                         },
                     contentAlignment = Alignment.Center
@@ -147,32 +131,48 @@ fun TeacherCommentItemRow(
                 .fillMaxHeight()
                 .width(animatedWidth),
         ) {
-            Box(
+            GPIconButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(28.gdp)
-                    .background(GPColor.BackgroundFrameOrange),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    modifier = Modifier.size(14.gdp),
-                    painter = painterResource(Res.drawable.icon_edit),
-                    contentDescription = null
-                )
-            }
-            Box(
+                    .height(28.gdp),
+                icon = {
+                    Image(
+                        modifier = Modifier.size(14.gdp),
+                        painter = if (isLike) painterResource(Res.drawable.icon_like_fill)
+                            else painterResource(Res.drawable.icon_like),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(GPColor.White)
+                    )
+                },
+                normalColor = GPColor.ButtonOrange,
+                pressColor = GPColor.ButtonPressOrange,
+                onClick = {
+                    onLikeButtonClicked(like)
+                    isLike = !isLike
+                },
+                shadow = false,
+                shape = RectangleShape
+            )
+            GPIconButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(28.gdp)
-                    .background(GPColor.Red),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    modifier = Modifier.size(14.gdp),
-                    painter = painterResource(Res.drawable.icon_delete),
-                    contentDescription = null
-                )
-            }
+                    .height(28.gdp),
+                icon = {
+                    Image(
+                        modifier = Modifier.size(14.gdp),
+                        painter = painterResource(Res.drawable.icon_delete),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(GPColor.White)
+                    )
+                },
+                normalColor = GPColor.ButtonRed,
+                pressColor = GPColor.ButtonPressRed,
+                onClick = {
+                    onDeleteButtonClicked()
+                },
+                shadow = false,
+                shape = RectangleShape
+            )
         }
     }
 }

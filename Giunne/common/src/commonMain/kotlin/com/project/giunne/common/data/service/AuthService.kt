@@ -7,6 +7,7 @@ import com.project.giunne.common.data.remote.request.TeacherSignupRequest
 import com.project.giunne.common.data.remote.response.AuthResponse
 import com.project.giunne.common.data.remote.response.RefreshResponse
 import com.project.giunne.common.data.util.BaseResponse
+import com.project.giunne.common.data.util.DefineUrl.URL_CHANGE_PASSWORD
 import com.project.giunne.common.data.util.DefineUrl.URL_LOGIN
 import com.project.giunne.common.data.util.DefineUrl.URL_LOGOUT
 import com.project.giunne.common.data.util.DefineUrl.URL_REFRESH
@@ -42,6 +43,13 @@ interface AuthService {
 
     @POST(URL_REFRESH)
     suspend fun refresh(
+        @Header("Authorization") accessToken: String = "Bearer ${Define.refreshToken}",
         @Body playerRequest: PlayerRequest
     ): BaseResponse<RefreshResponse>
+
+    @POST(URL_CHANGE_PASSWORD)
+    suspend fun changePassword(
+        @Header("Authorization") accessToken: String = "Bearer ${Define.accessToken}",
+        @Body loginRequest: LoginRequest
+    ): BaseResponse<AuthResponse>
 }

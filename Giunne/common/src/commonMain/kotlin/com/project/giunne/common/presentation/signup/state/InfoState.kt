@@ -6,6 +6,7 @@ import com.project.giunne.common.data.util.DataThrowable
 
 data class InfoState(
     val idText: String = "",
+    val nameText: String = "",
     val passText: String = "",
     val passConfText: String = "",
     val codeText: String = "",
