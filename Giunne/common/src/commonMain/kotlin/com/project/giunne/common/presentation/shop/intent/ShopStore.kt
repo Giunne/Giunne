@@ -123,7 +123,7 @@ class ShopStore(
             runCatching {
                 getAvatarListUseCase()
             }.onSuccess { response ->
-                val userInfo = response.find { it.recreationId.toLong() == playerId }
+                val userInfo = response.find { it.id.toLong() == playerId }
                 val wearingItems = userInfo?.wearingItems ?: listOf()
                 val characterItem = wearingItems.find { it.categoryId == 6 } ?: wearingItems.find { it.categoryId == 1 }
                 val characterUrl = characterItem?.itemImage?.fileUrl.orEmpty()

@@ -33,7 +33,7 @@ BaseComponent<MyPageState, MyPageEvent>(initialState = MyPageState()){
                 setState {
                     copy(
                         isLoading = false,
-                        userInfo = response.find { it.recreationId.toLong() == playerId } ?: AvatarUserResponse()
+                        userInfo = response.find { it.id.toLong() == playerId } ?: AvatarUserResponse()
                     )
                 }
             }.onFailure {
