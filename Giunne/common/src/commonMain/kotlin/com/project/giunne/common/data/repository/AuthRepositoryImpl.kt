@@ -45,4 +45,10 @@ class AuthRepositoryImpl(
             authService.refresh(playerRequest = playerRequest)
         }
     }
+
+    override suspend fun changePassword(loginRequest: LoginRequest): NetworkResult<AuthResponse> {
+        return handleApi(TAG) {
+            authService.changePassword(loginRequest = loginRequest)
+        }
+    }
 }

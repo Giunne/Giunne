@@ -1,5 +1,6 @@
 package com.project.giunne.common.di
 
+import com.project.giunne.common.domain.usecase.auth.ChangePasswordUseCase
 import com.project.giunne.common.domain.usecase.auth.LoginUseCase
 import com.project.giunne.common.domain.usecase.auth.LogoutUseCase
 import com.project.giunne.common.domain.usecase.auth.StudentSignupUseCase
@@ -15,5 +16,6 @@ val useCaseModule: Module = module {
     single { LogoutUseCase(get()) }
     single { StudentSignupUseCase(get()) }
     single { TeacherSignupUseCase(get()) }
+    single { ChangePasswordUseCase(get()) }
     single { GetSchoolListUseCase(get()) }
 }

@@ -16,4 +16,5 @@ interface AuthRepository {
     suspend fun login(loginRequest: LoginRequest): NetworkResult<AuthResponse>
     suspend fun logout(): NetworkResult<String>
     suspend fun refresh(playerRequest: PlayerRequest): NetworkResult<RefreshResponse>
+    suspend fun changePassword(loginRequest: LoginRequest): NetworkResult<AuthResponse>
 }
