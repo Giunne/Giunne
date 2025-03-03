@@ -20,13 +20,13 @@ actual fun PermissionController(
             listOf(
                 Manifest.permission.READ_MEDIA_IMAGES,
                 Manifest.permission.READ_MEDIA_VIDEO,
-//                Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED,
-                Manifest.permission.REQUEST_INSTALL_PACKAGES
+                Manifest.permission.REQUEST_INSTALL_PACKAGES,
+                Manifest.permission.POST_NOTIFICATIONS
             )
         else listOf(
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.REQUEST_INSTALL_PACKAGES
+            Manifest.permission.REQUEST_INSTALL_PACKAGES,
         )
     )
 

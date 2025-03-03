@@ -1,10 +1,15 @@
 package com.project.giunne.android
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.pm.ActivityInfo
+import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.View
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.LaunchedEffect
@@ -17,8 +22,10 @@ import com.project.giunne.common.presentation.root.RootComponent
 import com.project.giunne.common.presentation.root.RootContent
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.ui.theme.GiunnaeTheme
+import com.project.giunne.common.util.GLog
 import com.russhwolf.settings.SharedPreferencesSettings
 
+private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
     private val settingsRepository by lazy {
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
@@ -28,6 +35,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel(channel_id, "기운내")
+        }
+
         val root = RootComponent(
             componentContext = DefaultComponentContext(
                 lifecycle = lifecycle,
@@ -55,5 +67,22 @@ class MainActivity : AppCompatActivity() {
                 )
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    // Notification 수신을 위한 체널 추가
+    private fun createNotificationChannel(id: String, name: String) {
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val channel = NotificationChannel(id, name, importance)
+
+        val notificationManager: NotificationManager
+                = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        notificationManager.createNotificationChannel(channel)
+        GLog.d(TAG, "createChannel :: $channel")
+    }
+
+    companion object {
+        val channel_id = "giunne_channel"
     }
 }

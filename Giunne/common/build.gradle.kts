@@ -18,6 +18,7 @@ plugins {
     alias(libs.plugins.serialization)
     alias(libs.plugins.ktorfit)
     alias(libs.plugins.buildkonfig)
+    alias(libs.plugins.google.services)
 }
 
 sqldelight {
@@ -79,6 +80,7 @@ kotlin {
                 api(libs.bundles.ktor)
 
                 api(libs.androidx.graphics.shapes)
+                api(libs.notifier)
             }
         }
         val androidMain by getting {
@@ -140,6 +142,9 @@ android {
 }
 dependencies {
     implementation(libs.androidx.foundation.android)
+    implementation(platform(libs.firebase.bom))
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-messaging-ktx")
 }
 
 compose.resources {

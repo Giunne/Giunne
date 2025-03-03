@@ -113,9 +113,10 @@ fun StudentMainScreen(
                 if (backPress == false) {
                     backPress = true
                     snackbarState.showSnackbar("뒤로가기를 한번 더 누르면 종료됩니다.")
+                    delay(4000)
                     backPress = false
                 } else {
-                    com.project.giunne.common.util.exitProgram()
+                    exitProgram()
                 }
             }
         }

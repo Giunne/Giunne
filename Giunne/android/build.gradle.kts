@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.android.application)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.google.services)
 }
 
 group = "com.project.giunne"
@@ -17,6 +18,9 @@ dependencies {
     implementation(project(":common"))
     implementation(libs.androidx.activity.compose)
     implementation(libs.koin.android.compose)
+    implementation(platform(libs.firebase.bom))
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-messaging-ktx")
 }
 
 android {
