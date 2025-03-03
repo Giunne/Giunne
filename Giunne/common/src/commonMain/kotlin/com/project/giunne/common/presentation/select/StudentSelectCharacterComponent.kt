@@ -44,6 +44,7 @@ class StudentSelectCharacterComponent(
                         avatarResponse = response
                     )
                 }
+                postSideEffect(SelectCharacterEvent.Success)
             }.onFailure {
                 setState {
                     copy(

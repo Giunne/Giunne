@@ -20,6 +20,7 @@ import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,6 +35,7 @@ import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.common.textfield.GPTextFieldWithClose
 import com.project.giunne.common.presentation.select.content.SelectCharacterPage
+import com.project.giunne.common.presentation.select.state.SelectCharacterEvent
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.extension.addFocusCleaner
@@ -58,6 +60,16 @@ fun StudentCharacterSelectScreen(
     val isEnabled by remember {
         derivedStateOf {
             gradeText.isNotEmpty() && classText.isNotEmpty() && nameText.isNotEmpty()
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        component.sideEffect.collect { event ->
+            when (event) {
+                is SelectCharacterEvent.Success -> {
+                    navigateToHome()
+                }
+            }
         }
     }
 

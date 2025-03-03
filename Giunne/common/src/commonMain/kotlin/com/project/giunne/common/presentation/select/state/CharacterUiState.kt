@@ -46,5 +46,5 @@ data class SelectCharacterUiState(
 )
 
 sealed interface SelectCharacterEvent {
-    data class Success(val message: String) : SelectCharacterEvent
+    data object Success : SelectCharacterEvent
 }

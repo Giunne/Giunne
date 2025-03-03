@@ -4,7 +4,6 @@ import com.arkivanov.decompose.ComponentContext
 import com.project.giunne.common.base.BaseComponent
 import com.project.giunne.common.data.remote.request.AvatarLoginRequest
 import com.project.giunne.common.data.util.asDataThrowable
-import com.project.giunne.common.domain.usecase.avatar.CreateAvatarUseCase
 import com.project.giunne.common.domain.usecase.avatar.GetUserAvatarListUseCase
 import com.project.giunne.common.domain.usecase.avatar.LoginRecreationUseCase
 import com.project.giunne.common.presentation.home.student.state.StudentJoinEvent
@@ -52,14 +51,14 @@ class StudentJoinRecreationComponent(
     }
 
     fun loginRecreation(
-        playerId: Long
+        recreationId: Long
     ) {
         setState { copy(isLoading = false) }
         scope.launch {
             runCatching {
                 loginRecreationUseCase(
                     AvatarLoginRequest(
-                        playerId = playerId
+                        playerId = recreationId
                     )
                 )
             }.onSuccess { response ->
@@ -70,7 +69,7 @@ class StudentJoinRecreationComponent(
                     )
                 }
                 // playerId, accessToken 업데이트
-                Define.playerId = response.recreationId
+                Define.playerId = recreationId
                 Define.accessToken = response.accessToken
                 postSideEffect(StudentJoinEvent.SuccessLogin("선택한 로드맵에 연결 되었습니다! 👏🏼"))
             }.onFailure {

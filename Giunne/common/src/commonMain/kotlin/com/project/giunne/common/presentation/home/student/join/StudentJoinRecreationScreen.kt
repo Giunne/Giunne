@@ -139,10 +139,9 @@ internal fun StudentJoinRecreationScreen(
                 pressColor = if (isEnabled) GPColor.ButtonPressOrange else GPColor.ButtonLightGray,
                 hoverColor = if (isEnabled) GPColor.ButtonHoverOrange else GPColor.ButtonLightGray,
                 onClick = {
-                    /* TODO(Token 갈아 끼워줘야함) */
                     if (isEnabled) {
                         component.loginRecreation(
-                            playerId = joinState.recreationStudentJoinList[selectedItemIndex].id.toLong()
+                            recreationId = joinState.recreationStudentJoinList[selectedItemIndex].id.toLong()
                         )
                     }
                 },
