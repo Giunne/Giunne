@@ -30,6 +30,8 @@ object GPColor {
     @Stable val ButtonHoverLightGray = Color(0xffbcbcbc)
     @Stable val ButtonPressWhite = Color(0xffededed)
     @Stable val ButtonHoverWhite = Color(0xffefefef)
+    @Stable val ButtonRed = Color(0xFFFF5A5A)
+    @Stable val ButtonPressRed = Color(0xfffa4949)
 
     // Background
     @Stable val BackgroundBlack = Color(0xFF232323)

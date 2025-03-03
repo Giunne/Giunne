@@ -134,9 +134,7 @@ internal fun TeacherCommunityDetailScreen(
                                     .onZoomEvent(
                                         scope = scope,
                                         state = state,
-                                        onSingleTapEvent = {
-
-                                        }
+                                        onSingleTapEvent = {}
                                     ),
                                 model = "https://picsum.photos/200/300",
                                 placeholder = painterResource(Res.drawable.image_loader_1),

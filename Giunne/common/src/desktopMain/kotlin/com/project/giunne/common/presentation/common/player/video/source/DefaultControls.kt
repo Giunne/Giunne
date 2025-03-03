@@ -74,43 +74,45 @@ fun DefaultControls(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (state.isPlaying) {
-                GPIconButton(
-                    modifier = Modifier
-                        .width(24.gdp)
-                        .aspectRatio(1f),
-                    normalColor = GPColor.ButtonBlack,
-                    pressColor = GPColor.ButtonPressBlack,
-                    shape = CircleShape,
-                    onClick = controller::pause,
-                    icon = {
-                        Image(
-                            modifier = Modifier.size(12.gdp),
-                            painter = painterResource(Res.drawable.icon_pause),
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(GPColor.White)
-                        )
-                    }
-                )
-            } else {
-                GPIconButton(
-                    modifier = Modifier
-                        .width(24.gdp)
-                        .aspectRatio(1f),
-                    normalColor = GPColor.ButtonOrange,
-                    pressColor = GPColor.ButtonPressOrange,
-                    shape = CircleShape,
-                    onClick = controller::play,
-                    icon = {
-                        Image(
-                            modifier = Modifier.size(12.gdp),
-                            painter = painterResource(Res.drawable.icon_play),
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(GPColor.White)
-                        )
-                    }
-                )
-            }
+//            if (state.isPlaying) {
+//                GPIconButton(
+//                    modifier = Modifier
+//                        .width(24.gdp)
+//                        .aspectRatio(1f),
+//                    normalColor = GPColor.ButtonBlack,
+//                    pressColor = GPColor.ButtonPressBlack,
+//                    shape = CircleShape,
+//                    onClick = controller::pause,
+//                    icon = {
+//                        Image(
+//                            modifier = Modifier.size(12.gdp),
+//                            painter = painterResource(Res.drawable.icon_pause),
+//                            contentDescription = null,
+//                            colorFilter = ColorFilter.tint(GPColor.White)
+//                        )
+//                    },
+//                    shadow = false
+//                )
+//            } else {
+//                GPIconButton(
+//                    modifier = Modifier
+//                        .width(24.gdp)
+//                        .aspectRatio(1f),
+//                    normalColor = GPColor.ButtonOrange,
+//                    pressColor = GPColor.ButtonPressOrange,
+//                    shape = CircleShape,
+//                    onClick = controller::play,
+//                    icon = {
+//                        Image(
+//                            modifier = Modifier.size(12.gdp),
+//                            painter = painterResource(Res.drawable.icon_play),
+//                            contentDescription = null,
+//                            colorFilter = ColorFilter.tint(GPColor.White)
+//                        )
+//                    },
+//                    shadow = false
+//                )
+//            }
             Slider(
                 modifier = Modifier
                     .weight(1f)
@@ -179,7 +181,8 @@ fun DefaultControls(
                         contentDescription = null,
                         colorFilter = ColorFilter.tint(GPColor.White)
                     )
-                }
+                },
+                shadow = false
             )
         }
     }

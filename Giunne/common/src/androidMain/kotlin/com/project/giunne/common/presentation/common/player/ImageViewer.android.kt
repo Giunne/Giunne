@@ -1,5 +1,6 @@
 package com.project.giunne.common.presentation.common.player
 
+import android.view.Window
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,11 +25,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.DialogWindowProvider
 import coil3.compose.AsyncImage
 import com.project.giunne.Res
+import com.project.giunne.common.presentation.common.button.GPIconButton
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.ZoomStore
@@ -57,6 +63,15 @@ actual fun ImageViewer(
             usePlatformDefaultWidth = false
         ),
     ) {
+        val dialogWindow = getDialogWindow()
+
+        SideEffect {
+            dialogWindow.let { window ->
+                window?.setDimAmount(0f)
+                window?.setWindowAnimations(-1)
+            }
+        }
+
         Box(
             modifier = modifier
                 .fillMaxSize()
@@ -108,21 +123,31 @@ actual fun ImageViewer(
                 )
             }
 
-            Box(
+            GPIconButton(
                 modifier = Modifier
-                    .align(Alignment.BottomEnd)
                     .padding(10.gdp)
-                    .noRippleClickable {
-                        rotate += 90f
-                    }
-            ) {
-                Image(
-                    modifier = Modifier.size(20.gdp),
-                    painter = painterResource(Res.drawable.icon_rotate),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(GPColor.ButtonGray)
-                )
-            }
+                    .size(30.gdp)
+                    .align(Alignment.BottomEnd),
+                icon = {
+                    Image(
+                        modifier = Modifier.size(20.gdp),
+                        painter = painterResource(Res.drawable.icon_rotate),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(GPColor.White)
+                    )
+                },
+                normalColor = GPColor.ButtonBlack,
+                pressColor = GPColor.ButtonPressBlack,
+                hoverColor = GPColor.ButtonHoverBlack,
+                onClick = {
+                    rotate += 90f
+                },
+                shadow = false
+            )
         }
     }
 }
+
+@ReadOnlyComposable
+@Composable
+fun getDialogWindow(): Window? = (LocalView.current.parent as? DialogWindowProvider)?.window

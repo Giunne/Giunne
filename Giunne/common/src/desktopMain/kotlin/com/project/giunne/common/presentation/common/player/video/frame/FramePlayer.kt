@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntSize
 import com.project.giunne.common.presentation.common.player.video.source.DefaultControls
+import com.project.giunne.common.presentation.common.player.video.source.MidControls
 import com.project.giunne.common.presentation.common.player.video.source.PlayerController
 import com.project.giunne.common.presentation.common.player.video.source.TopControls
 import kotlinx.coroutines.CoroutineScope
@@ -63,6 +64,12 @@ fun FramePlayer(
                 isHovered = isHovered,
                 onFullScreenClicked = onFullScreenClicked,
                 isFullScreen = isFullScreen
+            )
+            MidControls(
+                modifier = Modifier
+                    .align(Alignment.Center),
+                controller = controller,
+                isHovered = isHovered,
             )
             DefaultControls(
                 modifier = Modifier
