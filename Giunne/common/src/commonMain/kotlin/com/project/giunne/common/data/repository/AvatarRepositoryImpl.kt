@@ -3,7 +3,7 @@ package com.project.giunne.common.data.repository
 import com.project.giunne.common.data.remote.request.AvatarCreateRequest
 import com.project.giunne.common.data.remote.request.AvatarLoginRequest
 import com.project.giunne.common.data.remote.response.AvatarResponse
-import com.project.giunne.common.data.remote.response.AvatarUserResponse
+import com.project.giunne.common.data.remote.response.AvatarUserListResponse
 import com.project.giunne.common.data.service.AvatarService
 import com.project.giunne.common.data.util.NetworkResult
 import com.project.giunne.common.data.util.handleApi
@@ -25,9 +25,9 @@ class AvatarRepositoryImpl(
         }
     }
 
-    override suspend fun getUserAvatarList(): NetworkResult<List<AvatarUserResponse>> {
+    override suspend fun getUserAvatarList(pageIndex: Int): NetworkResult<AvatarUserListResponse> {
         return handleApi(TAG) {
-            avatarService.getUserAvatarList()
+            avatarService.getUserAvatarList(pageIndex)
         }
     }
 

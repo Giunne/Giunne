@@ -23,17 +23,18 @@ BaseComponent<MyPageState, MyPageEvent>(initialState = MyPageState()){
     }
 
     fun getRecreationList(
-        playerId: Long
+        playerId: Long,
+        pageIndex: Int
     ) {
         setState { copy(isLoading = true) }
         scope.launch {
             runCatching {
-                getAvatarListUseCase()
+                getAvatarListUseCase(pageIndex)
             }.onSuccess { response ->
                 setState {
                     copy(
                         isLoading = false,
-                        userInfo = response.find { it.id.toLong() == playerId } ?: AvatarUserResponse()
+                        userInfo = response.data.find { it.id.toLong() == playerId } ?: AvatarUserResponse()
                     )
                 }
             }.onFailure {

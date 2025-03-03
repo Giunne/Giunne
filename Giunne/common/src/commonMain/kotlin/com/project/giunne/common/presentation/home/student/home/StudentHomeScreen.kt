@@ -41,7 +41,6 @@ import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 private const val TAG = "StudentRoadmapScreen"
@@ -65,10 +64,12 @@ internal fun StudentHomeScreen(
         if (Define.playerId != 0L) {
             async {
                 component.loginRecreation(Define.playerId)
-                component.getRecreationList(Define.playerId)
+                component.getRecreationList(Define.playerId, 1)
             }.await()
         }
+    }
 
+    LaunchedEffect(Unit) {
         component.sideEffect.collect { event ->
             when (event) {
                 is StudentHomeEvent.ErrorSnackBar -> {
@@ -122,7 +123,7 @@ internal fun StudentHomeScreen(
                         StudentCharacter(
                             level = homeState.avatarInfo.level,
                             currentExp = homeState.avatarInfo.exp,
-                            totalExp = homeState.avatarInfo.needExp,
+                            needExp = homeState.avatarInfo.needExp,
                             wearingItems = homeState.userInfo.wearingItems
                         )
                         ResultRoadMapItem(

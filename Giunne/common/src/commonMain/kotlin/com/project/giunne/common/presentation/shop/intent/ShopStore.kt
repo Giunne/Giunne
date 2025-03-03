@@ -116,14 +116,15 @@ class ShopStore(
     }
 
     fun setCurrentWearingItems(
-        playerId: Long
+        playerId: Long,
+        pageIndex: Int
     ) {
         setState { copy(isLoading = true) }
         scope.launch {
             runCatching {
-                getAvatarListUseCase()
+                getAvatarListUseCase(pageIndex)
             }.onSuccess { response ->
-                val userInfo = response.find { it.id.toLong() == playerId }
+                val userInfo = response.data.find { it.id.toLong() == playerId }
                 val wearingItems = userInfo?.wearingItems ?: listOf()
                 val characterItem = wearingItems.find { it.categoryId == 6 } ?: wearingItems.find { it.categoryId == 1 }
                 val characterUrl = characterItem?.itemImage?.fileUrl.orEmpty()

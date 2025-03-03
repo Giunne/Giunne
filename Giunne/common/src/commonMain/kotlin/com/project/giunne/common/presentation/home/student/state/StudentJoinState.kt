@@ -10,6 +10,7 @@ data class StudentJoinState(
     val isLoading: Boolean = false,
     val avatarInfo: AvatarResponse = AvatarResponse(),
     val recreationStudentJoinList: List<Recreation> = listOf(),
+    val paginationInfo: PaginationInfo = PaginationInfo(),
     val error: DataThrowable? = null
 ) {
     fun List<AvatarUserResponse>.mapToRecreation(): List<Recreation> {

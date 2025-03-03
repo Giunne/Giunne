@@ -27,16 +27,41 @@ class StudentJoinRecreationComponent(
         GLog.d(TAG, "onCreate")
     }
 
-    fun getJoinRecreationList() {
+    fun getJoinRecreationList(
+        pageIndex: Int
+    ) {
         scope.launch {
             setState { copy(isLoading = true) }
             runCatching {
-                getAvatarListUseCase()
+                getAvatarListUseCase(pageIndex)
             }.onSuccess { response ->
                 setState {
                     copy(
                         isLoading = false,
-                        recreationStudentJoinList = response.mapToRecreation()
+                        recreationStudentJoinList = response.data.mapToRecreation()
+                    )
+                }
+            }.onFailure {
+                setState {
+                    copy(
+                        isLoading = false,
+                        error = it.asDataThrowable()
+                    )
+                }
+            }
+        }
+    }
+
+    fun loadMore(pageIndex: Int) {
+        scope.launch {
+            setState { copy(isLoading = true) }
+            runCatching {
+                getAvatarListUseCase(pageIndex)
+            }.onSuccess { response ->
+                setState {
+                    copy(
+                        isLoading = false,
+                        recreationStudentJoinList = (recreationStudentJoinList + response.data.mapToRecreation()).distinctBy { it.id }
                     )
                 }
             }.onFailure {

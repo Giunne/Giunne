@@ -25,9 +25,10 @@ import com.project.giunne.common.util.gsp
 fun StudentCharacter(
     level: Int,
     currentExp: Int,
-    totalExp: Int,
+    needExp: Int,
     wearingItems: List<WearingItem>
 ) {
+    val totalExp = if (needExp != 0) needExp else currentExp
     val percent = currentExp.toFloat() / totalExp.toFloat()
     Column(
         modifier = Modifier
