@@ -97,7 +97,7 @@ object TokenHandler {
     suspend fun refresh(): RefreshResponse {
         return handleApi(TAG) {
             authService.refresh(
-                PlayerRequest(Define.playerId)
+                playerRequest = PlayerRequest(Define.playerId)
             )
         }.successOr(RefreshResponse())
     }

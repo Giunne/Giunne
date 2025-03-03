@@ -10,6 +10,7 @@ import com.project.giunne.common.domain.usecase.auth.StudentSignupUseCase
 import com.project.giunne.common.domain.usecase.auth.TeacherSignupUseCase
 import com.project.giunne.common.domain.usecase.common.GetSchoolListUseCase
 import com.project.giunne.common.presentation.signup.SignupComponent.Companion.TYPE_STUDENT
+import com.project.giunne.common.presentation.signup.SignupComponent.Companion.TYPE_TEACHER
 import com.project.giunne.common.presentation.signup.state.InfoState
 import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.isValidPassword
@@ -118,6 +119,9 @@ class InfoStore(
             uiState.value.idText.isEmpty() -> {
                 setState { copy(signupValidate = "아이디를 입력해야 합니다.") }
             }
+            uiState.value.nameText.isEmpty() && signupType == TYPE_TEACHER -> {
+                setState { copy(signupValidate = "이름을 입력해야 합니다.") }
+            }
             uiState.value.passText.isEmpty() -> {
                 setState { copy(signupValidate = "비밀번호를 입력해야 합니다.") }
             }
@@ -153,6 +157,14 @@ class InfoStore(
     ) {
         setState {
             copy(idText = text)
+        }
+    }
+
+    fun onNameTextChanged(
+        text: String
+    ) {
+        setState {
+            copy(nameText = text)
         }
     }
 

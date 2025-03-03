@@ -86,3 +86,34 @@ actual fun VideoPlayer(
         )
     }
 }
+
+@Composable
+actual fun IntroVideoPlayer(
+    modifier: Modifier,
+    videoPath: String,
+    onFullScreenClicked: () -> Unit
+) {
+    val componentController = remember(videoPath) { JfxComponentController() }
+    val frameController = remember(videoPath) { JfxFrameController() }
+
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        PlayerSource(
+            url = videoPath.run {
+                (runCatching(URI::create).getOrNull() ?: File(this).toURI()).toString()
+            },
+            component = componentController.component,
+            componentController = componentController,
+            size = frameController.size.collectAsState(null).value?.run {
+                IntSize(first, second)
+            } ?: IntSize.Zero,
+            bytes = frameController.bytes.collectAsState(null).value,
+            frameController = frameController,
+            onFullScreenClicked = onFullScreenClicked,
+            isFullScreen = false,
+            isIntro = true
+        )
+    }
+}

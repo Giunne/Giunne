@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,7 +22,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.RectangleShape
 import com.project.giunne.Res
+import com.project.giunne.common.presentation.common.button.GPIconButton
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.shape.GPSquircleShape
 import com.project.giunne.common.presentation.common.spacer.SpW
@@ -34,6 +39,7 @@ import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_delete
 import com.project.giunne.icon_edit
 import com.project.giunne.icon_more
+import com.project.giunne.icon_upload_image
 import com.project.giunne.test_character
 import org.jetbrains.compose.resources.painterResource
 
@@ -41,7 +47,7 @@ import org.jetbrains.compose.resources.painterResource
 fun StudentCommentItemRow(
     modifier: Modifier = Modifier,
     commentDto: CommentDto,
-    onMenuButtonClicked: () -> Unit,
+    onDeleteButtonClicked: () -> Unit,
 ) {
     var isMenuOpen by remember { mutableStateOf(false) }
 
@@ -59,7 +65,6 @@ fun StudentCommentItemRow(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-//                .background(GPColor.White)
                 .offset(x = animatedDP),
         ) {
             Row(
@@ -87,11 +92,17 @@ fun StudentCommentItemRow(
                     textSize = 8.gsp,
                     fontFamily = GPFontFamily.Bold
                 )
+                GPText(
+                    text = if (commentDto.like) "선생님이 좋아하는 댓글♥️" else "",
+                    textColor = GPColor.TextLightGray,
+                    textSize = 8.gsp,
+                    fontFamily = GPFontFamily.Medium
+                )
+                SpW(8.gdp)
                 Box(
                     modifier = Modifier
                         .size(28.gdp)
                         .noRippleClickable {
-                            onMenuButtonClicked()
                             isMenuOpen = !isMenuOpen
                         },
                     contentAlignment = Alignment.Center
@@ -124,32 +135,26 @@ fun StudentCommentItemRow(
                 .fillMaxHeight()
                 .width(animatedWidth),
         ) {
-            Box(
+            GPIconButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(28.gdp)
-                    .background(GPColor.BackgroundFrameOrange),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    modifier = Modifier.size(14.gdp),
-                    painter = painterResource(Res.drawable.icon_edit),
-                    contentDescription = null
-                )
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(28.gdp)
-                    .background(GPColor.Red),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    modifier = Modifier.size(14.gdp),
-                    painter = painterResource(Res.drawable.icon_delete),
-                    contentDescription = null
-                )
-            }
+                    .height(28.gdp),
+                icon = {
+                    Image(
+                        modifier = Modifier.size(14.gdp),
+                        painter = painterResource(Res.drawable.icon_delete),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(GPColor.White)
+                    )
+                },
+                normalColor = GPColor.ButtonRed,
+                pressColor = GPColor.ButtonPressRed,
+                onClick = {
+                    onDeleteButtonClicked()
+                },
+                shadow = false,
+                shape = RectangleShape
+            )
         }
     }
 }

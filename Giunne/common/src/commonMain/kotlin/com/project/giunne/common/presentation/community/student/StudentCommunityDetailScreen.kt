@@ -1,5 +1,6 @@
 package com.project.giunne.common.presentation.community.student
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -31,6 +33,8 @@ import coil3.compose.AsyncImage
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.addFocusCleaner
+import com.project.giunne.common.presentation.common.button.GPIconButton
+import com.project.giunne.common.presentation.common.player.ImageViewer
 import com.project.giunne.common.presentation.common.player.VideoPlayer
 import com.project.giunne.common.presentation.common.player.VideoWindowPlayer
 import com.project.giunne.common.presentation.common.spacer.SpH
@@ -47,6 +51,8 @@ import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.common.util.onZoomEvent
 import com.project.giunne.common.util.rememberZoomState
+import com.project.giunne.icon_expand
+import com.project.giunne.icon_upload_image
 import com.project.giunne.image_loader_1
 import org.jetbrains.compose.resources.painterResource
 
@@ -62,7 +68,8 @@ fun StudentCommunityDetailScreen(
     val zoomUiState by zoomStore.uiState.collectAsState()
 
     /////test/////
-    var full by remember { mutableStateOf(false) }
+    var fullVideo by remember { mutableStateOf(false) }
+    var fullImage by remember { mutableStateOf(false) }
     //////////////
 
     Scaffold(
@@ -95,7 +102,7 @@ fun StudentCommunityDetailScreen(
                         VideoPlayer(
                             modifier = Modifier.fillMaxSize(),
                             videoPath = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4", //TODO API
-                            onFullScreenClicked = { full = true }
+                            onFullScreenClicked = { fullVideo = true }
                         )
                     } else {
                         BoxWithConstraints(
@@ -128,6 +135,25 @@ fun StudentCommunityDetailScreen(
                                 contentScale = ContentScale.Crop
                             )
                         }
+
+                        GPIconButton(
+                            modifier = Modifier
+                                .padding(10.gdp)
+                                .size(28.gdp)
+                                .align(Alignment.BottomEnd),
+                            icon = {
+                                Image(
+                                    modifier = Modifier.size(18.gdp),
+                                    painter = painterResource(Res.drawable.icon_expand),
+                                    contentDescription = null,
+                                )
+                            },
+                            normalColor = GPColor.White,
+                            pressColor = GPColor.ButtonPressWhite,
+                            onClick = {
+                                fullImage = true
+                            },
+                        )
                     }
                 }
                 SpH(4.gdp)
@@ -160,11 +186,20 @@ fun StudentCommunityDetailScreen(
         }
     }
 
-    with(full) {
+    with(fullVideo) {
         if (this) {
             VideoWindowPlayer(
                 videoPath = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
-                dismiss = { full = false }
+                dismiss = { fullVideo = false }
+            )
+        }
+    }
+
+    with(fullImage) {
+        if (this) {
+            ImageViewer(
+                imagePath = "https://picsum.photos/200/300",
+                dismiss = { fullImage = false }
             )
         }
     }
