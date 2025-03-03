@@ -75,7 +75,7 @@ fun ItemBox(
             )
         }
 
-        if (selectedItems.contains(item)) {
+        if (selectedItems.find { selectedItems -> selectedItems.id == item.id } != null) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()

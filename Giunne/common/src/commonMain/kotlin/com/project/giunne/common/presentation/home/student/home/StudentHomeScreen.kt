@@ -24,8 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.project.giunne.Res
-import com.project.giunne.common.data.remote.response.Recreation
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
@@ -42,7 +40,7 @@ import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
-import com.project.giunne.test_character
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 private const val TAG = "StudentRoadmapScreen"
@@ -64,7 +62,10 @@ internal fun StudentHomeScreen(
 
     LaunchedEffect(Define.playerId) {
         if (Define.playerId != 0L) {
-            component.loginRecreation(Define.playerId)
+            async {
+                component.loginRecreation(Define.playerId)
+                component.getRecreationList(Define.playerId)
+            }.await()
         }
 
         component.sideEffect.collect { event ->
@@ -117,18 +118,17 @@ internal fun StudentHomeScreen(
                             .verticalScroll(rememberScrollState()),
                         verticalArrangement = Arrangement.spacedBy(16.gdp)
                     ) {
-                        /* TODO(아이템 및 캐릭터 API 가져오기) */
                         StudentCharacter(
                             level = homeState.avatarInfo.level,
                             currentExp = homeState.avatarInfo.exp,
                             totalExp = homeState.avatarInfo.needExp,
-                            character = "",
-                            items = listOf()
+                            wearingItems = homeState.userInfo.wearingItems
                         )
                         ResultRoadMapItem(
                             modifier = Modifier.fillMaxWidth()
                                 .padding(horizontal = 16.gdp),
-                            recreation = Recreation()
+                            teacherName = homeState.userInfo.teacherName.orEmpty(),
+                            recreationName = homeState.userInfo.recreationName
                         )
                         TeacherCheckingBox(
                             modifier = Modifier.fillMaxWidth(),

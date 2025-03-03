@@ -26,7 +26,8 @@ import com.project.giunne.common.util.gsp
 fun ResultRoadMapItem(
     modifier: Modifier,
     isSelected: Boolean = true,
-    recreation: Recreation,
+    teacherName: String,
+    recreationName: String,
     onItemSelected: () -> Unit = {}
 ) {
     Column (
@@ -50,7 +51,7 @@ fun ResultRoadMapItem(
             textColor = GPColor.TextGray
         )
         GPText(
-            text = recreation.teacherName,
+            text = teacherName,
             textSize = 14.gsp,
             fontFamily = GPFontFamily.Bold
         )
@@ -63,7 +64,7 @@ fun ResultRoadMapItem(
             textColor = GPColor.TextGray
         )
         GPText(
-            text = recreation.recreationName,
+            text = recreationName,
             textSize = 14.gsp,
             fontFamily = GPFontFamily.Bold
         )

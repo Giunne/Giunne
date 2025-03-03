@@ -112,7 +112,8 @@ internal fun SearchRoadMapScreen(
                     ResultRoadMapItem(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         isSelected = selectedItemIndex == index,
-                        recreation = searchState.searchRecreationList[index],
+                        recreationName = searchState.searchRecreationList[index].recreationName,
+                        teacherName = searchState.searchRecreationList[index].teacherName,
                         onItemSelected = {
                             selectedItemIndex = if (selectedItemIndex == index) {
                                 -1
