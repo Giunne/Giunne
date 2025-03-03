@@ -9,6 +9,7 @@ object GPColor {
     @Stable val MainOrangeColor = Color(0xFFFF814D)
     @Stable val MainBlueColor = Color(0xFF546EED)
     @Stable val Red = Color(0xFFFF5A5A)
+    @Stable val Green = Color(0xFF7AD171)
 
     // Text
     @Stable val TextBlack = Color(0xFF3A3A3A)
