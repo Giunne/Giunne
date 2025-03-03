@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
@@ -23,6 +24,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -50,7 +52,7 @@ internal fun StudentJoinRecreationScreen(
     GLog.d(TAG, "onCreate")
 
     val focusManager = LocalFocusManager.current
-    val scope = rememberCoroutineScope()
+    val lazyListState = rememberLazyListState()
     val snackbarHostState = remember { SnackbarHostState() }
     val joinState by component.uiState.collectAsStateWithLifecycle()
     var selectedItemIndex by remember { mutableIntStateOf(-1) }
@@ -61,7 +63,7 @@ internal fun StudentJoinRecreationScreen(
     }
 
     LaunchedEffect(Unit) {
-        component.getJoinRecreationList()
+        component.getJoinRecreationList(1)
         component.sideEffect.collect { event ->
             when (event) {
                 is StudentJoinEvent.SuccessLogin -> {
@@ -75,6 +77,18 @@ internal fun StudentJoinRecreationScreen(
                 }
             }
         }
+    }
+
+    LaunchedEffect(lazyListState) {
+        snapshotFlow { lazyListState.layoutInfo }
+            .collect { layoutInfo ->
+                val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+                val totalItemsCount = layoutInfo.totalItemsCount
+
+                if (joinState.paginationInfo.hasNextPage && lastVisibleItemIndex >= totalItemsCount - 1) {
+                    component.loadMore(joinState.paginationInfo.currentPage + 1)
+                }
+            }
     }
 
     Scaffold(

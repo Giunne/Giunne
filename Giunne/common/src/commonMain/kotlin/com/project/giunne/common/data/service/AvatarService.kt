@@ -3,7 +3,7 @@ package com.project.giunne.common.data.service
 import com.project.giunne.common.data.remote.request.AvatarCreateRequest
 import com.project.giunne.common.data.remote.request.AvatarLoginRequest
 import com.project.giunne.common.data.remote.response.AvatarResponse
-import com.project.giunne.common.data.remote.response.AvatarUserResponse
+import com.project.giunne.common.data.remote.response.AvatarUserListResponse
 import com.project.giunne.common.data.util.BaseResponse
 import com.project.giunne.common.data.util.DefineUrl.URL_AVATAR_CREATE
 import com.project.giunne.common.data.util.DefineUrl.URL_AVATAR_LOGIN
@@ -11,6 +11,7 @@ import com.project.giunne.common.data.util.DefineUrl.URL_USER_AVATAR_LIST
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.POST
+import de.jensklingenberg.ktorfit.http.Query
 
 interface AvatarService {
     @POST(URL_AVATAR_LOGIN)
@@ -24,5 +25,7 @@ interface AvatarService {
     ): BaseResponse<AvatarResponse>
 
     @GET(URL_USER_AVATAR_LIST)
-    suspend fun getUserAvatarList(): BaseResponse<List<AvatarUserResponse>>
+    suspend fun getUserAvatarList(
+        @Query("pageIndex") pageIndex: Int,
+    ): BaseResponse<AvatarUserListResponse>
 }

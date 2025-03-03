@@ -39,6 +39,5 @@ object Define {
         userRole = ""
         accessToken = ""
         refreshToken = ""
-        playerId = 0
     }
 }

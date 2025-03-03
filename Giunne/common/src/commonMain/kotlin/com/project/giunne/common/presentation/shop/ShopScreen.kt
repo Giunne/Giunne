@@ -44,7 +44,7 @@ internal fun ShopScreen(
         async {
             shopStore.getCategoryMap()
             shopStore.onChangeType(2)
-            shopStore.setCurrentWearingItems(Define.playerId)
+            shopStore.setCurrentWearingItems(Define.playerId, 1)
         }.await()
     }
 

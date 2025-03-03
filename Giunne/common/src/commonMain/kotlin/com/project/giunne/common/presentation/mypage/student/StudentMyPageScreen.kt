@@ -18,7 +18,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -51,14 +50,15 @@ internal fun StudentMyPageScreen(
     GLog.d(TAG, "onCreate")
 
     val focusManager = LocalFocusManager.current
-    val scope = rememberCoroutineScope()
     val myPageState by component.uiState.collectAsStateWithLifecycle()
+    val totalExp = if (myPageState.userInfo.needExp != 0) myPageState.userInfo.needExp else myPageState.userInfo.exp
 
     LaunchedEffect(Unit) {
         if (Define.playerId != 0L) {
-            component.getRecreationList(Define.playerId)
+            component.getRecreationList(Define.playerId, 1)
         }
     }
+
     Scaffold(
         modifier = Modifier
             .addFocusCleaner(focusManager)
@@ -87,7 +87,7 @@ internal fun StudentMyPageScreen(
                         .padding(horizontal = 16.gdp),
                     wearingItems = myPageState.userInfo.wearingItems,
                     level = myPageState.userInfo.level,
-                    percent = myPageState.userInfo.exp / myPageState.userInfo.needExp.toFloat()
+                    percent = myPageState.userInfo.exp / totalExp.toFloat()
                 )
 
                 Row(

@@ -55,17 +55,18 @@ class StudentHomeComponent(
     }
 
     fun getRecreationList(
-        playerId: Long
+        playerId: Long,
+        pageSize: Int
     ) {
         setState { copy(isLoading = true) }
         scope.launch {
             runCatching {
-                getAvatarListUseCase()
+                getAvatarListUseCase(pageSize)
             }.onSuccess { response ->
                 setState {
                     copy(
                         isLoading = false,
-                        userInfo = response.find { it.id.toLong() == playerId } ?: AvatarUserResponse()
+                        userInfo = response.data.find { it.id.toLong() == playerId } ?: AvatarUserResponse()
                     )
                 }
             }.onFailure {
