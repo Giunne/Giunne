@@ -25,7 +25,6 @@ fun GPShopCharacter(
     character: String,
     items: List<Item> = listOf()
 ) {
-    println("캐릭터 url: $character")
     Box {
         AsyncImage(
             modifier = modifier,
