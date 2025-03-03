@@ -4,6 +4,7 @@ import com.project.giunne.common.base.BaseComponent
 import com.project.giunne.common.data.remote.response.Item
 import com.project.giunne.common.data.util.DefineUrl.IMAGE_BASE_URL
 import com.project.giunne.common.data.util.asDataThrowable
+import com.project.giunne.common.domain.usecase.avatar.GetUserAvatarListUseCase
 import com.project.giunne.common.domain.usecase.shop.GetCategoryItemListUseCase
 import com.project.giunne.common.domain.usecase.shop.GetCategoryMapUseCase
 import com.project.giunne.common.presentation.shop.state.CharacterState
@@ -15,7 +16,8 @@ import org.koin.java.KoinJavaComponent
 
 class ShopStore(
     private val getCategoryMapUseCase: GetCategoryMapUseCase = KoinJavaComponent.get(GetCategoryMapUseCase::class.java),
-    private val getCategoryItemListUseCase: GetCategoryItemListUseCase = KoinJavaComponent.get(GetCategoryItemListUseCase::class.java)
+    private val getCategoryItemListUseCase: GetCategoryItemListUseCase = KoinJavaComponent.get(GetCategoryItemListUseCase::class.java),
+    private val getAvatarListUseCase: GetUserAvatarListUseCase = KoinJavaComponent.get(GetUserAvatarListUseCase::class.java),
 ): BaseComponent<CharacterState, ShopEvent>(
     scope = CoroutineScope(Dispatchers.IO),
     initialState = CharacterState()
@@ -28,7 +30,6 @@ class ShopStore(
             }.onSuccess { response ->
                 setState {
                     copy(
-                        currentLevel = 6,
                         categoryMap = response
                     )
                 }
@@ -37,6 +38,7 @@ class ShopStore(
             }
         }
     }
+
     fun onChangeItem(item: Item) {
         setState {
             copy(
@@ -111,5 +113,37 @@ class ShopStore(
 
     fun dismissErrorDialog() {
         setState { copy(error = null) }
+    }
+
+    fun setCurrentWearingItems(
+        playerId: Long
+    ) {
+        setState { copy(isLoading = true) }
+        scope.launch {
+            runCatching {
+                getAvatarListUseCase()
+            }.onSuccess { response ->
+                val userInfo = response.find { it.recreationId.toLong() == playerId }
+                val wearingItems = userInfo?.wearingItems ?: listOf()
+                val characterItem = wearingItems.find { it.categoryId == 6 } ?: wearingItems.find { it.categoryId == 1 }
+                val characterUrl = characterItem?.itemImage?.fileUrl.orEmpty()
+
+                val url = IMAGE_BASE_URL + characterUrl
+                val items = wearingItems.map { item -> item.asShopItem() }
+
+                setState {
+                    copy(
+                        isLoading = false,
+                        currentLevel = userInfo?.level ?: 1,
+                        character = url,
+                        selectedCharacter = url,
+                        wearingItems = items,
+                        selectedItems = items,
+                    )
+                }
+            }.onFailure {
+                setState { copy(isLoading = false) }
+            }
+        }
     }
 }

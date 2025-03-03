@@ -138,7 +138,8 @@ internal fun TeacherHomeScreen(
                     ResultRoadMapItem(
                         modifier = Modifier.fillMaxWidth()
                             .padding(horizontal = 16.gdp),
-                        recreation = Recreation()
+                        teacherName = "",
+                        recreationName = ""
                     )
                 }
             }

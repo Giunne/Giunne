@@ -14,8 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.project.giunne.common.data.remote.response.Item
-import com.project.giunne.common.presentation.common.charactor.GPCharacter
+import com.project.giunne.common.data.remote.response.WearingItem
+import com.project.giunne.common.presentation.common.charactor.GPMainCharacter
 import com.project.giunne.common.presentation.common.progress.GPLevelProgressBar
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.util.gdp
@@ -26,8 +26,7 @@ fun StudentCharacter(
     level: Int,
     currentExp: Int,
     totalExp: Int,
-    character: String,
-    items: List<Item>
+    wearingItems: List<WearingItem>
 ) {
     val percent = currentExp.toFloat() / totalExp.toFloat()
     Column(
@@ -49,11 +48,9 @@ fun StudentCharacter(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.gdp)
         ) {
-            GPCharacter(
+            GPMainCharacter(
                 modifier = Modifier.size(256.gdp),
-                character = character,
-                currentLevel = level,
-                items = items
+                wearingItems = wearingItems
             )
 
             Spacer(modifier = Modifier.height(10.gdp))

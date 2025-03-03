@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
@@ -24,13 +23,11 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.project.giunne.common.data.remote.request.AvatarLoginRequest
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
@@ -43,7 +40,6 @@ import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
-import kotlinx.coroutines.launch
 
 private const val TAG = "StudentJoinRecreationScreen"
 @Composable
@@ -120,7 +116,8 @@ internal fun StudentJoinRecreationScreen(
                     ResultRoadMapItem(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         isSelected = selectedItemIndex == index,
-                        recreation = joinState.recreationStudentJoinList[index],
+                        recreationName = joinState.recreationStudentJoinList[index].recreationName,
+                        teacherName = joinState.recreationStudentJoinList[index].teacherName,
                         onItemSelected = {
                             selectedItemIndex = if (selectedItemIndex == index) {
                                 -1
@@ -142,10 +139,9 @@ internal fun StudentJoinRecreationScreen(
                 pressColor = if (isEnabled) GPColor.ButtonPressOrange else GPColor.ButtonLightGray,
                 hoverColor = if (isEnabled) GPColor.ButtonHoverOrange else GPColor.ButtonLightGray,
                 onClick = {
-                    /* TODO(Token 갈아 끼워줘야함) */
                     if (isEnabled) {
                         component.loginRecreation(
-                            playerId = joinState.recreationStudentJoinList[selectedItemIndex].id.toLong()
+                            recreationId = joinState.recreationStudentJoinList[selectedItemIndex].id.toLong()
                         )
                     }
                 },

@@ -14,35 +14,29 @@ import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
 import coil3.compose.AsyncImage
-import com.project.giunne.common.data.remote.response.Item
+import com.project.giunne.common.data.remote.response.WearingItem
 import com.project.giunne.common.data.util.DefineUrl.IMAGE_BASE_URL
 import com.project.giunne.common.util.gdp
 
 @Composable
-fun GPCharacter(
+fun GPMainCharacter(
     modifier: Modifier = Modifier,
-    currentLevel: Int,
-    character: String,
-    items: List<Item> = listOf()
+    wearingItems: List<WearingItem>
 ) {
+    val characterItem = wearingItems.find { it.categoryId == 6 } ?: wearingItems.find { it.categoryId == 1 }
+    val characterUrl = characterItem?.itemImage?.fileUrl.orEmpty()
     Box {
         AsyncImage(
             modifier = modifier,
-            model = character,
+            model = IMAGE_BASE_URL + characterUrl,
             contentDescription = null
         )
-        items.forEach { item ->
+        wearingItems.forEach { item ->
             // 이미지 크기만 측정 -> 추후 서버에 이미지 크기도 함께 저장하도록 수정
             var itemSize by remember { mutableStateOf(IntSize.Zero) }
 
             SubcomposeLayout { constraints ->
 
-                // 아이템이 2개 인건 레벨별로 이미지가 다름 -> 매핑
-                val currentItem = if (1 < item.itemImages.size) {
-                    item.itemImages.find { it.level == currentLevel }
-                } else {
-                    item.itemImages.first()
-                }
                 val unconstrainedConstraints = constraints.copy(
                     minWidth = 0,
                     minHeight = 0,
@@ -55,8 +49,8 @@ fun GPCharacter(
                         modifier = Modifier.onSizeChanged {
                             itemSize = it
                         }
-                            .alpha(0.1f),
-                        model = IMAGE_BASE_URL + currentItem?.fileUrl,
+                            .alpha(0f),
+                        model = IMAGE_BASE_URL + item.itemImage.fileUrl,
                         contentDescription = null
                     )
                 }.first().measure(unconstrainedConstraints)
@@ -69,10 +63,10 @@ fun GPCharacter(
                                 height = (itemSize.height / 4).gdp
                             )
                             .offset(
-                                x = currentItem?.itemImagePositions?.find { it.level == currentLevel }?.positionX?.gdp ?: 0.gdp,
-                                y = currentItem?.itemImagePositions?.find { it.level == currentLevel }?.positionY?.gdp ?: 0.gdp
+                                x = item.itemImage.itemImagePosition?.positionX?.gdp ?: 0.gdp,
+                                y = item.itemImage.itemImagePosition?.positionY?.gdp ?: 0.gdp
                             ),
-                        model = IMAGE_BASE_URL + currentItem?.fileUrl,
+                        model = IMAGE_BASE_URL + item.itemImage.fileUrl,
                         contentDescription = null
                     )
                 }.first().measure(constraints)

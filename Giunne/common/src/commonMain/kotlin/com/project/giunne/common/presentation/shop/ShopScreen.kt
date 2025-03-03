@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.Scaffold
@@ -22,18 +21,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import com.project.giunne.common.presentation.common.addFocusCleaner
-import com.project.giunne.common.presentation.common.charactor.GPCharacter
+import com.project.giunne.common.presentation.common.charactor.GPShopCharacter
 import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.shop.content.ItemBottomView
-import com.project.giunne.common.presentation.shop.content.StudentRemainPoint
 import com.project.giunne.common.presentation.shop.intent.ShopStore
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.gdp
+import kotlinx.coroutines.async
 
 @Composable
 internal fun ShopScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
     val lazyGridState = rememberLazyGridState()
@@ -41,8 +41,11 @@ internal fun ShopScreen(
     val state by shopStore.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
-        shopStore.getCategoryMap()
-        shopStore.onChangeType(2)
+        async {
+            shopStore.getCategoryMap()
+            shopStore.onChangeType(2)
+            shopStore.setCurrentWearingItems(Define.playerId)
+        }.await()
     }
 
     LaunchedEffect(lazyGridState) {
@@ -75,19 +78,9 @@ internal fun ShopScreen(
             ) {
                 Box(
                     modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(top = 8.gdp, end = 16.gdp)
-                ) {
-                    StudentRemainPoint(
-                        modifier = Modifier.size(24.gdp),
-                        remainPoint = 250
-                    )
-                }
-                Box(
-                    modifier = Modifier
                         .align(Alignment.Center)
                 ) {
-                    GPCharacter(
+                    GPShopCharacter(
                         modifier = Modifier
                             .size(256.gdp),
                         currentLevel = state.currentLevel,

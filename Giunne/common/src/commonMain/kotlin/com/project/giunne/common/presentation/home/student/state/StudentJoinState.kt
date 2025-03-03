@@ -15,7 +15,7 @@ data class StudentJoinState(
     fun List<AvatarUserResponse>.mapToRecreation(): List<Recreation> {
         return this.map { avatar ->
             Recreation(
-                id = avatar.recreationId,
+                id = avatar.id,
                 recreationCode = avatar.recreationCode,
                 recreationName = avatar.recreationName,
                 teacherId = avatar.teacherId,
