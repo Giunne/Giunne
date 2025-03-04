@@ -1,27 +1,33 @@
 package com.project.giunne.common.presentation.roadmap.content
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.shape.GPSquircleShapeWithBorder
+import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.roadmap.node.ConnectNode
 import com.project.giunne.common.presentation.roadmap.node.Node
 import com.project.giunne.common.presentation.roadmap.node.NodeStatus
 import com.project.giunne.common.presentation.roadmap.state.ExerciseUiState
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
+import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_lock
 import org.jetbrains.compose.resources.painterResource
 
@@ -67,31 +73,51 @@ fun RoadMapExerciseStage(
                 modifier = Modifier.wrapContentSize(),
                 contentAlignment = Alignment.Center
             ) {
-                GPSquircleShapeWithBorder(
-                    modifier = Modifier
-                        .size(node.boxSize.dp)
-                        .offset(node.drawOffset.x.dp, node.drawOffset.y.dp)
-                        .noRippleClickable {
-                            if (findNode?.status != NodeStatus.LOCK) {
-                                onExerciseClicked(node.step)
-                            }
-                        },
-                    backgroundColor = backgroundColor,
-                    borderColor = borderColor
-                ) {
-                    Text(
-                        text = node.step
-                    )
-                }
-                if (findNode?.status == NodeStatus.LOCK) {
-                    Icon(
+                // 시작 노드
+                if (node.step == findNode?.step) {
+                    Box(
                         modifier = Modifier
-                            .size(18.gdp)
-                            .offset(node.drawOffset.x.dp, node.drawOffset.y.dp),
-                        painter = painterResource(Res.drawable.icon_lock),
-                        contentDescription = "잠금",
-                        tint = GPColor.MainOrangeColor
-                    )
+                            .wrapContentSize()
+                            .offset(node.drawOffset.x.dp, node.drawOffset.y.dp)
+                            .clip(RoundedCornerShape(6.gdp))
+                            .background(GPColor.MainOrangeColor)
+                            .padding(4.gdp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        /* TODO(API 연결시 title로 변경) */
+                        GPText(
+                            text = findNode?.name ?: "테스트",
+                            textSize = 10.gsp,
+                            fontFamily = GPFontFamily.Bold
+                        )
+                    }
+                } else {
+                    GPSquircleShapeWithBorder(
+                        modifier = Modifier
+                            .size(node.boxSize.dp)
+                            .offset(node.drawOffset.x.dp, node.drawOffset.y.dp)
+                            .noRippleClickable {
+                                if (findNode?.status != NodeStatus.LOCK) {
+                                    onExerciseClicked(node.step)
+                                }
+                            },
+                        backgroundColor = backgroundColor,
+                        borderColor = borderColor
+                    ) {
+                        GPText(
+                            text = node.step
+                        )
+                    }
+                    if (findNode?.status == NodeStatus.LOCK) {
+                        Icon(
+                            modifier = Modifier
+                                .size(18.gdp)
+                                .offset(node.drawOffset.x.dp, node.drawOffset.y.dp),
+                            painter = painterResource(Res.drawable.icon_lock),
+                            contentDescription = "잠금",
+                            tint = GPColor.MainOrangeColor
+                        )
+                    }
                 }
             }
         }

@@ -58,7 +58,7 @@ fun TeacherExerciseRoadmapScreen(
             )
         }
 
-        val width = maxWidth.value
+        val width = maxWidth.value + 20
         val height = maxHeight.value
 
         val (node1, connect1) = roadMap1(width, height)

@@ -6,13 +6,13 @@ fun roadMap1(
     width: Float,
     height: Float
 ): Pair<List<Node>, List<ConnectNode>> {
-    val steps = listOf("1", "2", "3", "4-a", "4-b", "4-c")
+    val steps = listOf("1.CORE", "2.CORE", "3.CORE", "4-a.CORE", "4-b.CORE", "4-c.CORE")
     var currentOffset = Offset(width / 2, height - 78f)
 
     val node = mutableListOf<Node>()
     val spacing = 16f
     val boxSize =  60f
-    node.add(Node(currentOffset, 30f, 48f))
+    node.add(Node(currentOffset, 30f, 48f, step = "0.CORE"))
     repeat(4) { index ->
         currentOffset = Offset(currentOffset.x, currentOffset.y - boxSize - spacing)
         node.add(Node(currentOffset, boxSize, spacing, step = steps[index]))
@@ -42,7 +42,7 @@ fun roadMap2(
     width: Float,
     height: Float
 ): Pair<List<Node>, List<ConnectNode>> {
-    val steps = listOf("5-b", "6-b", "7-b", "5-a", "6-a", "7-a", "5-c", "6-c", "7-c", "8", "9")
+    val steps = listOf("5-b.CORE", "6-b.CORE", "7-b.CORE", "5-a.CORE", "6-a.CORE", "7-a.CORE", "5-c.CORE", "6-c.CORE", "7-c.CORE", "8.CORE", "9.CORE")
     var currentOffset = Offset(width / 2, height - 32)
 
     val node = mutableListOf<Node>()
@@ -89,7 +89,7 @@ fun roadMap3(
     width: Float,
     height: Float
 ): Pair<List<Node>, List<ConnectNode>> {
-    val steps = listOf("10", "11", "12", "13-a", "13-b", "14")
+    val steps = listOf("10.CORE", "11.CORE", "12.CORE", "13-a.CORE", "13-b.CORE", "14.CORE")
     val spacing = 32f
     val boxSize = 60f
     val node = mutableListOf<Node>()
@@ -126,15 +126,11 @@ fun roadMap4(
     width: Float,
     height: Float
 ): Pair<List<Node>, List<ConnectNode>> {
-    val steps1 = listOf("15-a", "16-a", "15-b", "16-b")
-    val steps2 = listOf("17", "25", "26-a", "21", "26-b", "27")
+    val steps1 = listOf("1-a.LOWER_BODY", "2-a.LOWER_BODY", "1-b.LOWER_BODY", "2-b.LOWER_BODY", "3.LOWER_BODY")
     val spacing = 16f
     val boxSize = 60f
-    val left = Node(Offset(width / 2 - width / 3, 0f),60f, 0f)
-    val center = Node(Offset(width / 2, 0f),60f, 0f)
-    val right = Node(Offset(width / 2 + width / 3, 0f),60f, 0f)
 
-    val startNode1 = Node(Offset(width / 2, height - 48f), 30f, 0f)
+    val startNode1 = Node(Offset(width / 2, height - 48f), 30f, 0f, step = "0.LOWER_BODY")
 
     val node = mutableListOf(startNode1)
     var leftOffset = Offset(width / 3, height - 48f)
@@ -146,30 +142,43 @@ fun roadMap4(
         rightOffset = Offset(rightOffset.x, rightOffset.y - boxSize - spacing)
         node.add(Node(leftOffset, boxSize, spacing, step = steps1[index]))
         node.add(Node(rightOffset, boxSize, spacing, step = steps1[index + 2]))
-    }
-    // 4-2 두 번째 로드맵
-    val startOffsetY = rightOffset.y - boxSize * 2
-    val startNode2 = Node(Offset(width / 2, startOffsetY), 30f, 0f)
-    leftOffset = Offset(width / 3, startOffsetY)
-    rightOffset = Offset(width - width / 3, startOffsetY)
-    node.add(startNode2)
-    repeat(2) { index ->
-        if (index == 0) {
-            leftOffset = Offset(leftOffset.x, leftOffset.y - boxSize - spacing)
-            rightOffset = Offset(rightOffset.x, rightOffset.y - boxSize - spacing)
-            node.add(Node(leftOffset, boxSize, spacing, step = steps2[0]))
-            node.add(Node(rightOffset, boxSize, spacing, step = steps2[1]))
-        } else {
-            val centerNode = Offset(center.centerOffset.x,leftOffset.y - boxSize - spacing)
-            leftOffset = Offset(left.centerOffset.x, leftOffset.y - (boxSize - spacing) * 2)
-            rightOffset = Offset(right.centerOffset.x, rightOffset.y - boxSize - spacing)
-            node.add(Node(centerNode, boxSize, spacing, step = steps2[2]))
-            node.add(Node(leftOffset, boxSize, spacing, step = steps2[3]))
-            node.add(Node(rightOffset, boxSize, spacing, step = steps2[4]))
+        if (index == 1) {
+            // 마지막 노드 추가
+            val mid = Offset(width / 2, rightOffset.y - boxSize - spacing)
+            node.add(Node(mid, boxSize, spacing, step = steps1[4]))
         }
     }
-    val lastOffset = Offset(width - width / 3,leftOffset.y - boxSize - spacing)
-    node.add(Node(lastOffset, boxSize, spacing, step = steps2[steps2.lastIndex]))
+    val steps2 = listOf("1.SQUATS", "1.LUNGES", "1-a.DEADLIFT", "1-b.DEADLIFT", "2.DEADLIFT")
+    // 4-2 두 번째 로드맵
+    val startOffsetY = rightOffset.y - boxSize * 2
+    var centerOffset = Offset(width / 2, startOffsetY - (boxSize - spacing) * 3)
+    leftOffset = Offset(width / 2 - width / 3, startOffsetY - boxSize - spacing)
+    rightOffset = Offset(width / 2 + width / 3, startOffsetY - boxSize - spacing)
+    // 스쿼트
+    val startNodeSquat = Node(leftOffset, 30f, 0f, step = "0.SQUATS")
+    node.add(startNodeSquat)
+    leftOffset = Offset(leftOffset.x, leftOffset.y - boxSize - spacing)
+    node.add(Node(leftOffset, boxSize, spacing, step = steps2[0]))
+    // 런지
+    val startNodeLunge = Node(centerOffset, 30f, 0f, step = "0.LUNGES")
+    node.add(startNodeLunge)
+    centerOffset = Offset(centerOffset.x, centerOffset.y - boxSize - spacing)
+    node.add(Node(centerOffset, boxSize, spacing, step = steps2[1]))
+    // 데드
+    val startNodeDeadlift = Node(rightOffset, 30f, 0f, step = "0.DEADLIFT")
+    node.add(startNodeDeadlift)
+    val leftDead = Offset(rightOffset.x - 60f, rightOffset.y - boxSize - spacing)
+    val rightDead = Offset(rightOffset.x + 30f, rightOffset.y - boxSize - spacing)
+    node.add(Node(leftDead, boxSize, spacing, step = steps2[2]))
+    node.add(Node(rightDead, boxSize, spacing, step = steps2[3]))
+    val lastDead = Offset(rightOffset.x, leftDead.y - boxSize - spacing)
+    node.add(Node(lastDead, boxSize, spacing, step = steps2[4]))
+
+
+    // 연결 될 상단 offset
+    val left = Node(Offset(width / 2 - width / 3, 0f),60f, 0f)
+    val center = Node(Offset(width / 2, 0f),60f, 0f)
+    val right = Node(Offset(width / 2 + width / 3, 0f),60f, 0f)
 
     val connectList = buildList {
         // 4-2 첫 번째 로드맵
@@ -177,18 +186,20 @@ fun roadMap4(
         add(ConnectNode(node[0], node[2], Connect.TOP_CURVE))
         add(ConnectNode(node[1], node[3], Connect.STRAIGHT))
         add(ConnectNode(node[2], node[4], Connect.STRAIGHT))
+        add(ConnectNode(node[3], node[5], Connect.BOTTOM_CURVE))
+        add(ConnectNode(node[4], node[5], Connect.BOTTOM_CURVE))
         // 4-2 두 번째 로드맵
         add(ConnectNode(node[5], node[6], Connect.TOP_CURVE))
-        add(ConnectNode(node[5], node[7], Connect.TOP_CURVE))
-        add(ConnectNode(node[6], node[9], Connect.TOP_CURVE))
-        add(ConnectNode(node[7], node[8], Connect.BOTTOM_CURVE))
-        add(ConnectNode(node[7], node[10], Connect.TOP_CURVE))
-        add(ConnectNode(node[8], node[11], Connect.TOP_CURVE))
-        add(ConnectNode(node[10], node[11], Connect.BOTTOM_CURVE))
-        add(ConnectNode(node[8], center, Connect.BOTTOM_CURVE))
-        add(ConnectNode(node[9], left, Connect.STRAIGHT))
-        add(ConnectNode(node[11], right, Connect.TOP_CURVE))
-
+        add(ConnectNode(node[6], node[7], Connect.STRAIGHT))
+        add(ConnectNode(node[7], left, Connect.STRAIGHT))
+        add(ConnectNode(node[8], node[7], Connect.BOTTOM_CURVE))
+        add(ConnectNode(node[8], node[9], Connect.STRAIGHT))
+        add(ConnectNode(node[9], center, Connect.STRAIGHT))
+        add(ConnectNode(node[10], node[11], Connect.TOP_CURVE))
+        add(ConnectNode(node[10], node[12], Connect.TOP_CURVE))
+        add(ConnectNode(node[11], node[13], Connect.BOTTOM_CURVE))
+        add(ConnectNode(node[12], node[13], Connect.BOTTOM_CURVE))
+        add(ConnectNode(node[13], right, Connect.STRAIGHT))
     }
 
     return Pair(node, connectList)
@@ -198,41 +209,56 @@ fun roadMap5(
     width: Float,
     height: Float
 ): Pair<List<Node>, List<ConnectNode>> {
-    val steps = listOf("22", "23", "24", "18", "19", "20", "28", "29", "30", "31", "32")
+    val steps = listOf("2.LUNGES", "3.LUNGES", "4.LUNGES", "2.SQUATS", "3.SQUATS", "4-a.SQUATS", "4-b.SQUATS", "3.DEADLIFT", "4.DEADLIFT", "5.DEADLIFT", "6.DEADLIFT", "7.DEADLIFT")
     val spacing = 16f
     val boxSize = 60f
-    var currentOffset = Offset(width / 2, height)
+    val currentOffset = Offset(width / 2, height)
+    var midOffset = currentOffset
+    var leftNodeOffset = Offset(currentOffset.x - width / 3, currentOffset.y)
+    var rightNodeOffset = Offset(currentOffset.x + width / 3, currentOffset.y)
     val node = mutableListOf<Node>()
     val left = Node(Offset(width / 2 - width / 3, height),60f, 0f)
     val center = Node(Offset(width / 2, height),60f, 0f)
     val right = Node(Offset(width / 2 + width / 3, height),60f, 0f)
 
-    repeat(5) { index ->
-        currentOffset = Offset(currentOffset.x, currentOffset.y - boxSize - spacing)
-        val leftNodeOffset = Offset(currentOffset.x - width / 3, currentOffset.y)
-        val rightNodeOffset = Offset(currentOffset.x + width / 3, currentOffset.y)
-        if (index < 3) {
-            // 가운데, 왼쪽, 오른쪽 순으로 배치
-            node.add(Node(currentOffset, boxSize, spacing, step = steps[index]))
-            node.add(Node(leftNodeOffset, boxSize, spacing, step = steps[index + 3]))
-            node.add(Node(rightNodeOffset, boxSize, spacing, step = steps[index + 6]))
-        } else {
-            node.add(Node(rightNodeOffset, boxSize, spacing, step = steps[index + 6]))
+    // 가운데
+    for (index in 0..2) {
+        midOffset = Offset(midOffset.x, midOffset.y - boxSize - spacing)
+        node.add(Node(midOffset, boxSize, spacing, step = steps[index]))
+    }
+
+    // 왼쪽
+    for (index in 3..4) {
+        leftNodeOffset = Offset(leftNodeOffset.x, leftNodeOffset.y - boxSize - spacing)
+        node.add(Node(leftNodeOffset, boxSize, spacing, step = steps[index]))
+        if (index == 4) {
+            // 양 쪽 두개
+            val left = Offset(leftNodeOffset.x - 40, leftNodeOffset.y - boxSize - spacing)
+            val right = Offset(leftNodeOffset.x + 40, leftNodeOffset.y - boxSize - spacing)
+            node.add(Node(left, boxSize, spacing, step = steps[5]))
+            node.add(Node(right, boxSize, spacing, step = steps[6]))
         }
     }
 
+    // 오른쪽
+    for (index in 7..11) {
+        rightNodeOffset = Offset(rightNodeOffset.x, rightNodeOffset.y - boxSize - spacing)
+        node.add(Node(rightNodeOffset, boxSize, spacing, step = steps[index]))
+    }
+
     val connectList = buildList {
-        add(ConnectNode(left, node[1], Connect.STRAIGHT))
-        add(ConnectNode(node[1], node[4], Connect.STRAIGHT))
-        add(ConnectNode(node[4], node[7], Connect.STRAIGHT))
         add(ConnectNode(center, node[0], Connect.STRAIGHT))
-        add(ConnectNode(node[0], node[3], Connect.STRAIGHT))
-        add(ConnectNode(node[3], node[6], Connect.STRAIGHT))
-        add(ConnectNode(right, node[2], Connect.STRAIGHT))
-        add(ConnectNode(node[2], node[5], Connect.STRAIGHT))
-        add(ConnectNode(node[5], node[8], Connect.STRAIGHT))
+        add(ConnectNode(node[0], node[1], Connect.STRAIGHT))
+        add(ConnectNode(node[1], node[2], Connect.STRAIGHT))
+        add(ConnectNode(left, node[3], Connect.STRAIGHT))
+        add(ConnectNode(node[3], node[4], Connect.STRAIGHT))
+        add(ConnectNode(node[4], node[5], Connect.TOP_CURVE))
+        add(ConnectNode(node[4], node[6], Connect.TOP_CURVE))
+        add(ConnectNode(right, node[7], Connect.STRAIGHT))
+        add(ConnectNode(node[7], node[8], Connect.STRAIGHT))
         add(ConnectNode(node[8], node[9], Connect.STRAIGHT))
         add(ConnectNode(node[9], node[10], Connect.STRAIGHT))
+        add(ConnectNode(node[10], node[11], Connect.STRAIGHT))
     }
 
     return Pair(node, connectList)
