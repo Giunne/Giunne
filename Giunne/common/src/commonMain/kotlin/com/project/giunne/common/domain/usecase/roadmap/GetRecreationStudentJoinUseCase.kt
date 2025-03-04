@@ -1,19 +1,19 @@
 package com.project.giunne.common.domain.usecase.roadmap
 
-import com.project.giunne.common.data.remote.response.RecreationStudentJoinResponse
+import com.project.giunne.common.data.remote.response.RecreationListTeacherResponse
 import com.project.giunne.common.data.util.successOr
 import com.project.giunne.common.domain.repository.RecreationRepository
 
-class GetRecreationStudentJoinUseCase(
+class GetRecreationTeacherListUseCase(
     private val recreationRepository: RecreationRepository
 ) {
     suspend operator fun invoke(
         pageIndex: Int
-    ): RecreationStudentJoinResponse {
+    ): RecreationListTeacherResponse {
         return recreationRepository
-            .getStudentJoinRecreationList(
+            .getTeacherRecreationList(
                 pageIndex = pageIndex
             )
-            .successOr(RecreationStudentJoinResponse())
+            .successOr(RecreationListTeacherResponse())
     }
 }

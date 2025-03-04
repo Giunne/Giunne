@@ -2,8 +2,8 @@ package com.project.giunne.common.data.repository
 
 import com.project.giunne.common.data.remote.request.RecreationRequest
 import com.project.giunne.common.data.remote.response.RecreationCreateResponse
+import com.project.giunne.common.data.remote.response.RecreationListTeacherResponse
 import com.project.giunne.common.data.remote.response.RecreationSearchResponse
-import com.project.giunne.common.data.remote.response.RecreationStudentJoinResponse
 import com.project.giunne.common.data.service.RecreationService
 import com.project.giunne.common.data.util.NetworkResult
 import com.project.giunne.common.data.util.handleApi
@@ -33,9 +33,9 @@ class RecreationRepositoryImpl(
         }
     }
 
-    override suspend fun getStudentJoinRecreationList(pageIndex: Int): NetworkResult<RecreationStudentJoinResponse> {
+    override suspend fun getTeacherRecreationList(pageIndex: Int): NetworkResult<RecreationListTeacherResponse> {
         return handleApi(TAG) {
-            service.getStudentJoinRecreationList(
+            service.getTeacherRecreationList(
                 pageIndex = pageIndex
             )
         }

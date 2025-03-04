@@ -2,8 +2,8 @@ package com.project.giunne.common.domain.repository
 
 import com.project.giunne.common.data.remote.request.RecreationRequest
 import com.project.giunne.common.data.remote.response.RecreationCreateResponse
+import com.project.giunne.common.data.remote.response.RecreationListTeacherResponse
 import com.project.giunne.common.data.remote.response.RecreationSearchResponse
-import com.project.giunne.common.data.remote.response.RecreationStudentJoinResponse
 import com.project.giunne.common.data.util.NetworkResult
 
 
@@ -17,7 +17,7 @@ interface RecreationRepository {
         recreationRequest: RecreationRequest
     ): NetworkResult<RecreationCreateResponse>
 
-    suspend fun getStudentJoinRecreationList(
+    suspend fun getTeacherRecreationList(
         pageIndex: Int
-    ): NetworkResult<RecreationStudentJoinResponse>
+    ): NetworkResult<RecreationListTeacherResponse>
 }

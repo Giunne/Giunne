@@ -14,6 +14,7 @@ import com.project.giunne.common.domain.usecase.avatar.GetUserAvatarListUseCase
 import com.project.giunne.common.domain.usecase.avatar.LoginRecreationUseCase
 import com.project.giunne.common.domain.usecase.common.GetSchoolListUseCase
 import com.project.giunne.common.domain.usecase.roadmap.CreateRecreationUseCase
+import com.project.giunne.common.domain.usecase.roadmap.GetRecreationTeacherListUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetSearchRecreationUseCase
 import org.koin.dsl.module
 
@@ -32,4 +33,5 @@ val useCaseModule: Module = module {
     single { CreateAvatarUseCase(get()) }
     single { LoginRecreationUseCase(get()) }
     single { GetUserAvatarListUseCase(get()) }
+    single { GetRecreationTeacherListUseCase(get()) }
 }

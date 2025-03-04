@@ -7,6 +7,10 @@ object Define {
         get() = PreferencesUtil.settingsRepository!!.playerPref.get().toLong()
         set(value) { PreferencesUtil.settingsRepository!!.playerPref.set(value.toString()) }
 
+    var teacherId: Long
+        get() = PreferencesUtil.settingsRepository!!.playerPref.get().toLong()
+        set(value) { PreferencesUtil.settingsRepository!!.playerPref.set(value.toString()) }
+
     var userRole: String
         get() = PreferencesUtil.settingsRepository!!.rolePref.get()
         set(value) { PreferencesUtil.settingsRepository!!.rolePref.set(value) }

@@ -25,7 +25,7 @@ object DefineUrl {
     /* Recreation */
     const val URL_SEARCH_RECREATION = "member/recreation"
     const val URL_CREATE_RECREATION = "member/recreation"
-    const val URL_STUDENT_JOIN_RECREATION = "member/recreation/join"
+    const val URL_TEACHER_RECREATION_LIST = "member/recreation/my-recreation"
 
     /* Avatar */
     const val URL_AVATAR_LOGIN = "member/avatar/login"
