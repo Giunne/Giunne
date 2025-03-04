@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class AvatarUserResponse(
     val characterNo: Int = 0,
     val exp: Int = 0,
-    val needExp: Int = 0,
+    val needExp: Int = 10,
     val id: Int = 0,
     val level: Int = 0,
     val nickname: String = "",
