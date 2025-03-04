@@ -3,6 +3,7 @@ package com.project.giunne.common.di
 import com.project.giunne.common.data.service.AuthService
 import com.project.giunne.common.data.service.AvatarService
 import com.project.giunne.common.data.service.CommonService
+import com.project.giunne.common.data.service.MyPageService
 import com.project.giunne.common.data.service.RecreationService
 import com.project.giunne.common.data.service.ShopService
 import de.jensklingenberg.ktorfit.Ktorfit
@@ -26,6 +27,9 @@ val serviceModule: Module = module {
     }
     single {
         authKtorfit().create<AvatarService>()
+    }
+    single {
+        authKtorfit().create<MyPageService>()
     }
 }
 

@@ -67,7 +67,7 @@ fun ItemBottomView(
                     }
                 )
             }
-            if (state.wearingItems != state.selectedItems) {
+            if (state.wearingItems.map { it.id } != state.selectedItems.map { it.id }) {
                 ItemModifyBottomView(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -76,7 +76,8 @@ fun ItemBottomView(
                         shopStore.onUndo()
                     },
                     onModifyClick = {
-                        shopStore.onModifyWearingItems()
+//                        shopStore.onModifyWearingItems()
+                        shopStore.saveEquipmentState(state.selectedItems)
                     }
                 )
             }

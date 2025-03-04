@@ -10,6 +10,7 @@ import com.project.giunne.common.presentation.home.student.state.StudentHomeEven
 import com.project.giunne.common.presentation.home.student.state.StudentHomeState
 import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.GLog
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.java.KoinJavaComponent
@@ -25,12 +26,20 @@ class StudentHomeComponent(
 
     init {
         GLog.d(TAG, "onCreate")
+        scope.launch {
+            if (Define.playerId != 0L) {
+                async {
+                    loginRecreation(Define.playerId)
+                    getRecreationList(Define.playerId, 1)
+                }.await()
+            }
+        }
     }
 
     fun loginRecreation(
         playerId: Long
     ) {
-        setState { copy(isLoading = false) }
+        setState { copy(isLoading = true) }
         scope.launch {
             runCatching {
                 loginRecreationUseCase(

@@ -13,6 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,16 +49,25 @@ internal fun ShopScreen(
         }.await()
     }
 
-    LaunchedEffect(lazyGridState) {
-        snapshotFlow { lazyGridState.layoutInfo }
-            .collect { layoutInfo ->
-                val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
-                val totalItemsCount = layoutInfo.totalItemsCount
+    val endOfListReached by remember {
+        derivedStateOf {
+            val lastVisibleItem = lazyGridState.layoutInfo.visibleItemsInfo.lastOrNull()
+            val totalItemsCount = lazyGridState.layoutInfo.totalItemsCount
 
-                if (state.paginationInfo.hasNextPage && lastVisibleItemIndex >= totalItemsCount - 1) {
-                    shopStore.loadNextPage(state.selectedType, state.paginationInfo.currentPage + 1)
-                }
-            }
+            state.paginationInfo.hasNextPage && lastVisibleItem != null && lastVisibleItem.index >= totalItemsCount - 1
+        }
+    }
+
+    LaunchedEffect(endOfListReached) {
+        if (endOfListReached && state.paginationInfo.currentPage != state.paginationInfo.totalPage) {
+            shopStore.loadNextPage(state.selectedType, state.paginationInfo.currentPage + 1)
+        }
+    }
+
+    LaunchedEffect(state.paginationInfo.currentPage) {
+        if (state.paginationInfo.currentPage == 1) {
+            lazyGridState.animateScrollToItem(0)
+        }
     }
 
     Scaffold(

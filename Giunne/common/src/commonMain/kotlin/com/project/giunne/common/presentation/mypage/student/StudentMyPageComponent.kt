@@ -6,6 +6,7 @@ import com.project.giunne.common.data.remote.response.AvatarUserResponse
 import com.project.giunne.common.domain.usecase.avatar.GetUserAvatarListUseCase
 import com.project.giunne.common.presentation.mypage.intent.MyPageEvent
 import com.project.giunne.common.presentation.mypage.state.MyPageState
+import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.GLog
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -20,6 +21,9 @@ class StudentMyPageComponent(
 BaseComponent<MyPageState, MyPageEvent>(initialState = MyPageState()){
     init {
         GLog.d(TAG, "onCreate")
+        if (Define.playerId != 0L) {
+            getRecreationList(Define.playerId, 1)
+        }
     }
 
     fun getRecreationList(

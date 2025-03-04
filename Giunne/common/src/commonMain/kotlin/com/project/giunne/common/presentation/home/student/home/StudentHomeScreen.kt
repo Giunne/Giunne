@@ -43,7 +43,7 @@ import com.project.giunne.common.util.gsp
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-private const val TAG = "StudentRoadmapScreen"
+private const val TAG = "StudentHomeScreen"
 @Composable
 internal fun StudentHomeScreen(
     component: StudentHomeComponent,
@@ -60,14 +60,14 @@ internal fun StudentHomeScreen(
 
     val homeState by component.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Define.playerId) {
-        if (Define.playerId != 0L) {
-            async {
-                component.loginRecreation(Define.playerId)
-                component.getRecreationList(Define.playerId, 1)
-            }.await()
-        }
-    }
+//    LaunchedEffect(Define.playerId) {
+//        if (Define.playerId != 0L) {
+//            async {
+//                component.loginRecreation(Define.playerId)
+//                component.getRecreationList(Define.playerId, 1)
+//            }.await()
+//        }
+//    }
 
     LaunchedEffect(Unit) {
         component.sideEffect.collect { event ->

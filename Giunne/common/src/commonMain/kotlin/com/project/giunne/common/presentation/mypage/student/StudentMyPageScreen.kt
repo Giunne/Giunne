@@ -54,9 +54,9 @@ internal fun StudentMyPageScreen(
     val totalExp = if (myPageState.userInfo.needExp != 0) myPageState.userInfo.needExp else myPageState.userInfo.exp
 
     LaunchedEffect(Unit) {
-        if (Define.playerId != 0L) {
-            component.getRecreationList(Define.playerId, 1)
-        }
+//        if (Define.playerId != 0L) {
+//            component.getRecreationList(Define.playerId, 1)
+//        }
     }
 
     Scaffold(
