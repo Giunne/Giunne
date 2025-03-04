@@ -8,7 +8,10 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,13 +20,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.project.giunne.common.data.remote.response.RoadMapInfo
 import com.project.giunne.common.presentation.common.addFocusCleaner
+import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.toggle.GPToggleButton
+import com.project.giunne.common.presentation.roadmap.teacher.state.RoadMapEvent
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.gdp
+import kotlinx.coroutines.async
 
 private const val TAG = "TeacherRoadmapScreen"
+
 @Composable
 internal fun TeacherRoadmapScreen(
     component: TeacherRoadmapComponent,
@@ -32,7 +41,9 @@ internal fun TeacherRoadmapScreen(
     GLog.d(TAG, "onCreate")
 
     val focusManager = LocalFocusManager.current
+    val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val roadMapState by component.uiState.collectAsStateWithLifecycle()
     var isSelected by remember { mutableStateOf(false) }
 
     val joggingWeek = listOf(
@@ -43,16 +54,36 @@ internal fun TeacherRoadmapScreen(
         1, 2, 3
     )
 
+    LaunchedEffect(Unit) {
+        async {
+            component.getAllRoadMap()
+            component.getCourse(1)
+        }.await()
+        component.sideEffect.collect { event ->
+            when (event) {
+                is RoadMapEvent.Success -> {
+                    snackbarHostState.showSnackbar(event.message)
+                }
+            }
+        }
+    }
+
     Scaffold(
         modifier = Modifier
             .addFocusCleaner(focusManager)
             .fillMaxSize()
             .imePadding(),
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
+        }
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
         ) {
+            if (roadMapState.isLoading) {
+                Loader()
+            }
             if (isSelected) {
                 TeacherJoggingRoadmapScreen(
                     modifier = Modifier
@@ -78,14 +109,16 @@ internal fun TeacherRoadmapScreen(
                     modifier = Modifier
                         .width(120.gdp)
                         .height(44.gdp),
-                    titleLeft = "운동",
-                    titleRight = "조깅",
+                    titleLeft = roadMapState.roadMapInfo.getOrNull(0)?.title.orEmpty(),
+                    titleRight = roadMapState.roadMapInfo.getOrNull(1)?.title.orEmpty(),
                     isSelected = isSelected,
                     onLeftButtonClick = {
                         isSelected = false
+                        component.getCourse(1)
                     },
                     onRightButtonClick = {
                         isSelected = true
+                        component.getCourse(2)
                     }
                 )
             }

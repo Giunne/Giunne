@@ -8,10 +8,12 @@ import com.project.giunne.common.data.repository.AuthRepositoryImpl
 import com.project.giunne.common.data.repository.CommonRepositoryImpl
 import com.project.giunne.common.data.repository.RecreationRepositoryImpl
 import com.project.giunne.common.data.repository.AvatarRepositoryImpl
+import com.project.giunne.common.data.repository.RoadMapRepositoryImpl
 import com.project.giunne.common.domain.repository.AuthRepository
 import com.project.giunne.common.domain.repository.AvatarRepository
 import com.project.giunne.common.domain.repository.CommonRepository
 import com.project.giunne.common.domain.repository.RecreationRepository
+import com.project.giunne.common.domain.repository.RoadMapRepository
 import com.project.giunne.common.domain.repository.ShopRepository
 import org.koin.dsl.bind
 
@@ -21,4 +23,5 @@ val repositoryModule: Module = module {
     singleOf(::CommonRepositoryImpl) bind CommonRepository::class
     singleOf(::RecreationRepositoryImpl) bind RecreationRepository::class
     singleOf(::AvatarRepositoryImpl) bind AvatarRepository::class
+    singleOf(::RoadMapRepositoryImpl) bind RoadMapRepository::class
 }
