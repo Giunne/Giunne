@@ -42,11 +42,6 @@ fun TeacherExerciseRoadmapScreen(
     var offsetY by remember { mutableStateOf(0f) }
     var isShow by remember { mutableStateOf(false) }
     var questInfo by remember { mutableStateOf(QuestInfo()) }
-    var youtubeUrl by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var stepDescription by remember { mutableStateOf("") }
-    var rewardCoin by remember { mutableStateOf("") }
-    var rewardExp by remember { mutableStateOf("") }
 
     BoxWithConstraints(
         modifier = modifier
@@ -61,36 +56,12 @@ fun TeacherExerciseRoadmapScreen(
 
         if (isShow) {
             RoadMapDialogEditable(
+                roadMapComponent = roadMapComponent,
                 questInfo = questInfo,
                 nextQuestList = roadMapState.courseMap[questInfo.id.toLong()] ?: listOf(),
-                onUrlChange = { url ->
-                    youtubeUrl = url
-                },
-                onDescriptionChange = { desc ->
-                    description = desc
-                },
-                onStepChange = { step ->
-                    stepDescription = step
-                },
-                onRewardExpChange = { exp ->
-                    rewardExp = exp
-                },
-                onRewardCoinChange = { coin ->
-                    rewardCoin = coin
-                },
                 onDismissDialog = {
                     isShow = false
                 },
-                onConfirm = {
-                    roadMapComponent.modifyQuestInfo(
-                        id = questInfo.id,
-                        description = description,
-                        trainingDescription = stepDescription,
-                        rewardPoint = rewardCoin.toLong(),
-                        rewardExp = rewardExp.toLong(),
-                        guideUrl = youtubeUrl
-                    )
-                }
             )
         }
 

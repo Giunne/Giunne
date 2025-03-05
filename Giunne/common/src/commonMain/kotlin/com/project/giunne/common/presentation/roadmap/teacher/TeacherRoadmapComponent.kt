@@ -97,7 +97,7 @@ class TeacherRoadmapComponent(
                         isLoading = false,
                     )
                 }
-                postSideEffect(RoadMapEvent.Success("로드맵 정보를 수정했습니다! 🫡"))
+                getCourse(1)
             }.onFailure {
                 setState {
                     copy(

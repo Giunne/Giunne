@@ -2,15 +2,23 @@ package com.project.giunne.common.presentation.roadmap.content
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
@@ -20,7 +28,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.project.giunne.Res
 import com.project.giunne.common.data.remote.response.QuestInfo
 import com.project.giunne.common.presentation.common.text.GPText
-import com.project.giunne.common.presentation.roadmap.state.ExerciseUiState
+import com.project.giunne.common.presentation.roadmap.teacher.TeacherRoadmapComponent
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
@@ -30,17 +38,18 @@ import com.project.giunne.icon_stage
 
 @Composable
 fun RoadMapDialogEditable(
+    roadMapComponent: TeacherRoadmapComponent,
     questInfo: QuestInfo = QuestInfo(),
     nextQuestList: List<QuestInfo>,
-    onUrlChange: (String) -> Unit = {},
-    onDescriptionChange: (String) -> Unit = {},
-    onStepChange: (String) -> Unit = {},
-    onRewardExpChange: (String) -> Unit = {},
-    onRewardCoinChange: (String) -> Unit = {},
     onDismissDialog: () -> Unit = {},
-    onConfirm: () -> Unit = {}
 ) {
     val uriHandler = LocalUriHandler.current
+
+    var youtubeUrl by remember { mutableStateOf(questInfo.guideUrl) }
+    var description by remember { mutableStateOf(questInfo.description) }
+    var stepDescription by remember { mutableStateOf(questInfo.trainingDescription) }
+    var rewardCoin by remember { mutableStateOf(questInfo.rewardPoint.toString()) }
+    var rewardExp by remember { mutableStateOf(questInfo.rewardExp.toString()) }
 
     Dialog(
         onDismissRequest = onDismissDialog,
@@ -56,15 +65,15 @@ fun RoadMapDialogEditable(
                     shape = RoundedCornerShape(16.gdp)
                 )
                 .imePadding()
-                .padding(16.gdp),
+                .padding(16.gdp)
+                .verticalScroll(rememberScrollState()),
         ) {
-
             ExerciseHeaderLink(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 title = questInfo.title,
                 openYoutubeLink = {
-                    if (questInfo.guideUrl.startsWith("https")) {
-                        uriHandler.openUri(questInfo.guideUrl )
+                    if (youtubeUrl.startsWith("https")) {
+                        uriHandler.openUri(youtubeUrl )
                     }
                 }
             )
@@ -84,9 +93,9 @@ fun RoadMapDialogEditable(
                     .wrapContentHeight()
             ) {
                 BasicTextField(
-                    value = questInfo.guideUrl,
+                    value = youtubeUrl,
                     onValueChange = {
-                        onUrlChange(it)
+                        youtubeUrl = it
                     }
                 )
             }
@@ -110,9 +119,9 @@ fun RoadMapDialogEditable(
                         .fillMaxWidth()
                         .wrapContentHeight()
                         .background(GPColor.Transparent),
-                    value = questInfo.description,
+                    value = description,
                     onValueChange = {
-                        onDescriptionChange(it)
+                        description = it
                     }
                 )
             }
@@ -134,9 +143,9 @@ fun RoadMapDialogEditable(
                         .fillMaxWidth()
                         .wrapContentHeight()
                         .background(GPColor.Transparent),
-                    value = questInfo.trainingDescription,
+                    value = stepDescription,
                     onValueChange = {
-                        onStepChange(it)
+                        stepDescription = it
                     }
                 )
             }
@@ -169,9 +178,9 @@ fun RoadMapDialogEditable(
                             fontSize = 12.gsp,
                             color = GPColor.MainOrangeColor
                         ),
-                        value = questInfo.rewardExp.toString(),
+                        value = rewardExp,
                         onValueChange = {
-                            onRewardExpChange(it)
+                            rewardExp = it
                         }
                     )
                 }
@@ -183,20 +192,30 @@ fun RoadMapDialogEditable(
                     titleColor = GPColor.TextBlack,
                     icon = Res.drawable.icon_attach_money
                 ) {
-                    BasicTextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                            .background(GPColor.Transparent),
-                        value = "+${questInfo.rewardPoint}",
-                        textStyle = TextStyle(
-                            fontSize = 12.gsp,
-                            color = GPColor.MainOrangeColor
-                        ),
-                        onValueChange = {
-                            onRewardCoinChange(it)
-                        }
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        GPText(
+                            text = "+",
+                            textSize = 12.gsp,
+                            textColor = GPColor.MainOrangeColor
+                        )
+                        Spacer(modifier = Modifier.width(2.gdp))
+                        BasicTextField(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                                .background(GPColor.Transparent),
+                            value = rewardCoin,
+                            textStyle = TextStyle(
+                                fontSize = 12.gsp,
+                                color = GPColor.MainOrangeColor
+                            ),
+                            onValueChange = {
+                                rewardCoin = it
+                            }
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.height(8.gdp))
 
@@ -219,7 +238,14 @@ fun RoadMapDialogEditable(
             ExerciseActionButtons(
                 onClose = onDismissDialog,
                 onConfirm = {
-                    onConfirm()
+                    roadMapComponent.modifyQuestInfo(
+                        id = questInfo.id,
+                        description = description,
+                        trainingDescription = stepDescription,
+                        rewardPoint = rewardCoin.toLong(),
+                        rewardExp = rewardExp.toLong(),
+                        guideUrl = youtubeUrl
+                    )
                 }
             )
         }
