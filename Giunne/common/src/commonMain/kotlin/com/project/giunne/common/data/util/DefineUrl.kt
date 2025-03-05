@@ -31,4 +31,9 @@ object DefineUrl {
     const val URL_AVATAR_LOGIN = "member/avatar/login"
     const val URL_AVATAR_CREATE = "member/avatar/create"
     const val URL_USER_AVATAR_LIST = "member/avatar"
+
+    /* RoadMap */
+    const val URL_ROADMAP_LIST = "quest/roadmap"
+    const val URL_MODIFY_QUEST = "quest/course"
+    const val URL_ROADMAP_COURSE = "quest/course/road-map"
 }

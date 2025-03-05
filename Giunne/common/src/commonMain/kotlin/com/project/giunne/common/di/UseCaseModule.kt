@@ -14,7 +14,10 @@ import com.project.giunne.common.domain.usecase.avatar.GetUserAvatarListUseCase
 import com.project.giunne.common.domain.usecase.avatar.LoginRecreationUseCase
 import com.project.giunne.common.domain.usecase.common.GetSchoolListUseCase
 import com.project.giunne.common.domain.usecase.roadmap.CreateRecreationUseCase
+import com.project.giunne.common.domain.usecase.roadmap.GetAllRoadMapUseCase
+import com.project.giunne.common.domain.usecase.roadmap.GetCourseUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetSearchRecreationUseCase
+import com.project.giunne.common.domain.usecase.roadmap.ModifyQuestInfoUseCase
 import org.koin.dsl.module
 
 val useCaseModule: Module = module {
@@ -32,4 +35,7 @@ val useCaseModule: Module = module {
     single { CreateAvatarUseCase(get()) }
     single { LoginRecreationUseCase(get()) }
     single { GetUserAvatarListUseCase(get()) }
+    single { GetAllRoadMapUseCase(get()) }
+    single { GetCourseUseCase(get()) }
+    single { ModifyQuestInfoUseCase(get()) }
 }
