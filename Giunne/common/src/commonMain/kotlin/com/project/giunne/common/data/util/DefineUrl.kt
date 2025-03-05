@@ -10,6 +10,7 @@ object DefineUrl {
     const val GET_CATEGORY_ITEM_BY_ID = "items/category"
     const val GET_CATEGORY_ROOT = "items/category/root"
     const val GET_GACHA_TYPE = "items/order/gacha-type"
+    const val POST_GACHA = "items/order/gacha"
 
     /* Auth */
     const val URL_TEACHER_SIGNUP = "member/auth/signup/teacher"

@@ -46,15 +46,11 @@ class ShopStore(
     fun onChangeItem(item: Item) {
         setState {
             copy(
-                selectedCharacter = if (item.categoryId == 6) {
-                    (IMAGE_BASE_URL + item.itemImages.find { it.level == currentLevel }?.fileUrl)
-                } else this.selectedCharacter,
-                selectedItems = if (selectedItems.find { it.id == item.id } != null) {
+//                selectedCharacter = if (item.categoryId == 6) {
+                selectedCharacter = (IMAGE_BASE_URL + item.itemImages.find { it.level == currentLevel }?.fileUrl),
+                selectedItems = if (selectedItems.find { it.id == item.id } != null) { // 착용중
                     selectedItems.filter { item.id != it.id }
-//                    selectedItems.toMutableList().apply {
-//                        remove(item)
-//                    }
-                } else {
+                } else { // 착용중이지 않음
                     selectedItems.toMutableList().apply {
                         removeIf { it.categoryId == item.categoryId }
                         add(item)
@@ -150,6 +146,7 @@ class ShopStore(
                 val wearingItems = userInfo?.wearingItems ?: listOf()
                 val characterItem = wearingItems.find { it.categoryId == 6 } ?: wearingItems.find { it.categoryId == 1 }
                 val characterUrl = characterItem?.itemImage?.fileUrl.orEmpty()
+//                val wearingItems2 = wearingItems.toMutableList().filter { it.categoryId != 6 && it.categoryId != 1 }
 
                 val url = IMAGE_BASE_URL + characterUrl
                 val items = wearingItems.map { item -> item.asShopItem() }

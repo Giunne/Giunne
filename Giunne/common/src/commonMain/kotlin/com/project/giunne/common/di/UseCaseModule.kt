@@ -17,12 +17,14 @@ import com.project.giunne.common.domain.usecase.mypage.GetInventoryItemListUseCa
 import com.project.giunne.common.domain.usecase.mypage.PutInventoryItemUseCase
 import com.project.giunne.common.domain.usecase.roadmap.CreateRecreationUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetSearchRecreationUseCase
+import com.project.giunne.common.domain.usecase.shop.PostGachaUseCase
 import org.koin.dsl.module
 
 val useCaseModule: Module = module {
     single { GetCategoryMapUseCase(get()) }
     single { GetCategoryItemListUseCase(get()) }
     single { GetGachaTypeUseCase(get()) }
+    single { PostGachaUseCase(get()) }
     single { LoginUseCase(get()) }
     single { LogoutUseCase(get()) }
     single { StudentSignupUseCase(get()) }

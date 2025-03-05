@@ -9,6 +9,7 @@ import com.arkivanov.decompose.router.stack.popWhile
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.value.Value
+import com.project.giunne.common.data.remote.request.GachaType
 import com.project.giunne.common.presentation.certification.student.StudentCertificationComponent
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.community.student.StudentCommunityComponent
@@ -50,7 +51,7 @@ class StudentMainComponent(
         class StudentMyPageChild(val component: StudentMyPageComponent) : StudentChild()
         class StudentShopChild(val component: StudentMyPageComponent) : StudentChild()
         class StudentGachaChild(val component: StudentMyPageComponent) : StudentChild()
-        class StudentPickingItemChild(val component: StudentMyPageComponent) : StudentChild()
+        class StudentPickingItemChild(val component: StudentMyPageComponent, val gachaType: GachaType) : StudentChild()
         class StudentJoinRecreationChild(val component: StudentJoinRecreationComponent) : StudentChild()
     }
 
@@ -67,7 +68,7 @@ class StudentMainComponent(
             is StudentMainConfig.Shop -> StudentChild.StudentShopChild(StudentMyPageComponent(componentContext))
             is StudentMainConfig.Gacha -> StudentChild.StudentGachaChild(StudentMyPageComponent(componentContext))
             is StudentMainConfig.SelectedCharacter -> StudentChild.StudentSelectCharacterChild(StudentSelectCharacterComponent(componentContext), config.recreationId)
-            is StudentMainConfig.PickingItem -> StudentChild.StudentPickingItemChild(StudentMyPageComponent(componentContext))
+            is StudentMainConfig.PickingItem -> StudentChild.StudentPickingItemChild(StudentMyPageComponent(componentContext), config.gachaType)
             is StudentMainConfig.JoinRecreation -> StudentChild.StudentJoinRecreationChild(StudentJoinRecreationComponent(componentContext))
         }
 
@@ -107,7 +108,7 @@ class StudentMainComponent(
         data object Gacha : StudentMainConfig
 
         @Serializable
-        data object PickingItem : StudentMainConfig
+        data class PickingItem(val gachaType: GachaType) : StudentMainConfig
 
         @Serializable
         data object JoinRecreation : StudentMainConfig
@@ -163,8 +164,10 @@ class StudentMainComponent(
         navigation.push(StudentMainConfig.SelectedCharacter(recreationId))
     }
 
-    fun navigateToPickingItem() {
-        navigation.push(StudentMainConfig.PickingItem)
+    fun navigateToPickingItem(
+        gachaType: GachaType
+    ) {
+        navigation.push(StudentMainConfig.PickingItem(gachaType = gachaType))
     }
 
     fun navigateFromPickingItemToShop() {

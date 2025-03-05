@@ -14,7 +14,7 @@ import org.koin.java.KoinJavaComponent
 
 val serviceModule: Module = module {
     single {
-        defaultKtorfit().create<ShopService>()
+        authKtorfit().create<ShopService>()
     }
     single {
         defaultKtorfit().create<AuthService>()

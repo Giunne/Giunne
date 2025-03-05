@@ -41,6 +41,7 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.slid
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.project.giunne.Res
+import com.project.giunne.common.data.remote.request.GachaType
 import com.project.giunne.common.presentation.certification.student.StudentCertificationScreen
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.badge.GPNotificationBadge
@@ -481,14 +482,17 @@ private fun StudentChildren(
                 }
             )
             is StudentMainComponent.StudentChild.StudentGachaChild -> GachaScreen(
-                onGachaClick = {
-                    component.navigateToPickingItem()
+                onGachaClick = { gachaType ->
+                    component.navigateToPickingItem(gachaType)
                 },
             )
             is StudentMainComponent.StudentChild.StudentPickingItemChild -> PickingItemScreen(
                 onWearingItemClick = {
                     component.navigateFromPickingItemToShop()
-                }
+                },
+                gachaType = if (activeComponent is StudentMainComponent.StudentChild.StudentPickingItemChild) {
+                    activeComponent.gachaType
+                } else GachaType.GENERAL
             )
 
             is StudentMainComponent.StudentChild.StudentJoinRecreationChild -> StudentJoinRecreationScreen(
