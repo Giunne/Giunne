@@ -17,15 +17,16 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import com.project.giunne.common.data.remote.response.QuestInfo
 import com.project.giunne.common.presentation.common.text.GPAnnotatedText
-import com.project.giunne.common.presentation.roadmap.content.RoadMapDialog
-import com.project.giunne.common.presentation.roadmap.content.RoadMapExerciseStage
-import com.project.giunne.common.presentation.roadmap.dummy.exerciseList
+import com.project.giunne.common.presentation.roadmap.content.RoadMapDialogEditable
+import com.project.giunne.common.presentation.roadmap.content.RoadMapTeacherExerciseStage
 import com.project.giunne.common.presentation.roadmap.node.roadMap1
 import com.project.giunne.common.presentation.roadmap.node.roadMap2
 import com.project.giunne.common.presentation.roadmap.node.roadMap3
 import com.project.giunne.common.presentation.roadmap.node.roadMap4
 import com.project.giunne.common.presentation.roadmap.node.roadMap5
+import com.project.giunne.common.presentation.roadmap.teacher.state.RoadMapState
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
@@ -34,10 +35,18 @@ import com.project.giunne.common.util.gsp
 @Composable
 fun TeacherExerciseRoadmapScreen(
     modifier: Modifier = Modifier,
+    roadMapState: RoadMapState,
+    roadMapComponent: TeacherRoadmapComponent,
 ) {
     var offsetX by remember { mutableStateOf(0f) }
     var offsetY by remember { mutableStateOf(0f) }
     var isShow by remember { mutableStateOf(false) }
+    var questInfo by remember { mutableStateOf(QuestInfo()) }
+    var youtubeUrl by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+    var stepDescription by remember { mutableStateOf("") }
+    var rewardCoin by remember { mutableStateOf("") }
+    var rewardExp by remember { mutableStateOf("") }
 
     BoxWithConstraints(
         modifier = modifier
@@ -51,9 +60,36 @@ fun TeacherExerciseRoadmapScreen(
     ) {
 
         if (isShow) {
-            RoadMapDialog(
+            RoadMapDialogEditable(
+                questInfo = questInfo,
+                nextQuestList = roadMapState.courseMap[questInfo.id.toLong()] ?: listOf(),
+                onUrlChange = { url ->
+                    youtubeUrl = url
+                },
+                onDescriptionChange = { desc ->
+                    description = desc
+                },
+                onStepChange = { step ->
+                    stepDescription = step
+                },
+                onRewardExpChange = { exp ->
+                    rewardExp = exp
+                },
+                onRewardCoinChange = { coin ->
+                    rewardCoin = coin
+                },
                 onDismissDialog = {
                     isShow = false
+                },
+                onConfirm = {
+                    roadMapComponent.modifyQuestInfo(
+                        id = questInfo.id,
+                        description = description,
+                        trainingDescription = stepDescription,
+                        rewardPoint = rewardCoin.toLong(),
+                        rewardExp = rewardExp.toLong(),
+                        guideUrl = youtubeUrl
+                    )
                 }
             )
         }
@@ -82,52 +118,57 @@ fun TeacherExerciseRoadmapScreen(
             "혼자 해내야 해요!"
         }
 
-        RoadMapExerciseStage(
+        RoadMapTeacherExerciseStage(
             offset = Offset(offsetX, offsetY),
-            exerciseList = exerciseList,
+            questInfoList = roadMapState.courseMap.values.flatten(),
             node = node1,
             connect = connect1,
             onExerciseClicked = {
+                questInfo = it
                 isShow = true
             }
         )
 
-        RoadMapExerciseStage(
+        RoadMapTeacherExerciseStage(
             offset = Offset(offsetX, offsetY - height),
+            questInfoList = roadMapState.courseMap.values.flatten(),
             node = node2,
-            exerciseList = exerciseList,
             connect = connect2,
-            onExerciseClicked = { step ->
+            onExerciseClicked = {
+                questInfo = it
                 isShow = true
             }
         )
 
-        RoadMapExerciseStage(
+        RoadMapTeacherExerciseStage(
             offset = Offset(offsetX, offsetY - height * 2),
             node = node3,
-            exerciseList = exerciseList,
+            questInfoList = roadMapState.courseMap.values.flatten(),
             connect = connect3,
-            onExerciseClicked = { step ->
+            onExerciseClicked = {
+                questInfo = it
                 isShow = true
             }
         )
 
-        RoadMapExerciseStage(
+        RoadMapTeacherExerciseStage(
             offset = Offset(offsetX + width, offsetY - height),
             node = node4,
-            exerciseList = exerciseList,
+            questInfoList = roadMapState.courseMap.values.flatten(),
             connect = connect4,
-            onExerciseClicked = { step ->
+            onExerciseClicked = {
+                questInfo = it
                 isShow = true
             }
         )
 
-        RoadMapExerciseStage(
+        RoadMapTeacherExerciseStage(
             offset = Offset(offsetX + width, offsetY - height * 2),
             node = node5,
-            exerciseList = exerciseList,
+            questInfoList = roadMapState.courseMap.values.flatten(),
             connect = connect5,
-            onExerciseClicked = { step ->
+            onExerciseClicked = {
+                questInfo = it
                 isShow = true
             }
         )

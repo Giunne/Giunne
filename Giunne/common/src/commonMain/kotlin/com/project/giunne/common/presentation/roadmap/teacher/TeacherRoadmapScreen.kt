@@ -46,14 +46,6 @@ internal fun TeacherRoadmapScreen(
     val roadMapState by component.uiState.collectAsStateWithLifecycle()
     var isSelected by remember { mutableStateOf(false) }
 
-    val joggingWeek = listOf(
-        13, 14, 15,
-        12, 11, 10,
-        7, 8, 9,
-        6, 5, 4,
-        1, 2, 3
-    )
-
     LaunchedEffect(Unit) {
         async {
             component.getAllRoadMap()
@@ -91,13 +83,14 @@ internal fun TeacherRoadmapScreen(
                         .background(GPColor.BackgroundLightGray)
                         .padding(horizontal = 16.gdp, vertical = 8.gdp)
                         .align(Alignment.Center),
-                    joggingWeek = joggingWeek,
                 )
             } else {
                 TeacherExerciseRoadmapScreen(
                     modifier = Modifier
                         .fillMaxSize()
-                        .align(Alignment.Center)
+                        .align(Alignment.Center),
+                    roadMapComponent = component,
+                    roadMapState = roadMapState
                 )
             }
             Box(

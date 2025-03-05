@@ -51,7 +51,7 @@ fun ExerciseActionButtons(
             onClick = { onConfirm() },
         ) {
             GPText(
-                text = if (isEditable) "수정하기" else "인증완료",
+                text = if (isEditable) "인증완료" else "수정하기",
                 textSize = 14.gsp,
                 fontFamily = GPFontFamily.Bold,
                 textColor = GPColor.White

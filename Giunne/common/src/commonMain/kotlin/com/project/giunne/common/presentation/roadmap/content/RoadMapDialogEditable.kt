@@ -18,6 +18,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.project.giunne.Res
+import com.project.giunne.common.data.remote.response.QuestInfo
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.roadmap.state.ExerciseUiState
 import com.project.giunne.common.ui.theme.GPColor
@@ -29,7 +30,8 @@ import com.project.giunne.icon_stage
 
 @Composable
 fun RoadMapDialogEditable(
-    exerciseUiState: ExerciseUiState = ExerciseUiState(),
+    questInfo: QuestInfo = QuestInfo(),
+    nextQuestList: List<QuestInfo>,
     onUrlChange: (String) -> Unit = {},
     onDescriptionChange: (String) -> Unit = {},
     onStepChange: (String) -> Unit = {},
@@ -55,17 +57,26 @@ fun RoadMapDialogEditable(
                 )
                 .imePadding()
                 .padding(16.gdp),
-            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             ExerciseHeaderLink(
-                title = exerciseUiState.title,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                title = questInfo.title,
                 openYoutubeLink = {
-                    uriHandler.openUri(exerciseUiState.youtubeUrl)
+                    if (questInfo.guideUrl.startsWith("https")) {
+                        uriHandler.openUri(questInfo.guideUrl )
+                    }
                 }
             )
 
             Spacer(modifier = Modifier.height(16.gdp))
+
+            GPText(
+                text = "운동 방법 페이지",
+                textSize = 12.gsp
+            )
+
+            Spacer(modifier = Modifier.height(4.gdp))
 
             BorderContentField(
                 modifier = Modifier
@@ -73,7 +84,7 @@ fun RoadMapDialogEditable(
                     .wrapContentHeight()
             ) {
                 BasicTextField(
-                    value = exerciseUiState.youtubeUrl,
+                    value = questInfo.guideUrl,
                     onValueChange = {
                         onUrlChange(it)
                     }
@@ -81,6 +92,13 @@ fun RoadMapDialogEditable(
             }
 
             Spacer(modifier = Modifier.height(16.gdp))
+
+            GPText(
+                text = "운동 설명",
+                textSize = 12.gsp
+            )
+
+            Spacer(modifier = Modifier.height(4.gdp))
 
             BorderContentField(
                 modifier = Modifier
@@ -92,7 +110,7 @@ fun RoadMapDialogEditable(
                         .fillMaxWidth()
                         .wrapContentHeight()
                         .background(GPColor.Transparent),
-                    value = exerciseUiState.description,
+                    value = questInfo.description,
                     onValueChange = {
                         onDescriptionChange(it)
                     }
@@ -100,6 +118,13 @@ fun RoadMapDialogEditable(
             }
 
             Spacer(modifier = Modifier.height(16.gdp))
+
+            GPText(
+                text = "운동 방법",
+                textSize = 12.gsp
+            )
+
+            Spacer(modifier = Modifier.height(4.gdp))
 
             BorderContentField(
                 modifier = Modifier.fillMaxWidth()
@@ -109,7 +134,7 @@ fun RoadMapDialogEditable(
                         .fillMaxWidth()
                         .wrapContentHeight()
                         .background(GPColor.Transparent),
-                    value = exerciseUiState.exerciseStep,
+                    value = questInfo.trainingDescription,
                     onValueChange = {
                         onStepChange(it)
                     }
@@ -125,7 +150,7 @@ fun RoadMapDialogEditable(
 
                 GPText(
                     text = "완료 보상",
-                    textSize = 14.gsp
+                    textSize = 12.gsp
                 )
 
                 Spacer(modifier = Modifier.height(8.gdp))
@@ -144,7 +169,7 @@ fun RoadMapDialogEditable(
                             fontSize = 12.gsp,
                             color = GPColor.MainOrangeColor
                         ),
-                        value = exerciseUiState.rewardExp.toString(),
+                        value = questInfo.rewardExp.toString(),
                         onValueChange = {
                             onRewardExpChange(it)
                         }
@@ -163,7 +188,7 @@ fun RoadMapDialogEditable(
                             .fillMaxWidth()
                             .wrapContentHeight()
                             .background(GPColor.Transparent),
-                        value = "+${exerciseUiState.rewardCoin}",
+                        value = "+${questInfo.rewardPoint}",
                         textStyle = TextStyle(
                             fontSize = 12.gsp,
                             color = GPColor.MainOrangeColor
@@ -175,15 +200,17 @@ fun RoadMapDialogEditable(
                 }
                 Spacer(modifier = Modifier.height(8.gdp))
 
-                ExerciseRewardSection(
-                    title = exerciseUiState.nextExerciseTitle,
-                    titleColor = GPColor.MainOrangeColor,
-                    icon = Res.drawable.icon_stage
-                ) {
-                    GPText(
-                        text = "도전 가능!",
-                        textSize = 12.gsp
-                    )
+                if (nextQuestList.isNotEmpty()) {
+                    ExerciseRewardSection(
+                        title = nextQuestList.joinToString("\n") { it.title },
+                        titleColor = GPColor.MainOrangeColor,
+                        icon = Res.drawable.icon_stage
+                    ) {
+                        GPText(
+                            text = "도전 가능!",
+                            textSize = 12.gsp
+                        )
+                    }
                 }
             }
 

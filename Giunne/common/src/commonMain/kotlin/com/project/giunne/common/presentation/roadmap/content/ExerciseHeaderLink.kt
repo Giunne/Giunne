@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.project.giunne.Res
+import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
@@ -27,7 +28,7 @@ fun ExerciseHeaderLink(
     Row(
         modifier = modifier
             .wrapContentSize()
-            .clickable {
+            .noRippleClickable {
                 openYoutubeLink()
             },
         verticalAlignment = Alignment.CenterVertically,

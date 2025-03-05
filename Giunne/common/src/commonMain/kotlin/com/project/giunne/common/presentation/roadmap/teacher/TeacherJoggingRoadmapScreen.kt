@@ -28,9 +28,15 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun TeacherJoggingRoadmapScreen(
     modifier: Modifier,
-    joggingWeek: List<Int>,
 ) {
     val density = LocalDensity.current.density
+    val joggingWeek = listOf(
+        13, 14, 15,
+        12, 11, 10,
+        7, 8, 9,
+        6, 5, 4,
+        1, 2, 3
+    )
 
     Box(
         modifier = modifier,
