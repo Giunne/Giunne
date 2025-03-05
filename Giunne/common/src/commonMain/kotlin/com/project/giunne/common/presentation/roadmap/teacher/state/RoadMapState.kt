@@ -6,6 +6,7 @@ import com.project.giunne.common.data.util.DataThrowable
 
 data class RoadMapState(
     val isLoading: Boolean = false,
+    val modifySuccess: Boolean = false,
     val roadMapInfo: List<RoadMapInfo> = listOf(),
     val courseMap: Map<Long, List<QuestInfo>> = mapOf(),
     val error: DataThrowable? = null

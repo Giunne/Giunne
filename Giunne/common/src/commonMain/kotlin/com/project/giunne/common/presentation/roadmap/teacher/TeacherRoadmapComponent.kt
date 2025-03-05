@@ -95,6 +95,7 @@ class TeacherRoadmapComponent(
                 setState {
                     copy(
                         isLoading = false,
+                        modifySuccess = true
                     )
                 }
                 getCourse(1)
@@ -107,5 +108,9 @@ class TeacherRoadmapComponent(
                 }
             }
         }
+    }
+
+    fun dismissModifySuccessDialog() {
+        setState { copy(modifySuccess = false) }
     }
 }

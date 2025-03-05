@@ -27,8 +27,10 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.project.giunne.Res
 import com.project.giunne.common.data.remote.response.QuestInfo
+import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.roadmap.teacher.TeacherRoadmapComponent
+import com.project.giunne.common.presentation.roadmap.teacher.state.RoadMapState
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
@@ -39,6 +41,7 @@ import com.project.giunne.icon_stage
 @Composable
 fun RoadMapDialogEditable(
     roadMapComponent: TeacherRoadmapComponent,
+    roadMapState:  RoadMapState,
     questInfo: QuestInfo = QuestInfo(),
     nextQuestList: List<QuestInfo>,
     onDismissDialog: () -> Unit = {},
@@ -51,6 +54,16 @@ fun RoadMapDialogEditable(
     var rewardCoin by remember { mutableStateOf(questInfo.rewardPoint.toString()) }
     var rewardExp by remember { mutableStateOf(questInfo.rewardExp.toString()) }
 
+    if (roadMapState.modifySuccess) {
+        GPAlertDialog(
+            modifier = Modifier.padding(horizontal = 16.gdp),
+            title = "로드맵 수정",
+            content = "수정되었습니다!",
+            dismiss = {
+                roadMapComponent.dismissModifySuccessDialog()
+            }
+        )
+    }
     Dialog(
         onDismissRequest = onDismissDialog,
         properties = DialogProperties(
