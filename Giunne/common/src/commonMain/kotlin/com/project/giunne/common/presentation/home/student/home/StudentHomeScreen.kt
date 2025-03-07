@@ -17,6 +17,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -35,6 +36,7 @@ import com.project.giunne.common.presentation.home.student.content.StudentRoadMa
 import com.project.giunne.common.presentation.home.student.content.TeacherCheckingBox
 import com.project.giunne.common.presentation.home.student.state.StudentHomeEvent
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.AvatarUtil
 import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
@@ -59,15 +61,7 @@ internal fun StudentHomeScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     val homeState by component.uiState.collectAsStateWithLifecycle()
-
-//    LaunchedEffect(Define.playerId) {
-//        if (Define.playerId != 0L) {
-//            async {
-//                component.loginRecreation(Define.playerId)
-//                component.getRecreationList(Define.playerId, 1)
-//            }.await()
-//        }
-//    }
+    val userInfoState = AvatarUtil.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
         component.sideEffect.collect { event ->
@@ -124,13 +118,13 @@ internal fun StudentHomeScreen(
                             level = homeState.avatarInfo.level,
                             currentExp = homeState.avatarInfo.exp,
                             needExp = homeState.avatarInfo.needExp,
-                            wearingItems = homeState.userInfo.wearingItems
+                            wearingItems = userInfoState.value.wearingItems
                         )
                         ResultRoadMapItem(
                             modifier = Modifier.fillMaxWidth()
                                 .padding(horizontal = 16.gdp),
-                            teacherName = homeState.userInfo.teacherName.orEmpty(),
-                            recreationName = homeState.userInfo.recreationName
+                            teacherName = userInfoState.value.teacherName.orEmpty(),
+                            recreationName = userInfoState.value.recreationName
                         )
                         TeacherCheckingBox(
                             modifier = Modifier.fillMaxWidth(),

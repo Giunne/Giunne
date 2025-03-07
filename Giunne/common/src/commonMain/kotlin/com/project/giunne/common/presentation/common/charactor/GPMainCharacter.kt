@@ -32,7 +32,14 @@ fun GPMainCharacter(
             model = IMAGE_BASE_URL + characterUrl,
             contentDescription = null
         )
-//        wearingItems.forEach { item ->
+//        SubcomposeAsyncImage(
+//            modifier = modifier,
+//            model = IMAGE_BASE_URL + characterUrl,
+//            contentDescription = null,
+//            loading = {
+//                Box(modifier = modifier.background(GPColor.MainBlueColor))
+//            }
+//        )
         wearingItems.filter { it.categoryId != 1 && it.categoryId != 6 }.forEach { item ->
             // 이미지 크기만 측정 -> 추후 서버에 이미지 크기도 함께 저장하도록 수정
             var itemSize by remember { mutableStateOf(IntSize.Zero) }

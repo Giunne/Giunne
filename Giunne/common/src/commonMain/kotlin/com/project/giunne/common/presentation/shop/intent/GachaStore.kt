@@ -44,7 +44,7 @@ class GachaStore(
         gachaType: String
     ) {
 //        scope.launch {
-//            setState { copy(loading = true) }
+            setState { copy(loading = true) }
             runCatching {
                 postGachaUseCase(gachaRequest = GachaRequest(gachaType))
             }.onSuccess { response ->

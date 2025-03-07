@@ -17,7 +17,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -28,6 +27,7 @@ import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.shop.content.ItemBottomView
 import com.project.giunne.common.presentation.shop.intent.ShopStore
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.AvatarUtil
 import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.gdp
 import kotlinx.coroutines.async
@@ -41,11 +41,13 @@ internal fun ShopScreen(
     val shopStore by remember { mutableStateOf(ShopStore()) }
     val state by shopStore.uiState.collectAsState()
 
+    val userInfoState = AvatarUtil.uiState.collectAsState()
+
     LaunchedEffect(Unit) {
         async {
             shopStore.getCategoryMap()
             shopStore.onChangeType(2)
-            shopStore.setCurrentWearingItems(Define.playerId, 1)
+            shopStore.setCurrentWearingItems(userInfoState.value)
         }.await()
     }
 
@@ -109,14 +111,23 @@ internal fun ShopScreen(
                         .weight(1f),
                     lazyGridState = lazyGridState,
                     types = state.categoryMap[0]?.drop(1) ?: listOf(),
-                    shopStore = shopStore,
-                    state = state,
+                    selectedType = state.selectedType,
+                    onTypeSelected = { itemType ->
+                        shopStore.onChangeType(itemType)
+                    },
+                    categoryItem = state.categoryItem,
                     onItemClick = { item ->
                         shopStore.onChangeItem(item)
                     },
-                    onTypeSelected = { itemType ->
-                        shopStore.onChangeType(itemType)
-                    }
+                    currentLevel = state.currentLevel,
+                    wearingItems = state.wearingItems,
+                    selectedItems = state.selectedItems,
+                    onUndoButtonClicked = { shopStore.onUndo() },
+                    saveEquipmentState = {
+                        shopStore.saveEquipmentState(it) {
+                            AvatarUtil.getRecreationList(Define.playerId, 1)
+                        }
+                    },
                 )
             }
         }

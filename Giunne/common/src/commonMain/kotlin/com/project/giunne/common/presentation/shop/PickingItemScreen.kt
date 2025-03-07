@@ -150,7 +150,7 @@ fun PickingItemScreen(
         }
     }
 
-//    with(gachaState.loading) {
-//        Loader()
-//    }
+    if(gachaState.loading) {
+        Loader()
+    }
 }

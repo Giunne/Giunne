@@ -49,9 +49,9 @@ class StudentMainComponent(
         class StudentCommunityDetailChild(val communityDto: CommunityDto) : StudentChild()
         class StudentFriendsChild(val component: StudentFriendComponent) : StudentChild()
         class StudentMyPageChild(val component: StudentMyPageComponent) : StudentChild()
-        class StudentShopChild(val component: StudentMyPageComponent) : StudentChild()
-        class StudentGachaChild(val component: StudentMyPageComponent) : StudentChild()
-        class StudentPickingItemChild(val component: StudentMyPageComponent, val gachaType: GachaType) : StudentChild()
+        class StudentShopChild : StudentChild()
+        class StudentGachaChild : StudentChild()
+        class StudentPickingItemChild(val gachaType: GachaType) : StudentChild()
         class StudentJoinRecreationChild(val component: StudentJoinRecreationComponent) : StudentChild()
     }
 
@@ -65,10 +65,10 @@ class StudentMainComponent(
             is StudentMainConfig.CommunityDetail -> StudentChild.StudentCommunityDetailChild(config.communityDto)
             is StudentMainConfig.Friends -> StudentChild.StudentFriendsChild(StudentFriendComponent(componentContext))
             is StudentMainConfig.MyPage -> StudentChild.StudentMyPageChild(StudentMyPageComponent(componentContext))
-            is StudentMainConfig.Shop -> StudentChild.StudentShopChild(StudentMyPageComponent(componentContext))
-            is StudentMainConfig.Gacha -> StudentChild.StudentGachaChild(StudentMyPageComponent(componentContext))
+            is StudentMainConfig.Shop -> StudentChild.StudentShopChild()
+            is StudentMainConfig.Gacha -> StudentChild.StudentGachaChild()
             is StudentMainConfig.SelectedCharacter -> StudentChild.StudentSelectCharacterChild(StudentSelectCharacterComponent(componentContext), config.recreationId)
-            is StudentMainConfig.PickingItem -> StudentChild.StudentPickingItemChild(StudentMyPageComponent(componentContext), config.gachaType)
+            is StudentMainConfig.PickingItem -> StudentChild.StudentPickingItemChild(config.gachaType)
             is StudentMainConfig.JoinRecreation -> StudentChild.StudentJoinRecreationChild(StudentJoinRecreationComponent(componentContext))
         }
 
