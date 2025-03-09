@@ -10,6 +10,7 @@ object DefineUrl {
     const val GET_CATEGORY_ITEM_BY_ID = "items/category"
     const val GET_CATEGORY_ROOT = "items/category/root"
     const val GET_GACHA_TYPE = "items/order/gacha-type"
+    const val POST_GACHA = "items/order/gacha"
 
     /* Auth */
     const val URL_TEACHER_SIGNUP = "member/auth/signup/teacher"
@@ -31,4 +32,9 @@ object DefineUrl {
     const val URL_AVATAR_LOGIN = "member/avatar/login"
     const val URL_AVATAR_CREATE = "member/avatar/create"
     const val URL_USER_AVATAR_LIST = "member/avatar"
+    const val URL_RECREATION_AVATAR_LIST = "member/avatar/recreation-students"
+
+    /* MyPage */
+    const val PUT_INVENTORY_ITEM = "member/inventory"
+    const val GET_INVENTORY_ITEM_BY_ID = "member/inventory/category"
 }

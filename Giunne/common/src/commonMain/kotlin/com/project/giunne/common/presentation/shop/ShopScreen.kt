@@ -13,10 +13,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -27,6 +27,7 @@ import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.shop.content.ItemBottomView
 import com.project.giunne.common.presentation.shop.intent.ShopStore
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.AvatarUtil
 import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.gdp
 import kotlinx.coroutines.async
@@ -40,24 +41,35 @@ internal fun ShopScreen(
     val shopStore by remember { mutableStateOf(ShopStore()) }
     val state by shopStore.uiState.collectAsState()
 
+    val userInfoState = AvatarUtil.uiState.collectAsState()
+
     LaunchedEffect(Unit) {
         async {
             shopStore.getCategoryMap()
             shopStore.onChangeType(2)
-            shopStore.setCurrentWearingItems(Define.playerId, 1)
+            shopStore.setCurrentWearingItems(userInfoState.value)
         }.await()
     }
 
-    LaunchedEffect(lazyGridState) {
-        snapshotFlow { lazyGridState.layoutInfo }
-            .collect { layoutInfo ->
-                val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
-                val totalItemsCount = layoutInfo.totalItemsCount
+    val endOfListReached by remember {
+        derivedStateOf {
+            val lastVisibleItem = lazyGridState.layoutInfo.visibleItemsInfo.lastOrNull()
+            val totalItemsCount = lazyGridState.layoutInfo.totalItemsCount
 
-                if (state.paginationInfo.hasNextPage && lastVisibleItemIndex >= totalItemsCount - 1) {
-                    shopStore.loadNextPage(state.selectedType, state.paginationInfo.currentPage + 1)
-                }
-            }
+            state.paginationInfo.hasNextPage && lastVisibleItem != null && lastVisibleItem.index >= totalItemsCount - 1
+        }
+    }
+
+    LaunchedEffect(endOfListReached) {
+        if (endOfListReached && state.paginationInfo.currentPage != state.paginationInfo.totalPage) {
+            shopStore.loadNextPage(state.selectedType, state.paginationInfo.currentPage + 1)
+        }
+    }
+
+    LaunchedEffect(state.paginationInfo.currentPage) {
+        if (state.paginationInfo.currentPage == 1) {
+            lazyGridState.animateScrollToItem(0)
+        }
     }
 
     Scaffold(
@@ -99,14 +111,23 @@ internal fun ShopScreen(
                         .weight(1f),
                     lazyGridState = lazyGridState,
                     types = state.categoryMap[0]?.drop(1) ?: listOf(),
-                    shopStore = shopStore,
-                    state = state,
+                    selectedType = state.selectedType,
+                    onTypeSelected = { itemType ->
+                        shopStore.onChangeType(itemType)
+                    },
+                    categoryItem = state.categoryItem,
                     onItemClick = { item ->
                         shopStore.onChangeItem(item)
                     },
-                    onTypeSelected = { itemType ->
-                        shopStore.onChangeType(itemType)
-                    }
+                    currentLevel = state.currentLevel,
+                    wearingItems = state.wearingItems,
+                    selectedItems = state.selectedItems,
+                    onUndoButtonClicked = { shopStore.onUndo() },
+                    saveEquipmentState = {
+                        shopStore.saveEquipmentState(it) {
+                            AvatarUtil.getRecreationList(Define.playerId, 1)
+                        }
+                    },
                 )
             }
         }

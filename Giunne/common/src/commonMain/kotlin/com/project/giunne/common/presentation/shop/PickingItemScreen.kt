@@ -26,7 +26,11 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import coil3.compose.AsyncImage
+import com.project.giunne.common.data.remote.request.GachaType
+import com.project.giunne.common.data.util.DefineUrl
 import com.project.giunne.common.presentation.common.button.GPButton
+import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.text.GPAnnotatedText
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.shop.content.LottieBox
@@ -46,6 +50,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun PickingItemScreen(
     onWearingItemClick: () -> Unit = {},
+    gachaType: GachaType
 ) {
     var isProgress by remember { mutableStateOf(true) }
     val gachaStore by remember { mutableStateOf(GachaStore()) }
@@ -54,6 +59,10 @@ fun PickingItemScreen(
     LaunchedEffect(Unit) {
         delay(2000)
         isProgress = false
+        when (gachaType) {
+            GachaType.GENERAL -> { gachaStore.postGacha(GachaType.GENERAL.text) }
+            GachaType.PREMIUM -> { gachaStore.postGacha(GachaType.PREMIUM.text) }
+        }
     }
 
     Column(
@@ -83,11 +92,13 @@ fun PickingItemScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(16.gdp)
                 ) {
-                    Image(
-                        modifier = Modifier.size(120.gdp),
-                        painter = painterResource(gachaState.randomItem.drawable),
-                        contentDescription = "이미지"
-                    )
+                    if (gachaState.randomItem.itemImages.isNotEmpty()) {
+                        AsyncImage(
+                            modifier = Modifier.size(120.gdp),
+                            model = DefineUrl.IMAGE_BASE_URL + gachaState.randomItem.itemImages.first().fileUrl, // TODO 레벨 정보 Define에 넣어주고 분기
+                            contentDescription = "이미지"
+                        )
+                    }
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -97,7 +108,7 @@ fun PickingItemScreen(
                             text = buildAnnotatedString {
                                 withStyle(
                                     style = SpanStyle(
-                                        brush = when (gachaState.randomItem.rank) {
+                                        brush = when (gachaState.randomItem.itemGrade) {
                                             "S" -> sRankColorBrush
                                             "A" -> aRankColorBrush
                                             "B" -> bRankColorBrush
@@ -107,7 +118,7 @@ fun PickingItemScreen(
                                         fontWeight = FontWeight.ExtraBold
                                     )
                                 ) {
-                                    append(gachaState.randomItem.name)
+                                    append(gachaState.randomItem.itemName)
                                 }
                             },
                         )
@@ -137,5 +148,9 @@ fun PickingItemScreen(
                 )
             }
         }
+    }
+
+    if(gachaState.loading) {
+        Loader()
     }
 }

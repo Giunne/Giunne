@@ -38,6 +38,7 @@ import com.project.giunne.common.presentation.home.common.EmptyResult
 import com.project.giunne.common.presentation.home.student.content.ResultRoadMapItem
 import com.project.giunne.common.presentation.home.student.state.StudentJoinEvent
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.AvatarUtil
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
