@@ -114,4 +114,10 @@ object TokenHandler {
             }
         }
     }
+
+    fun dismissExpireDialog() {
+        scope.launch {
+            _expireEffects.send(false)
+        }
+    }
 }
