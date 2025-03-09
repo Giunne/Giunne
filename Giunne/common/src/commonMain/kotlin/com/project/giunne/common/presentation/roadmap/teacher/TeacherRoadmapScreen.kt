@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.project.giunne.common.data.remote.response.RoadMapInfo
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.toggle.GPToggleButton
@@ -49,7 +48,7 @@ internal fun TeacherRoadmapScreen(
     LaunchedEffect(Unit) {
         async {
             component.getAllRoadMap()
-            component.getCourse(1)
+            component.getTeacherCourse(1)
         }.await()
         component.sideEffect.collect { event ->
             when (event) {
@@ -107,11 +106,11 @@ internal fun TeacherRoadmapScreen(
                     isSelected = isSelected,
                     onLeftButtonClick = {
                         isSelected = false
-                        component.getCourse(1)
+                        component.getTeacherCourse(1)
                     },
                     onRightButtonClick = {
                         isSelected = true
-                        component.getCourse(2)
+                        component.getTeacherCourse(2)
                     }
                 )
             }

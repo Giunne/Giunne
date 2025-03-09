@@ -17,6 +17,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import com.project.giunne.common.data.remote.response.CourseInfo
 import com.project.giunne.common.data.remote.response.QuestInfo
 import com.project.giunne.common.presentation.common.text.GPAnnotatedText
 import com.project.giunne.common.presentation.roadmap.content.RoadMapDialogEditable
@@ -41,7 +42,7 @@ fun TeacherExerciseRoadmapScreen(
     var offsetX by remember { mutableStateOf(0f) }
     var offsetY by remember { mutableStateOf(0f) }
     var isShow by remember { mutableStateOf(false) }
-    var questInfo by remember { mutableStateOf(QuestInfo()) }
+    var courseInfo by remember { mutableStateOf(CourseInfo()) }
 
     BoxWithConstraints(
         modifier = modifier
@@ -58,8 +59,11 @@ fun TeacherExerciseRoadmapScreen(
             RoadMapDialogEditable(
                 roadMapComponent = roadMapComponent,
                 roadMapState = roadMapState,
-                questInfo = questInfo,
-                nextQuestList = roadMapState.courseMap[questInfo.id.toLong()] ?: listOf(),
+                questInfo = courseInfo.questInfo,
+                nextQuestList = roadMapState.courseMap[courseInfo.id.toLong()]
+                    ?.map { it.title }
+                    ?.distinct()
+                    ?: listOf(),
                 onDismissDialog = {
                     isShow = false
                 },
@@ -96,7 +100,7 @@ fun TeacherExerciseRoadmapScreen(
             node = node1,
             connect = connect1,
             onExerciseClicked = {
-                questInfo = it
+                courseInfo = it
                 isShow = true
             }
         )
@@ -107,7 +111,7 @@ fun TeacherExerciseRoadmapScreen(
             node = node2,
             connect = connect2,
             onExerciseClicked = {
-                questInfo = it
+                courseInfo = it
                 isShow = true
             }
         )
@@ -118,7 +122,7 @@ fun TeacherExerciseRoadmapScreen(
             questInfoList = roadMapState.courseMap.values.flatten(),
             connect = connect3,
             onExerciseClicked = {
-                questInfo = it
+                courseInfo = it
                 isShow = true
             }
         )
@@ -129,7 +133,7 @@ fun TeacherExerciseRoadmapScreen(
             questInfoList = roadMapState.courseMap.values.flatten(),
             connect = connect4,
             onExerciseClicked = {
-                questInfo = it
+                courseInfo = it
                 isShow = true
             }
         )
@@ -140,7 +144,7 @@ fun TeacherExerciseRoadmapScreen(
             questInfoList = roadMapState.courseMap.values.flatten(),
             connect = connect5,
             onExerciseClicked = {
-                questInfo = it
+                courseInfo = it
                 isShow = true
             }
         )

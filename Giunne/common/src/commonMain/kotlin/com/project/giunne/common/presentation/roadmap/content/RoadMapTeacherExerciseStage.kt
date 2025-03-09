@@ -16,6 +16,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.project.giunne.common.data.remote.response.CourseInfo
 import com.project.giunne.common.data.remote.response.QuestInfo
 import com.project.giunne.common.data.util.DefineUrl.IMAGE_BASE_URL
 import com.project.giunne.common.presentation.common.noRippleClickable
@@ -31,10 +32,10 @@ import com.project.giunne.common.util.gsp
 @Composable
 fun RoadMapTeacherExerciseStage(
     offset: Offset,
-    questInfoList: List<QuestInfo>,
+    questInfoList: List<CourseInfo>,
     node: List<Node>,
     connect: List<ConnectNode>,
-    onExerciseClicked: (QuestInfo) -> Unit,
+    onExerciseClicked: (CourseInfo) -> Unit,
 ) {
     val density = LocalDensity.current.density
     Box(
@@ -47,7 +48,7 @@ fun RoadMapTeacherExerciseStage(
             connect = connect
         )
         node.forEach { node ->
-            val questInfo = questInfoList.find { it.courseName == node.step } ?: QuestInfo()
+            val courseInfo = questInfoList.find { it.courseName == node.step } ?: CourseInfo()
             val borderColor = if (node.boxSize == 30f) {
                 GPColor.MainOrangeColor
             } else {
@@ -63,7 +64,7 @@ fun RoadMapTeacherExerciseStage(
                 contentAlignment = Alignment.Center
             ) {
                 // 시작 노드
-                if (questInfo.courseName.startsWith("0")) {
+                if (courseInfo.questInfo.questName.startsWith("0")) {
                     Box(
                         modifier = Modifier
                             .wrapContentSize()
@@ -74,7 +75,7 @@ fun RoadMapTeacherExerciseStage(
                         contentAlignment = Alignment.Center
                     ) {
                         GPText(
-                            text = questInfo.title,
+                            text = courseInfo.questInfo.questName.split(".").last(),
                             textSize = 10.gsp,
                             fontFamily = GPFontFamily.Bold
                         )
@@ -85,12 +86,12 @@ fun RoadMapTeacherExerciseStage(
                             .size(node.boxSize.dp)
                             .offset(node.drawOffset.x.dp, node.drawOffset.y.dp)
                             .noRippleClickable {
-                                onExerciseClicked(questInfo)
+                                onExerciseClicked(courseInfo)
                             },
                         backgroundColor = backgroundColor,
                         borderColor = borderColor
                     ) {
-                        questInfo.thumbnailUrl?.let { url ->
+                        courseInfo.thumbnailUrl?.let { url ->
                             AsyncImage(
                                 modifier = Modifier
                                     .size(node.boxSize.dp),

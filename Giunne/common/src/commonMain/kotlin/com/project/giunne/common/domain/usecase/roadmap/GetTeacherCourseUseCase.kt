@@ -4,12 +4,12 @@ import com.project.giunne.common.data.remote.response.CourseResponse
 import com.project.giunne.common.data.util.successOr
 import com.project.giunne.common.domain.repository.RoadMapRepository
 
-class GetCourseUseCase(
+class GetTeacherCourseUseCase(
     private val roadMapRepository: RoadMapRepository
 ) {
     suspend operator fun invoke(roadmapId: Long): CourseResponse {
         return roadMapRepository
-            .getCourse(roadmapId = roadmapId)
+            .getTeacherCourse(roadmapId = roadmapId)
             .successOr(CourseResponse())
     }
 }

@@ -6,7 +6,7 @@ fun roadMap1(
     width: Float,
     height: Float
 ): Pair<List<Node>, List<ConnectNode>> {
-    val steps = listOf("1.CORE", "2.CORE", "3.CORE", "4-a.CORE", "4-b.CORE", "4-c.CORE")
+    val steps = listOf("1.CORE", "2.CORE", "3.CORE", "4-b.CORE", "4-a.CORE", "4-c.CORE")
     var currentOffset = Offset(width / 2, height - 78f)
 
     val node = mutableListOf<Node>()

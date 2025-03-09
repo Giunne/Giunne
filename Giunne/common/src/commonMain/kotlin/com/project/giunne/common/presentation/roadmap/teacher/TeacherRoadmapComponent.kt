@@ -5,7 +5,7 @@ import com.project.giunne.common.base.BaseComponent
 import com.project.giunne.common.data.remote.request.ModifyQuestInfoRequest
 import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.roadmap.GetAllRoadMapUseCase
-import com.project.giunne.common.domain.usecase.roadmap.GetCourseUseCase
+import com.project.giunne.common.domain.usecase.roadmap.GetTeacherCourseUseCase
 import com.project.giunne.common.domain.usecase.roadmap.ModifyQuestInfoUseCase
 import com.project.giunne.common.presentation.roadmap.teacher.state.RoadMapEvent
 import com.project.giunne.common.presentation.roadmap.teacher.state.RoadMapState
@@ -17,7 +17,7 @@ private const val TAG = "TeacherRoadmapComponent"
 class TeacherRoadmapComponent(
     componentContext: ComponentContext,
     private val getAllRoadMapUseCase: GetAllRoadMapUseCase = KoinJavaComponent.get(GetAllRoadMapUseCase::class.java),
-    private val getCourseUseCase: GetCourseUseCase = KoinJavaComponent.get(GetCourseUseCase::class.java),
+    private val getTeacherCourseUseCase: GetTeacherCourseUseCase = KoinJavaComponent.get(GetTeacherCourseUseCase::class.java),
     private val modifyQuestInfoUseCase: ModifyQuestInfoUseCase = KoinJavaComponent.get(ModifyQuestInfoUseCase::class.java)
 ): KoinComponent, ComponentContext by componentContext, BaseComponent<RoadMapState, RoadMapEvent>(
     initialState = RoadMapState()
@@ -45,13 +45,13 @@ class TeacherRoadmapComponent(
         }
     }
 
-    fun getCourse(
+    fun getTeacherCourse(
         id: Long
     ) {
         setState { copy(isLoading = true) }
         scope.launch {
             runCatching {
-                getCourseUseCase(id)
+                getTeacherCourseUseCase(id)
             }.onSuccess { response ->
                 setState {
                     copy(
@@ -72,19 +72,20 @@ class TeacherRoadmapComponent(
 
     fun modifyQuestInfo(
         id: Int,
-        description: String,
+        questDescription: String,
         trainingDescription: String,
         rewardPoint: Long,
         rewardExp: Long,
         guideUrl: String,
     ) {
+        println(id)
         setState { copy(isLoading = true) }
         scope.launch {
             runCatching {
                 modifyQuestInfoUseCase(
                     modifyQuestInfoRequest = ModifyQuestInfoRequest(
                         id = id,
-                        description = description,
+                        questDescription = questDescription,
                         trainingDescription = trainingDescription,
                         rewardPoint = rewardPoint,
                         rewardExp = rewardExp,
@@ -98,7 +99,7 @@ class TeacherRoadmapComponent(
                         modifySuccess = true
                     )
                 }
-                getCourse(1)
+                getTeacherCourse(1)
             }.onFailure {
                 setState {
                     copy(
@@ -112,5 +113,9 @@ class TeacherRoadmapComponent(
 
     fun dismissModifySuccessDialog() {
         setState { copy(modifySuccess = false) }
+    }
+
+    fun dismissErrorDialog() {
+        setState { copy(error = null) }
     }
 }

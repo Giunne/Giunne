@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CourseResponse(
-    @SerialName("courseInfo") val courseInfo: Map<Long, List<QuestInfo>> = mapOf(),
+    @SerialName("courseInfo") val courseInfo: Map<Long, List<CourseInfo>> = mapOf(),
 )

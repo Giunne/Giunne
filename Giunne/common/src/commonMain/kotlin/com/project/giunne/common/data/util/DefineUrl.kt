@@ -34,6 +34,6 @@ object DefineUrl {
 
     /* RoadMap */
     const val URL_ROADMAP_LIST = "quest/roadmap"
-    const val URL_MODIFY_QUEST = "quest/course"
-    const val URL_ROADMAP_COURSE = "quest/course/road-map"
+    const val URL_MODIFY_QUEST = "quest/quest"
+    const val URL_TEACHER_ROADMAP_COURSE = "quest/course/teacher/road-map"
 }

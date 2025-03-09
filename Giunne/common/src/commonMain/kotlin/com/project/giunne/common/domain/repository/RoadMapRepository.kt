@@ -9,5 +9,5 @@ import com.project.giunne.common.data.util.NetworkResult
 interface RoadMapRepository {
     suspend fun getAllRoadMapList(): NetworkResult<List<RoadMapInfo>>
     suspend fun modifyQuestInfo(modifyQuestInfoRequest: ModifyQuestInfoRequest): NetworkResult<QuestInfo>
-    suspend fun getCourse(roadmapId: Long): NetworkResult<CourseResponse>
+    suspend fun getTeacherCourse(roadmapId: Long): NetworkResult<CourseResponse>
 }
