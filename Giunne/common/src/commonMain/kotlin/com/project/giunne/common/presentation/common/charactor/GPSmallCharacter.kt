@@ -19,16 +19,21 @@ import com.project.giunne.common.data.util.DefineUrl.IMAGE_BASE_URL
 import com.project.giunne.common.util.gdp
 
 @Composable
-fun GPMainCharacter(
+fun GPSmallCharacter(
     modifier: Modifier = Modifier,
     wearingItems: List<WearingItem>
 ) {
     val characterItem = wearingItems.find { it.categoryId == 6 } ?: wearingItems.find { it.categoryId == 1 }
     val characterUrl = characterItem?.itemImage?.fileUrl.orEmpty()
 
+    var characterSize by remember { mutableStateOf(IntSize.Zero) }
+
     Box {
         AsyncImage(
-            modifier = modifier,
+            modifier = modifier
+                .onSizeChanged {
+                    characterSize = it
+                },
             model = IMAGE_BASE_URL + characterUrl,
             contentDescription = null
         )
@@ -60,12 +65,14 @@ fun GPMainCharacter(
                     AsyncImage(
                         modifier = Modifier
                             .size(
-                                width = (itemSize.width / 4).gdp,
-                                height = (itemSize.height / 4).gdp
+                                width = (itemSize.width * (characterSize.width.toFloat() / 1024.gdp.toPx())).gdp,
+                                height = (itemSize.height * (characterSize.height.toFloat() / 1024.gdp.toPx())).gdp
                             )
                             .offset(
-                                x = item.itemImage.itemImagePosition?.positionX?.gdp ?: 0.gdp,
-                                y = item.itemImage.itemImagePosition?.positionY?.gdp ?: 0.gdp
+                                x = item.itemImage.itemImagePosition?.positionX?.times(4)
+                                    ?.times(characterSize.width.toFloat() / 1024.gdp.toPx())?.gdp ?: 0.gdp,
+                                y = item.itemImage.itemImagePosition?.positionY?.times(4)
+                                    ?.times(characterSize.height.toFloat() / 1024.gdp.toPx())?.gdp ?: 0.gdp
                             ),
                         model = IMAGE_BASE_URL + item.itemImage.fileUrl,
                         contentDescription = null
