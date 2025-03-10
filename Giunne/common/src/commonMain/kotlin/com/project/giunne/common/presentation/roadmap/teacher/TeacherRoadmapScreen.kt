@@ -50,13 +50,6 @@ internal fun TeacherRoadmapScreen(
             component.getAllRoadMap()
             component.getTeacherCourse(1)
         }.await()
-        component.sideEffect.collect { event ->
-            when (event) {
-                is RoadMapEvent.Success -> {
-                    snackbarHostState.showSnackbar(event.message)
-                }
-            }
-        }
     }
 
     Scaffold(

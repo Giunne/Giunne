@@ -273,6 +273,7 @@ fun RoadMapDialogEditable(
 
             ExerciseActionButtons(
                 onClose = onDismissDialog,
+                isEditable = true,
                 onConfirm = {
                     roadMapComponent.modifyQuestInfo(
                         id = questInfo.id,
