@@ -86,7 +86,6 @@ class TeacherRoadmapComponent(
         rewardExp: Long,
         guideUrl: String,
     ) {
-        println(id)
         setState { copy(isLoading = true) }
         scope.launch {
             runCatching {
@@ -137,7 +136,6 @@ class TeacherRoadmapComponent(
                         val name = response.find { it.id == questInfo.playerId }?.nickname.orEmpty()
                         questInfo.copy(name = name)
                     }.filter { it.name != "" }
-                    println(studentList)
                     copy(isLoading = false, studentList = studentList)
                 }
             }
@@ -204,8 +202,6 @@ class TeacherRoadmapComponent(
                     checkedIdList + studentCheck.id
                 } else {
                     checkedIdList - studentCheck.id
-                }.also {
-                    println(it)
                 }
             )
         }
