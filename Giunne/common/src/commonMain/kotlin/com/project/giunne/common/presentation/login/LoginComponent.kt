@@ -104,11 +104,6 @@ BaseComponent<LoginState, LoginEvent>(
         prefRepository.idPref.set(idText)
     }
 
-    fun dismissDialog() {
-        scope.launch {
-            _loginFailEffect.send(NON_FAIL)
-        }
-    }
 
     fun dismissErrorDialog() {
         setState { copy(error = null) }
@@ -120,7 +115,5 @@ BaseComponent<LoginState, LoginEvent>(
     }
 
     companion object {
-        const val NON_FAIL = ""
-        const val LOGIN_FAIL = "login_fail"
     }
 }

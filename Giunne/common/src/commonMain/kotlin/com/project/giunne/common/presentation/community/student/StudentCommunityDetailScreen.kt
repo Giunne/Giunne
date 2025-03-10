@@ -101,7 +101,7 @@ fun StudentCommunityDetailScreen(
                     if (communityDto.type == CertPage.RoadMap) {
                         VideoPlayer(
                             modifier = Modifier.fillMaxSize(),
-                            videoPath = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4", //TODO API
+                            videoPath = "https://hu-sh.synology.me:10004/upload/20250310_212031.mp4", //TODO API
                             onFullScreenClicked = { fullVideo = true }
                         )
                     } else {
@@ -189,7 +189,7 @@ fun StudentCommunityDetailScreen(
     with(fullVideo) {
         if (this) {
             VideoWindowPlayer(
-                videoPath = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+                videoPath = "https://hu-sh.synology.me:10004/upload/20250310_204353.mp4",
                 dismiss = { fullVideo = false }
             )
         }

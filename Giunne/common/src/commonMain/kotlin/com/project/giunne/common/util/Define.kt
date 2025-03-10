@@ -47,6 +47,7 @@ object Define {
 
     fun clearInfo() {
 //        authInfo = AuthResponse()
+        playerId = 0
         userRole = ""
         accessToken = ""
         refreshToken = ""
