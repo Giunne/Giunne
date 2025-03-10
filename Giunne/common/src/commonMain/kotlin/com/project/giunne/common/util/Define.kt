@@ -42,11 +42,9 @@ object Define {
         value: String
     ) {
         accessToken = value
-//        authInfo = authInfo.copy(accessToken = accessToken)
     }
 
     fun clearInfo() {
-//        authInfo = AuthResponse()
         playerId = 0
         userRole = ""
         accessToken = ""
