@@ -1,0 +1,35 @@
+package com.project.giunne.common.presentation.friend.intent
+
+import com.project.giunne.common.base.BaseStore
+import com.project.giunne.common.data.remote.request.GachaRequest
+import com.project.giunne.common.data.util.asDataThrowable
+import com.project.giunne.common.domain.usecase.avatar.GetFriendsListUseCase
+import com.project.giunne.common.presentation.friend.state.FriendState
+import com.project.giunne.common.util.AvatarUtil
+import kotlinx.coroutines.launch
+import org.koin.java.KoinJavaComponent
+
+class FriendStore(
+    private val getFriendsListUseCase: GetFriendsListUseCase = KoinJavaComponent.get(GetFriendsListUseCase::class.java)
+): BaseStore<FriendState>(
+    initialState = FriendState()
+) {
+    fun getFriendsList(
+        recreationId: Long,
+        id: Int
+    ) {
+        scope.launch {
+            setState { copy(loading = true) }
+            runCatching {
+                getFriendsListUseCase(recreationId)
+            }.onSuccess { response ->
+                setState {
+                    copy(loading = false, friendsList = response.filter { it.id != id })
+                }
+            }
+            .onFailure {
+                setState { copy(loading = false, error = it.asDataThrowable()) }
+            }
+        }
+    }
+}

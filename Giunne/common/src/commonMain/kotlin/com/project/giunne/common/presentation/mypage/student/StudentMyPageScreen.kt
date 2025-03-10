@@ -17,7 +17,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -32,6 +34,7 @@ import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.mypage.student.content.MyPageCharacter
 import com.project.giunne.common.presentation.mypage.student.content.MyPageStudentInfoColumn
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.AvatarUtil
 import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
@@ -51,13 +54,9 @@ internal fun StudentMyPageScreen(
 
     val focusManager = LocalFocusManager.current
     val myPageState by component.uiState.collectAsStateWithLifecycle()
-    val totalExp = if (myPageState.userInfo.needExp != 0) myPageState.userInfo.needExp else myPageState.userInfo.exp
 
-    LaunchedEffect(Unit) {
-        if (Define.playerId != 0L) {
-            component.getRecreationList(Define.playerId, 1)
-        }
-    }
+    val userInfoState = AvatarUtil.uiState.collectAsState()
+    val totalExp = if (userInfoState.value.needExp != 0) userInfoState.value.needExp else userInfoState.value.exp
 
     Scaffold(
         modifier = Modifier
@@ -78,16 +77,16 @@ internal fun StudentMyPageScreen(
             ) {
                 GPMainCharacter(
                     modifier = Modifier.size(256.gdp),
-                    wearingItems = myPageState.userInfo.wearingItems
+                    wearingItems = userInfoState.value.wearingItems
                 )
 
                 MyPageCharacter(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.gdp),
-                    wearingItems = myPageState.userInfo.wearingItems,
-                    level = myPageState.userInfo.level,
-                    percent = myPageState.userInfo.exp / totalExp.toFloat()
+                    wearingItems = userInfoState.value.wearingItems,
+                    level = userInfoState.value.level,
+                    percent = userInfoState.value.exp / totalExp.toFloat()
                 )
 
                 Row(

@@ -8,6 +8,7 @@ import com.project.giunne.common.domain.usecase.avatar.GetUserAvatarListUseCase
 import com.project.giunne.common.domain.usecase.avatar.LoginRecreationUseCase
 import com.project.giunne.common.presentation.home.student.state.StudentJoinEvent
 import com.project.giunne.common.presentation.home.student.state.StudentJoinState
+import com.project.giunne.common.util.AvatarUtil
 import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.GLog
 import kotlinx.coroutines.launch
@@ -76,7 +77,7 @@ class StudentJoinRecreationComponent(
     }
 
     fun loginRecreation(
-        recreationId: Long
+        recreationId: Long,
     ) {
         setState { copy(isLoading = false) }
         scope.launch {
@@ -96,6 +97,7 @@ class StudentJoinRecreationComponent(
                 // playerId, accessToken 업데이트
                 Define.playerId = recreationId
                 Define.accessToken = response.accessToken
+                AvatarUtil.getRecreationList(recreationId, 1)
                 postSideEffect(StudentJoinEvent.SuccessLogin("선택한 로드맵에 연결 되었습니다! 👏🏼"))
             }.onFailure {
                 setState {

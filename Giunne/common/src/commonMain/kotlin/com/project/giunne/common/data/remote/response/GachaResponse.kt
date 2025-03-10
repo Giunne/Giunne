@@ -7,5 +7,6 @@ data class GachaResponse(
     val code: String = "",
     val codeName: String = "",
     val price: Int = 0,
-    val itemGradeMap: Map<String, Int> = mapOf()
+    val itemGradeMap: Map<String, Int> = mapOf(),
+    val imageList: List<String> = listOf(),
 )

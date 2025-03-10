@@ -100,6 +100,7 @@ fun RootContent(
                 dismiss = {
                     Define.clearInfo()
                     component.navigateToLogin()
+                    TokenHandler.dismissExpireDialog()
                 },
                 title = "접속 기한 초과",
                 content = "로그인이 만료되었습니다. 다시 로그인 해주세요!",

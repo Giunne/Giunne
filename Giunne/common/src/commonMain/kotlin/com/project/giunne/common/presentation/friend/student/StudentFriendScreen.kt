@@ -9,13 +9,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import com.project.giunne.common.presentation.common.addFocusCleaner
+import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.friend.content.StudentFriendItemRow
 import com.project.giunne.common.presentation.friend.dummy.friendList
+import com.project.giunne.common.presentation.friend.intent.FriendStore
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.AvatarUtil
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.gdp
 
@@ -29,6 +36,15 @@ internal fun StudentFriendScreen(
 
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
+    val friendStore = remember { FriendStore() }
+    val friendState by friendStore.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        friendStore.getFriendsList(
+            recreationId = AvatarUtil.uiState.value.recreationId.toLong(),
+            id = AvatarUtil.uiState.value.id
+        )
+    }
 
     Scaffold(
         modifier = Modifier
@@ -42,16 +58,20 @@ internal fun StudentFriendScreen(
                 .background(color = GPColor.BackgroundLightGray)
         ) {
             items(
-                count = friendList.size
+                count = friendState.friendsList.size
             ) {
                 StudentFriendItemRow(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(64.gdp)
                         .padding(horizontal = 16.gdp),
-                    friendInfo = friendList[it]
+                    friendInfo = friendState.friendsList[it]
                 )
             }
         }
+    }
+
+    if(friendState.loading) {
+        Loader()
     }
 }

@@ -2,9 +2,15 @@ package com.project.giunne.common.domain.repository
 
 import com.project.giunne.common.data.remote.request.AvatarCreateRequest
 import com.project.giunne.common.data.remote.request.AvatarLoginRequest
+import com.project.giunne.common.data.remote.request.GachaRequest
 import com.project.giunne.common.data.remote.response.AvatarResponse
 import com.project.giunne.common.data.remote.response.AvatarUserListResponse
+import com.project.giunne.common.data.remote.response.AvatarUserResponse
+import com.project.giunne.common.data.remote.response.Item
+import com.project.giunne.common.data.util.BaseResponse
 import com.project.giunne.common.data.util.NetworkResult
+import de.jensklingenberg.ktorfit.http.Body
+import de.jensklingenberg.ktorfit.http.Query
 
 interface AvatarRepository {
     suspend fun loginRecreation(
@@ -16,4 +22,5 @@ interface AvatarRepository {
     ): NetworkResult<AvatarResponse>
 
     suspend fun getUserAvatarList(pageIndex: Int): NetworkResult<AvatarUserListResponse>
+    suspend fun getRecreationAvatarList(recreationId: Long): NetworkResult<List<AvatarUserResponse>>
 }

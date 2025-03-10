@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import com.project.giunne.common.data.remote.request.GachaType
 import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.common.toggle.GPToggleButton
@@ -32,7 +33,7 @@ import com.project.giunne.common.util.gsp
 
 @Composable
 fun GachaScreen(
-    onGachaClick: () -> Unit
+    onGachaClick: (GachaType) -> Unit
 ) {
     var isAdvanced by remember { mutableStateOf(false) }
     val gachaStore by remember { mutableStateOf(GachaStore()) }
@@ -42,7 +43,7 @@ fun GachaScreen(
         gachaStore.getGachaType()
     }
 
-    if (gachaState.gachaInfo.isEmpty()) {
+    if (gachaState.loading) {
         Loader()
     } else {
         Column (
@@ -55,8 +56,8 @@ fun GachaScreen(
                     modifier = Modifier.width(120.gdp)
                         .height(56.gdp)
                         .padding(horizontal = 16.gdp, vertical = 8.gdp),
-                    titleLeft = gachaState.gachaInfo[0].codeName,
-                    titleRight = gachaState.gachaInfo[1].codeName,
+                    titleLeft = gachaState.generalGachaInfo.codeName,
+                    titleRight = gachaState.premiumGachaInfo.codeName,
                     isSelected = isAdvanced,
                     onLeftButtonClick = {
                         isAdvanced = false
@@ -108,7 +109,8 @@ fun GachaScreen(
             Spacer(modifier = Modifier.height(32.gdp))
 
             GPText(
-                text = "${gachaState.gachaItemList.size}개 아이템 중 하나 당첨",
+                text = if (!isAdvanced) "${gachaState.generalGachaInfo.imageList.size}개 아이템 중 하나 당첨" // 일반이면
+                    else "${gachaState.premiumGachaInfo.imageList.size}개 아이템 중 하나 당첨", // 고급이면
                 textSize = 18.gsp,
                 fontFamily = GPFontFamily.Bold,
                 textColor = GPColor.ButtonLightGray
@@ -117,7 +119,8 @@ fun GachaScreen(
             Spacer(modifier = Modifier.height(64.gdp))
 
             GachaItemList(
-                gachaItems = gachaState.gachaItemList
+                gachaItems = if (!isAdvanced) gachaState.generalGachaInfo.imageList // 일반이면
+                    else gachaState.premiumGachaInfo.imageList, // 고급이면
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -126,10 +129,10 @@ fun GachaScreen(
                 modifier = Modifier.fillMaxWidth()
                     .wrapContentHeight()
                     .padding(16.gdp),
-                gachaCost = if (isAdvanced) gachaState.gachaInfo[1].price else gachaState.gachaInfo[0].price,
+                gachaCost = if (isAdvanced) gachaState.premiumGachaInfo.price else gachaState.generalGachaInfo.price,
                 remainPoint = gachaState.remainPoint,
                 onGachaClick = {
-                    onGachaClick()
+                    onGachaClick(if(!isAdvanced) GachaType.GENERAL else GachaType.PREMIUM)
                 }
             )
         }
