@@ -5,6 +5,7 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,6 +23,8 @@ import com.project.giunne.common.data.remote.response.QuestInfo
 import com.project.giunne.common.presentation.common.text.GPAnnotatedText
 import com.project.giunne.common.presentation.roadmap.content.RoadMapDialogEditable
 import com.project.giunne.common.presentation.roadmap.content.RoadMapTeacherExerciseStage
+import com.project.giunne.common.presentation.roadmap.content.TeacherCheckStudentDialog
+import com.project.giunne.common.presentation.roadmap.content.TeacherCheckbox
 import com.project.giunne.common.presentation.roadmap.node.roadMap1
 import com.project.giunne.common.presentation.roadmap.node.roadMap2
 import com.project.giunne.common.presentation.roadmap.node.roadMap3
@@ -42,7 +45,17 @@ fun TeacherExerciseRoadmapScreen(
     var offsetX by remember { mutableStateOf(0f) }
     var offsetY by remember { mutableStateOf(0f) }
     var isShow by remember { mutableStateOf(false) }
+    var isChecked by remember { mutableStateOf(false) }
     var courseInfo by remember { mutableStateOf(CourseInfo()) }
+
+    LaunchedEffect(isShow) {
+        if (isChecked && isShow) {
+            roadMapComponent.loadStudentList(
+                recreationId = 18,
+                id = courseInfo.id
+            )
+        }
+    }
 
     BoxWithConstraints(
         modifier = modifier
@@ -56,18 +69,42 @@ fun TeacherExerciseRoadmapScreen(
     ) {
 
         if (isShow) {
-            RoadMapDialogEditable(
-                roadMapComponent = roadMapComponent,
-                roadMapState = roadMapState,
-                questInfo = courseInfo.questInfo,
-                nextQuestList = roadMapState.courseMap[courseInfo.id.toLong()]
-                    ?.map { it.title }
-                    ?.distinct()
-                    ?: listOf(),
-                onDismissDialog = {
-                    isShow = false
-                },
-            )
+            if (isChecked) {
+                TeacherCheckStudentDialog(
+                    roadMapState = roadMapState,
+                    dismissSuccessDialog = {
+                        roadMapComponent.dismissSuccessDialog()
+                    },
+                    onDismissDialog = {
+                        isShow = false
+                        roadMapComponent.clearStudentCheckList()
+                    },
+                    onAllSelectedChange = {
+                        roadMapComponent.checkedStudentAll(it)
+                    },
+                    studentList = roadMapState.studentList,
+                    onCheckedChanged = { studentCheck, checked ->
+                        roadMapComponent.checkedStudent(studentCheck, checked)
+                    },
+                    onConfirm = {
+                        println(roadMapState.checkedIdList)
+                        roadMapComponent.modifyQuestState(roadMapState.studentList)
+                    },
+                )
+            } else {
+                RoadMapDialogEditable(
+                    roadMapComponent = roadMapComponent,
+                    roadMapState = roadMapState,
+                    questInfo = courseInfo.questInfo,
+                    nextQuestList = roadMapState.courseMap[courseInfo.id.toLong()]
+                        ?.map { it.title }
+                        ?.distinct()
+                        ?: listOf(),
+                    onDismissDialog = {
+                        isShow = false
+                    },
+                )
+            }
         }
 
         val width = maxWidth.value + 20
@@ -166,6 +203,14 @@ fun TeacherExerciseRoadmapScreen(
                 append(text.substring(2))
             },
             fontFamily = GPFontFamily.Bold
+        )
+
+        TeacherCheckbox(
+            modifier = Modifier.align(Alignment.TopEnd),
+            isChecked = isChecked,
+            onCheckedChanged = {
+                isChecked = it
+            }
         )
     }
 }

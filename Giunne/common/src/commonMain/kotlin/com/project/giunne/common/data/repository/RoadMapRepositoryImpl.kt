@@ -1,7 +1,9 @@
 package com.project.giunne.common.data.repository
 
 import com.project.giunne.common.data.remote.request.ModifyQuestInfoRequest
+import com.project.giunne.common.data.remote.request.QuestStateRequest
 import com.project.giunne.common.data.remote.response.CourseResponse
+import com.project.giunne.common.data.remote.response.QuestCodeResponse
 import com.project.giunne.common.data.remote.response.QuestInfo
 import com.project.giunne.common.data.remote.response.RoadMapInfo
 import com.project.giunne.common.data.service.RoadMapService
@@ -28,6 +30,24 @@ class RoadMapRepositoryImpl(
     override suspend fun getTeacherCourse(roadmapId: Long): NetworkResult<CourseResponse> {
         return handleApi(TAG) {
             roadMapService.getTeacherCourse(roadmapId = roadmapId)
+        }
+    }
+
+    override suspend fun getStudentCourse(roadmapId: Long): NetworkResult<CourseResponse> {
+        return handleApi(TAG) {
+            roadMapService.getStudentCourse(roadmapId = roadmapId)
+        }
+    }
+
+    override suspend fun getQuestCode(): NetworkResult<QuestCodeResponse> {
+        return handleApi(TAG) {
+            roadMapService.getQuestCode()
+        }
+    }
+
+    override suspend fun modifyQuestState(questStateRequest: QuestStateRequest): NetworkResult<String> {
+        return handleApi(TAG) {
+            roadMapService.modifyQuestState(questStateRequest)
         }
     }
 }

@@ -66,6 +66,7 @@ data class QuestInfo(
 
 @Serializable
 data class QuestStateInfo(
+    val name: String = "",
     @SerialName("hasExtraPoints")
     val hasExtraPoints: Boolean = false,
     @SerialName("id")
@@ -79,7 +80,8 @@ data class QuestStateInfo(
     @SerialName("rewardPoint")
     val rewardPoint: Int = 0,
     @SerialName("starPoint")
-    val starPoint: Int = 0
+    val starPoint: Int = 0,
+    val isChecked: Boolean = false
 )
 
 @Serializable

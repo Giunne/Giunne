@@ -14,14 +14,17 @@ import com.project.giunne.common.domain.usecase.mypage.GetInventoryItemListUseCa
 import com.project.giunne.common.domain.usecase.mypage.PutInventoryItemUseCase
 import com.project.giunne.common.domain.usecase.roadmap.CreateRecreationUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetAllRoadMapUseCase
-import com.project.giunne.common.domain.usecase.roadmap.GetTeacherCourseUseCase
+import com.project.giunne.common.domain.usecase.roadmap.GetQuestCodeUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetSearchRecreationUseCase
+import com.project.giunne.common.domain.usecase.roadmap.GetStudentCourseUseCase
+import com.project.giunne.common.domain.usecase.roadmap.GetTeacherCourseUseCase
 import com.project.giunne.common.domain.usecase.shop.GetCategoryItemListUseCase
 import com.project.giunne.common.domain.usecase.shop.GetCategoryMapUseCase
 import com.project.giunne.common.domain.usecase.shop.GetGachaTypeUseCase
 import com.project.giunne.common.domain.usecase.shop.PostGachaUseCase
 import org.koin.core.module.Module
 import com.project.giunne.common.domain.usecase.roadmap.ModifyQuestInfoUseCase
+import com.project.giunne.common.domain.usecase.roadmap.ModifyQuestStateUseCase
 import org.koin.dsl.module
 
 val useCaseModule: Module = module {
@@ -43,6 +46,9 @@ val useCaseModule: Module = module {
     single { GetAllRoadMapUseCase(get()) }
     single { GetTeacherCourseUseCase(get()) }
     single { ModifyQuestInfoUseCase(get()) }
+    single { GetQuestCodeUseCase(get()) }
+    single { GetStudentCourseUseCase(get()) }
+    single { ModifyQuestStateUseCase(get()) }
     single { GetInventoryItemListUseCase(get()) }
     single { PutInventoryItemUseCase(get()) }
     single { GetFriendsListUseCase(get()) }
