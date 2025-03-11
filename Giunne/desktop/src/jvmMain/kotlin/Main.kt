@@ -63,10 +63,11 @@ fun main() {
 
     application {
         val density = LocalDensity.current.density
+        val size = if (1 < density) 1.3f else 1f
         val toolkit = Toolkit.getDefaultToolkit()
         val windowState = rememberWindowState(
-            width = 360.dp * density,
-            height = 780.dp * density,
+            width = 360.dp * size,
+            height = 780.dp * size,
             position = WindowPosition(Alignment.TopEnd),
 //            position = WindowPosition((-100).dp, 0.dp),
             isMinimized = false
@@ -108,11 +109,3 @@ private fun tryRestoreStateFromFile(): ParcelableContainer? =
             file.delete()
         }
     }
-
-
-fun getScreenDPI(): Float {
-    val toolkit = Toolkit.getDefaultToolkit()
-    val screenResolution = toolkit.screenResolution
-    println("screenResolution ================> $screenResolution")
-    return screenResolution.toFloat() / 96f // 96 DPI가 기본 값
-}
