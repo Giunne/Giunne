@@ -18,23 +18,18 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.project.giunne.Res
-import com.project.giunne.common.data.remote.response.CourseInfo
 import com.project.giunne.common.data.remote.response.StudentCourseInfo
 import com.project.giunne.common.data.util.DefineUrl.IMAGE_BASE_URL
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.shape.GPSquircleShapeWithBorder
 import com.project.giunne.common.presentation.common.text.GPText
-import com.project.giunne.common.presentation.roadmap.dummy.exerciseList
 import com.project.giunne.common.presentation.roadmap.node.ConnectNode
 import com.project.giunne.common.presentation.roadmap.node.Node
-import com.project.giunne.common.presentation.roadmap.node.NodeStatus
-import com.project.giunne.common.presentation.roadmap.state.ExerciseUiState
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_lock
-import com.project.giunne.icon_unlock
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
