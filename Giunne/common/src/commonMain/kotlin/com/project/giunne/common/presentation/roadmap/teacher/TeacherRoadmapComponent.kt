@@ -146,15 +146,15 @@ class TeacherRoadmapComponent(
     }
 
     fun modifyQuestState(
-        studentList: List<QuestStateInfo>
+        checkIdSet: Set<Int>
     ) {
         scope.launch {
             runCatching {
                 async {
-                    studentList.forEach {
+                    checkIdSet.forEach { id ->
                         modifyQuestStateUseCase(
                             QuestStateRequest(
-                                questStateId = it.id,
+                                questStateId = id,
                                 questProgress = "CHECK"
                             )
                         )
@@ -198,10 +198,10 @@ class TeacherRoadmapComponent(
                     val index = indexOf(studentCheck)
                     this[index] = studentCheck.copy(isChecked = checked)
                 },
-                checkedIdList = if (checked) {
-                    checkedIdList + studentCheck.id
+                checkedIdSet = if (checked) {
+                    checkedIdSet + studentCheck.id
                 } else {
-                    checkedIdList - studentCheck.id
+                    checkedIdSet - studentCheck.id
                 }
             )
         }
@@ -211,7 +211,7 @@ class TeacherRoadmapComponent(
         setState {
             copy(
                 studentList = studentList.map { it.copy(isChecked = allSelected) },
-                checkedIdList = if (allSelected) {
+                checkedIdSet = if (allSelected) {
                     studentList.map { it.id }.toSet()
                 } else {
                     setOf()
@@ -223,7 +223,7 @@ class TeacherRoadmapComponent(
 
     fun clearStudentCheckList() {
         setState {
-            copy(studentList = listOf())
+            copy(checkedIdSet = setOf())
         }
     }
 }

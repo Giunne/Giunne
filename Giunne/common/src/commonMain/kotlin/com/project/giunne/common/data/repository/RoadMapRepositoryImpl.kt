@@ -6,6 +6,7 @@ import com.project.giunne.common.data.remote.response.CourseResponse
 import com.project.giunne.common.data.remote.response.QuestCodeResponse
 import com.project.giunne.common.data.remote.response.QuestInfo
 import com.project.giunne.common.data.remote.response.RoadMapInfo
+import com.project.giunne.common.data.remote.response.StudentCourseResponse
 import com.project.giunne.common.data.service.RoadMapService
 import com.project.giunne.common.data.util.NetworkResult
 import com.project.giunne.common.data.util.handleApi
@@ -33,7 +34,7 @@ class RoadMapRepositoryImpl(
         }
     }
 
-    override suspend fun getStudentCourse(roadmapId: Long): NetworkResult<CourseResponse> {
+    override suspend fun getStudentCourse(roadmapId: Long): NetworkResult<StudentCourseResponse> {
         return handleApi(TAG) {
             roadMapService.getStudentCourse(roadmapId = roadmapId)
         }

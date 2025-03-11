@@ -62,9 +62,9 @@ fun roadMap2(
             node.add(Node(currentOffset, boxSize, spacing, step = steps[index + 6]))
         }
     }
-    val startNode = Node(Offset(width / 2, height - 32),60f, 0f)
-    val emptyNode = Node(Offset(width / 2, height),60f, 0f, step = "4-a")
-    val endNode = Node(Offset(width / 2, 0f),60f, 0f)
+    val startNode = Node(Offset(width / 2, height - 32),60f, 0f, step = "4-b.CORE")
+    val emptyNode = Node(Offset(width / 2, height),60f, 0f, step = "4-b.CORE")
+    val endNode = Node(Offset(width / 2, 0f),60f, 0f, step = "9.CORE")
     val connectList = buildList {
         add(ConnectNode(emptyNode, startNode, Connect.STRAIGHT))
         add(ConnectNode(startNode, node[0], Connect.STRAIGHT))
@@ -109,7 +109,7 @@ fun roadMap3(
             node.add(Node(currentOffset, boxSize, spacing, step = steps[index]))
         }
     }
-    val startNode = Node(Offset(width / 2, height),60f, 0f)
+    val startNode = Node(Offset(width / 2, height),60f, 0f, step = "9.CORE")
     val connectList = buildList {
         add(ConnectNode(startNode, node[0], Connect.STRAIGHT))
         add(ConnectNode(node[0], node[1], Connect.STRAIGHT))
@@ -176,9 +176,9 @@ fun roadMap4(
 
 
     // 연결 될 상단 offset
-    val left = Node(Offset(width / 2 - width / 3, 0f),60f, 0f)
-    val center = Node(Offset(width / 2, 0f),60f, 0f)
-    val right = Node(Offset(width / 2 + width / 3, 0f),60f, 0f)
+    val left = Node(Offset(width / 2 - width / 3, 0f),60f, 0f, step = "1.SQUATS")
+    val center = Node(Offset(width / 2, 0f),60f, 0f, step = "1.LUNGES")
+    val right = Node(Offset(width / 2 + width / 3, 0f),60f, 0f, step = "2.DEADLIFT")
 
     val connectList = buildList {
         // 4-2 첫 번째 로드맵
@@ -190,6 +190,7 @@ fun roadMap4(
         add(ConnectNode(node[4], node[5], Connect.BOTTOM_CURVE))
         // 4-2 두 번째 로드맵
         add(ConnectNode(node[5], node[6], Connect.TOP_CURVE))
+        add(ConnectNode(node[5], node[10], Connect.TOP_CURVE))
         add(ConnectNode(node[6], node[7], Connect.STRAIGHT))
         add(ConnectNode(node[7], left, Connect.STRAIGHT))
         add(ConnectNode(node[8], node[7], Connect.BOTTOM_CURVE))
@@ -217,9 +218,9 @@ fun roadMap5(
     var leftNodeOffset = Offset(currentOffset.x - width / 3, currentOffset.y)
     var rightNodeOffset = Offset(currentOffset.x + width / 3, currentOffset.y)
     val node = mutableListOf<Node>()
-    val left = Node(Offset(width / 2 - width / 3, height),60f, 0f)
-    val center = Node(Offset(width / 2, height),60f, 0f)
-    val right = Node(Offset(width / 2 + width / 3, height),60f, 0f)
+    val left = Node(Offset(width / 2 - width / 3, height),60f, 0f, step = "1.SQUATS")
+    val center = Node(Offset(width / 2, height),60f, 0f, step = "1.LUNGES")
+    val right = Node(Offset(width / 2 + width / 3, height),60f, 0f, step = "2.DEADLIFT")
 
     // 가운데
     for (index in 0..2) {

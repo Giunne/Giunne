@@ -16,8 +16,8 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.project.giunne.Res
+import com.project.giunne.common.data.remote.response.StudentQuestInfo
 import com.project.giunne.common.presentation.common.text.GPText
-import com.project.giunne.common.presentation.roadmap.state.ExerciseUiState
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
@@ -27,7 +27,8 @@ import com.project.giunne.icon_stage
 
 @Composable
 fun RoadMapDialog(
-    exerciseUiState: ExerciseUiState = ExerciseUiState(),
+    questInfo: StudentQuestInfo,
+    nextQuestList: List<String>,
     onDismissDialog: () -> Unit = {},
     onConfirm: () -> Unit = {}
 ) {
@@ -47,22 +48,22 @@ fun RoadMapDialog(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ExerciseHeaderLink(
-                title = exerciseUiState.title,
+                title = questInfo.questName,
                 openYoutubeLink = {
-                    uriHandler.openUri(exerciseUiState.youtubeUrl)
+                    uriHandler.openUri(questInfo.guideUrl)
                 }
             )
 
             Spacer(modifier = Modifier.height(16.gdp))
 
-            ExerciseDescription(exerciseUiState.description)
+            ExerciseDescription(questInfo.questDescription)
 
             Spacer(modifier = Modifier.height(16.gdp))
 
             BorderContentField(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                ExerciseStep(exerciseUiState.exerciseStep)
+                ExerciseStep(questInfo.trainingDescription)
             }
 
             Spacer(modifier = Modifier.height(16.gdp))
@@ -85,7 +86,7 @@ fun RoadMapDialog(
                     icon = Res.drawable.icon_exp
                 ) {
                     GPText(
-                        text = exerciseUiState.rewardExp.toString(),
+                        text = questInfo.rewardExp.toString(),
                         textSize = 12.gsp,
                         textColor = GPColor.MainOrangeColor
                     )
@@ -99,22 +100,24 @@ fun RoadMapDialog(
                     icon = Res.drawable.icon_attach_money
                 ) {
                     GPText(
-                        text = "+${exerciseUiState.rewardCoin}",
+                        text = "+${questInfo.rewardPoint}",
                         textSize = 12.gsp,
                         textColor = GPColor.MainOrangeColor
                     )
                 }
                 Spacer(modifier = Modifier.height(8.gdp))
 
-                ExerciseRewardSection(
-                    title = exerciseUiState.nextExerciseTitle,
-                    titleColor = GPColor.MainOrangeColor,
-                    icon = Res.drawable.icon_stage
-                ) {
-                    GPText(
-                        text = "도전 가능!",
-                        textSize = 12.gsp
-                    )
+                if (nextQuestList.isNotEmpty()) {
+                    ExerciseRewardSection(
+                        title = nextQuestList.joinToString("\n") { it },
+                        titleColor = GPColor.MainOrangeColor,
+                        icon = Res.drawable.icon_stage
+                    ) {
+                        GPText(
+                            text = "도전 가능!",
+                            textSize = 12.gsp
+                        )
+                    }
                 }
             }
 

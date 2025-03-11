@@ -16,10 +16,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.project.giunne.Res
+import com.project.giunne.common.data.remote.response.CourseInfo
+import com.project.giunne.common.data.remote.response.StudentCourseInfo
+import com.project.giunne.common.data.util.DefineUrl.IMAGE_BASE_URL
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.shape.GPSquircleShapeWithBorder
 import com.project.giunne.common.presentation.common.text.GPText
+import com.project.giunne.common.presentation.roadmap.dummy.exerciseList
 import com.project.giunne.common.presentation.roadmap.node.ConnectNode
 import com.project.giunne.common.presentation.roadmap.node.Node
 import com.project.giunne.common.presentation.roadmap.node.NodeStatus
@@ -29,15 +34,16 @@ import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_lock
+import com.project.giunne.icon_unlock
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun RoadMapExerciseStage(
     offset: Offset,
-    exerciseList: List<ExerciseUiState>,
+    questInfoList: List<StudentCourseInfo>,
     node: List<Node>,
     connect: List<ConnectNode>,
-    onExerciseClicked: (String) -> Unit,
+    onExerciseClicked: (StudentCourseInfo) -> Unit,
 ) {
     val density = LocalDensity.current.density
     Box(
@@ -47,25 +53,29 @@ fun RoadMapExerciseStage(
     ) {
         DrawExerciseLine(
             density = density,
-            exerciseState = exerciseList,
+            questInfoList = questInfoList,
             connect = connect
         )
         node.forEach { node ->
-            val findNode = exerciseList.find { it.step == node.step }
-
+            val courseInfo = questInfoList.find { it.courseName == node.step } ?: StudentCourseInfo()
+            val questStateInfo = courseInfo.questInfo.questStateInfo
+            val status = questStateInfo.questProgress
+            val isBonus = questStateInfo.hasExtraPoints
             val borderColor = if (node.boxSize == 30f) {
                 GPColor.MainOrangeColor
-            } else if (findNode?.status == NodeStatus.CONFIRM) {
+            } else if (status == "CONFIRM") {
                 GPColor.Green
-            } else if (findNode?.isBonusDay == true) {
+            } else if (isBonus) {
                 GPColor.MainOrangeColor
             } else {
                 GPColor.ButtonLightGray
             }
             val backgroundColor = if (node.boxSize == 30f) {
                 GPColor.MainOrangeColor
-            } else if (findNode?.status == NodeStatus.LOCK || findNode?.status == NodeStatus.UNCHECK) {
+            } else if (status == "LOCK") {
                 GPColor.TextBlack
+            } else if (status == "LOCK_OPEN") {
+                GPColor.TextGray
             } else {
                 GPColor.White
             }
@@ -74,7 +84,7 @@ fun RoadMapExerciseStage(
                 contentAlignment = Alignment.Center
             ) {
                 // 시작 노드
-                if (node.step == findNode?.step) {
+                if (courseInfo.questInfo.questName.startsWith("0")) {
                     Box(
                         modifier = Modifier
                             .wrapContentSize()
@@ -84,9 +94,8 @@ fun RoadMapExerciseStage(
                             .padding(4.gdp),
                         contentAlignment = Alignment.Center
                     ) {
-                        /* TODO(API 연결시 title로 변경) */
                         GPText(
-                            text = findNode?.name ?: "테스트",
+                            text = courseInfo.questInfo.questName.split(".").last(),
                             textSize = 10.gsp,
                             fontFamily = GPFontFamily.Bold
                         )
@@ -97,18 +106,23 @@ fun RoadMapExerciseStage(
                             .size(node.boxSize.dp)
                             .offset(node.drawOffset.x.dp, node.drawOffset.y.dp)
                             .noRippleClickable {
-                                if (findNode?.status != NodeStatus.LOCK) {
-                                    onExerciseClicked(node.step)
+                                if (status != "LOCK") {
+                                    onExerciseClicked(courseInfo)
                                 }
                             },
                         backgroundColor = backgroundColor,
                         borderColor = borderColor
                     ) {
-                        GPText(
-                            text = node.step
-                        )
+                        courseInfo.thumbnailUrl?.let { url ->
+                            AsyncImage(
+                                modifier = Modifier
+                                    .size(node.boxSize.dp),
+                                model = IMAGE_BASE_URL + url,
+                                contentDescription = "운동 이미지"
+                            )
+                        }
                     }
-                    if (findNode?.status == NodeStatus.LOCK) {
+                    if (status == "LOCK") {
                         Icon(
                             modifier = Modifier
                                 .size(18.gdp)

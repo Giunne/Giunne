@@ -6,6 +6,7 @@ import com.project.giunne.common.data.remote.response.CourseResponse
 import com.project.giunne.common.data.remote.response.QuestCodeResponse
 import com.project.giunne.common.data.remote.response.QuestInfo
 import com.project.giunne.common.data.remote.response.RoadMapInfo
+import com.project.giunne.common.data.remote.response.StudentCourseResponse
 import com.project.giunne.common.data.util.BaseResponse
 import com.project.giunne.common.data.util.DefineUrl.URL_MODIFY_QUEST
 import com.project.giunne.common.data.util.DefineUrl.URL_QUEST_CODE
@@ -15,7 +16,6 @@ import com.project.giunne.common.data.util.DefineUrl.URL_STUDENT_ROADMAP_COURSE
 import com.project.giunne.common.data.util.DefineUrl.URL_TEACHER_ROADMAP_COURSE
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
-import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Query
 
@@ -37,7 +37,7 @@ interface RoadMapService {
     @GET(URL_STUDENT_ROADMAP_COURSE)
     suspend fun getStudentCourse(
         @Query("roadmapId") roadmapId: Long
-    ): BaseResponse<CourseResponse>
+    ): BaseResponse<StudentCourseResponse>
 
     @GET(URL_QUEST_CODE)
     suspend fun getQuestCode(): BaseResponse<QuestCodeResponse>

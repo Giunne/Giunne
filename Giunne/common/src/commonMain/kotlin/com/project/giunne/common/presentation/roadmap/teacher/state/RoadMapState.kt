@@ -11,11 +11,9 @@ data class RoadMapState(
     val modifySuccess: Boolean = false,
     val roadMapInfo: List<RoadMapInfo> = listOf(),
     val studentList: List<QuestStateInfo> = listOf(),
-    val checkedIdList: Set<Int> = setOf(),
+    val checkedIdSet: Set<Int> = hashSetOf(),
     val courseMap: Map<Long, List<CourseInfo>> = mapOf(),
     val error: DataThrowable? = null
 )
 
-sealed interface RoadMapEvent {
-    data class Success(val message: String): RoadMapEvent
-}
+sealed interface RoadMapEvent

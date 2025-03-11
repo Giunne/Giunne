@@ -23,7 +23,7 @@ fun CheckboxAll(
             .noRippleClickable {
                 onCheckedChanged(!isChecked)
             }
-            .padding(16.gdp),
+            .padding(horizontal = 16.gdp, vertical = 4.gdp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {

@@ -51,7 +51,8 @@ fun TeacherExerciseRoadmapScreen(
     LaunchedEffect(isShow) {
         if (isChecked && isShow) {
             roadMapComponent.loadStudentList(
-                recreationId = 18,
+                /* TODO(선생님용 Recreation 접속 API 나오면 ID로 변경) */
+                recreationId = 19,
                 id = courseInfo.id
             )
         }
@@ -87,7 +88,7 @@ fun TeacherExerciseRoadmapScreen(
                         roadMapComponent.checkedStudent(studentCheck, checked)
                     },
                     onConfirm = {
-                        roadMapComponent.modifyQuestState(roadMapState.studentList)
+                        roadMapComponent.modifyQuestState(roadMapState.checkedIdSet)
                     },
                 )
             } else {
