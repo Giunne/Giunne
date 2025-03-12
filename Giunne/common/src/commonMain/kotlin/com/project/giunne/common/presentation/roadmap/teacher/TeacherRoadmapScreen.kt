@@ -75,6 +75,7 @@ internal fun TeacherRoadmapScreen(
                         .background(GPColor.BackgroundLightGray)
                         .padding(horizontal = 16.gdp, vertical = 8.gdp)
                         .align(Alignment.Center),
+                    questInfoList = roadMapState.courseMap.values.flatten()
                 )
             } else {
                 TeacherExerciseRoadmapScreen(

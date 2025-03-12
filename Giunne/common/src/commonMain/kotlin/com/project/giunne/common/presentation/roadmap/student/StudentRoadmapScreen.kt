@@ -22,6 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.toggle.GPToggleButton
+import com.project.giunne.common.presentation.roadmap.dummy.joggingUiState
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.gdp
@@ -68,6 +69,7 @@ internal fun StudentRoadmapScreen(
                         .background(GPColor.BackgroundLightGray)
                         .padding(horizontal = 16.gdp, vertical = 8.gdp)
                         .align(Alignment.Center),
+                    questInfoList = roadMapState.courseMap.values.flatten()
                 )
             } else {
                 ExerciseRoadmapScreen(

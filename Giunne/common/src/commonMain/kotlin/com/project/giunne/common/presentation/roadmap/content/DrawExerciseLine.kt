@@ -30,15 +30,10 @@ fun DrawExerciseLine(
                 val to = it.to
                 val connection = it.connect
                 val fromCourseInfo = questInfoList.find { it.courseName == from.step } ?: StudentCourseInfo()
-                val toCourseInfo = questInfoList.find { it.courseName == to.step } ?: StudentCourseInfo()
                 val fromQuestStateInfo = fromCourseInfo.questInfo.questStateInfo
-                val toQuestStateInfo = toCourseInfo.questInfo.questStateInfo
                 val fromStatus = fromQuestStateInfo.questProgress
-                val toStatus = toQuestStateInfo.questProgress
                 val defaultColor = if (from.boxSize == 30f) GPColor.MainOrangeColor else GPColor.ButtonLightGray
-                val color = if (fromStatus == "CONFIRM") {
-                    GPColor.Green
-                } else if (toStatus == "LOCK_OPEN" && from.boxSize == 30f) { // 화면 그리위한 노드는 바로 연결 시켜줘야함
+                val color = if (fromStatus == "CONFIRM" && from.boxSize != 30f) {
                     GPColor.Green
                 } else {
                     defaultColor
