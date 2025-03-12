@@ -37,6 +37,7 @@ import com.project.giunne.icon_exp
 @Composable
 fun TeacherJoggingDialog(
     roadMapComponent: TeacherRoadmapComponent,
+    courseId: Long,
     roadMapState: RoadMapState,
     questInfo: QuestInfo,
     onDismissDialog: () -> Unit = {},
@@ -175,6 +176,7 @@ fun TeacherJoggingDialog(
                 isEditable = true,
                 onConfirm = {
                     roadMapComponent.modifyQuestInfo(
+                        courseId = courseId,
                         id = questInfo.id,
                         rewardPoint = rewardCoin.toLong(),
                         rewardExp = rewardExp.toLong(),

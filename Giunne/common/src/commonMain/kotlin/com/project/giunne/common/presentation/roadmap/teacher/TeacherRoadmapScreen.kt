@@ -74,6 +74,7 @@ internal fun TeacherRoadmapScreen(
             if (isShow) {
                 TeacherJoggingDialog(
                     roadMapComponent = component,
+                    courseId = 2,
                     roadMapState = roadMapState,
                     questInfo = courseInfo.questInfo,
                     onDismissDialog = {

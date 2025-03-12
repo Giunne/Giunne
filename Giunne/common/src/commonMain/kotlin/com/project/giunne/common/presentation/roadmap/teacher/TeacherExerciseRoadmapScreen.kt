@@ -94,6 +94,7 @@ fun TeacherExerciseRoadmapScreen(
             } else {
                 RoadMapDialogEditable(
                     roadMapComponent = roadMapComponent,
+                    courseId = 1,
                     roadMapState = roadMapState,
                     questInfo = courseInfo.questInfo,
                     nextQuestList = roadMapState.courseMap[courseInfo.id.toLong()]

@@ -41,6 +41,7 @@ import com.project.giunne.icon_stage
 @Composable
 fun RoadMapDialogEditable(
     roadMapComponent: TeacherRoadmapComponent,
+    courseId: Long,
     roadMapState:  RoadMapState,
     questInfo: QuestInfo,
     nextQuestList: List<String>,
@@ -274,6 +275,7 @@ fun RoadMapDialogEditable(
                 isEditable = true,
                 onConfirm = {
                     roadMapComponent.modifyQuestInfo(
+                        courseId = courseId,
                         id = questInfo.id,
                         questDescription = questDescription,
                         trainingDescription = stepDescription,

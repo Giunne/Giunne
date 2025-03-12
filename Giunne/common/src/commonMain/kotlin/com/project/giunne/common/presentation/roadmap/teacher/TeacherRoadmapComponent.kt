@@ -79,6 +79,7 @@ class TeacherRoadmapComponent(
     }
 
     fun modifyQuestInfo(
+        courseId: Long,
         id: Int,
         questDescription: String = "퀘스트 설명",
         trainingDescription: String = "퀘스트 방법",
@@ -106,6 +107,7 @@ class TeacherRoadmapComponent(
                         modifySuccess = true
                     )
                 }
+                getTeacherCourse(courseId)
             }.onFailure {
                 setState {
                     copy(
