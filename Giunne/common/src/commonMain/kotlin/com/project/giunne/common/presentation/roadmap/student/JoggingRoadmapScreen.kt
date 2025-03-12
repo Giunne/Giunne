@@ -22,7 +22,9 @@ import com.project.giunne.common.presentation.common.shape.GPSquircleShapeWithBo
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.roadmap.content.DrawJoggingLine
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
+import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_check
 import org.jetbrains.compose.resources.painterResource
 
@@ -48,7 +50,9 @@ fun JoggingRoadmapScreen(
 
         GPText(
             modifier = Modifier.align(Alignment.TopStart),
-            text = "열심히 뛰어봅시다!"
+            text = "열심히 뛰어봅시다!",
+            textSize = 12.gsp,
+            fontFamily = GPFontFamily.Bold
         )
 
         // Line 그리기
