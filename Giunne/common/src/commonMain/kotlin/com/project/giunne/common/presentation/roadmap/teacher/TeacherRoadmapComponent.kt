@@ -80,11 +80,11 @@ class TeacherRoadmapComponent(
 
     fun modifyQuestInfo(
         id: Int,
-        questDescription: String,
-        trainingDescription: String,
+        questDescription: String = "퀘스트 설명",
+        trainingDescription: String = "퀘스트 방법",
         rewardPoint: Long,
         rewardExp: Long,
-        guideUrl: String,
+        guideUrl: String = "퀘스트 URL",
     ) {
         setState { copy(isLoading = true) }
         scope.launch {
@@ -106,7 +106,6 @@ class TeacherRoadmapComponent(
                         modifySuccess = true
                     )
                 }
-                getTeacherCourse(1)
             }.onFailure {
                 setState {
                     copy(

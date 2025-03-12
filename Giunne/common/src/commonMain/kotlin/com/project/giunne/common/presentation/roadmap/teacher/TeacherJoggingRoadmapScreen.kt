@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import com.project.giunne.common.data.remote.response.CourseInfo
+import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.shape.GPSquircleShapeWithBorder
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.roadmap.content.DrawTeacherJoggingLine
@@ -24,7 +25,8 @@ import com.project.giunne.common.util.gdp
 @Composable
 fun TeacherJoggingRoadmapScreen(
     modifier: Modifier,
-    questInfoList: List<CourseInfo>
+    questInfoList: List<CourseInfo>,
+    onJoggingClick: (CourseInfo) -> Unit
 ) {
     val density = LocalDensity.current.density
     val joggingWeek = listOf(
@@ -66,8 +68,12 @@ fun TeacherJoggingRoadmapScreen(
             verticalArrangement = Arrangement.spacedBy(16.gdp),
         ) {
             items(joggingWeek) { week ->
+                val courseInfo = questInfoList.find { it.courseName == week } ?: CourseInfo()
                 GPSquircleShapeWithBorder(
-                    modifier = Modifier.size(64.gdp),
+                    modifier = Modifier.size(64.gdp)
+                        .noRippleClickable {
+                            onJoggingClick(courseInfo)
+                        },
                     backgroundColor = GPColor.White,
                     borderColor = GPColor.BorderLightGray
                 ) {

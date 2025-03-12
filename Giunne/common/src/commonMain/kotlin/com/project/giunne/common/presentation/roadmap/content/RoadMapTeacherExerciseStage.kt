@@ -94,7 +94,7 @@ fun RoadMapTeacherExerciseStage(
                         courseInfo.thumbnailUrl?.let { url ->
                             AsyncImage(
                                 modifier = Modifier
-                                    .size(node.boxSize.dp),
+                                    .size((node.boxSize * 0.6).dp),
                                 model = IMAGE_BASE_URL + url,
                                 contentDescription = "운동 이미지"
                             )

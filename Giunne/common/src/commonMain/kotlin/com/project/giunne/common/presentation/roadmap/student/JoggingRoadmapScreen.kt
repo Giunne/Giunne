@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import com.project.giunne.Res
 import com.project.giunne.common.data.remote.response.StudentCourseInfo
+import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.shape.GPSquircleShapeWithBorder
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.roadmap.content.DrawJoggingLine
@@ -28,7 +29,8 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun JoggingRoadmapScreen(
     modifier: Modifier,
-    questInfoList: List<StudentCourseInfo>
+    questInfoList: List<StudentCourseInfo>,
+    onJoggingClick: (StudentCourseInfo) -> Unit
 ) {
     val density = LocalDensity.current.density
     val joggingWeek = listOf(
@@ -76,7 +78,10 @@ fun JoggingRoadmapScreen(
                 val status = questStateInfo.questProgress
                 val isBonus = questStateInfo.hasExtraPoints
                 GPSquircleShapeWithBorder(
-                    modifier = Modifier.size(64.gdp),
+                    modifier = Modifier.size(64.gdp)
+                        .noRippleClickable {
+                            onJoggingClick(courseInfo)
+                        },
                     backgroundColor = if (status == "CONFIRM") GPColor.Green else GPColor.White,
                     borderColor = if (status == "CONFIRM") {
                         GPColor.Green
