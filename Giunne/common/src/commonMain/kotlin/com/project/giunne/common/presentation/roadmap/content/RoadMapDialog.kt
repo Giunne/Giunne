@@ -56,14 +56,14 @@ fun RoadMapDialog(
 
             Spacer(modifier = Modifier.height(16.gdp))
 
-            ExerciseDescription(questInfo.questDescription)
+            ExerciseDescription(questInfo.questDescription.ifEmpty { "아직 작성된 설명이 없어요" })
 
             Spacer(modifier = Modifier.height(16.gdp))
 
             BorderContentField(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                ExerciseStep(questInfo.trainingDescription)
+                ExerciseStep(questInfo.trainingDescription.ifEmpty { "아직 작성된 운동 방법이 없어요" })
             }
 
             Spacer(modifier = Modifier.height(16.gdp))
