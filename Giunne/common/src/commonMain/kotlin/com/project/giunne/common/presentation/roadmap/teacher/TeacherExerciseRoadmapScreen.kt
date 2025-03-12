@@ -194,7 +194,7 @@ fun TeacherExerciseRoadmapScreen(
                 withStyle(
                     style = SpanStyle(
                         color = GPColor.MainOrangeColor,
-                        fontSize = 16.gsp,
+                        fontSize = 14.gsp,
                         fontWeight = FontWeight.Bold
                     )
                 ) {
@@ -202,6 +202,7 @@ fun TeacherExerciseRoadmapScreen(
                 }
                 append(text.substring(2))
             },
+            textSize = 12.gsp,
             fontFamily = GPFontFamily.Bold
         )
 

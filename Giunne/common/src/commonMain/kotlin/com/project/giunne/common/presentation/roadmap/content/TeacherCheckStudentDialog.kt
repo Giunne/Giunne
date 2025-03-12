@@ -146,7 +146,7 @@ fun TeacherCheckStudentDialog(
                     },
                 ) {
                     GPText(
-                        text = "체크하기",
+                        text = "통과",
                         textSize = 14.gsp,
                         fontFamily = GPFontFamily.Bold,
                         textColor = GPColor.White

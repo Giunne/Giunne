@@ -14,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ModalBottomSheetDefaults.properties
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,7 +26,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.project.giunne.Res
-import com.project.giunne.common.data.remote.response.CourseInfo
 import com.project.giunne.common.data.remote.response.QuestInfo
 import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.text.GPText
@@ -71,7 +69,7 @@ fun RoadMapDialogEditable(
         GPAlertDialog(
             modifier = Modifier.padding(horizontal = 16.gdp),
             title = "로드맵 수정",
-            content = error.message.orEmpty(),
+            content = error.message?.split(",")?.joinToString("\n") { it.split("]").last() }.orEmpty(),
             dismiss = {
                 roadMapComponent.dismissErrorDialog()
             }

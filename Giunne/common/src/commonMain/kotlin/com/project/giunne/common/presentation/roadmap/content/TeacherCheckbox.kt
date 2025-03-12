@@ -29,7 +29,7 @@ fun TeacherCheckbox(
     ) {
 
         GPText(
-            textSize = 14.gsp,
+            textSize = 12.gsp,
             text = "학생 운동 체크하기"
         )
         GPCheckbox(
