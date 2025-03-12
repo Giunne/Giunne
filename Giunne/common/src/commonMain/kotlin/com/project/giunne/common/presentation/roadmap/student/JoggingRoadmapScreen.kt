@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -15,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
 import com.project.giunne.Res
 import com.project.giunne.common.data.remote.response.StudentCourseInfo
 import com.project.giunne.common.presentation.common.noRippleClickable
@@ -26,6 +28,7 @@ import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_check
+import com.project.giunne.icon_lock
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -84,9 +87,17 @@ fun JoggingRoadmapScreen(
                 GPSquircleShapeWithBorder(
                     modifier = Modifier.size(64.gdp)
                         .noRippleClickable {
-                            onJoggingClick(courseInfo)
+                            if (status != "LOCK") {
+                                onJoggingClick(courseInfo)
+                            }
                         },
-                    backgroundColor = if (status == "CONFIRM") GPColor.Green else GPColor.White,
+                    backgroundColor = if (status == "CONFIRM") {
+                        GPColor.Green
+                    } else if (status == "LOCK") {
+                        GPColor.TextBlack
+                    } else {
+                        GPColor.White
+                    },
                     borderColor = if (status == "CONFIRM") {
                         GPColor.Green
                     } else if (isBonus) {
@@ -100,6 +111,14 @@ fun JoggingRoadmapScreen(
                             painter = painterResource(Res.drawable.icon_check),
                             contentDescription = "성공",
                             tint = GPColor.White
+                        )
+                    } else if (status == "LOCK") {
+                        Icon(
+                            modifier = Modifier
+                                .size(24.gdp),
+                            painter = painterResource(Res.drawable.icon_lock),
+                            contentDescription = "잠금",
+                            tint = GPColor.MainOrangeColor
                         )
                     } else {
                         GPText(
