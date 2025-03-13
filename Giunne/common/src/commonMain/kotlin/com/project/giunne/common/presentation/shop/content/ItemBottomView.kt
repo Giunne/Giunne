@@ -58,7 +58,8 @@ fun ItemBottomView(
                 EmptyItemList(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f)
+                        .weight(1f),
+                    description = "아이템이 비어있어요!"
                 )
             } else {
                 ItemGridList(

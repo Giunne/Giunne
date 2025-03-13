@@ -3,6 +3,7 @@ package com.project.giunne.common.presentation.roadmap.content
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,15 +24,16 @@ fun CheckboxAll(
             .noRippleClickable {
                 onCheckedChanged(!isChecked)
             }
-            .padding(horizontal = 16.gdp, vertical = 4.gdp),
+            .padding(horizontal = 8.gdp, vertical = 4.gdp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         GPText(
             text = if (isChecked) "전체 해제" else "전체 선택",
-            textSize = 14.gsp
+            textSize = 11.gsp
         )
         GPCheckbox(
+            modifier = Modifier.size(32.gdp),
             isChecked = isChecked,
             onCheckedChanged = {
                 onCheckedChanged(it)

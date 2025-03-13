@@ -7,17 +7,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
@@ -27,6 +25,7 @@ import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.roadmap.teacher.state.RoadMapState
+import com.project.giunne.common.presentation.shop.content.EmptyItemList
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
@@ -75,12 +74,13 @@ fun TeacherCheckStudentDialog(
             Spacer(modifier = Modifier.height(8.gdp))
             GPText(
                 text = "운동 상황 체크",
-                textSize = 22.gsp
+                textSize = 18.gsp
             )
 
-            Spacer(modifier = Modifier.height(8.gdp))
+            Spacer(modifier = Modifier.height(16.gdp))
 
             HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 24.gdp),
                 color = GPColor.BorderLightGray
             )
 
@@ -94,21 +94,27 @@ fun TeacherCheckStudentDialog(
                 )
             }
 
-            Spacer(modifier = Modifier.height(4.gdp))
-
-            LazyColumn(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .height(500.gdp)
-            ) {
-                items(studentList) { student ->
-                    StudentCheckboxRow(
-                        modifier = Modifier.fillMaxWidth(),
-                        studentCheck = student,
-                        onCheckedChanged = { studentCheck, check ->
-                            onCheckedChanged(studentCheck, check)
-                        }
-                    )
+            if (studentList.isEmpty()) {
+                EmptyItemList(
+                    modifier = Modifier.fillMaxWidth()
+                        .heightIn(200.gdp, 400.gdp),
+                    description = "확인할 학생들이 없습니다."
+                )
+            } else {
+                LazyColumn(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .heightIn(200.gdp, 400.gdp)
+                ) {
+                    items(studentList) { student ->
+                        StudentCheckboxRow(
+                            modifier = Modifier.fillMaxWidth(),
+                            studentCheck = student,
+                            onCheckedChanged = { studentCheck, check ->
+                                onCheckedChanged(studentCheck, check)
+                            }
+                        )
+                    }
                 }
             }
             Row(
@@ -149,7 +155,7 @@ fun TeacherCheckStudentDialog(
                         text = "통과",
                         textSize = 14.gsp,
                         fontFamily = GPFontFamily.Bold,
-                        textColor = GPColor.White
+                        textColor = if (isNoneSelected) GPColor.TextBlack else GPColor.White
                     )
                 }
             }

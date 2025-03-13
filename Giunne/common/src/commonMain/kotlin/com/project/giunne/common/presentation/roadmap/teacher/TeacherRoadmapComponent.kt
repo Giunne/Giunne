@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.project.giunne.common.base.BaseComponent
 import com.project.giunne.common.data.remote.request.ModifyQuestInfoRequest
 import com.project.giunne.common.data.remote.request.QuestStateRequest
+import com.project.giunne.common.data.remote.response.AvatarUserResponse
 import com.project.giunne.common.data.remote.response.QuestInfo
 import com.project.giunne.common.data.remote.response.QuestStateInfo
 import com.project.giunne.common.data.util.asDataThrowable
@@ -134,8 +135,11 @@ class TeacherRoadmapComponent(
                     val course = courseMap.values.flatten()
                     val questInfo = course.find { it.id == id }?.questInfo ?: QuestInfo()
                     val studentList = questInfo.questStateInfos.map { questInfo ->
-                        val name = response.find { it.id == questInfo.playerId }?.nickname.orEmpty()
-                        questInfo.copy(name = name)
+                        val findUser = response.find { it.id == questInfo.playerId } ?: AvatarUserResponse()
+                        questInfo.copy(
+                            name = findUser.nickname,
+                            wearingItems = findUser.wearingItems
+                        )
                     }.filter { it.name != "" }
                     copy(isLoading = false, studentList = studentList)
                 }

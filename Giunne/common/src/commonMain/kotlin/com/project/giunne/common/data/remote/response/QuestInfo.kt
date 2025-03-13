@@ -81,7 +81,8 @@ data class QuestStateInfo(
     val rewardPoint: Int = 0,
     @SerialName("starPoint")
     val starPoint: Int = 0,
-    val isChecked: Boolean = false
+    val isChecked: Boolean = false,
+    val wearingItems: List<WearingItem> = listOf()
 )
 
 @Serializable
