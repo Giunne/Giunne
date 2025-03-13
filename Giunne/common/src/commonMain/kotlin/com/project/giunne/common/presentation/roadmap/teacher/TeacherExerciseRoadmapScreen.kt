@@ -19,7 +19,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import com.project.giunne.common.data.remote.response.CourseInfo
-import com.project.giunne.common.data.remote.response.QuestInfo
 import com.project.giunne.common.presentation.common.text.GPAnnotatedText
 import com.project.giunne.common.presentation.roadmap.content.RoadMapDialogEditable
 import com.project.giunne.common.presentation.roadmap.content.RoadMapTeacherExerciseStage

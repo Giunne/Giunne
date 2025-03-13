@@ -38,7 +38,6 @@ internal fun StudentRoadmapScreen(
     GLog.d(TAG, "onCreate")
 
     val focusManager = LocalFocusManager.current
-    val scope = rememberCoroutineScope()
     val roadMapState by component.uiState.collectAsStateWithLifecycle()
     var isSelected by remember { mutableStateOf(false) }
     var isShow by remember { mutableStateOf(false) }

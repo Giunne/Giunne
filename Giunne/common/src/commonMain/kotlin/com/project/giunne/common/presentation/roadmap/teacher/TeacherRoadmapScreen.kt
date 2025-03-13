@@ -15,7 +15,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +24,6 @@ import com.project.giunne.common.data.remote.response.CourseInfo
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.toggle.GPToggleButton
-import com.project.giunne.common.presentation.roadmap.content.TeacherJoggingDialog
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.gdp
@@ -35,18 +33,14 @@ private const val TAG = "TeacherRoadmapScreen"
 
 @Composable
 internal fun TeacherRoadmapScreen(
-    component: TeacherRoadmapComponent,
-    modifier: Modifier = Modifier,
+    component: TeacherRoadmapComponent
 ) {
     GLog.d(TAG, "onCreate")
 
     val focusManager = LocalFocusManager.current
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     val roadMapState by component.uiState.collectAsStateWithLifecycle()
     var isSelected by remember { mutableStateOf(false) }
-    var isShow by remember { mutableStateOf(false) }
-    var courseInfo by remember { mutableStateOf(CourseInfo()) }
 
     LaunchedEffect(Unit) {
         async {
@@ -71,29 +65,14 @@ internal fun TeacherRoadmapScreen(
             if (roadMapState.isLoading) {
                 Loader()
             }
-            if (isShow) {
-                TeacherJoggingDialog(
-                    roadMapComponent = component,
-                    courseId = 2,
-                    roadMapState = roadMapState,
-                    questInfo = courseInfo.questInfo,
-                    onDismissDialog = {
-                        isShow = false
-                    }
-                )
-            }
             if (isSelected) {
                 TeacherJoggingRoadmapScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(GPColor.BackgroundLightGray)
-                        .padding(horizontal = 16.gdp, vertical = 8.gdp)
                         .align(Alignment.Center),
-                    questInfoList = roadMapState.courseMap.values.flatten(),
-                    onJoggingClick = { info ->
-                        isShow = true
-                        courseInfo = info
-                    }
+                    roadMapState = roadMapState,
+                    roadMapComponent = component
                 )
             } else {
                 TeacherExerciseRoadmapScreen(
