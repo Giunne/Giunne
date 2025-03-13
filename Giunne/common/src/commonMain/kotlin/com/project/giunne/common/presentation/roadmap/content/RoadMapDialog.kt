@@ -50,7 +50,9 @@ fun RoadMapDialog(
             ExerciseHeaderLink(
                 title = questInfo.questName,
                 openYoutubeLink = {
-                    uriHandler.openUri(questInfo.guideUrl)
+                    if (questInfo.guideUrl.startsWith("https")) {
+                        uriHandler.openUri(questInfo.guideUrl)
+                    }
                 }
             )
 
