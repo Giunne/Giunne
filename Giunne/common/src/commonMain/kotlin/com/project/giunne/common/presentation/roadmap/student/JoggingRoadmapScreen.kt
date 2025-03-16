@@ -4,33 +4,47 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
 import com.project.giunne.Res
+import com.project.giunne.common.data.remote.response.StudentCourseInfo
+import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.shape.GPSquircleShapeWithBorder
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.roadmap.content.DrawJoggingLine
-import com.project.giunne.common.presentation.roadmap.dummy.joggingUiState
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
+import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_check
+import com.project.giunne.icon_lock
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun JoggingRoadmapScreen(
     modifier: Modifier,
-    joggingWeek: List<Int>,
+    questInfoList: List<StudentCourseInfo>,
+    onJoggingClick: (StudentCourseInfo) -> Unit
 ) {
     val density = LocalDensity.current.density
+    val joggingWeek = listOf(
+        "13주차", "14주차", "15주차",
+        "12주차", "11주차", "10주차",
+        "7주차", "8주차", "9주차",
+        "6주차", "5주차", "4주차",
+        "1주차", "2주차", "3주차",
+    )
 
     Box(
         modifier = modifier,
@@ -39,7 +53,9 @@ fun JoggingRoadmapScreen(
 
         GPText(
             modifier = Modifier.align(Alignment.TopStart),
-            text = "열심히 뛰어봅시다!"
+            text = "열심히 뛰어봅시다!",
+            textSize = 12.gsp,
+            fontFamily = GPFontFamily.Bold
         )
 
         // Line 그리기
@@ -48,7 +64,7 @@ fun JoggingRoadmapScreen(
                 .width(360.gdp)
                 .height(500.gdp)
                 .padding(48.gdp),
-            joggingUiState = joggingUiState,
+            questInfoList = questInfoList,
             weeks = joggingWeek,
             boxSize = 64.gdp.value * density,
             spacing = 16.gdp.value * density
@@ -63,27 +79,50 @@ fun JoggingRoadmapScreen(
             horizontalArrangement = Arrangement.spacedBy(16.gdp),
             verticalArrangement = Arrangement.spacedBy(16.gdp),
         ) {
-            itemsIndexed(joggingWeek) { index, week ->
+            items(joggingWeek) { week ->
+                val courseInfo = questInfoList.find { it.courseName == week } ?: StudentCourseInfo()
+                val questStateInfo = courseInfo.questInfo.questStateInfo
+                val status = questStateInfo.questProgress
+                val isBonus = questStateInfo.hasExtraPoints
                 GPSquircleShapeWithBorder(
-                    modifier = Modifier.size(64.gdp),
-                    backgroundColor = if (week < joggingUiState.week) GPColor.Green else GPColor.White,
-                    borderColor = if (week <= joggingUiState.week) {
+                    modifier = Modifier.size(64.gdp)
+                        .noRippleClickable {
+                            if (status != "LOCK") {
+                                onJoggingClick(courseInfo)
+                            }
+                        },
+                    backgroundColor = if (status == "CONFIRM") {
                         GPColor.Green
-                    } else if (joggingUiState.bonusWeek.contains(week)) {
+                    } else if (status == "LOCK") {
+                        GPColor.TextBlack
+                    } else {
+                        GPColor.White
+                    },
+                    borderColor = if (status == "CONFIRM") {
+                        GPColor.Green
+                    } else if (isBonus) {
                         GPColor.MainOrangeColor
                     } else {
                         GPColor.BorderLightGray
                     },
                 ) {
-                    if (week < joggingUiState.week) {
+                    if (status == "CONFIRM") {
                         Icon(
                             painter = painterResource(Res.drawable.icon_check),
                             contentDescription = "성공",
                             tint = GPColor.White
                         )
+                    } else if (status == "LOCK") {
+                        Icon(
+                            modifier = Modifier
+                                .size(24.gdp),
+                            painter = painterResource(Res.drawable.icon_lock),
+                            contentDescription = "잠금",
+                            tint = GPColor.MainOrangeColor
+                        )
                     } else {
                         GPText(
-                            text = "${week}주차",
+                            text = week,
                         )
                     }
                 }

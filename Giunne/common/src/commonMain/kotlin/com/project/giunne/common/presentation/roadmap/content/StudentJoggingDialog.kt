@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,61 +13,46 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.project.giunne.Res
 import com.project.giunne.common.data.remote.response.StudentQuestInfo
+import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_attach_money
 import com.project.giunne.icon_exp
-import com.project.giunne.icon_stage
 
 @Composable
-fun RoadMapDialog(
+fun StudentJoggingDialog(
     questInfo: StudentQuestInfo,
-    nextQuestList: List<String>,
     onDismissDialog: () -> Unit = {},
-    onConfirm: () -> Unit = {}
 ) {
-    val uriHandler = LocalUriHandler.current
-
     Dialog(
-        onDismissRequest = onDismissDialog
+        onDismissRequest = onDismissDialog,
+        properties = DialogProperties(
+            dismissOnClickOutside = false,
+            dismissOnBackPress = false
+        )
     ) {
         Column(
             modifier = Modifier
                 .background(
                     color = GPColor.White,
-                    shape = RoundedCornerShape(16.dp)
+                    shape = RoundedCornerShape(16.gdp)
                 )
-                .padding(16.gdp)
-                .verticalScroll(rememberScrollState()),
+                .imePadding()
+                .padding(16.gdp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ExerciseHeaderLink(
-                title = questInfo.questName,
-                openYoutubeLink = {
-                    if (questInfo.guideUrl.startsWith("https")) {
-                        uriHandler.openUri(questInfo.guideUrl)
-                    }
-                }
+
+            GPText(
+                text = questInfo.questName,
+                textSize = 18.gsp
             )
-
-            Spacer(modifier = Modifier.height(16.gdp))
-
-            ExerciseDescription(questInfo.questDescription.ifEmpty { "아직 작성된 설명이 없어요" })
-
-            Spacer(modifier = Modifier.height(16.gdp))
-
-            BorderContentField(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                ExerciseStep(questInfo.trainingDescription.ifEmpty { "아직 작성된 운동 방법이 없어요" })
-            }
 
             Spacer(modifier = Modifier.height(16.gdp))
 
@@ -107,30 +93,26 @@ fun RoadMapDialog(
                         textColor = GPColor.MainOrangeColor
                     )
                 }
-                Spacer(modifier = Modifier.height(8.gdp))
-
-                if (nextQuestList.isNotEmpty()) {
-                    ExerciseRewardSection(
-                        title = nextQuestList.joinToString("\n") { it },
-                        titleColor = GPColor.MainOrangeColor,
-                        icon = Res.drawable.icon_stage
-                    ) {
-                        GPText(
-                            text = "도전 가능!",
-                            textSize = 12.gsp
-                        )
-                    }
-                }
             }
 
             Spacer(modifier = Modifier.height(16.gdp))
 
-            ExerciseActionButtons(
-                onClose = onDismissDialog,
-                onConfirm = {
-                    onConfirm()
-                }
-            )
+            GPButton(
+                modifier = Modifier
+                    .height(48.gdp)
+                    .fillMaxWidth(),
+                normalColor = GPColor.ButtonLightGray,
+                pressColor = GPColor.ButtonPressLightGray,
+                hoverColor = GPColor.ButtonHoverLightGray,
+                onClick = { onDismissDialog() },
+            ) {
+                GPText(
+                    text = "닫기",
+                    textSize = 14.gsp,
+                    fontFamily = GPFontFamily.Bold,
+                    textColor = GPColor.TextBlack
+                )
+            }
         }
     }
 }
