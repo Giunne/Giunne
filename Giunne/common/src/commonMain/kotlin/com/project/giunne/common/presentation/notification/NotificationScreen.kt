@@ -24,7 +24,9 @@ import com.project.giunne.common.presentation.common.button.GPIconButton
 import com.project.giunne.common.presentation.common.topbar.GPMainTopBar
 import com.project.giunne.common.presentation.main.dummy.Noti
 import com.project.giunne.common.presentation.notification.content.NotificationItem
+import com.project.giunne.common.presentation.signup.SignupComponent.Companion.TYPE_TEACHER
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.gdp
 import com.project.giunne.icon_rotate
 import com.project.giunne.icon_write
@@ -49,25 +51,27 @@ fun NotificationScreen(
                     GPBackButton { onBackButtonClicked() }
                 },
                 rightIcon = {
-                    GPIconButton(
-                        modifier = Modifier
-                            .padding(end = 16.gdp)
-                            .size(32.gdp),
-                        icon = {
-                            Image(
-                                modifier = Modifier.size(16.gdp),
-                                painter = painterResource(Res.drawable.icon_write),
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(GPColor.White)
-                            )
-                        },
-                        normalColor = GPColor.ButtonBlack,
-                        pressColor = GPColor.ButtonPressBlack,
-                        hoverColor = GPColor.ButtonHoverBlack,
-                        onClick = {
-                        },
-                        shadow = false
-                    )
+                    if (Define.userRole == TYPE_TEACHER) {
+                        GPIconButton(
+                            modifier = Modifier
+                                .padding(end = 16.gdp)
+                                .size(32.gdp),
+                            icon = {
+                                Image(
+                                    modifier = Modifier.size(16.gdp),
+                                    painter = painterResource(Res.drawable.icon_write),
+                                    contentDescription = null,
+                                    colorFilter = ColorFilter.tint(GPColor.White)
+                                )
+                            },
+                            normalColor = GPColor.ButtonBlack,
+                            pressColor = GPColor.ButtonPressBlack,
+                            hoverColor = GPColor.ButtonHoverBlack,
+                            onClick = {
+                            },
+                            shadow = false
+                        )
+                    }
                 }
             )
         }
