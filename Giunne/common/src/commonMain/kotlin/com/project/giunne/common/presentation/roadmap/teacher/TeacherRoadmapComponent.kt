@@ -138,10 +138,17 @@ class TeacherRoadmapComponent(
                         val findUser = response.find { it.id == questInfo.playerId } ?: AvatarUserResponse()
                         questInfo.copy(
                             name = findUser.nickname,
-                            wearingItems = findUser.wearingItems
+                            wearingItems = findUser.wearingItems,
+                            isChecked = questInfo.questProgress == "CHECK"
                         )
-                    }.filter { it.name != "" }
-                    copy(isLoading = false, studentList = studentList)
+                    }
+                        .filter { it.name != "" }
+                        .filter { it.questProgress == "LOCK_OPEN" || it.questProgress == "CHECK" }
+                    copy(
+                        isLoading = false,
+                        studentList = studentList,
+                        checkedIdSet = studentList.filter { it.isChecked }.map { it.id }.toSet()
+                    )
                 }
             }
             .onFailure {
@@ -151,11 +158,14 @@ class TeacherRoadmapComponent(
     }
 
     fun modifyQuestState(
+        roadMapId: Long,
+        totalStudentId: List<Int>,
         checkIdSet: Set<Int>
     ) {
         scope.launch {
             runCatching {
                 async {
+                    // 체크 된 학생 -> CHECK
                     checkIdSet.forEach { id ->
                         modifyQuestStateUseCase(
                             QuestStateRequest(
@@ -164,7 +174,17 @@ class TeacherRoadmapComponent(
                             )
                         )
                     }
+                    // 체크 안된 학생 -> LOCK_OPEN
+                    (totalStudentId - checkIdSet).forEach { id ->
+                        modifyQuestStateUseCase(
+                            QuestStateRequest(
+                                questStateId = id,
+                                questProgress = "LOCK_OPEN"
+                            )
+                        )
+                    }
                 }.await()
+                getTeacherCourse(roadMapId)
             }.onSuccess {
                 setState {
                     copy(
@@ -194,7 +214,6 @@ class TeacherRoadmapComponent(
     fun dismissSuccessDialog() {
         setState { copy(isSuccess = false) }
     }
-
 
     fun checkedStudent(studentCheck: QuestStateInfo, checked: Boolean) {
         setState {
