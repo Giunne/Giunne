@@ -1,4 +1,5 @@
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
@@ -27,6 +28,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.core.context.startKoin
 import util.runOnUiThread
+import java.awt.Toolkit
 import java.io.File
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
@@ -60,9 +62,12 @@ fun main() {
         }
 
     application {
+        val density = LocalDensity.current.density
+        val size = if (1 < density) 1.3f else 1f
+        val toolkit = Toolkit.getDefaultToolkit()
         val windowState = rememberWindowState(
-            width = 360.dp,
-            height = 780.dp,
+            width = 360.dp * size,
+            height = 780.dp * size,
             position = WindowPosition(Alignment.TopEnd),
 //            position = WindowPosition((-100).dp, 0.dp),
             isMinimized = false
@@ -72,8 +77,6 @@ fun main() {
             onCloseRequest = ::exitApplication,
             title = stringResource(Res.string.app_title) + " - 1.0.0",
             state = windowState
-//            icon = BitmapPainter(useResource("drawable/ic_app.png", ::loadImageBitmap)),
-//            resizable = false,
         ) {
 
 //            windowState.size = DpSize(780.dp, 360.dp)

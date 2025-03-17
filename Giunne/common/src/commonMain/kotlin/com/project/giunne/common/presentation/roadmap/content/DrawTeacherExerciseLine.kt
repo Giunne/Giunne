@@ -8,15 +8,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
-import com.project.giunne.common.data.remote.response.StudentCourseInfo
 import com.project.giunne.common.presentation.roadmap.node.Connect
 import com.project.giunne.common.presentation.roadmap.node.ConnectNode
 import com.project.giunne.common.ui.theme.GPColor
 
 @Composable
-fun DrawExerciseLine(
+fun DrawTeacherExerciseLine(
     density: Float,
-    questInfoList: List<StudentCourseInfo>,
     connect: List<ConnectNode>
 ) {
     Box(
@@ -29,15 +27,6 @@ fun DrawExerciseLine(
                 val from = it.from
                 val to = it.to
                 val connection = it.connect
-                val fromCourseInfo = questInfoList.find { it.courseName == from.step } ?: StudentCourseInfo()
-                val fromQuestStateInfo = fromCourseInfo.questInfo.questStateInfo
-                val fromStatus = fromQuestStateInfo.questProgress
-                val defaultColor = if (from.boxSize == 30f) GPColor.MainOrangeColor else GPColor.ButtonLightGray
-                val color = if (fromStatus == "CONFIRM" && from.boxSize != 30f) {
-                    GPColor.Green
-                } else {
-                    defaultColor
-                }
                 when (connection) {
                     Connect.BOTTOM_CURVE, Connect.TOP_CURVE -> {
                         Path().apply {
@@ -51,14 +40,14 @@ fun DrawExerciseLine(
                         }.also { path ->
                             drawPath(
                                 path = path,
-                                color = color,
+                                color = GPColor.ButtonLightGray,
                                 style = Stroke(width = from.boxSize * 0.2f * density)
                             )
                         }
                     }
                     else -> {
                         drawLine(
-                            color = color,
+                            color = GPColor.ButtonLightGray,
                             start = Offset(from.centerOffset.x * density, from.centerOffset.y * density),
                             end = Offset(to.centerOffset.x * density, to.centerOffset.y * density),
                             strokeWidth = from.boxSize * 0.2f * density

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,8 +16,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.project.giunne.Res
-import com.project.giunne.common.data.remote.response.StudentCourseInfo
+import com.project.giunne.common.data.remote.response.CourseInfo
+import com.project.giunne.common.data.remote.response.QuestInfo
 import com.project.giunne.common.data.util.DefineUrl.IMAGE_BASE_URL
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.shape.GPSquircleShapeWithBorder
@@ -29,16 +28,14 @@ import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
-import com.project.giunne.icon_lock
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun RoadMapExerciseStage(
+fun RoadMapTeacherExerciseStage(
     offset: Offset,
-    questInfoList: List<StudentCourseInfo>,
+    questInfoList: List<CourseInfo>,
     node: List<Node>,
     connect: List<ConnectNode>,
-    onExerciseClicked: (StudentCourseInfo) -> Unit,
+    onExerciseClicked: (CourseInfo) -> Unit,
 ) {
     val density = LocalDensity.current.density
     Box(
@@ -46,31 +43,19 @@ fun RoadMapExerciseStage(
             .fillMaxSize()
             .offset(offset.x.dp, offset.y.dp),
     ) {
-        DrawExerciseLine(
+        DrawTeacherExerciseLine(
             density = density,
-            questInfoList = questInfoList,
             connect = connect
         )
         node.forEach { node ->
-            val courseInfo = questInfoList.find { it.courseName == node.step } ?: StudentCourseInfo()
-            val questStateInfo = courseInfo.questInfo.questStateInfo
-            val status = questStateInfo.questProgress
-            val isBonus = questStateInfo.hasExtraPoints
+            val courseInfo = questInfoList.find { it.courseName == node.step } ?: CourseInfo()
             val borderColor = if (node.boxSize == 30f) {
-                GPColor.MainOrangeColor
-            } else if (status == "CONFIRM") {
-                GPColor.Green
-            } else if (isBonus) {
                 GPColor.MainOrangeColor
             } else {
                 GPColor.ButtonLightGray
             }
             val backgroundColor = if (node.boxSize == 30f) {
                 GPColor.MainOrangeColor
-            } else if (status == "LOCK") {
-                GPColor.TextBlack
-            } else if (status == "LOCK_OPEN") {
-                GPColor.TextGray
             } else {
                 GPColor.White
             }
@@ -101,9 +86,7 @@ fun RoadMapExerciseStage(
                             .size(node.boxSize.dp)
                             .offset(node.drawOffset.x.dp, node.drawOffset.y.dp)
                             .noRippleClickable {
-                                if (status != "LOCK") {
-                                    onExerciseClicked(courseInfo)
-                                }
+                                onExerciseClicked(courseInfo)
                             },
                         backgroundColor = backgroundColor,
                         borderColor = borderColor
@@ -116,16 +99,6 @@ fun RoadMapExerciseStage(
                                 contentDescription = "운동 이미지"
                             )
                         }
-                    }
-                    if (status == "LOCK") {
-                        Icon(
-                            modifier = Modifier
-                                .size(18.gdp)
-                                .offset(node.drawOffset.x.dp, node.drawOffset.y.dp),
-                            painter = painterResource(Res.drawable.icon_lock),
-                            contentDescription = "잠금",
-                            tint = GPColor.MainOrangeColor
-                        )
                     }
                 }
             }
