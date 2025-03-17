@@ -3,6 +3,8 @@ package com.project.giunne.common.presentation.roadmap.content
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -56,6 +58,7 @@ fun RoadMapExerciseStage(
             val questStateInfo = courseInfo.questInfo.questStateInfo
             val status = questStateInfo.questProgress
             val isBonus = questStateInfo.hasExtraPoints
+            val starPoint = courseInfo.questInfo.questStateInfo.starPoint
             val borderColor = if (node.boxSize == 30f) {
                 GPColor.MainOrangeColor
             } else if (status == "CONFIRM") {
@@ -116,6 +119,16 @@ fun RoadMapExerciseStage(
                                 contentDescription = "운동 이미지"
                             )
                         }
+
+                        RoadMapGradeCount(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 4.gdp)
+                                .height(20.gdp)
+                                .offset(y = 8.gdp)
+                                .align(Alignment.BottomCenter),
+                            starPoint = starPoint
+                        )
                     }
                     if (status == "LOCK") {
                         Icon(
