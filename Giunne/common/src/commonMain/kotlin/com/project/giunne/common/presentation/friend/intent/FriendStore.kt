@@ -32,4 +32,8 @@ class FriendStore(
             }
         }
     }
+
+    fun dismissErrorDialog() {
+        setState { copy(error = null) }
+    }
 }

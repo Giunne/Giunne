@@ -1,7 +1,9 @@
 package com.project.giunne.common.util
 
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.ActivityCompat.finishAffinity
 
 @Composable
 actual fun BackHandler(

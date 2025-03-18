@@ -24,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
@@ -40,8 +39,6 @@ import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.common.textfield.GPTextField
-import com.project.giunne.common.presentation.login.LoginComponent.Companion.LOGIN_FAIL
-import com.project.giunne.common.presentation.login.LoginComponent.Companion.NON_FAIL
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
@@ -63,7 +60,6 @@ internal fun LoginScreen(
     GLog.d(TAG, "onCreate")
 
     val focusManager = LocalFocusManager.current
-    val loginFailEffect by component.loginFailEffect.collectAsState(NON_FAIL)
     val loginState by component.uiState.collectAsState()
 
     PermissionController()
@@ -249,16 +245,6 @@ internal fun LoginScreen(
                     )
                 }
             }
-        }
-    }
-
-    with(loginFailEffect) {
-        if (this == LOGIN_FAIL) {
-            GPAlertDialog(
-                dismiss = { component.dismissDialog() },
-                title = "로그인 실패",
-                content = "로그인에 실패하였습니다. 확인해주세요.",
-            )
         }
     }
 

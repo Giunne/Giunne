@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.content.Loader
+import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.friend.content.StudentFriendItemRow
 import com.project.giunne.common.presentation.friend.dummy.friendList
 import com.project.giunne.common.presentation.friend.intent.FriendStore
@@ -68,6 +69,16 @@ internal fun StudentFriendScreen(
                     friendInfo = friendState.friendsList[it]
                 )
             }
+        }
+    }
+
+    with(friendState.error) {
+        if (this != null) {
+            GPAlertDialog(
+                dismiss = { friendStore.dismissErrorDialog() },
+                title = "에러",
+                content = friendState.error?.message.orEmpty(),
+            )
         }
     }
 

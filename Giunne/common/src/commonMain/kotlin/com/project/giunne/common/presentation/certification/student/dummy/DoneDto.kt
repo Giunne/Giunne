@@ -22,13 +22,6 @@ data class RunningDoneDto(
     val coin: Int,
 )
 
-val roadmapDoneList = listOf(
-    RoadmapDoneDto(Res.drawable.roadcon_1_birddog, "1", "버드독", 10, 2),
-    RoadmapDoneDto(Res.drawable.roadcon_2_deadbug, "2", "데드버그", 12, 3),
-    RoadmapDoneDto(Res.drawable.roadcon_3_beast, "3", "비스트", 14, 4),
-    RoadmapDoneDto(Res.drawable.roadcon_4_a_plank, "4-a", "플랭크", 16, 5),
-)
-
 val runningDoneList = listOf(
     RunningDoneDto("25.01.02", 4, 1),
     RunningDoneDto("25.01.03", 4, 1),
