@@ -45,4 +45,8 @@ object DefineUrl {
     /* MyPage */
     const val PUT_INVENTORY_ITEM = "member/inventory"
     const val GET_INVENTORY_ITEM_BY_ID = "member/inventory/category"
+
+    /* Certification */
+    const val GET_CERT_PROGRESS = "quest/certification/student/in-progress"
+    const val GET_CERT_HISTORY = "quest/certification/student/history"
 }

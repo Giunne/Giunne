@@ -1,8 +1,6 @@
 package com.project.giunne.common.presentation.main.student
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -113,9 +111,10 @@ fun StudentMainScreen(
                 if (backPress == false) {
                     backPress = true
                     snackbarState.showSnackbar("뒤로가기를 한번 더 누르면 종료됩니다.")
+                    delay(2000)
                     backPress = false
                 } else {
-                    com.project.giunne.common.util.exitProgram()
+                    exitProgram()
                 }
             }
         }

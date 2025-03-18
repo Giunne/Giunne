@@ -21,6 +21,7 @@ import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import kotlin.math.roundToInt
 
 @Composable
 fun RoadmapCertProgressBox(
@@ -29,7 +30,7 @@ fun RoadmapCertProgressBox(
     roadmapName: String,
     progressText: String,
     icon: @Composable () -> Unit = {  },
-    step: Int,
+    percent: Float,
 ) {
     Box(
         modifier = modifier
@@ -75,14 +76,14 @@ fun RoadmapCertProgressBox(
             ) {
                 GPCertCircleProgress(
                     modifier = Modifier.fillMaxSize(),
-                    percent = (step.toFloat() / 4)
+                    percent = percent
                 )
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     icon()
                     GPText(
-                        text = "25%",
+                        text = "${(percent * 100).roundToInt()} %",
                         textSize = 18.gsp,
                         textColor = GPColor.TextBlack,
                         fontFamily = GPFontFamily.Bold

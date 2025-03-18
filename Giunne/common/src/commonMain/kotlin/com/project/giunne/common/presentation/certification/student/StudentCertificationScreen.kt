@@ -11,15 +11,12 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -58,13 +55,12 @@ internal fun StudentCertificationScreen(
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
 
-    ///// test /////
-    var loading by remember { mutableStateOf(false) }
-    var roadmapStep by remember { mutableStateOf<Int?>(null) }
-    var runningStep by remember { mutableStateOf<Int?>(null) }
-    ////////////////
-
     val certificationState by component.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        component.callCertificationProgressList(1) //TODO
+        component.callCertificationHistoryList(1) //TODO
+    }
 
     Scaffold(
         modifier = Modifier
@@ -121,17 +117,11 @@ internal fun StudentCertificationScreen(
                 page = certificationState.pageType,
                 onRoadmapClicked = {
                     scope.launch { /* TODO API */
-                        loading = true
-                        delay(1000)
-                        loading = false
                         component.onClickRoadmapTap()
                     }
                 },
                 onRunningClicked = {
                     scope.launch { /* TODO API */
-                        loading = true
-                        delay(1000)
-                        loading = false
                         component.onClickRunningTap()
                     }
                 }
@@ -143,7 +133,8 @@ internal fun StudentCertificationScreen(
                         onCertButtonClicked = {
                             component.onClickRoadmapCertButton()
                         },
-                        step = roadmapStep
+                        roadmapProgressList = certificationState.roadmapProgressList,
+                        roadmapHistoryList = certificationState.roadmapHistoryList,
                     )
                 }
                 CertPage.Running -> {
@@ -152,7 +143,7 @@ internal fun StudentCertificationScreen(
                         onCertButtonClicked = {
                             component.onClickRunningCertButton()
                         },
-                        step = runningStep
+                        step = null
                     )
                 }
             }
@@ -166,10 +157,6 @@ internal fun StudentCertificationScreen(
                 onConfirmButtonClicked = {
                     component.dismissRoadmapCertDialog()
                     scope.launch {
-                        loading = true
-                        delay(1000)
-                        loading = false
-                        roadmapStep = 1
                     }
                 }, /* TODO API */
                 levelText = "3단계 비스트", /* TODO API */
@@ -184,10 +171,6 @@ internal fun StudentCertificationScreen(
                 onConfirmButtonClicked = {
                     component.dismissRunningCertDialog()
                     scope.launch {
-                        loading = true
-                        delay(1000)
-                        loading = false
-                        runningStep = 1
                     }
                 }, /* TODO API */
                 weekText = "2주차", /* TODO API */
@@ -195,7 +178,7 @@ internal fun StudentCertificationScreen(
         }
     }
 
-    if (loading) {
+    if (certificationState.loading) {
         Loader()
     }
 }

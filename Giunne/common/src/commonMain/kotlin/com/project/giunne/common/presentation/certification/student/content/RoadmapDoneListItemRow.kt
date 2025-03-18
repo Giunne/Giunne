@@ -14,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.project.giunne.Res
+import com.project.giunne.common.data.remote.response.StudentQuestInfo
+import com.project.giunne.common.data.remote.response.convertType
 import com.project.giunne.common.presentation.certification.student.dummy.RoadmapDoneDto
 import com.project.giunne.common.presentation.common.shape.GPSquircleBorderShape
 import com.project.giunne.common.presentation.common.spacer.SpW
@@ -23,12 +25,13 @@ import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_plus
+import com.project.giunne.roadcon_3_beast
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun RoadmapDoneListItemRow(
     modifier: Modifier = Modifier,
-    doneItem: RoadmapDoneDto
+    historyItem: StudentQuestInfo
 ) {
     Row(
         modifier = modifier
@@ -52,19 +55,28 @@ fun RoadmapDoneListItemRow(
             content = {
                 Image(
                     modifier = Modifier.size(32.gdp),
-                    painter = painterResource(doneItem.img),
+                    painter = painterResource(Res.drawable.roadcon_3_beast), // TODO 썸네일 파라미터 나오면
                     contentDescription = null
                 )
             }
         )
         SpW(8.gdp)
-        GPText(
-            modifier = Modifier.weight(1f),
-            text = doneItem.level + "단계 " + doneItem.name,
-            textColor = GPColor.TextBlack,
-            textSize = 14.gsp,
-            fontFamily = GPFontFamily.Bold
-        )
+        Row (
+            modifier = Modifier.weight(1f)
+        ) {
+            GPText(
+                text = historyItem.trainingType.convertType() + " ",
+                textColor = GPColor.MainOrangeColor,
+                textSize = 14.gsp,
+                fontFamily = GPFontFamily.Bold
+            )
+            GPText(
+                text = historyItem.questName.replace(".", "단계 "),
+                textColor = GPColor.TextBlack,
+                textSize = 14.gsp,
+                fontFamily = GPFontFamily.Bold
+            )
+        }
         Image(
             modifier = Modifier.size(12.gdp),
             painter = painterResource(Res.drawable.icon_plus),
@@ -78,7 +90,7 @@ fun RoadmapDoneListItemRow(
         ) {
             GPText(
                 modifier = Modifier.height(14.gdp),
-                text = doneItem.exp.toString() + " exp",
+                text = historyItem.rewardExp.toString() + " exp",
                 textColor = GPColor.MainOrangeColor,
                 textSize = 12.gsp,
                 fontFamily = GPFontFamily.Bold,
@@ -86,7 +98,7 @@ fun RoadmapDoneListItemRow(
             GPText(
                 modifier = Modifier
                     .height(14.gdp),
-                text = doneItem.coin.toString() + " 코인",
+                text = historyItem.rewardPoint.toString() + " 코인",
                 textColor = GPColor.MainOrangeColor,
                 textSize = 12.gsp,
                 fontFamily = GPFontFamily.Bold,
