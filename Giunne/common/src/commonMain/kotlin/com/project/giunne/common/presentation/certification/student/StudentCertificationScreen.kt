@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +28,9 @@ import com.project.giunne.common.presentation.certification.student.content.Road
 import com.project.giunne.common.presentation.certification.student.content.RoadmapCertConfirmDialog
 import com.project.giunne.common.presentation.certification.student.content.RunningCertConfirmDialog
 import com.project.giunne.common.presentation.certification.student.content.RunningCertScreen
+import com.project.giunne.common.presentation.certification.student.intent.VideoUploadStore
 import com.project.giunne.common.presentation.certification.student.state.CertPage
+import com.project.giunne.common.presentation.certification.student.state.CertProgress
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
@@ -43,6 +46,7 @@ import com.project.giunne.icon_arrow_right
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import java.io.File
 
 private const val TAG = "StudentCertificationScreen"
 @Composable
@@ -57,6 +61,10 @@ internal fun StudentCertificationScreen(
     val scope = rememberCoroutineScope()
 
     val certificationState by component.uiState.collectAsState()
+    val videoUploadStore = remember { VideoUploadStore(scope) }
+    val videoUploadState by videoUploadStore.state.collectAsState()
+    val checkProgressItem = certificationState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.CHECK.code }
+    val uploadProgressItem = certificationState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.UPLOAD.code }
 
     LaunchedEffect(Unit) {
         component.callCertificationProgressList(1) //TODO
@@ -131,10 +139,13 @@ internal fun StudentCertificationScreen(
                 CertPage.RoadMap -> {
                     RoadMapCertScreen(
                         modifier = Modifier.fillMaxSize(),
+                        videoUploadStore = videoUploadStore,
+                        videoUploadState = videoUploadState,
                         onCertButtonClicked = {
                             component.onClickRoadmapCertButton()
                         },
-                        roadmapProgressList = certificationState.roadmapProgressList,
+                        checkProgressItem = checkProgressItem,
+                        uploadProgressItem = uploadProgressItem,
                         roadmapHistoryList = certificationState.roadmapHistoryList,
                     )
                 }
@@ -158,6 +169,9 @@ internal fun StudentCertificationScreen(
                 onConfirmButtonClicked = {
                     component.dismissRoadmapCertDialog()
                     scope.launch {
+                        checkProgressItem?.let { item ->
+                            component.uploadFile(item.id.toLong(), videoUploadState.videoFile?.getPath())
+                    }
                     }
                 }, /* TODO API */
                 levelText = "3단계 비스트", /* TODO API */

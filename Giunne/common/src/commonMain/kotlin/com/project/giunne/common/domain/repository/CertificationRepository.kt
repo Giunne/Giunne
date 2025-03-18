@@ -7,9 +7,11 @@ import com.project.giunne.common.data.util.DefineUrl.GET_UPLOAD_LIST
 import com.project.giunne.common.data.util.NetworkResult
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Query
+import java.io.File
 
 interface CertificationRepository {
     suspend fun getCertificationProgress(roadmapId: Long): NetworkResult<List<StudentQuestInfo>>
     suspend fun getCertificationHistory(roadmapId: Long): NetworkResult<List<StudentQuestInfo>>
     suspend fun getUploadList(roadmapId: Long): NetworkResult<List<QuestUploadInfo>>
+    suspend fun postUploadFile(questId: Long, file: File): NetworkResult<String>
 }

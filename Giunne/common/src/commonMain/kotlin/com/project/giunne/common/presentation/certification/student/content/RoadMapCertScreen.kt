@@ -22,6 +22,7 @@ import com.project.giunne.common.data.remote.response.StudentQuestInfo
 import com.project.giunne.common.data.remote.response.convertType
 import com.project.giunne.common.presentation.certification.student.intent.VideoUploadStore
 import com.project.giunne.common.presentation.certification.student.state.CertProgress
+import com.project.giunne.common.presentation.certification.student.state.VideoUploadState
 import com.project.giunne.common.presentation.common.picker.VideoPicker
 import com.project.giunne.common.presentation.common.player.VideoWindowPlayer
 import com.project.giunne.common.presentation.common.spacer.SpH
@@ -38,17 +39,12 @@ private const val TAG = "RoadMapCertScreen"
 fun RoadMapCertScreen(
     modifier: Modifier = Modifier,
     onCertButtonClicked: () -> Unit,
-    roadmapProgressList: List<StudentQuestInfo>,
+    videoUploadStore: VideoUploadStore,
+    videoUploadState: VideoUploadState,
+    checkProgressItem: StudentQuestInfo?,
+    uploadProgressItem: StudentQuestInfo?,
     roadmapHistoryList: List<StudentQuestInfo>,
 ) {
-    val scope = rememberCoroutineScope()
-
-    val videoUploadStore = remember { VideoUploadStore(scope) }
-    val videoUploadState by videoUploadStore.state.collectAsState()
-
-    val checkProgressItem = roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.CHECK.code }
-    val uploadProgressItem = roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.UPLOAD.code }
-
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally

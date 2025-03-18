@@ -5,6 +5,7 @@ import com.project.giunne.common.base.BaseComponent
 import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.certification.GetCertificationHistory
 import com.project.giunne.common.domain.usecase.certification.GetCertificationProgress
+import com.project.giunne.common.domain.usecase.certification.PostUploadFileUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetAllRoadMapUseCase
 import com.project.giunne.common.presentation.certification.student.intent.StudentCertificationEvent
 import com.project.giunne.common.presentation.certification.student.state.CertPage
@@ -15,12 +16,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.java.KoinJavaComponent
+import java.io.File
 
 private const val TAG = "StudentCertificationComponent"
 class StudentCertificationComponent(
     componentContext: ComponentContext,
     private val getCertificationProgress: GetCertificationProgress = KoinJavaComponent.get(GetCertificationProgress::class.java),
     private val getCertificationHistory: GetCertificationHistory = KoinJavaComponent.get(GetCertificationHistory::class.java),
+    private val postUploadFileUseCase: PostUploadFileUseCase = KoinJavaComponent.get(PostUploadFileUseCase::class.java)
 ): KoinComponent, ComponentContext by componentContext,
     BaseComponent<StudentCertificationState, StudentCertificationEvent>(initialState = StudentCertificationState()) {
 
@@ -70,6 +73,28 @@ class StudentCertificationComponent(
                         error = it.asDataThrowable()
                     )
                 }
+            }
+        }
+    }
+
+    fun uploadFile(questId: Long, path: String?) {
+        println("QuestId: $questId | Path: $path")
+        scope.launch {
+            path?.let { filePath ->
+                runCatching {
+                    postUploadFileUseCase(questId, File(filePath))
+                }.onSuccess {
+                    setState { copy(loading = false) }
+                }.onFailure {
+                    setState {
+                        copy(
+                            loading = false,
+                            error = it.asDataThrowable()
+                        )
+                    }
+                }
+            } ?: run {
+                setState { copy(fileError = true) }
             }
         }
     }

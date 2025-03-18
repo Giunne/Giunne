@@ -49,5 +49,6 @@ object DefineUrl {
     /* Certification */
     const val GET_CERT_PROGRESS = "quest/certification/student/in-progress"
     const val GET_CERT_HISTORY = "quest/certification/student/history"
+    const val POST_UPLOAD_FILE = "quest/certification/student"
     const val GET_UPLOAD_LIST = "quest/certification/teacher"
 }

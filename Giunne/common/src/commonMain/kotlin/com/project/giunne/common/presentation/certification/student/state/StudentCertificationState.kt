@@ -16,5 +16,6 @@ data class StudentCertificationState(
     val roadmapHistoryList: List<StudentQuestInfo> = listOf(),
     val runningHistoryList: List<StudentQuestInfo> = listOf(),
 
-    val error: DataThrowable? = null
+    val error: DataThrowable? = null,
+    val fileError: Boolean = false
 )
