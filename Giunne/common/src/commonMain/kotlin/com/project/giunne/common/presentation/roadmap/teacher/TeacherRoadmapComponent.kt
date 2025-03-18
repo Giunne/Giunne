@@ -121,6 +121,7 @@ class TeacherRoadmapComponent(
     }
 
 
+    /* TODO(로드맵 서버로 리팩토링 시 하드 코딩 제거) */
     fun loadStudentList(
         recreationId: Long,
         id: Int
@@ -157,6 +158,7 @@ class TeacherRoadmapComponent(
         }
     }
 
+    /* TODO(로드맵 서버로 리팩토링 시 하드 코딩 제거) */
     fun modifyQuestState(
         roadMapId: Long,
         totalStudentId: List<Int>,
