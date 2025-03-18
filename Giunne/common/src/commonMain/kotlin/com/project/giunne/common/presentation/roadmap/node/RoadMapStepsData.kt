@@ -33,7 +33,7 @@ fun roadMap1(
         add(ConnectNode(node[3], node[4], Connect.STRAIGHT))
         add(ConnectNode(node[3], node[5], Connect.TOP_CURVE))
         add(ConnectNode(node[3], node[6], Connect.TOP_CURVE))
-        add(ConnectNode(node[3], endNode, Connect.STRAIGHT))
+        add(ConnectNode(node[4], endNode, Connect.STRAIGHT))
     }
     return Pair(node, connectList)
 }

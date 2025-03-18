@@ -43,10 +43,7 @@ fun TeacherCheckStudentDialog(
     onConfirm: () -> Unit
 ) {
     val isAllSelected by derivedStateOf {
-        studentList.all { it.isChecked }
-    }
-    val isNoneSelected by derivedStateOf {
-        studentList.none { it.isChecked }
+        studentList.all { it.isChecked && studentList.isNotEmpty() }
     }
 
     if (roadMapState.isSuccess) {
@@ -142,20 +139,18 @@ fun TeacherCheckStudentDialog(
                     modifier = Modifier
                         .height(48.gdp)
                         .weight(1f),
-                    normalColor = if (isNoneSelected) GPColor.ButtonLightGray else GPColor.ButtonOrange,
-                    pressColor = if (isNoneSelected) GPColor.ButtonPressLightGray else GPColor.ButtonPressOrange,
-                    hoverColor = if (isNoneSelected) GPColor.ButtonHoverLightGray else GPColor.ButtonHoverOrange,
+                    normalColor = GPColor.ButtonOrange,
+                    pressColor = GPColor.ButtonPressOrange,
+                    hoverColor = GPColor.ButtonHoverOrange,
                     onClick = {
-                        if (!isNoneSelected) {
-                            onConfirm()
-                        }
+                        onConfirm()
                     },
                 ) {
                     GPText(
                         text = "통과",
                         textSize = 14.gsp,
                         fontFamily = GPFontFamily.Bold,
-                        textColor = if (isNoneSelected) GPColor.TextBlack else GPColor.White
+                        textColor = GPColor.White
                     )
                 }
             }
