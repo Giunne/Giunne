@@ -31,6 +31,7 @@ import com.project.giunne.common.presentation.certification.student.state.CertPa
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
+import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.ui.theme.GPColor
@@ -174,6 +175,16 @@ internal fun StudentCertificationScreen(
                     }
                 }, /* TODO API */
                 weekText = "2주차", /* TODO API */
+            )
+        }
+    }
+
+    with(certificationState.error) {
+        if (this != null) {
+            GPAlertDialog(
+                dismiss = { component.dismissErrorDialog() },
+                title = "인증 화면 에러",
+                content = certificationState.error?.message.orEmpty(),
             )
         }
     }

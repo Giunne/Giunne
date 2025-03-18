@@ -110,6 +110,12 @@ class StudentCertificationComponent(
         }
     }
 
+    fun dismissErrorDialog() {
+        setState {
+            copy(error = null)
+        }
+    }
+
     init {
         GLog.d(TAG, "onCreate")
     }
