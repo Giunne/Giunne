@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +37,7 @@ import com.project.giunne.common.presentation.certification.student.state.CertPa
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
+import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.scrollbar.VerticalScrollbar
 import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
@@ -66,11 +68,11 @@ internal fun TeacherCertificationScreen(
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
 
-    ///// test /////
-    var loading by remember { mutableStateOf(false) }
-    ////////////////
-
     val certificationState by component.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        component.callUploadList(1) // TODO
+    }
 
     Scaffold(
         modifier = Modifier
@@ -127,33 +129,28 @@ internal fun TeacherCertificationScreen(
                 page = certificationState.pageType,
                 onRoadmapClicked = {
                     scope.launch { /* TODO API */
-                        loading = true
-                        delay(1000)
-                        loading = false
                         component.onClickRoadmapTap()
                     }
                 },
                 onRunningClicked = {
                     scope.launch { /* TODO API */
-                        loading = true
-                        delay(1000)
-                        loading = false
                         component.onClickRunningTap()
                     }
                 }
             )
+
             when(certificationState.pageType) {
                 CertPage.RoadMap -> {
                     TeacherRoadMapCertScreen(
                         modifier = Modifier.fillMaxSize(),
-                        certWaitingList = roadmapCommunityList,
+                        certWaitingList = certificationState.uploadList,
                         onItemClicked = { navigateToDetail(it) },
                     )
                 }
                 CertPage.Running -> {
                     TeacherRunningCertScreen(
                         modifier = Modifier.fillMaxSize(),
-                        certWaitingList = runningCommunityList,
+                        certWaitingList = certificationState.uploadList,
                         onItemClicked = { navigateToDetail(it) }
                     )
                 }
@@ -161,7 +158,17 @@ internal fun TeacherCertificationScreen(
         }
     }
 
-    if (loading) {
+    with(certificationState.error) {
+        if (this != null) {
+            GPAlertDialog(
+                dismiss = { component.dismissErrorDialog() },
+                title = "인증 화면 에러",
+                content = certificationState.error?.message.orEmpty(),
+            )
+        }
+    }
+
+    if (certificationState.loading) {
         Loader()
     }
 }
