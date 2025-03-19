@@ -89,7 +89,7 @@ fun StudentCommunityDetailScreen(
                         .padding(horizontal = 16.gdp)
                         .fillMaxWidth()
                         .height(76.gdp),
-                    communityDto = communityDto
+//                    communityDto = communityDto
                 )
                 Box(
                     modifier = Modifier

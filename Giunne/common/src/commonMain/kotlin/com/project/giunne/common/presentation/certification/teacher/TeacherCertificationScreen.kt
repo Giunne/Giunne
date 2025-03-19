@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
 import com.project.giunne.Res
+import com.project.giunne.common.data.remote.response.QuestUploadInfo
 import com.project.giunne.common.presentation.certification.student.content.PageSelectRow
 import com.project.giunne.common.presentation.certification.student.content.RoadMapCertScreen
 import com.project.giunne.common.presentation.certification.student.content.RunningCertScreen
@@ -61,7 +62,7 @@ internal fun TeacherCertificationScreen(
     component: TeacherCertificationComponent,
     modifier: Modifier = Modifier,
     onCommunityButtonClicked: (CertPage) -> Unit,
-    navigateToDetail: (CommunityDto) -> Unit,
+    navigateToDetail: (QuestUploadInfo) -> Unit,
 ) {
     GLog.d(TAG, "onCreate")
 

@@ -99,18 +99,18 @@ fun TeacherCertItemRow(
                 fontFamily = GPFontFamily.Bold
             )
         }
-        Row(
-            modifier = Modifier
-                .padding(8.gdp)
-                .align(Alignment.TopEnd),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            GPText(
-                text = "24.11.11", // TODO API
-                textColor = GPColor.TextLightGray,
-                fontFamily = GPFontFamily.Bold,
-                textSize = 10.gsp
-            )
-        }
+//        Row(
+//            modifier = Modifier
+//                .padding(8.gdp)
+//                .align(Alignment.TopEnd),
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            GPText(
+//                text = "24.11.11", // TODO API
+//                textColor = GPColor.TextLightGray,
+//                fontFamily = GPFontFamily.Bold,
+//                textSize = 10.gsp
+//            )
+//        }
     }
 }

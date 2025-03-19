@@ -43,6 +43,7 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.slid
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.project.giunne.Res
+import com.project.giunne.common.data.remote.response.QuestUploadInfo
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.certification.teacher.TeacherCertificationScreen
 import com.project.giunne.common.presentation.common.badge.GPNotificationBadge
@@ -146,7 +147,7 @@ fun TeacherMainScreen(
                         is TeacherMainComponent.TeacherChild.TeacherRoadmapChild -> "로드맵"
                         is TeacherMainComponent.TeacherChild.TeacherCertificationChild -> "인증"
                         is TeacherMainComponent.TeacherChild.TeacherCommunityChild -> "게시판"
-                        is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild -> activeComponent.communityDto.content
+                        is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild -> activeComponent.questUploadInfo.getQuestTitle()
                         is TeacherMainComponent.TeacherChild.TeacherFriendsChild -> "학생들"
                         is TeacherMainComponent.TeacherChild.TeacherMyPageChild -> "내정보"
                         is TeacherMainComponent.TeacherChild.TeacherShopChild -> "꾸미기"
@@ -383,21 +384,21 @@ private fun TeacherChildren(
                 onCommunityButtonClicked = { type ->
                     component.navigateToCommunity(type)
                 },
-                navigateToDetail = {communityDto ->
-                    component.navigateToCommunityDetail(communityDto)
+                navigateToDetail = { questUploadInfo ->
+                    component.navigateToCommunityDetail(questUploadInfo)
                 }
             )
             is TeacherMainComponent.TeacherChild.TeacherCommunityChild -> TeacherCommunityScreen(
                 component = child.component,
-                navigateToDetail = { communityDto ->
-                    component.navigateToCommunityDetail(communityDto)
+                navigateToDetail = { questUploadInfo ->
+                    component.navigateToCommunityDetail(questUploadInfo)
                 },
                 pageType = if (activeComponent is TeacherMainComponent.TeacherChild.TeacherCommunityChild)
                     activeComponent.pageType else CertPage.RoadMap
             )
             is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild -> TeacherCommunityDetailScreen(
-                communityDto = if (activeComponent is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild)
-                    activeComponent.communityDto else null
+                questUploadInfo = if (activeComponent is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild)
+                    activeComponent.questUploadInfo else null
             )
             is TeacherMainComponent.TeacherChild.TeacherFriendsChild -> TeacherFriendScreen(component = child.component)
             is TeacherMainComponent.TeacherChild.TeacherMyPageChild -> TeacherMyPageScreen(

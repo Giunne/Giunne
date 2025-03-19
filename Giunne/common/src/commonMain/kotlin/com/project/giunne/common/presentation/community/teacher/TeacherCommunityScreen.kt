@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import com.project.giunne.common.data.remote.response.QuestUploadInfo
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.content.Loader
@@ -43,7 +44,7 @@ private const val TAG = "TeacherCommunityScreen"
 internal fun TeacherCommunityScreen(
     component: TeacherCommunityComponent,
     modifier: Modifier = Modifier,
-    navigateToDetail: (CommunityDto) -> Unit,
+    navigateToDetail: (QuestUploadInfo) -> Unit,
     pageType: CertPage
 ) {
     GLog.d(TAG, "onCreate")
@@ -110,7 +111,7 @@ internal fun TeacherCommunityScreen(
                             rootName = list[it].rootName,
                             content = list[it].content,
                             type = pageType,
-                            onClick = { navigateToDetail(list[it]) },
+//                            onClick = { navigateToDetail(list[it]) },
                         )
                     }
                 }

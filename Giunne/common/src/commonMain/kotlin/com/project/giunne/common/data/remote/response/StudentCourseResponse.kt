@@ -46,7 +46,8 @@ data class StudentQuestInfo(
     @SerialName("rewardPoint") val rewardPoint: Int = 0,
     @SerialName("sortSeq") val sortSeq: Int = 0,
     @SerialName("trainingDescription") val trainingDescription: String = "",
-    @SerialName("trainingType") val trainingType: String = ""
+    @SerialName("trainingType") val trainingType: String = "",
+    @SerialName("thumbnailUrl") val thumbnailUrl: String = ""
 )
 
 fun String.convertType(): String {

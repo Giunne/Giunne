@@ -47,7 +47,7 @@ fun CommunityItemRow(
     content: String,
     type: CertPage,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    onClick: () -> Unit
+    onClick: () -> Unit = {  }
 ) {
     val isPressed by interactionSource.collectIsPressedAsState()
     val isHovered by interactionSource.collectIsHoveredAsState()

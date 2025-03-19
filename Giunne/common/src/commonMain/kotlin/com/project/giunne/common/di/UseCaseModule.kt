@@ -13,6 +13,8 @@ import com.project.giunne.common.domain.usecase.certification.GetCertificationHi
 import com.project.giunne.common.domain.usecase.certification.GetCertificationProgress
 import com.project.giunne.common.domain.usecase.certification.GetUploadList
 import com.project.giunne.common.domain.usecase.common.GetSchoolListUseCase
+import com.project.giunne.common.domain.usecase.community.GetPostingDetail
+import com.project.giunne.common.domain.usecase.community.GetPostingDetailList
 import com.project.giunne.common.domain.usecase.mypage.GetInventoryItemListUseCase
 import com.project.giunne.common.domain.usecase.mypage.PutInventoryItemUseCase
 import com.project.giunne.common.domain.usecase.roadmap.CreateRecreationUseCase
@@ -58,4 +60,6 @@ val useCaseModule: Module = module {
     single { GetCertificationProgress(get()) }
     single { GetCertificationHistory(get()) }
     single { GetUploadList(get()) }
+    single { GetPostingDetail(get()) }
+    single { GetPostingDetailList(get()) }
 }

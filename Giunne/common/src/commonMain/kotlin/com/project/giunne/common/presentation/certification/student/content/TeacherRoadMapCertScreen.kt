@@ -30,7 +30,7 @@ private const val TAG = "RoadMapCertScreen"
 fun TeacherRoadMapCertScreen(
     modifier: Modifier = Modifier,
     certWaitingList: List<QuestUploadInfo>, //TODO API
-    onItemClicked: (CommunityDto) -> Unit
+    onItemClicked: (QuestUploadInfo) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val scrollState = rememberLazyListState()
@@ -78,7 +78,7 @@ fun TeacherRoadMapCertScreen(
                 ) {
                     TeacherCertItemRow(
                         questUploadInfo = certWaitingList[it],
-//                        onClick = { onItemClicked(certWaitingList[it]) },
+                        onClick = { onItemClicked(certWaitingList[it]) },
                     )
                 }
             }

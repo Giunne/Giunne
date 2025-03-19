@@ -45,7 +45,7 @@ private const val TAG = "RunningCertScreen"
 fun TeacherRunningCertScreen(
     modifier: Modifier = Modifier,
     certWaitingList: List<QuestUploadInfo>, //TODO API
-    onItemClicked: (CommunityDto) -> Unit
+    onItemClicked: (QuestUploadInfo) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val scrollState = rememberLazyListState()
