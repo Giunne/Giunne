@@ -170,8 +170,14 @@ internal fun StudentCertificationScreen(
                     component.dismissRoadmapCertDialog()
                     scope.launch {
                         checkProgressItem?.let { item ->
-                            component.uploadFile(item.id.toLong(), videoUploadState.videoFile?.getPath())
-                    }
+                            videoUploadState.videoFile?.let { file ->
+                                component.uploadFile(
+                                    item.id.toLong(),
+                                    file.toByteArray(),
+                                    file.getMimeType()
+                                )
+                            }
+                        }
                     }
                 }, /* TODO API */
                 levelText = "3단계 비스트", /* TODO API */

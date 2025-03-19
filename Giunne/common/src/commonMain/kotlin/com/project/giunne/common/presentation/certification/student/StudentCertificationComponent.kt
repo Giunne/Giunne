@@ -77,24 +77,23 @@ class StudentCertificationComponent(
         }
     }
 
-    fun uploadFile(questId: Long, path: String?) {
-        println("QuestId: $questId | Path: $path")
+    fun uploadFile(
+        questId: Long,
+        byteArray: ByteArray,
+        mimeType: String
+    ) {
         scope.launch {
-            path?.let { filePath ->
-                runCatching {
-                    postUploadFileUseCase(questId, File(filePath))
-                }.onSuccess {
-                    setState { copy(loading = false) }
-                }.onFailure {
-                    setState {
-                        copy(
-                            loading = false,
-                            error = it.asDataThrowable()
-                        )
-                    }
+            runCatching {
+                postUploadFileUseCase(questId, byteArray, mimeType)
+            }.onSuccess {
+                setState { copy(loading = false) }
+            }.onFailure {
+                setState {
+                    copy(
+                        loading = false,
+                        error = it.asDataThrowable()
+                    )
                 }
-            } ?: run {
-                setState { copy(fileError = true) }
             }
         }
     }

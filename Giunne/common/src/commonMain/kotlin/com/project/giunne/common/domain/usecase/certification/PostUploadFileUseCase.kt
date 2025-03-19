@@ -7,9 +7,13 @@ import java.io.File
 class PostUploadFileUseCase(
     private val certificationRepository: CertificationRepository
 ) {
-    suspend operator fun invoke(questId: Long, file: File): String {
+    suspend operator fun invoke(
+        questId: Long,
+        byteArray: ByteArray,
+        mimeType: String
+    ): String {
         return certificationRepository
-            .postUploadFile(questId, file)
+            .postUploadFile(questId, byteArray, mimeType)
             .successOr("")
     }
 }

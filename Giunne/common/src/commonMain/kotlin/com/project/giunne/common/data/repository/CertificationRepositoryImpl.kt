@@ -36,13 +36,18 @@ class CertificationRepositoryImpl(
         }
     }
 
-    override suspend fun postUploadFile(questId: Long, file: File): NetworkResult<String> {
+    override suspend fun postUploadFile(
+        questId: Long,
+        byteArray: ByteArray,
+        mimeType: String
+    ): NetworkResult<String> {
         return handleApi(TAG) {
+            val extension = mimeType.substringAfter("/")
             val multipart = MultiPartFormDataContent(
                 formData {
-                    append("file", file.readBytes(),Headers.build {
-                        append(HttpHeaders.ContentType, Files.probeContentType(file.toPath()))
-                        append(HttpHeaders.ContentDisposition,  "filename=${file.name}")
+                    append("file", byteArray, Headers.build {
+                        append(HttpHeaders.ContentType, mimeType)
+                        append(HttpHeaders.ContentDisposition,  "filename=Student-$questId-${byteArray.hashCode()}.$extension")
                     })
                 })
             certificationService.postUploadFile(questId, multipart)

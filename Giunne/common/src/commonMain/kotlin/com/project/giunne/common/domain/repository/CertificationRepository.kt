@@ -13,5 +13,5 @@ interface CertificationRepository {
     suspend fun getCertificationProgress(roadmapId: Long): NetworkResult<List<StudentQuestInfo>>
     suspend fun getCertificationHistory(roadmapId: Long): NetworkResult<List<StudentQuestInfo>>
     suspend fun getUploadList(roadmapId: Long): NetworkResult<List<QuestUploadInfo>>
-    suspend fun postUploadFile(questId: Long, file: File): NetworkResult<String>
+    suspend fun postUploadFile(questId: Long, byteArray: ByteArray, mimeType: String): NetworkResult<String>
 }
