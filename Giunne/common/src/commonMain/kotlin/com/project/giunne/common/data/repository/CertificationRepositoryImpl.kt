@@ -6,10 +6,13 @@ import com.project.giunne.common.data.service.CertificationService
 import com.project.giunne.common.data.util.NetworkResult
 import com.project.giunne.common.data.util.handleApi
 import com.project.giunne.common.domain.repository.CertificationRepository
+import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
+import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import java.io.File
+import java.nio.file.Files
 
 private const val TAG = "CertificationRepositoryImpl"
 class CertificationRepositoryImpl(
@@ -35,11 +38,13 @@ class CertificationRepositoryImpl(
 
     override suspend fun postUploadFile(questId: Long, file: File): NetworkResult<String> {
         return handleApi(TAG) {
-            val multipart = formData {
-                append("file", file.readBytes(),Headers.build {
-                    append(HttpHeaders.ContentType, "video/*")
+            val multipart = MultiPartFormDataContent(
+                formData {
+                    append("file", file.readBytes(),Headers.build {
+                        append(HttpHeaders.ContentType, Files.probeContentType(file.toPath()))
+                        append(HttpHeaders.ContentDisposition,  "filename=${file.name}")
+                    })
                 })
-            }
             certificationService.postUploadFile(questId, multipart)
         }
     }

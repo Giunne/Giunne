@@ -32,10 +32,9 @@ interface CertificationService {
         @Query("roadmapId") roadmapId: Long
     ): BaseResponse<List<QuestUploadInfo>>
 
-    @Multipart
     @POST(POST_UPLOAD_FILE)
     suspend fun postUploadFile(
         @Query("questId") questId: Long,
-        @Part("file") file: List<PartData>
+        @Body file: MultiPartFormDataContent
     ): BaseResponse<String>
 }
