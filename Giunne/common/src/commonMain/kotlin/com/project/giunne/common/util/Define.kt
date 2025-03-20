@@ -2,8 +2,14 @@ package com.project.giunne.common.util
 
 import com.project.giunne.common.data.remote.response.AuthResponse
 
+private const val TAG = "Define"
 object Define {
     var playerId: Long
+//        get() {
+//            val id = PreferencesUtil.settingsRepository!!.playerPref.get().toLong()
+//            GLog.d(TAG, "Get Player Id => $id")
+//            return id
+//        }
         get() = PreferencesUtil.settingsRepository!!.playerPref.get().toLong()
         set(value) { PreferencesUtil.settingsRepository!!.playerPref.set(value.toString()) }
 
@@ -16,6 +22,11 @@ object Define {
         set(value) { PreferencesUtil.settingsRepository!!.rolePref.set(value) }
 
     var accessToken: String
+//        get() {
+//            val token = PreferencesUtil.settingsRepository!!.accessTokenPref.get()
+//            GLog.d(TAG, "Get Access Token Event => $token")
+//            return token
+//        }
         get() = PreferencesUtil.settingsRepository!!.accessTokenPref.get()
         set(value) { PreferencesUtil.settingsRepository!!.accessTokenPref.set(value) }
 
@@ -35,11 +46,10 @@ object Define {
         value: String
     ) {
         accessToken = value
-//        authInfo = authInfo.copy(accessToken = accessToken)
     }
 
     fun clearInfo() {
-//        authInfo = AuthResponse()
+        playerId = 0
         userRole = ""
         accessToken = ""
         refreshToken = ""

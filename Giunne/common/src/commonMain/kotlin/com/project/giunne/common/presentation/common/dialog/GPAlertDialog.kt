@@ -37,7 +37,7 @@ fun GPAlertDialog(
         )
     ) {
         Card(
-            modifier = Modifier
+            modifier = modifier
                 .background(GPColor.White, RoundedCornerShape(12.gdp))
                 .width(320.gdp)
                 .wrapContentHeight()

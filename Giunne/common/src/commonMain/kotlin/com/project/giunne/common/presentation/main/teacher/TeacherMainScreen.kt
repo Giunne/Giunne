@@ -1,7 +1,7 @@
 package com.project.giunne.common.presentation.main.teacher
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -17,12 +17,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -58,6 +58,8 @@ import com.project.giunne.common.presentation.home.teacher.recreation.TeacherRec
 import com.project.giunne.common.presentation.main.common.NotificationScreen
 import com.project.giunne.common.presentation.main.dummy.notiList
 import com.project.giunne.common.presentation.mypage.teacher.TeacherMyPageScreen
+import com.project.giunne.common.presentation.notification.NotificationScreen
+import com.project.giunne.common.presentation.notification.NotificationUtil
 import com.project.giunne.common.presentation.roadmap.teacher.TeacherRoadmapScreen
 import com.project.giunne.common.presentation.shop.GachaScreen
 import com.project.giunne.common.presentation.shop.ShopScreen
@@ -90,27 +92,24 @@ fun TeacherMainScreen(
     val childStack by component.childStack.subscribeAsState()
     val activeComponent = childStack.active.instance
 
-    //// TEST ////
-    var noti by remember { mutableStateOf(false) }
-    var notiAnim by remember { mutableStateOf(false) }
+    val notificationState by NotificationUtil.uiState.collectAsState()
     val animatedDP by animateDpAsState(
-        targetValue = if (notiAnim) 0.gdp else 400.gdp,
-        animationSpec = tween(durationMillis = 150, easing = LinearEasing)
+        targetValue = if (notificationState.isOpen) 0.gdp else 400.gdp,
+        animationSpec = tween(durationMillis = 150, easing = LinearOutSlowInEasing)
     )
-    //////////////
+
 
     BackHandler {
         scope.launch {
-            if (noti) {
-                notiAnim = false
-                delay(150)
-                noti = false
+            if (notificationState.isOpen) {
+                NotificationUtil.closeNotificationScreen()
             } else if (childStack.backStack.isNotEmpty()) {
                 component.navigateBack()
             } else {
                 if (backPress == false) {
                     backPress = true
                     snackbarState.showSnackbar("뒤로가기를 한번 더 누르면 종료됩니다.")
+                    delay(2000)
                     backPress = false
                 } else {
                     exitProgram()
@@ -180,8 +179,7 @@ fun TeacherMainScreen(
                         GPNotificationBadge(
                             count = notiList.filter { !it.isRead }.size,
                             onClick = {
-                                noti = true
-                                notiAnim = true
+                                NotificationUtil.onClickNotificationButton()
                             }
                         )
                     }
@@ -213,30 +211,16 @@ fun TeacherMainScreen(
                 }
             }
 
-            if (noti) {
-                Column(
+            if (animatedDP != 400.gdp) {
+                NotificationScreen(
                     modifier = Modifier
                         .fillMaxSize()
-                        .offset(x = animatedDP)
-                ) {
-                    GPMainTopBar(
-                        titleText = "알림",
-                        leftIcon = {
-                            GPBackButton(
-                                onClick = {
-                                    scope.launch {
-                                        notiAnim = false
-                                        delay(150)
-                                        noti = false
-                                    }
-                                }
-                            )
-                        },
-                    )
-                    NotificationScreen(
-                        notificationItemList = notiList
-                    )
-                }
+                        .offset(x = animatedDP),
+                    onBackButtonClicked = {
+                        NotificationUtil.closeNotificationScreen()
+                    },
+                    notificationItemList = notiList,
+                )
             }
         }
     }

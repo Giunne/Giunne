@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,11 +18,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.project.giunne.common.data.remote.response.StudentCourseInfo
 import com.project.giunne.common.presentation.common.addFocusCleaner
+import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.toggle.GPToggleButton
+import com.project.giunne.common.presentation.roadmap.content.StudentJoggingDialog
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.gdp
+import kotlinx.coroutines.async
 
 private const val TAG = "StudentRoadmapScreen"
 @Composable
@@ -32,16 +38,18 @@ internal fun StudentRoadmapScreen(
     GLog.d(TAG, "onCreate")
 
     val focusManager = LocalFocusManager.current
-    val scope = rememberCoroutineScope()
+    val roadMapState by component.uiState.collectAsStateWithLifecycle()
     var isSelected by remember { mutableStateOf(false) }
+    var isShow by remember { mutableStateOf(false) }
+    var courseInfo by remember { mutableStateOf(StudentCourseInfo()) }
 
-    val joggingWeek = listOf(
-        13, 14, 15,
-        12, 11, 10,
-        7, 8, 9,
-        6, 5, 4,
-        1, 2, 3
-    )
+
+    LaunchedEffect(Unit) {
+        async {
+            component.getAllRoadMap()
+            component.getStudentCourse(1)
+        }.await()
+    }
 
     Scaffold(
         modifier = Modifier
@@ -53,6 +61,17 @@ internal fun StudentRoadmapScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
+            if (roadMapState.isLoading) {
+                Loader()
+            }
+            if (isShow) {
+                StudentJoggingDialog(
+                    questInfo = courseInfo.questInfo,
+                    onDismissDialog = {
+                        isShow = false
+                    }
+                )
+            }
             if (isSelected) {
                 JoggingRoadmapScreen(
                     modifier = Modifier
@@ -60,13 +79,18 @@ internal fun StudentRoadmapScreen(
                         .background(GPColor.BackgroundLightGray)
                         .padding(horizontal = 16.gdp, vertical = 8.gdp)
                         .align(Alignment.Center),
-                    joggingWeek = joggingWeek,
+                    questInfoList = roadMapState.courseMap.values.flatten(),
+                    onJoggingClick = { info ->
+                        isShow = true
+                        courseInfo = info
+                    }
                 )
             } else {
                 ExerciseRoadmapScreen(
                     modifier = Modifier
                         .fillMaxSize()
-                        .align(Alignment.Center)
+                        .align(Alignment.Center),
+                    roadMapState = roadMapState
                 )
             }
             Box(
@@ -78,14 +102,16 @@ internal fun StudentRoadmapScreen(
                     modifier = Modifier
                         .width(120.gdp)
                         .height(44.gdp),
-                    titleLeft = "운동",
-                    titleRight = "조깅",
+                    titleLeft = roadMapState.roadMapInfo.getOrNull(0)?.title.orEmpty(),
+                    titleRight = roadMapState.roadMapInfo.getOrNull(1)?.title.orEmpty(),
                     isSelected = isSelected,
                     onLeftButtonClick = {
                         isSelected = false
+                        component.getStudentCourse(1)
                     },
                     onRightButtonClick = {
                         isSelected = true
+                        component.getStudentCourse(2)
                     }
                 )
             }

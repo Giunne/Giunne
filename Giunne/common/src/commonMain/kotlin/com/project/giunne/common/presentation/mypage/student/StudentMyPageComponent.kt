@@ -6,6 +6,8 @@ import com.project.giunne.common.data.remote.response.AvatarUserResponse
 import com.project.giunne.common.domain.usecase.avatar.GetUserAvatarListUseCase
 import com.project.giunne.common.presentation.mypage.intent.MyPageEvent
 import com.project.giunne.common.presentation.mypage.state.MyPageState
+import com.project.giunne.common.util.AvatarUtil
+import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.GLog
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -14,32 +16,13 @@ import org.koin.java.KoinJavaComponent
 private const val TAG = "StudentMyPageComponent"
 class StudentMyPageComponent(
     componentContext: ComponentContext,
-    private val getAvatarListUseCase: GetUserAvatarListUseCase = KoinJavaComponent.get(GetUserAvatarListUseCase::class.java),
 ): KoinComponent, ComponentContext by componentContext,
 
 BaseComponent<MyPageState, MyPageEvent>(initialState = MyPageState()){
     init {
         GLog.d(TAG, "onCreate")
-    }
-
-    fun getRecreationList(
-        playerId: Long,
-        pageIndex: Int
-    ) {
-        setState { copy(isLoading = true) }
-        scope.launch {
-            runCatching {
-                getAvatarListUseCase(pageIndex)
-            }.onSuccess { response ->
-                setState {
-                    copy(
-                        isLoading = false,
-                        userInfo = response.data.find { it.id.toLong() == playerId } ?: AvatarUserResponse()
-                    )
-                }
-            }.onFailure {
-                setState { copy(isLoading = false) }
-            }
+        if (Define.playerId != 0L) {
+            AvatarUtil.getRecreationList(Define.playerId, 1)
         }
     }
 

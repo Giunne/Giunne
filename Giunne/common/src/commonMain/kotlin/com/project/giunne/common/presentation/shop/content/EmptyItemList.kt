@@ -21,7 +21,8 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun EmptyItemList(
-    modifier: Modifier
+    modifier: Modifier,
+    description: String
 ) {
     Box(
         modifier = modifier,
@@ -38,7 +39,7 @@ fun EmptyItemList(
             )
             Spacer(modifier = Modifier.height(8.gdp))
             GPText(
-                text = "아이템이 비어있어요!",
+                text = description,
                 textSize = 12.gsp
             )
         }

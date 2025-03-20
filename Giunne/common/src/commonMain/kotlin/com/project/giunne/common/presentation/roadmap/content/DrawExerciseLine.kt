@@ -8,18 +8,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
+import com.project.giunne.common.data.remote.response.StudentCourseInfo
 import com.project.giunne.common.presentation.roadmap.node.Connect
 import com.project.giunne.common.presentation.roadmap.node.ConnectNode
-import com.project.giunne.common.presentation.roadmap.node.NodeStatus
-import com.project.giunne.common.presentation.roadmap.state.ExerciseUiState
 import com.project.giunne.common.ui.theme.GPColor
 
 @Composable
 fun DrawExerciseLine(
     density: Float,
-    exerciseState: List<ExerciseUiState>,
+    questInfoList: List<StudentCourseInfo>,
     connect: List<ConnectNode>
 ) {
+    val allCheckMultipleConfirm = questInfoList
+        .filter { it.courseName == "4-a.CORE" || it.courseName == "4-b.CORE" || it.courseName == "4-c.CORE"  }
+        .all { studentCourseInfo ->
+            studentCourseInfo.questInfo.questStateInfo.questProgress == "CONFIRM"
+        }
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -30,10 +34,13 @@ fun DrawExerciseLine(
                 val from = it.from
                 val to = it.to
                 val connection = it.connect
+                val fromCourseInfo = questInfoList.find { it.courseName == from.step } ?: StudentCourseInfo()
+                val fromQuestStateInfo = fromCourseInfo.questInfo.questStateInfo
+                val fromStatus = fromQuestStateInfo.questProgress
                 val defaultColor = if (from.boxSize == 30f) GPColor.MainOrangeColor else GPColor.ButtonLightGray
-                val color = if (exerciseState.find { it.step == from.step }?.status == NodeStatus.CONFIRM) {
+                val color = if (fromStatus == "CONFIRM" && fromCourseInfo.courseName != "4-b.CORE" && from.boxSize != 30f) {
                     GPColor.Green
-                } else if (exerciseState.find { it.step == to.step }?.status == NodeStatus.CONFIRM && from.boxSize != 30f) {
+                } else if (fromCourseInfo.courseName == "4-b.CORE" && allCheckMultipleConfirm) {
                     GPColor.Green
                 } else {
                     defaultColor

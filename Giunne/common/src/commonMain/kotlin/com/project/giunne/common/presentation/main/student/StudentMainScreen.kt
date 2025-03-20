@@ -1,7 +1,7 @@
 package com.project.giunne.common.presentation.main.student
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -22,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +42,7 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.slid
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.project.giunne.Res
+import com.project.giunne.common.data.remote.request.GachaType
 import com.project.giunne.common.presentation.certification.student.StudentCertificationScreen
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.badge.GPNotificationBadge
@@ -55,9 +57,10 @@ import com.project.giunne.common.presentation.friend.student.StudentFriendScreen
 import com.project.giunne.common.presentation.home.student.home.StudentHomeScreen
 import com.project.giunne.common.presentation.home.student.join.StudentJoinRecreationScreen
 import com.project.giunne.common.presentation.home.student.search.SearchRoadMapScreen
-import com.project.giunne.common.presentation.main.common.NotificationScreen
 import com.project.giunne.common.presentation.main.dummy.notiList
 import com.project.giunne.common.presentation.mypage.student.StudentMyPageScreen
+import com.project.giunne.common.presentation.notification.NotificationScreen
+import com.project.giunne.common.presentation.notification.NotificationUtil
 import com.project.giunne.common.presentation.roadmap.student.StudentRoadmapScreen
 import com.project.giunne.common.presentation.select.StudentCharacterSelectScreen
 import com.project.giunne.common.presentation.shop.GachaScreen
@@ -91,31 +94,27 @@ fun StudentMainScreen(
 
     val childStack by component.childStack.subscribeAsState()
     val activeComponent = childStack.active.instance
-    var testOptionItem by remember { mutableStateOf("선택해주세요.") }
 
-    //// TEST ////
-    var noti by remember { mutableStateOf(false) }
-    var notiAnim by remember { mutableStateOf(false) }
+    val notificationState by NotificationUtil.uiState.collectAsState()
     val animatedDP by animateDpAsState(
-        targetValue = if (notiAnim) 0.gdp else 400.gdp,
-        animationSpec = tween(durationMillis = 150, easing = LinearEasing)
+        targetValue = if (notificationState.isOpen) 0.gdp else 400.gdp,
+        animationSpec = tween(durationMillis = 150, easing = LinearOutSlowInEasing)
     )
-    //////////////
+
     BackHandler {
         scope.launch {
-            if (noti) {
-                notiAnim = false
-                delay(150)
-                noti = false
+            if (notificationState.isOpen) {
+                NotificationUtil.closeNotificationScreen()
             } else if (childStack.backStack.isNotEmpty()) {
                 component.navigateBack()
             } else {
                 if (backPress == false) {
                     backPress = true
                     snackbarState.showSnackbar("뒤로가기를 한번 더 누르면 종료됩니다.")
+                    delay(2000)
                     backPress = false
                 } else {
-                    com.project.giunne.common.util.exitProgram()
+                    exitProgram()
                 }
             }
         }
@@ -187,8 +186,7 @@ fun StudentMainScreen(
                         GPNotificationBadge(
                             count = notiList.filter { !it.isRead }.size,
                             onClick = {
-                                noti = true
-                                notiAnim = true
+                                NotificationUtil.onClickNotificationButton()
                             }
                         )
                     }
@@ -247,30 +245,16 @@ fun StudentMainScreen(
                 }
             }
 
-            if (noti) {
-                Column(
+            if (animatedDP != 400.gdp) {
+                NotificationScreen(
                     modifier = Modifier
                         .fillMaxSize()
-                        .offset(x = animatedDP)
-                ) {
-                    GPMainTopBar(
-                        titleText = "알림",
-                        leftIcon = {
-                            GPBackButton(
-                                onClick = {
-                                    scope.launch {
-                                        notiAnim = false
-                                        delay(150)
-                                        noti = false
-                                    }
-                                }
-                            )
-                        },
-                    )
-                    NotificationScreen(
-                        notificationItemList = notiList
-                    )
-                }
+                        .offset(x = animatedDP),
+                    onBackButtonClicked = {
+                        NotificationUtil.closeNotificationScreen()
+                    },
+                    notificationItemList = notiList,
+                )
             }
         }
     }
@@ -481,14 +465,17 @@ private fun StudentChildren(
                 }
             )
             is StudentMainComponent.StudentChild.StudentGachaChild -> GachaScreen(
-                onGachaClick = {
-                    component.navigateToPickingItem()
+                onGachaClick = { gachaType ->
+                    component.navigateToPickingItem(gachaType)
                 },
             )
             is StudentMainComponent.StudentChild.StudentPickingItemChild -> PickingItemScreen(
                 onWearingItemClick = {
                     component.navigateFromPickingItemToShop()
-                }
+                },
+                gachaType = if (activeComponent is StudentMainComponent.StudentChild.StudentPickingItemChild) {
+                    activeComponent.gachaType
+                } else GachaType.GENERAL
             )
 
             is StudentMainComponent.StudentChild.StudentJoinRecreationChild -> StudentJoinRecreationScreen(

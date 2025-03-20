@@ -1,5 +1,6 @@
 package com.project.giunne.common.data.remote.response
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -10,16 +11,16 @@ data class CategoryItemResponse(
 
 @Serializable
 data class Item(
-    val id: Long,
-    val categoryId: Int,
-    val itemDescription: String,
-    val itemGrade: String,
-    val thumbnailUrl: String?,
-    val itemImages: List<ItemCategoryImage>,
-    val itemName: String,
-    val needLevel: Int,
-    val price: Int,
-    val sortSeq: Int
+    @SerialName("id") val id: Long = 0,
+    @SerialName("categoryId") val categoryId: Int = 0,
+    @SerialName("itemDescription") val itemDescription: String = "",
+    @SerialName("itemGrade") val itemGrade: String = "",
+    @SerialName("thumbnailUrl") val thumbnailUrl: String? = null,
+    @SerialName("itemImages") val itemImages: List<ItemCategoryImage> = listOf(),
+    @SerialName("itemName") val itemName: String = "",
+    @SerialName("needLevel") val needLevel: Int = 0,
+    @SerialName("price") val price: Int = 0,
+    @SerialName("sortSeq") val sortSeq: Int = 0
 )
 
 @Serializable
@@ -28,7 +29,7 @@ data class ItemCategoryImage(
     val id: Int,
     val level: Int,
     val isRepresent: Boolean,
-    val itemImagePositions: List<ItemImagePosition>
+    val itemImagePositions: List<ItemImagePosition> = listOf()
 )
 
 @Serializable

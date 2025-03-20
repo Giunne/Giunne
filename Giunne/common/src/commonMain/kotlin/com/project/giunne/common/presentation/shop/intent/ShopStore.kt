@@ -1,10 +1,14 @@
 package com.project.giunne.common.presentation.shop.intent
 
 import com.project.giunne.common.base.BaseComponent
+import com.project.giunne.common.data.remote.request.PutInventoryItemRequest
+import com.project.giunne.common.data.remote.response.AvatarUserResponse
 import com.project.giunne.common.data.remote.response.Item
 import com.project.giunne.common.data.util.DefineUrl.IMAGE_BASE_URL
 import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.avatar.GetUserAvatarListUseCase
+import com.project.giunne.common.domain.usecase.mypage.GetInventoryItemListUseCase
+import com.project.giunne.common.domain.usecase.mypage.PutInventoryItemUseCase
 import com.project.giunne.common.domain.usecase.shop.GetCategoryItemListUseCase
 import com.project.giunne.common.domain.usecase.shop.GetCategoryMapUseCase
 import com.project.giunne.common.presentation.shop.state.CharacterState
@@ -16,13 +20,12 @@ import org.koin.java.KoinJavaComponent
 
 class ShopStore(
     private val getCategoryMapUseCase: GetCategoryMapUseCase = KoinJavaComponent.get(GetCategoryMapUseCase::class.java),
-    private val getCategoryItemListUseCase: GetCategoryItemListUseCase = KoinJavaComponent.get(GetCategoryItemListUseCase::class.java),
-    private val getAvatarListUseCase: GetUserAvatarListUseCase = KoinJavaComponent.get(GetUserAvatarListUseCase::class.java),
+    private val getInventoryItemListUseCase: GetInventoryItemListUseCase = KoinJavaComponent.get(GetInventoryItemListUseCase::class.java),
+    private val putInventoryItemUseCase: PutInventoryItemUseCase = KoinJavaComponent.get(PutInventoryItemUseCase::class.java),
 ): BaseComponent<CharacterState, ShopEvent>(
     scope = CoroutineScope(Dispatchers.IO),
     initialState = CharacterState()
 ) {
-
     fun getCategoryMap() {
         scope.launch {
             runCatching {
@@ -42,14 +45,10 @@ class ShopStore(
     fun onChangeItem(item: Item) {
         setState {
             copy(
-                selectedCharacter = if (item.categoryId == 6) {
-                    (IMAGE_BASE_URL + item.itemImages.find { it.level == currentLevel }?.fileUrl)
-                } else this.selectedCharacter,
-                selectedItems = if (selectedItems.contains(item)) {
-                    selectedItems.toMutableList().apply {
-                        remove(item)
-                    }
-                } else {
+                selectedCharacter = (IMAGE_BASE_URL + item.itemImages.find { it.level == currentLevel }?.fileUrl),
+                selectedItems = if (selectedItems.find { it.id == item.id } != null) { // 착용중
+                    selectedItems.filter { item.id != it.id }
+                } else { // 착용중이지 않음
                     selectedItems.toMutableList().apply {
                         removeIf { it.categoryId == item.categoryId }
                         add(item)
@@ -59,11 +58,30 @@ class ShopStore(
         }
     }
 
+    fun saveEquipmentState(
+        items: List<Item>,
+        onSuccess: () -> Unit
+    ) {
+        scope.launch {
+            val request = PutInventoryItemRequest(
+                itemidList = items.map { it.id }
+            )
+
+            runCatching {
+                putInventoryItemUseCase.invoke(request)
+            }.onSuccess { response ->
+                onModifyWearingItems()
+                onSuccess()
+            }.onFailure {
+                setState { copy(error = it.asDataThrowable()) }
+            }
+        }
+    }
 
     fun onChangeType(categoryId: Long) {
         scope.launch {
             runCatching {
-                getCategoryItemListUseCase(categoryId, 1)
+                getInventoryItemListUseCase(categoryId, 1)
             }.onSuccess { response ->
                 setState {
                     copy(
@@ -81,7 +99,7 @@ class ShopStore(
     fun loadNextPage(categoryId: Long, pageIndex: Int) {
         scope.launch {
             runCatching {
-                getCategoryItemListUseCase(categoryId, pageIndex)
+                getInventoryItemListUseCase(categoryId, pageIndex)
             }.onSuccess { response ->
                 setState {
                     copy(
@@ -116,35 +134,24 @@ class ShopStore(
     }
 
     fun setCurrentWearingItems(
-        playerId: Long,
-        pageIndex: Int
+        userInfo: AvatarUserResponse
     ) {
-        setState { copy(isLoading = true) }
-        scope.launch {
-            runCatching {
-                getAvatarListUseCase(pageIndex)
-            }.onSuccess { response ->
-                val userInfo = response.data.find { it.id.toLong() == playerId }
-                val wearingItems = userInfo?.wearingItems ?: listOf()
-                val characterItem = wearingItems.find { it.categoryId == 6 } ?: wearingItems.find { it.categoryId == 1 }
-                val characterUrl = characterItem?.itemImage?.fileUrl.orEmpty()
+        val wearingItems = userInfo.wearingItems
+        val characterItem = wearingItems.find { it.categoryId == 6 } ?: wearingItems.find { it.categoryId == 1 }
+        val characterUrl = characterItem?.itemImage?.fileUrl.orEmpty()
 
-                val url = IMAGE_BASE_URL + characterUrl
-                val items = wearingItems.map { item -> item.asShopItem() }
+        val url = IMAGE_BASE_URL + characterUrl
+        val items = wearingItems.map { item -> item.asShopItem() }
 
-                setState {
-                    copy(
-                        isLoading = false,
-                        currentLevel = userInfo?.level ?: 1,
-                        character = url,
-                        selectedCharacter = url,
-                        wearingItems = items,
-                        selectedItems = items,
-                    )
-                }
-            }.onFailure {
-                setState { copy(isLoading = false) }
-            }
+        setState {
+            copy(
+                isLoading = false,
+                currentLevel = userInfo.level,
+                character = url,
+                selectedCharacter = url,
+                wearingItems = items,
+                selectedItems = items,
+            )
         }
     }
 }

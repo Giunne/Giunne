@@ -24,10 +24,15 @@ fun ItemBottomView(
     modifier: Modifier,
     lazyGridState: LazyGridState,
     types: List<CategoryTypeResponse>,
-    shopStore: ShopStore,
-    state: CharacterState,
-    onItemClick: (Item) -> Unit,
+    selectedType: Long,
     onTypeSelected: (Long) -> Unit,
+    categoryItem: List<Item>,
+    onItemClick: (Item) -> Unit,
+    currentLevel: Int,
+    wearingItems: List<Item>,
+    selectedItems: List<Item>,
+    onUndoButtonClicked: () -> Unit,
+    saveEquipmentState: (List<Item>)  -> Unit
 ) {
     Box(
         modifier = modifier
@@ -44,39 +49,41 @@ fun ItemBottomView(
 
             ItemChipGroup(
                 types = types,
-                selectedType = state.selectedType,
+                selectedType = selectedType,
                 onTypeSelected = { id ->
                     onTypeSelected(id)
                 }
             )
-            if (state.categoryItem.isEmpty()) {
+            if (categoryItem.isEmpty()) {
                 EmptyItemList(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f)
+                        .weight(1f),
+                    description = "아이템이 비어있어요!"
                 )
             } else {
                 ItemGridList(
                     modifier = Modifier.weight(1f),
-                    currentLevel = state.currentLevel,
+                    currentLevel = currentLevel,
                     lazyGridState = lazyGridState,
-                    items = state.categoryItem,
-                    selectedItems = state.selectedItems,
+                    items = categoryItem,
+                    selectedItems = selectedItems,
                     onItemClick = { item ->
                         onItemClick(item)
                     }
                 )
             }
-            if (state.wearingItems != state.selectedItems) {
+            if (wearingItems.map { it.id } != selectedItems.map { it.id }) {
                 ItemModifyBottomView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight(),
                     onUndoClick = {
-                        shopStore.onUndo()
+                        onUndoButtonClicked()
                     },
                     onModifyClick = {
-                        shopStore.onModifyWearingItems()
+//                        shopStore.onModifyWearingItems()
+                        saveEquipmentState(selectedItems)
                     }
                 )
             }

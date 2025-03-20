@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 import com.project.giunne.common.ui.theme.GPColor
 
 enum class NodeStatus {
-    LOCK, UNCHECK, CHECK, UPLOAD, CONFIRM
+    LOCK, LOCK_OPEN, CHECK, UPLOAD, CONFIRM
 }
 
 enum class Connect {
