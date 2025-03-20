@@ -26,6 +26,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RectangleShape
 import com.project.giunne.Res
+import com.project.giunne.common.data.remote.response.CommentInfo
 import com.project.giunne.common.presentation.common.button.GPIconButton
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.shape.GPSquircleShape
@@ -46,7 +47,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun StudentCommentItemRow(
     modifier: Modifier = Modifier,
-    commentDto: CommentDto,
+    commentInfo: CommentInfo,
     onDeleteButtonClicked: () -> Unit,
 ) {
     var isMenuOpen by remember { mutableStateOf(false) }
@@ -87,13 +88,13 @@ fun StudentCommentItemRow(
                 SpW(8.gdp)
                 GPText(
                     modifier = Modifier.weight(1f),
-                    text = commentDto.name,
+                    text = commentInfo.playerInfo.nickname,
                     textColor = GPColor.TextBlack,
                     textSize = 8.gsp,
                     fontFamily = GPFontFamily.Bold
                 )
                 GPText(
-                    text = if (commentDto.like) "선생님이 좋아하는 댓글♥️" else "",
+                    text = if (commentInfo.likeCount > 0) "선생님이 좋아하는 댓글♥️" else "",
                     textColor = GPColor.TextLightGray,
                     textSize = 8.gsp,
                     fontFamily = GPFontFamily.Medium
@@ -122,7 +123,7 @@ fun StudentCommentItemRow(
             ) {
                 GPText(
                     modifier = Modifier,
-                    text = commentDto.content,
+                    text = commentInfo.content,
                     textSize = 10.gsp,
                     fontFamily = GPFontFamily.Regular,
                     textColor = GPColor.TextBlack

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -24,7 +25,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RectangleShape
 import com.project.giunne.Res
+import com.project.giunne.common.data.remote.response.CommentInfo
 import com.project.giunne.common.presentation.common.button.GPIconButton
+import com.project.giunne.common.presentation.common.charactor.GPSmallCharacter
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.shape.GPSquircleShape
 import com.project.giunne.common.presentation.common.spacer.SpW
@@ -45,7 +48,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun TeacherCommentItemRow(
     modifier: Modifier = Modifier,
-    commentDto: CommentDto,
+    commentInfo: CommentInfo,
     like: Boolean,
     onDeleteButtonClicked: () -> Unit,
     onLikeButtonClicked: (Boolean) -> Unit
@@ -77,20 +80,19 @@ fun TeacherCommentItemRow(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 GPSquircleShape(
-                    modifier = Modifier
-                        .size(28.gdp),
-                    backgroundColor = GPColor.BackgroundGray_F6F6F6
-                ) {
-                    Image(
-                        modifier = Modifier.size(24.gdp),
-                        painter = painterResource(Res.drawable.test_character), //TODO API
-                        contentDescription = null
-                    )
-                }
+                    modifier = Modifier.size(28.gdp),
+                    backgroundColor = GPColor.BackgroundGray_F6F6F6,
+                    content = {
+                        GPSmallCharacter(
+                            modifier = Modifier.fillMaxSize(),
+                            wearingItems = commentInfo.playerInfo.wearingItems
+                        )
+                    }
+                )
                 SpW(8.gdp)
                 GPText(
                     modifier = Modifier.weight(1f),
-                    text = commentDto.name,
+                    text = commentInfo.playerInfo.nickname,
                     textColor = GPColor.TextBlack,
                     textSize = 8.gsp,
                     fontFamily = GPFontFamily.Bold
@@ -118,7 +120,7 @@ fun TeacherCommentItemRow(
             ) {
                 GPText(
                     modifier = Modifier,
-                    text = commentDto.content,
+                    text = commentInfo.content,
                     textSize = 10.gsp,
                     fontFamily = GPFontFamily.Regular,
                     textColor = GPColor.TextBlack

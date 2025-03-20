@@ -143,7 +143,7 @@ fun StudentMainScreen(
                         is StudentMainComponent.StudentChild.StudentRoadmapChild -> "로드맵"
                         is StudentMainComponent.StudentChild.StudentCertificationChild -> "인증"
                         is StudentMainComponent.StudentChild.StudentCommunityChild -> "게시판"
-                        is StudentMainComponent.StudentChild.StudentCommunityDetailChild -> activeComponent.communityDto.content
+                        is StudentMainComponent.StudentChild.StudentCommunityDetailChild -> activeComponent.title
                         is StudentMainComponent.StudentChild.StudentFriendsChild -> "친구"
                         is StudentMainComponent.StudentChild.StudentMyPageChild -> "내정보"
                         is StudentMainComponent.StudentChild.StudentShopChild -> "꾸미기"
@@ -422,16 +422,15 @@ private fun StudentChildren(
             )
             is StudentMainComponent.StudentChild.StudentCommunityChild -> StudentCommunityScreen(
                 component = child.component,
-                navigateToDetail = { communityDto ->
-                    component.navigateToCommunityDetail(communityDto)
+                navigateToDetail = { postId, title ->
+                    component.navigateToCommunityDetail(postId, title)
                 },
                 pageType = if (activeComponent is StudentMainComponent.StudentChild.StudentCommunityChild)
                     activeComponent.pageType else CertPage.RoadMap
             )
             is StudentMainComponent.StudentChild.StudentCommunityDetailChild -> StudentCommunityDetailScreen(
-//                communityDto = (activeComponent as StudentMainComponent.StudentChild.StudentCommunityDetailChild).communityDto
-                communityDto = if (activeComponent is StudentMainComponent.StudentChild.StudentCommunityDetailChild)
-                    activeComponent.communityDto else null
+                postId = if (activeComponent is StudentMainComponent.StudentChild.StudentCommunityDetailChild)
+                    activeComponent.postId else null
             )
             is StudentMainComponent.StudentChild.StudentFriendsChild -> StudentFriendScreen(component = child.component)
             is StudentMainComponent.StudentChild.StudentMyPageChild -> StudentMyPageScreen(

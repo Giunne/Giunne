@@ -62,7 +62,7 @@ internal fun TeacherCertificationScreen(
     component: TeacherCertificationComponent,
     modifier: Modifier = Modifier,
     onCommunityButtonClicked: (CertPage) -> Unit,
-    navigateToDetail: (QuestUploadInfo) -> Unit,
+    navigateToDetail: (Long, String) -> Unit,
 ) {
     GLog.d(TAG, "onCreate")
 
@@ -145,14 +145,23 @@ internal fun TeacherCertificationScreen(
                     TeacherRoadMapCertScreen(
                         modifier = Modifier.fillMaxSize(),
                         certWaitingList = certificationState.uploadList,
-                        onItemClicked = { navigateToDetail(it) },
+                        onItemClicked = {
+                            component.callPostingDetailList(
+                                playerId = it.playerInfo.id.toLong(),
+                                questId = it.id.toLong(),
+                            ) { postId, title ->
+                                navigateToDetail(postId, title)
+                            }
+                        },
                     )
                 }
                 CertPage.Running -> {
                     TeacherRunningCertScreen(
                         modifier = Modifier.fillMaxSize(),
                         certWaitingList = certificationState.uploadList,
-                        onItemClicked = { navigateToDetail(it) }
+                        onItemClicked = {
+//                            navigateToDetail(postId, title)
+                        }
                     )
                 }
             }

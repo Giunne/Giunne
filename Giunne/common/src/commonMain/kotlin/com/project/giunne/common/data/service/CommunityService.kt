@@ -1,7 +1,7 @@
 package com.project.giunne.common.data.service
 
 import com.project.giunne.common.data.remote.request.CommentRequest
-import com.project.giunne.common.data.remote.response.CommentInfo
+import com.project.giunne.common.data.remote.response.CommentListResponse
 import com.project.giunne.common.data.remote.response.PostingDetailListResponse
 import com.project.giunne.common.data.remote.response.PostingDetailResponse
 import com.project.giunne.common.data.util.BaseResponse
@@ -35,6 +35,6 @@ interface CommunityService {
     @GET("$GET_COMMENT_LIST/{postId}")
     suspend fun getCommentList(
         @Path("postId") postId: Long,
-        @Query("lastCommentId") lastCommentId: Long,
-    ): BaseResponse<List<CommentInfo>>
+        @Query("pageIndex") pageIndex: Int,
+    ): BaseResponse<CommentListResponse>
 }

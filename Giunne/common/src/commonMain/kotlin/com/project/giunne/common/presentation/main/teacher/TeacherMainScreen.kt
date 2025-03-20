@@ -147,7 +147,7 @@ fun TeacherMainScreen(
                         is TeacherMainComponent.TeacherChild.TeacherRoadmapChild -> "로드맵"
                         is TeacherMainComponent.TeacherChild.TeacherCertificationChild -> "인증"
                         is TeacherMainComponent.TeacherChild.TeacherCommunityChild -> "게시판"
-                        is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild -> activeComponent.questUploadInfo.getQuestTitle()
+                        is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild -> activeComponent.title
                         is TeacherMainComponent.TeacherChild.TeacherFriendsChild -> "학생들"
                         is TeacherMainComponent.TeacherChild.TeacherMyPageChild -> "내정보"
                         is TeacherMainComponent.TeacherChild.TeacherShopChild -> "꾸미기"
@@ -384,21 +384,21 @@ private fun TeacherChildren(
                 onCommunityButtonClicked = { type ->
                     component.navigateToCommunity(type)
                 },
-                navigateToDetail = { questUploadInfo ->
-                    component.navigateToCommunityDetail(questUploadInfo)
+                navigateToDetail = { postId, title ->
+                    component.navigateToCommunityDetail(postId, title)
                 }
             )
             is TeacherMainComponent.TeacherChild.TeacherCommunityChild -> TeacherCommunityScreen(
                 component = child.component,
-                navigateToDetail = { questUploadInfo ->
-                    component.navigateToCommunityDetail(questUploadInfo)
+                navigateToDetail = { postId, title ->
+                    component.navigateToCommunityDetail(postId, title)
                 },
                 pageType = if (activeComponent is TeacherMainComponent.TeacherChild.TeacherCommunityChild)
                     activeComponent.pageType else CertPage.RoadMap
             )
             is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild -> TeacherCommunityDetailScreen(
-                questUploadInfo = if (activeComponent is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild)
-                    activeComponent.questUploadInfo else null
+                postId = if (activeComponent is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild)
+                    activeComponent.postId else null
             )
             is TeacherMainComponent.TeacherChild.TeacherFriendsChild -> TeacherFriendScreen(component = child.component)
             is TeacherMainComponent.TeacherChild.TeacherMyPageChild -> TeacherMyPageScreen(

@@ -100,7 +100,7 @@ fun CommentInputRow(
                 painter = painterResource(Res.drawable.icon_arrow_up),
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(
-                    if (text.isNotEmpty()) GPColor.TextBlack
+                    if (text.isNotEmpty()) GPColor.White
                     else GPColor.ButtonGray,
                 )
             )

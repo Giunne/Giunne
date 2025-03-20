@@ -8,7 +8,7 @@ data class PostingDetailResponse(
     @SerialName("id") val id: Int = 0,
     @SerialName("questPostProgressType") val questPostProgressType: String = "",
     @SerialName("fileUrl") val fileUrl: String = "",
-    @SerialName("playerId") val playerId: List<PostingInfo> = listOf(),
+    @SerialName("playerId") val playerId: Long = 0,
     @SerialName("questId") val questId: Int = 0,
     @SerialName("createTime") val createTime: String = "",
     @SerialName("updateTime") val updateTime: String = "",

@@ -40,7 +40,7 @@ class TeacherMainComponent(
         class TeacherRoadmapChild(val component: TeacherRoadmapComponent) : TeacherChild()
         class TeacherCertificationChild(val component: TeacherCertificationComponent) : TeacherChild()
         class TeacherCommunityChild(val component: TeacherCommunityComponent, val pageType: CertPage) : TeacherChild()
-        class TeacherCommunityDetailChild(val questUploadInfo: QuestUploadInfo) : TeacherChild()
+        class TeacherCommunityDetailChild(val postId: Long, val title: String) : TeacherChild()
         class TeacherFriendsChild(val component: TeacherFriendComponent) : TeacherChild()
         class TeacherMyPageChild(val component: TeacherMyPageComponent) : TeacherChild()
         class TeacherShopChild(val component: TeacherMyPageComponent) : TeacherChild()
@@ -58,7 +58,7 @@ class TeacherMainComponent(
                 component = TeacherCommunityComponent(componentContext),
                 pageType = config.pageType
             )
-            is TeacherMainConfig.CommunityDetail -> TeacherChild.TeacherCommunityDetailChild(config.questUploadInfo)
+            is TeacherMainConfig.CommunityDetail -> TeacherChild.TeacherCommunityDetailChild(config.postId, config.title)
             is TeacherMainConfig.Friends -> TeacherChild.TeacherFriendsChild(TeacherFriendComponent(componentContext))
             is TeacherMainConfig.MyPage -> TeacherChild.TeacherMyPageChild(TeacherMyPageComponent(componentContext))
             is TeacherMainConfig.Shop -> TeacherChild.TeacherShopChild(TeacherMyPageComponent(componentContext))
@@ -80,7 +80,7 @@ class TeacherMainComponent(
         data class Community(val pageType: CertPage) : TeacherMainConfig
 
         @Serializable
-        data class CommunityDetail(val questUploadInfo: QuestUploadInfo) : TeacherMainConfig
+        data class CommunityDetail(val postId: Long, val title: String) : TeacherMainConfig
 
         @Serializable
         data object Friends : TeacherMainConfig
@@ -114,9 +114,9 @@ class TeacherMainComponent(
     }
 
     fun navigateToCommunityDetail(
-        questUploadInfo: QuestUploadInfo
+        postId: Long, title: String
     ) {
-        navigation.push(TeacherMainConfig.CommunityDetail(questUploadInfo))
+        navigation.push(TeacherMainConfig.CommunityDetail(postId, title))
     }
 
     fun navigateToFriends() {

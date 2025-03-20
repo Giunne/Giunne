@@ -78,7 +78,9 @@ fun TeacherRoadMapCertScreen(
                 ) {
                     TeacherCertItemRow(
                         questUploadInfo = certWaitingList[it],
-                        onClick = { onItemClicked(certWaitingList[it]) },
+                        onClick = {
+                            onItemClicked(certWaitingList[it])
+                        },
                     )
                 }
             }

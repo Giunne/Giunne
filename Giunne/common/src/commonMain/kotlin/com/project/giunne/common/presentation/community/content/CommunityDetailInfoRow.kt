@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.project.giunne.common.data.remote.response.PostingDetailListResponse
+import com.project.giunne.common.data.remote.response.PostingDetailResponse
 import com.project.giunne.common.presentation.common.charactor.GPSmallCharacter
 import com.project.giunne.common.presentation.common.shape.GPSquircleShape
 import com.project.giunne.common.presentation.common.spacer.SpW
@@ -22,7 +23,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun CommunityDetailInfoRow(
     modifier: Modifier = Modifier,
-    postingDetailListInfo: PostingDetailListResponse = PostingDetailListResponse()
+    postingDetailInfo: PostingDetailResponse = PostingDetailResponse()
 ) {
     Row(
         modifier = modifier,
@@ -34,20 +35,20 @@ fun CommunityDetailInfoRow(
             content = {
                 GPSmallCharacter(
                     modifier = Modifier.fillMaxSize(),
-                    wearingItems = postingDetailListInfo.playerInfo.wearingItems
+                    wearingItems = postingDetailInfo.playerInfo.wearingItems
                 )
             }
         )
         SpW(8.gdp)
         GPText(
             modifier = Modifier.weight(1f),
-            text = postingDetailListInfo.playerInfo.nickname,
+            text = postingDetailInfo.playerInfo.nickname,
             textColor = GPColor.TextBlack_232323,
             textSize = 14.gsp,
             fontFamily = GPFontFamily.Regular
         )
         GPText(
-            text = postingDetailListInfo.postInfoList.last().updateTime.substringBefore('T'),
+            text = postingDetailInfo.updateTime.substringBefore('T'),
             textColor = GPColor.TextLightGray,
             fontFamily = GPFontFamily.Bold,
             textSize = 12.gsp

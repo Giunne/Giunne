@@ -13,7 +13,6 @@ import com.project.giunne.common.data.remote.request.GachaType
 import com.project.giunne.common.presentation.certification.student.StudentCertificationComponent
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.community.student.StudentCommunityComponent
-import com.project.giunne.common.presentation.community.student.dummy.CommunityDto
 import com.project.giunne.common.presentation.friend.student.StudentFriendComponent
 import com.project.giunne.common.presentation.home.student.home.StudentHomeComponent
 import com.project.giunne.common.presentation.home.student.join.StudentJoinRecreationComponent
@@ -46,7 +45,7 @@ class StudentMainComponent(
         class StudentRoadmapChild(val component: StudentRoadmapComponent) : StudentChild()
         class StudentCertificationChild(val component: StudentCertificationComponent) : StudentChild()
         class StudentCommunityChild(val component: StudentCommunityComponent, val pageType: CertPage) : StudentChild()
-        class StudentCommunityDetailChild(val communityDto: CommunityDto) : StudentChild()
+        class StudentCommunityDetailChild(val postId: Long, val title: String) : StudentChild()
         class StudentFriendsChild(val component: StudentFriendComponent) : StudentChild()
         class StudentMyPageChild(val component: StudentMyPageComponent) : StudentChild()
         class StudentShopChild : StudentChild()
@@ -62,7 +61,7 @@ class StudentMainComponent(
             is StudentMainConfig.Roadmap -> StudentChild.StudentRoadmapChild(StudentRoadmapComponent(componentContext))
             is StudentMainConfig.Certification -> StudentChild.StudentCertificationChild(StudentCertificationComponent(componentContext))
             is StudentMainConfig.Community -> StudentChild.StudentCommunityChild(StudentCommunityComponent(componentContext), config.pageType)
-            is StudentMainConfig.CommunityDetail -> StudentChild.StudentCommunityDetailChild(config.communityDto)
+            is StudentMainConfig.CommunityDetail -> StudentChild.StudentCommunityDetailChild(config.postId, config.title)
             is StudentMainConfig.Friends -> StudentChild.StudentFriendsChild(StudentFriendComponent(componentContext))
             is StudentMainConfig.MyPage -> StudentChild.StudentMyPageChild(StudentMyPageComponent(componentContext))
             is StudentMainConfig.Shop -> StudentChild.StudentShopChild()
@@ -93,7 +92,7 @@ class StudentMainComponent(
         data class Community(val pageType: CertPage) : StudentMainConfig
 
         @Serializable
-        data class CommunityDetail(val communityDto: CommunityDto) : StudentMainConfig
+        data class CommunityDetail(val postId: Long, val title: String) : StudentMainConfig
 
         @Serializable
         data object Friends : StudentMainConfig
@@ -133,9 +132,9 @@ class StudentMainComponent(
     }
 
     fun navigateToCommunityDetail(
-        communityDto: CommunityDto
+        postId: Long, title: String
     ) {
-        navigation.push(StudentMainConfig.CommunityDetail(communityDto))
+        navigation.push(StudentMainConfig.CommunityDetail(postId, title))
     }
 
     fun navigateToFriends() {

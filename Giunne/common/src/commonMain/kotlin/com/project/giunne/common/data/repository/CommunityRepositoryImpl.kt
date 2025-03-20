@@ -2,6 +2,7 @@ package com.project.giunne.common.data.repository
 
 import com.project.giunne.common.data.remote.request.CommentRequest
 import com.project.giunne.common.data.remote.response.CommentInfo
+import com.project.giunne.common.data.remote.response.CommentListResponse
 import com.project.giunne.common.data.remote.response.PostingDetailListResponse
 import com.project.giunne.common.data.remote.response.PostingDetailResponse
 import com.project.giunne.common.data.service.CommunityService
@@ -36,10 +37,10 @@ class CommunityRepositoryImpl(
 
     override suspend fun getCommentList(
         postId: Long,
-        lastCommentId: Long
-    ): NetworkResult<List<CommentInfo>> {
+        pageIndex: Int,
+    ): NetworkResult<CommentListResponse> {
         return handleApi(TAG) {
-            communityService.getCommentList(postId = postId, lastCommentId = lastCommentId)
+            communityService.getCommentList(postId = postId, pageIndex = pageIndex)
         }
     }
 }

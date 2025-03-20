@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.project.giunne.common.data.remote.response.CommentInfo
 import com.project.giunne.common.presentation.common.dialog.GPConfirmDialog
 import com.project.giunne.common.presentation.common.scrollbar.VerticalScrollbar
 import com.project.giunne.common.presentation.community.student.dummy.CommentDto
@@ -23,7 +24,7 @@ import com.project.giunne.common.util.gdp
 @Composable
 fun StudentCommunityCommentColumn(
     modifier: Modifier = Modifier,
-    commentList: List<CommentDto>
+    commentList: List<CommentInfo>
 ) {
     val scrollState = rememberLazyListState()
 
@@ -48,7 +49,7 @@ fun StudentCommunityCommentColumn(
                         .padding(vertical = 8.gdp)
                         .fillMaxWidth()
                         .wrapContentHeight(),
-                    commentDto = commentList[it],
+                    commentInfo = commentList[it],
                     onDeleteButtonClicked = { deleteConfirmDialog = true }, // TODO 동작
                 )
             }

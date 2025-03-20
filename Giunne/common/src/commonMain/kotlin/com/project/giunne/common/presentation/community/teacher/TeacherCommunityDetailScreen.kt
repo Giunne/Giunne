@@ -8,16 +8,21 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +36,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import coil3.compose.AsyncImage
 import com.project.giunne.Res
+import com.project.giunne.character_cat_level_2
+import com.project.giunne.common.data.remote.request.CommentRequest
 import com.project.giunne.common.data.remote.response.QuestUploadInfo
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPIconButton
@@ -40,11 +47,13 @@ import com.project.giunne.common.presentation.common.dialog.GPConfirmDialog
 import com.project.giunne.common.presentation.common.player.ImageViewer
 import com.project.giunne.common.presentation.common.player.VideoPlayer
 import com.project.giunne.common.presentation.common.player.VideoWindowPlayer
+import com.project.giunne.common.presentation.common.scrollbar.VerticalScrollbar
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.community.content.CommentInputRow
 import com.project.giunne.common.presentation.community.content.CommunityDetailInfoRow
 import com.project.giunne.common.presentation.community.content.GradeDialog
+import com.project.giunne.common.presentation.community.content.TeacherCommentItemRow
 import com.project.giunne.common.presentation.community.content.TeacherCommunityCommentColumn
 import com.project.giunne.common.presentation.community.student.dummy.commentTestList
 import com.project.giunne.common.presentation.community.student.intent.CommunityStore
@@ -65,7 +74,7 @@ private const val TAG = "TeacherCommunityDetailScreen"
 @Composable
 internal fun TeacherCommunityDetailScreen(
     modifier: Modifier = Modifier,
-    questUploadInfo: QuestUploadInfo?
+    postId: Long?
 ) {
     GLog.d(TAG, "onCreate")
 
@@ -81,19 +90,35 @@ internal fun TeacherCommunityDetailScreen(
     val communityStore = remember { CommunityStore() }
     val communityState by communityStore.uiState.collectAsState()
 
+    val scrollState = rememberLazyListState()
+
     /////test/////
     var fullVideo by remember { mutableStateOf(false) }
     var fullImage by remember { mutableStateOf(false) }
     //////////////
+    /////TEST///// TODO API
+    var deleteConfirmDialog by remember { mutableStateOf(false) }
+    //////////////
 
     LaunchedEffect(Unit) {
-        communityStore.callPostingDetailList(
-            playerId = questUploadInfo?.playerInfo?.id?.toLong() ?: 0,
-            questId = questUploadInfo?.id?.toLong() ?: 0
-        )
-//        communityStore.callPostingDetail(
-//            postId =
-//        )
+        GLog.d(TAG, "postId: $postId")
+        communityStore.callPostingDetail(postId = postId ?: 0)
+        communityStore.callCommentList(postId = postId ?: 0)
+    }
+
+    val endOfListReached by remember {
+        derivedStateOf {
+            val lastVisibleItem = scrollState.layoutInfo.visibleItemsInfo.lastOrNull()
+            val totalItemsCount = scrollState.layoutInfo.totalItemsCount
+
+            communityState.paginationInfo.hasNextPage && lastVisibleItem != null && lastVisibleItem.index >= totalItemsCount - 1
+        }
+    }
+
+    LaunchedEffect(endOfListReached) {
+        if (endOfListReached && communityState.paginationInfo.currentPage != communityState.paginationInfo.totalPage) {
+            communityStore.loadNextPage(postId ?: 0, communityState.paginationInfo.currentPage + 1)
+        }
     }
 
     Scaffold(
@@ -107,13 +132,13 @@ internal fun TeacherCommunityDetailScreen(
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (questUploadInfo != null && communityState.postingDetailListInfo.postInfoList.isNotEmpty()) {
+            if (postId != null) {
                 CommunityDetailInfoRow(
                     modifier = Modifier
                         .padding(horizontal = 16.gdp)
                         .fillMaxWidth()
                         .height(76.gdp),
-                    postingDetailListInfo = communityState.postingDetailListInfo
+                    postingDetailInfo = communityState.postingDetailInfo
                 )
                 Box(
                     modifier = Modifier
@@ -122,10 +147,10 @@ internal fun TeacherCommunityDetailScreen(
                         .aspectRatio(1f),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (communityState.postingDetailListInfo.questInfo.questType == "ROAD_MAP") {
+                    if (communityState.postingDetailInfo.questInfo.questType == "ROAD_MAP") {
                         VideoPlayer(
                             modifier = Modifier.fillMaxSize(),
-                            videoPath = communityState.postingDetailListInfo.postInfoList.last().fileUrl, //TODO API
+                            videoPath = communityState.postingDetailInfo.fileUrl,
                             onFullScreenClicked = { fullVideo = true }
                         )
                     } else {
@@ -151,7 +176,7 @@ internal fun TeacherCommunityDetailScreen(
                                         state = state,
                                         onSingleTapEvent = {}
                                     ),
-                                model = communityState.postingDetailListInfo.postInfoList.last().fileUrl,
+                                model = communityState.postingDetailInfo.fileUrl,
                                 placeholder = painterResource(Res.drawable.image_loader_1),
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop
@@ -187,32 +212,121 @@ internal fun TeacherCommunityDetailScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     GPText(
-                        text = "댓글 " + commentTestList.size.toString(),
+                        text = "댓글 " + communityState.commentList.size.toString(),
                         textSize = 14.gsp,
                         fontFamily = GPFontFamily.Bold,
                         textColor = GPColor.TextBlack
                     )
                 }
-                TeacherCommunityCommentColumn(
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
-                    commentList = commentTestList
-                )
+                ) {
+                    if (communityState.commentList.isNotEmpty()) {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 16.gdp),
+                            state = scrollState
+                        ) {
+                            items(
+                                communityState.commentList.size
+                            ) {
+                                TeacherCommentItemRow(
+                                    modifier = Modifier
+                                        .padding(vertical = 8.gdp)
+                                        .fillMaxWidth()
+                                        .wrapContentHeight(),
+                                    commentInfo = communityState.commentList[it],
+                                    like = communityState.commentList[it].likeCount > 0,
+                                    onDeleteButtonClicked = { deleteConfirmDialog = true },
+                                    onLikeButtonClicked = { like ->
+                                        //                        commentList[it].like = !like
+                                    }
+                                )
+                            }
+                        }
+                        VerticalScrollbar(
+                            modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
+                            state = scrollState
+                        )
+                    } else {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Image(
+                                    modifier = Modifier.size(64.gdp),
+                                    painter = painterResource(Res.drawable.character_cat_level_2),
+                                    contentDescription = null
+                                )
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    GPText(
+                                        text = "댓글을 제일 먼저 남겨볼까요?",
+                                        textSize = 12.gsp,
+                                        fontFamily = GPFontFamily.Bold,
+                                        textColor = GPColor.TextBlack
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+//                TeacherCommunityCommentColumn(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .weight(1f),
+//                    commentList = communityState.commentList.toMutableList(),
+//                    paginationInfo = communityState.paginationInfo.copy(),
+//                    loadNextPage = { page ->
+//                        communityStore.loadNextPage(postId, page)
+//                    },
+//                )
                 CommentInputRow(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    onSendButtonClicked = {  }, // TODO API
+                    onSendButtonClicked = { content ->
+                        communityStore.callPostComment(
+                            commentRequest = CommentRequest(
+                                postId = postId,
+                                content = content
+                            ),
+                            onSuccess = {
+                                communityStore.callCommentList(postId = postId)
+                            }
+                        )
+                    },
                     onCertButtonClicked = { gradeStore.onClickGradeButton() }
                 )
             }
         }
     }
 
+    with(deleteConfirmDialog) {
+        if (this) {
+            GPConfirmDialog(
+                title = "",
+                content = "삭제할까요?",
+                onConfirmClicked = {
+                    deleteConfirmDialog = false
+                }, //TODO API
+                onCancelClicked = { deleteConfirmDialog = false },
+            )
+        }
+    }
+
     with(fullVideo) {
         if (this) {
             VideoWindowPlayer(
-                videoPath = communityState.postingDetailListInfo.postInfoList.last().fileUrl,
+                videoPath = communityState.postingDetailInfo.fileUrl,
                 dismiss = { fullVideo = false }
             )
         }
@@ -221,7 +335,7 @@ internal fun TeacherCommunityDetailScreen(
     with(fullImage) {
         if (this) {
             ImageViewer(
-                imagePath = communityState.postingDetailListInfo.postInfoList.last().fileUrl,
+                imagePath = communityState.postingDetailInfo.fileUrl,
                 dismiss = { fullImage = false }
             )
         }
@@ -230,7 +344,7 @@ internal fun TeacherCommunityDetailScreen(
     with(gradeState.gradeDialog) {
         if (this) {
             GradeDialog(
-                questName = communityState.postingDetailListInfo.questInfo.getQuestTitle(),
+                questName = communityState.postingDetailInfo.questInfo.getQuestTitle(),
                 onCloseButtonClicked = { gradeStore.dismissGradeDialog() },
                 onConfirmButtonClicked = { star, isChecked ->
                     gradeStore.onClickConfirmButton()
@@ -257,7 +371,7 @@ internal fun TeacherCommunityDetailScreen(
         if (this != null) {
             GPAlertDialog(
                 dismiss = { communityStore.dismissErrorDialog() },
-                title = "인증 화면 에러",
+                title = "게시판 에러",
                 content = this.message.orEmpty(),
             )
         }

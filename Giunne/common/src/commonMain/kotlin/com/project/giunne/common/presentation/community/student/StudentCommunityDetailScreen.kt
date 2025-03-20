@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,9 +32,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import coil3.compose.AsyncImage
 import com.project.giunne.Res
+import com.project.giunne.common.data.remote.request.CommentRequest
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPIconButton
+import com.project.giunne.common.presentation.common.content.Loader
+import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.player.ImageViewer
 import com.project.giunne.common.presentation.common.player.VideoPlayer
 import com.project.giunne.common.presentation.common.player.VideoWindowPlayer
@@ -44,7 +48,9 @@ import com.project.giunne.common.presentation.community.content.CommunityDetailI
 import com.project.giunne.common.presentation.community.content.StudentCommunityCommentColumn
 import com.project.giunne.common.presentation.community.student.dummy.CommunityDto
 import com.project.giunne.common.presentation.community.student.dummy.commentTestList
+import com.project.giunne.common.presentation.community.student.intent.CommunityStore
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.ZoomStore
 import com.project.giunne.common.util.gdp
@@ -56,10 +62,11 @@ import com.project.giunne.icon_upload_image
 import com.project.giunne.image_loader_1
 import org.jetbrains.compose.resources.painterResource
 
+private const val TAG = "StudentCommunityDetailScreen"
 @Composable
 fun StudentCommunityDetailScreen(
     modifier: Modifier = Modifier,
-    communityDto: CommunityDto?,
+    postId: Long?,
 ) {
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
@@ -67,10 +74,19 @@ fun StudentCommunityDetailScreen(
     val zoomStore = remember { ZoomStore() }
     val zoomUiState by zoomStore.uiState.collectAsState()
 
+    val communityStore = remember { CommunityStore() }
+    val communityState by communityStore.uiState.collectAsState()
+
     /////test/////
     var fullVideo by remember { mutableStateOf(false) }
     var fullImage by remember { mutableStateOf(false) }
     //////////////
+
+    LaunchedEffect(Unit) {
+        GLog.d(TAG, "postId: $postId")
+        communityStore.callPostingDetail(postId = postId ?: 0)
+        communityStore.callCommentList(postId = postId ?: 0)
+    }
 
     Scaffold(
         modifier = Modifier
@@ -83,13 +99,13 @@ fun StudentCommunityDetailScreen(
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (communityDto != null) {
+            if (postId != null) {
                 CommunityDetailInfoRow(
                     modifier = Modifier
                         .padding(horizontal = 16.gdp)
                         .fillMaxWidth()
                         .height(76.gdp),
-//                    communityDto = communityDto
+                    postingDetailInfo = communityState.postingDetailInfo
                 )
                 Box(
                     modifier = Modifier
@@ -98,10 +114,10 @@ fun StudentCommunityDetailScreen(
                         .aspectRatio(1f),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (communityDto.type == CertPage.RoadMap) {
+                    if (communityState.postingDetailInfo.questInfo.questType == "ROAD_MAP") {
                         VideoPlayer(
                             modifier = Modifier.fillMaxSize(),
-                            videoPath = "https://hu-sh.synology.me:10004/upload/20250310_212031.mp4", //TODO API
+                            videoPath = communityState.postingDetailInfo.fileUrl,
                             onFullScreenClicked = { fullVideo = true }
                         )
                     } else {
@@ -129,7 +145,7 @@ fun StudentCommunityDetailScreen(
 
                                         }
                                     ),
-                                model = "https://picsum.photos/200/300",
+                                model = communityState.postingDetailInfo.fileUrl,
                                 placeholder = painterResource(Res.drawable.image_loader_1),
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop
@@ -175,12 +191,22 @@ fun StudentCommunityDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
-                    commentList = commentTestList
+                    commentList = communityState.commentList
                 )
                 CommentInputRow(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    onSendButtonClicked = {  }, // TODO API
+                    onSendButtonClicked = { content ->
+                        communityStore.callPostComment(
+                            commentRequest = CommentRequest(
+                                postId = postId,
+                                content = content
+                            ),
+                            onSuccess = {
+                                communityStore.callCommentList(postId = postId)
+                            }
+                        )
+                    },
                 )
             }
         }
@@ -189,7 +215,7 @@ fun StudentCommunityDetailScreen(
     with(fullVideo) {
         if (this) {
             VideoWindowPlayer(
-                videoPath = "https://hu-sh.synology.me:10004/upload/20250310_204353.mp4",
+                videoPath = communityState.postingDetailInfo.fileUrl,
                 dismiss = { fullVideo = false }
             )
         }
@@ -198,9 +224,23 @@ fun StudentCommunityDetailScreen(
     with(fullImage) {
         if (this) {
             ImageViewer(
-                imagePath = "https://picsum.photos/200/300",
+                imagePath = communityState.postingDetailInfo.fileUrl,
                 dismiss = { fullImage = false }
             )
         }
+    }
+
+    with(communityState.error) {
+        if (this != null) {
+            GPAlertDialog(
+                dismiss = { communityStore.dismissErrorDialog() },
+                title = "게시판 에러",
+                content = this.message.orEmpty(),
+            )
+        }
+    }
+
+    if (communityState.loading) {
+        Loader()
     }
 }

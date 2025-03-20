@@ -44,7 +44,7 @@ private const val TAG = "StudentCommunityScreen"
 internal fun StudentCommunityScreen(
     component: StudentCommunityComponent,
     modifier: Modifier = Modifier,
-    navigateToDetail: (CommunityDto) -> Unit,
+    navigateToDetail: (Long, String) -> Unit,
     pageType: CertPage
 ) {
     GLog.d(TAG, "onCreate")
@@ -111,7 +111,7 @@ internal fun StudentCommunityScreen(
                             rootName = list[it].rootName,
                             content = list[it].content,
                             type = pageType,
-                            onClick = { navigateToDetail(list[it]) },
+//                            onClick = { navigateToDetail(list[it]) },
                         )
                     }
                 }

@@ -44,7 +44,7 @@ private const val TAG = "TeacherCommunityScreen"
 internal fun TeacherCommunityScreen(
     component: TeacherCommunityComponent,
     modifier: Modifier = Modifier,
-    navigateToDetail: (QuestUploadInfo) -> Unit,
+    navigateToDetail: (Long, String) -> Unit,
     pageType: CertPage
 ) {
     GLog.d(TAG, "onCreate")
