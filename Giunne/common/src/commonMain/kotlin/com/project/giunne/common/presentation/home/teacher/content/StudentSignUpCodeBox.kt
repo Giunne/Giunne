@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.common.shape.GPSquircleShape
@@ -82,7 +81,7 @@ fun StudentSignUpCodeBox(
             GPText(
                 text = signUpCode,
                 textColor = GPColor.TextBlack,
-                textSize = 18.gsp,
+                textSize = 15.gsp,
                 textDecoration = TextDecoration.Underline
             )
             BorderButton(

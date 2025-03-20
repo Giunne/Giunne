@@ -16,7 +16,7 @@ class SettingRepository(
     val refreshTokenPref: SettingConfig<*> = StringSettingConfig(settings, "RE_TOKEN", "")
     val rolePref: SettingConfig<*> = StringSettingConfig(settings, "ROLE", "")
     val playerPref: SettingConfig<*> = LongSettingConfig(settings, "PLAYER", 0)
-    val teacherPref: SettingConfig<*> = LongSettingConfig(settings, "TEACHER", 0)
+    val recreationIdPref: SettingConfig<*> = LongSettingConfig(settings, "RECREATION", 0)
 
     fun clear(): Unit = settings.clear()
 }

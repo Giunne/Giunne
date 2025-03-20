@@ -13,6 +13,9 @@ data class TeacherHomeState(
 )
 
 sealed interface TeacherHomeEvent {
+    data class CreateAvatar(
+        val recreationId: Int
+    ): TeacherHomeEvent
     data class ShowSnackBar(
         val message: String
     ): TeacherHomeEvent

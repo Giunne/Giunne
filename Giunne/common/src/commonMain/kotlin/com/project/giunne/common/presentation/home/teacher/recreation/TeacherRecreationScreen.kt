@@ -35,6 +35,7 @@ import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.home.common.EmptyResult
 import com.project.giunne.common.presentation.home.student.content.ResultRoadMapItem
+import com.project.giunne.common.presentation.home.teacher.state.TeacherRecreationEvent
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
@@ -62,6 +63,19 @@ internal fun TeacherRecreationScreen(
 
     LaunchedEffect(Unit) {
         component.getTeacherRecreationList(1)
+        component.sideEffect.collect { event ->
+            when (event) {
+                is TeacherRecreationEvent.SuccessLogin -> {
+                    onBackClick()
+                }
+
+                is TeacherRecreationEvent.ShowSnackBar -> {
+                    snackbarHostState.showSnackbar(
+                        message = event.message
+                    )
+                }
+            }
+        }
     }
 
     LaunchedEffect(lazyListState) {
@@ -100,7 +114,10 @@ internal fun TeacherRecreationScreen(
             }
             if (teacherRecreationState.recreationList.isEmpty()) {
                 EmptyResult(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .background(GPColor.BackgroundLightGray),
                     description = "아직 생성한 로드맵이 없습니다.",
                     highlightRegex = 7..9
                 )
@@ -138,7 +155,11 @@ internal fun TeacherRecreationScreen(
                 pressColor = if (isEnabled) GPColor.ButtonPressOrange else GPColor.ButtonLightGray,
                 hoverColor = if (isEnabled) GPColor.ButtonHoverOrange else GPColor.ButtonLightGray,
                 onClick = {
-
+                    if (isEnabled) {
+                        component.loginRecreation(
+                            recreationId = teacherRecreationState.recreationList[selectedItemIndex].id.toLong()
+                        )
+                    }
                 },
             ) {
                 GPText(

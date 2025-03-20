@@ -45,6 +45,7 @@ import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 private const val TAG = "TeacherHomeScreen"
@@ -72,13 +73,23 @@ internal fun TeacherHomeScreen(
     }
 
     LaunchedEffect(Unit) {
-//        component.getTeacherRecreation(Define.teacherId, 1)
-
+        if (Define.playerId != 0L) {
+            async {
+                component.loginRecreation(Define.playerId)
+                component.getCurrentTeacherRecreation(Define.recreationId, 1)
+            }.await()
+        }
         component.sideEffect.collect { event ->
             when (event) {
                 is TeacherHomeEvent.ShowSnackBar -> {
                     snackbarHostState.showSnackbar(
                         message = event.message
+                    )
+                }
+
+                is TeacherHomeEvent.CreateAvatar -> {
+                    component.autoCreateAvatar(
+                        event.recreationId,
                     )
                 }
             }
@@ -99,9 +110,12 @@ internal fun TeacherHomeScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (Define.teacherId == 0L && !teacherState.isLoading) {
+            if (Define.playerId == 0L && !teacherState.isLoading) {
                 EmptyResult(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .background(GPColor.BackgroundLightGray),
                     description = "아직 생성한 로드맵이 없습니다.",
                     highlightRegex = 7..9
                 )
