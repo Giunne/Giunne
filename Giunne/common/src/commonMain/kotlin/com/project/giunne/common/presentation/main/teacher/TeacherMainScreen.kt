@@ -55,7 +55,6 @@ import com.project.giunne.common.presentation.community.teacher.TeacherCommunity
 import com.project.giunne.common.presentation.friend.teacher.TeacherFriendScreen
 import com.project.giunne.common.presentation.home.teacher.TeacherHomeScreen
 import com.project.giunne.common.presentation.home.teacher.recreation.TeacherRecreationScreen
-import com.project.giunne.common.presentation.main.common.NotificationScreen
 import com.project.giunne.common.presentation.main.dummy.notiList
 import com.project.giunne.common.presentation.mypage.teacher.TeacherMyPageScreen
 import com.project.giunne.common.presentation.notification.NotificationScreen
