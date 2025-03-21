@@ -29,11 +29,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.project.giunne.common.data.remote.request.RecreationRequest
-import com.project.giunne.common.data.remote.response.Recreation
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
-import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.home.common.EmptyResult
 import com.project.giunne.common.presentation.home.student.content.ResultRoadMapItem
@@ -47,6 +45,7 @@ import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 private const val TAG = "TeacherHomeScreen"
@@ -56,6 +55,7 @@ internal fun TeacherHomeScreen(
     component: TeacherHomeComponent,
     modifier: Modifier = Modifier,
     navigateToCommunity: () -> Unit,
+    navigateToRecreation: () -> Unit
 ) {
     GLog.d(TAG, "onCreate")
 
@@ -73,11 +73,23 @@ internal fun TeacherHomeScreen(
     }
 
     LaunchedEffect(Unit) {
+        if (Define.playerId != 0L) {
+            async {
+                component.loginRecreation(Define.playerId)
+                component.getCurrentTeacherRecreation(Define.recreationId, 1)
+            }.await()
+        }
         component.sideEffect.collect { event ->
             when (event) {
                 is TeacherHomeEvent.ShowSnackBar -> {
                     snackbarHostState.showSnackbar(
                         message = event.message
+                    )
+                }
+
+                is TeacherHomeEvent.CreateAvatar -> {
+                    component.autoCreateAvatar(
+                        event.recreationId,
                     )
                 }
             }
@@ -98,9 +110,12 @@ internal fun TeacherHomeScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (Define.playerId == 1L) {
+            if (Define.playerId == 0L && !teacherState.isLoading) {
                 EmptyResult(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .background(GPColor.BackgroundLightGray),
                     description = "아직 생성한 로드맵이 없습니다.",
                     highlightRegex = 7..9
                 )
@@ -116,11 +131,11 @@ internal fun TeacherHomeScreen(
                     StudentSignUpCodeBox(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        signUpCode = "testcode",
+                        signUpCode = teacherState.recreation.recreationCode,
                         onCopyCode = {
                             clipboardManager.setText(
                                 annotatedString = buildAnnotatedString {
-                                    append("testcode")
+                                    append(teacherState.recreation.recreationCode)
                                 }
                             )
                             scope.launch {
@@ -138,8 +153,8 @@ internal fun TeacherHomeScreen(
                     ResultRoadMapItem(
                         modifier = Modifier.fillMaxWidth()
                             .padding(horizontal = 16.gdp),
-                        teacherName = "",
-                        recreationName = ""
+                        teacherName = teacherState.recreation.teacherName,
+                        recreationName = teacherState.recreation.recreationName
                     )
                 }
             }
@@ -156,7 +171,7 @@ internal fun TeacherHomeScreen(
                     normalColor = GPColor.ButtonOrange,
                     pressColor = GPColor.ButtonPressOrange,
                     hoverColor = GPColor.ButtonHoverOrange,
-                    onClick = {},
+                    onClick = navigateToRecreation,
                 ) {
                     GPText(
                         text = "로드맵 선택",
