@@ -93,7 +93,9 @@ fun TeacherRunningCertScreen(
                 ) {
                     TeacherCertItemRow(
                         questUploadInfo = certWaitingList[it],
-//                        onClick = { onItemClicked(certWaitingList[it]) },
+                        onClick = {
+                            onItemClicked(certWaitingList[it])
+                        },
                     )
                 }
             }

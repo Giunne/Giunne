@@ -71,8 +71,11 @@ internal fun TeacherCertificationScreen(
 
     val certificationState by component.uiState.collectAsState()
 
-    LaunchedEffect(Unit) {
-        component.callUploadList(1) // TODO
+    LaunchedEffect(certificationState.pageType) {
+        when (certificationState.pageType) {
+            CertPage.RoadMap -> { component.callUploadList(1) }
+            CertPage.Running -> { component.callUploadList(2) }
+        }
     }
 
     Scaffold(
@@ -114,7 +117,6 @@ internal fun TeacherCertificationScreen(
             modifier = Modifier
                 .background(GPColor.BackgroundLightGray)
                 .fillMaxSize(),
-//                .padding(horizontal = 16.gdp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             PageSelectRow(
@@ -129,12 +131,12 @@ internal fun TeacherCertificationScreen(
                     .padding(horizontal = 8.gdp),
                 page = certificationState.pageType,
                 onRoadmapClicked = {
-                    scope.launch { /* TODO API */
+                    scope.launch {
                         component.onClickRoadmapTap()
                     }
                 },
                 onRunningClicked = {
-                    scope.launch { /* TODO API */
+                    scope.launch {
                         component.onClickRunningTap()
                     }
                 }
@@ -160,8 +162,13 @@ internal fun TeacherCertificationScreen(
                         modifier = Modifier.fillMaxSize(),
                         certWaitingList = certificationState.uploadList,
                         onItemClicked = {
-//                            navigateToDetail(postId, title)
-                        }
+                            component.callPostingDetailList(
+                                playerId = it.playerInfo.id.toLong(),
+                                questId = it.id.toLong(),
+                            ) { postId, title ->
+                                navigateToDetail(postId, title)
+                            }
+                        },
                     )
                 }
             }

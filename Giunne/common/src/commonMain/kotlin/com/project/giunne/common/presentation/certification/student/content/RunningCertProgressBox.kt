@@ -38,6 +38,7 @@ import com.project.giunne.icon_upload_video
 import com.project.giunne.roadcon_3_beast
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import kotlin.math.roundToInt
 
 @Composable
 fun RunningCertProgressBox(
@@ -45,7 +46,7 @@ fun RunningCertProgressBox(
     weekText: String,
     progressText: String,
     icon: @Composable () -> Unit = {  },
-    step: Int,
+    percent: Float,
 ) {
     Box(
         modifier = modifier
@@ -85,7 +86,7 @@ fun RunningCertProgressBox(
             ) {
                 GPCertCircleProgress(
                     modifier = Modifier.fillMaxSize(),
-                    percent = (step.toFloat() / 2)
+                    percent = percent
                 )
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -93,7 +94,7 @@ fun RunningCertProgressBox(
                     icon()
                     SpH(4.gdp)
                     GPText(
-                        text = "50%", /* TODO API */
+                        text = "${(percent * 100).roundToInt()} %",
                         textSize = 18.gsp,
                         textColor = GPColor.TextBlack,
                         fontFamily = GPFontFamily.Bold
