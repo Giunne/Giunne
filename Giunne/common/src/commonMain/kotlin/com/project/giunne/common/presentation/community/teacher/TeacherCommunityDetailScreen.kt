@@ -8,14 +8,11 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
@@ -36,9 +33,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import coil3.compose.AsyncImage
 import com.project.giunne.Res
-import com.project.giunne.character_cat_level_2
+import com.project.giunne.common.data.remote.request.CommentLikeRequest
 import com.project.giunne.common.data.remote.request.CommentRequest
-import com.project.giunne.common.data.remote.response.QuestUploadInfo
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPIconButton
 import com.project.giunne.common.presentation.common.content.Loader
@@ -47,15 +43,12 @@ import com.project.giunne.common.presentation.common.dialog.GPConfirmDialog
 import com.project.giunne.common.presentation.common.player.ImageViewer
 import com.project.giunne.common.presentation.common.player.VideoPlayer
 import com.project.giunne.common.presentation.common.player.VideoWindowPlayer
-import com.project.giunne.common.presentation.common.scrollbar.VerticalScrollbar
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.community.content.CommentInputRow
 import com.project.giunne.common.presentation.community.content.CommunityDetailInfoRow
 import com.project.giunne.common.presentation.community.content.GradeDialog
-import com.project.giunne.common.presentation.community.content.TeacherCommentItemRow
 import com.project.giunne.common.presentation.community.content.TeacherCommunityCommentColumn
-import com.project.giunne.common.presentation.community.student.dummy.commentTestList
 import com.project.giunne.common.presentation.community.student.intent.CommunityStore
 import com.project.giunne.common.presentation.community.student.intent.GradeStore
 import com.project.giunne.common.ui.theme.GPColor
@@ -212,84 +205,25 @@ internal fun TeacherCommunityDetailScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     GPText(
-                        text = "댓글 " + communityState.commentList.size.toString(),
+                        text = "댓글 " + communityState.paginationInfo.totalCount,
                         textSize = 14.gsp,
                         fontFamily = GPFontFamily.Bold,
                         textColor = GPColor.TextBlack
                     )
                 }
-                Box(
+                TeacherCommunityCommentColumn(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
-                ) {
-                    if (communityState.commentList.isNotEmpty()) {
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(horizontal = 16.gdp),
-                            state = scrollState
-                        ) {
-                            items(
-                                communityState.commentList.size
-                            ) {
-                                TeacherCommentItemRow(
-                                    modifier = Modifier
-                                        .padding(vertical = 8.gdp)
-                                        .fillMaxWidth()
-                                        .wrapContentHeight(),
-                                    commentInfo = communityState.commentList[it],
-                                    like = communityState.commentList[it].likeCount > 0,
-                                    onDeleteButtonClicked = { deleteConfirmDialog = true },
-                                    onLikeButtonClicked = { like ->
-                                        //                        commentList[it].like = !like
-                                    }
-                                )
-                            }
-                        }
-                        VerticalScrollbar(
-                            modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
-                            state = scrollState
-                        )
-                    } else {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Image(
-                                    modifier = Modifier.size(64.gdp),
-                                    painter = painterResource(Res.drawable.character_cat_level_2),
-                                    contentDescription = null
-                                )
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    GPText(
-                                        text = "댓글을 제일 먼저 남겨볼까요?",
-                                        textSize = 12.gsp,
-                                        fontFamily = GPFontFamily.Bold,
-                                        textColor = GPColor.TextBlack
-                                    )
-                                }
-                            }
-                        }
+                    listState = scrollState,
+                    commentList = communityState.commentList,
+                    callLike = { commentId, onSuccess ->
+                        communityStore.callCommentLike(CommentLikeRequest(commentId)) { onSuccess() }
+                    },
+                    callUnlike = { commentId, onSuccess ->
+                        communityStore.callCommentLike(CommentLikeRequest(commentId)) { onSuccess() }
                     }
-                }
-
-//                TeacherCommunityCommentColumn(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .weight(1f),
-//                    commentList = communityState.commentList.toMutableList(),
-//                    paginationInfo = communityState.paginationInfo.copy(),
-//                    loadNextPage = { page ->
-//                        communityStore.loadNextPage(postId, page)
-//                    },
-//                )
+                )
                 CommentInputRow(
                     modifier = Modifier
                         .fillMaxWidth(),

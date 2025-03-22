@@ -14,11 +14,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -77,6 +79,8 @@ fun StudentCommunityDetailScreen(
     val communityStore = remember { CommunityStore() }
     val communityState by communityStore.uiState.collectAsState()
 
+    val scrollState = rememberLazyListState()
+
     /////test/////
     var fullVideo by remember { mutableStateOf(false) }
     var fullImage by remember { mutableStateOf(false) }
@@ -86,6 +90,21 @@ fun StudentCommunityDetailScreen(
         GLog.d(TAG, "postId: $postId")
         communityStore.callPostingDetail(postId = postId ?: 0)
         communityStore.callCommentList(postId = postId ?: 0)
+    }
+
+    val endOfListReached by remember {
+        derivedStateOf {
+            val lastVisibleItem = scrollState.layoutInfo.visibleItemsInfo.lastOrNull()
+            val totalItemsCount = scrollState.layoutInfo.totalItemsCount
+
+            communityState.paginationInfo.hasNextPage && lastVisibleItem != null && lastVisibleItem.index >= totalItemsCount - 1
+        }
+    }
+
+    LaunchedEffect(endOfListReached) {
+        if (endOfListReached && communityState.paginationInfo.currentPage != communityState.paginationInfo.totalPage) {
+            communityStore.loadNextPage(postId ?: 0, communityState.paginationInfo.currentPage + 1)
+        }
     }
 
     Scaffold(
@@ -181,7 +200,7 @@ fun StudentCommunityDetailScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     GPText(
-                        text = "댓글 " + commentTestList.size.toString(),
+                        text = "댓글 " + communityState.paginationInfo.totalCount,
                         textSize = 14.gsp,
                         fontFamily = GPFontFamily.Bold,
                         textColor = GPColor.TextBlack
@@ -191,6 +210,7 @@ fun StudentCommunityDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
+                    listState = scrollState,
                     commentList = communityState.commentList
                 )
                 CommentInputRow(

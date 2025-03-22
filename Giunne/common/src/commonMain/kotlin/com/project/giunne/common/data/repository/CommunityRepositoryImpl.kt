@@ -1,5 +1,6 @@
 package com.project.giunne.common.data.repository
 
+import com.project.giunne.common.data.remote.request.CommentLikeRequest
 import com.project.giunne.common.data.remote.request.CommentRequest
 import com.project.giunne.common.data.remote.response.CommentInfo
 import com.project.giunne.common.data.remote.response.CommentListResponse
@@ -41,6 +42,18 @@ class CommunityRepositoryImpl(
     ): NetworkResult<CommentListResponse> {
         return handleApi(TAG) {
             communityService.getCommentList(postId = postId, pageIndex = pageIndex)
+        }
+    }
+
+    override suspend fun postCommentLike(commentLikeRequest: CommentLikeRequest): NetworkResult<String> {
+        return handleApi(TAG) {
+            communityService.postCommentLike(commentLikeRequest = commentLikeRequest)
+        }
+    }
+
+    override suspend fun postCommentUnlike(commentLikeRequest: CommentLikeRequest): NetworkResult<String> {
+        return handleApi(TAG) {
+            communityService.postCommentUnlike(commentLikeRequest = commentLikeRequest)
         }
     }
 }

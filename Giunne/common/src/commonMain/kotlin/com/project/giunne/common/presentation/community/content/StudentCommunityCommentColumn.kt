@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,10 +25,9 @@ import com.project.giunne.common.util.gdp
 @Composable
 fun StudentCommunityCommentColumn(
     modifier: Modifier = Modifier,
+    listState: LazyListState,
     commentList: List<CommentInfo>
 ) {
-    val scrollState = rememberLazyListState()
-
     /////TEST///// TODO API
     var deleteConfirmDialog by remember { mutableStateOf(false) }
     //////////////
@@ -39,7 +39,7 @@ fun StudentCommunityCommentColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.gdp),
-            state = scrollState
+            state = listState
         ) {
             items(
                 commentList.size
@@ -56,7 +56,7 @@ fun StudentCommunityCommentColumn(
         }
         VerticalScrollbar(
             modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
-            state = scrollState
+            state = listState
         )
     }
 

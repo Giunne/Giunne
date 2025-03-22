@@ -88,7 +88,7 @@ fun StudentCommentItemRow(
                 SpW(8.gdp)
                 GPText(
                     modifier = Modifier.weight(1f),
-                    text = commentInfo.playerInfo.nickname,
+                    text = commentInfo.playerInfo.nickname.ifEmpty { commentInfo.playerInfo.teacherName.orEmpty() },
                     textColor = GPColor.TextBlack,
                     textSize = 8.gsp,
                     fontFamily = GPFontFamily.Bold

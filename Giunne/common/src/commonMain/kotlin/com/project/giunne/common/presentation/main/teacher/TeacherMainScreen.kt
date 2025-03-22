@@ -370,7 +370,7 @@ private fun TeacherChildren(
             is TeacherMainComponent.TeacherChild.TeacherHomeChild -> TeacherHomeScreen(
                 component = child.component,
                 navigateToCommunity = {
-                    component.navigateToCommunity(CertPage.RoadMap)
+                    component.navigateToCertification()
                 },
                 navigateToRecreation = {
                     component.navigateToRecreation()

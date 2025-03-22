@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,31 +39,14 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun TeacherCommunityCommentColumn(
     modifier: Modifier = Modifier,
+    listState: LazyListState,
     commentList: List<CommentInfo>,
-    paginationInfo: PaginationInfo,
-    loadNextPage: (Int) -> Unit,
-    content: @Composable () -> Unit
+    callLike: (Long, () -> Unit) -> Unit,
+    callUnlike: (Long, () -> Unit) -> Unit,
 ) {
-    val scrollState = rememberLazyListState()
-
     /////TEST///// TODO API
     var deleteConfirmDialog by remember { mutableStateOf(false) }
     //////////////
-
-    val endOfListReached by remember {
-        derivedStateOf {
-            val lastVisibleItem = scrollState.layoutInfo.visibleItemsInfo.lastOrNull()
-            val totalItemsCount = scrollState.layoutInfo.totalItemsCount
-
-            paginationInfo.hasNextPage && lastVisibleItem != null && lastVisibleItem.index >= totalItemsCount - 1
-        }
-    }
-
-    LaunchedEffect(endOfListReached) {
-        if (endOfListReached && paginationInfo.currentPage != paginationInfo.totalPage) {
-            loadNextPage(paginationInfo.currentPage + 1)
-        }
-    }
 
     Box(
         modifier = modifier
@@ -72,7 +56,7 @@ fun TeacherCommunityCommentColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 16.gdp),
-                state = scrollState
+                state = listState
             ) {
                 items(
                     commentList.size
@@ -85,15 +69,19 @@ fun TeacherCommunityCommentColumn(
                         commentInfo = commentList[it],
                         like = commentList[it].likeCount > 0,
                         onDeleteButtonClicked = { deleteConfirmDialog = true },
-                        onLikeButtonClicked = { like ->
-    //                        commentList[it].like = !like
+                        onLikeButtonClicked = { currentLikeState, onSuccess ->
+                            if (currentLikeState) {
+                                callUnlike(commentList[it].id.toLong()) { onSuccess() }
+                            } else {
+                                callLike(commentList[it].id.toLong()) { onSuccess() }
+                            }
                         }
                     )
                 }
             }
             VerticalScrollbar(
                 modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
-                state = scrollState
+                state = listState
             )
         } else {
             Box(

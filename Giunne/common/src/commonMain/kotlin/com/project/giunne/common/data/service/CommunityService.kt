@@ -1,5 +1,6 @@
 package com.project.giunne.common.data.service
 
+import com.project.giunne.common.data.remote.request.CommentLikeRequest
 import com.project.giunne.common.data.remote.request.CommentRequest
 import com.project.giunne.common.data.remote.response.CommentListResponse
 import com.project.giunne.common.data.remote.response.PostingDetailListResponse
@@ -9,6 +10,8 @@ import com.project.giunne.common.data.util.DefineUrl.GET_COMMENT_LIST
 import com.project.giunne.common.data.util.DefineUrl.GET_POSTING_DETAIL
 import com.project.giunne.common.data.util.DefineUrl.GET_POSTING_DETAIL_LIST
 import com.project.giunne.common.data.util.DefineUrl.POST_COMMENT
+import com.project.giunne.common.data.util.DefineUrl.POST_COMMENT_LIKE
+import com.project.giunne.common.data.util.DefineUrl.POST_COMMENT_UNLIKE
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.POST
@@ -37,4 +40,14 @@ interface CommunityService {
         @Path("postId") postId: Long,
         @Query("pageIndex") pageIndex: Int,
     ): BaseResponse<CommentListResponse>
+
+    @POST(POST_COMMENT_LIKE)
+    suspend fun postCommentLike(
+        @Body commentLikeRequest: CommentLikeRequest
+    ): BaseResponse<String>
+
+    @POST(POST_COMMENT_UNLIKE)
+    suspend fun postCommentUnlike(
+        @Body commentLikeRequest: CommentLikeRequest
+    ): BaseResponse<String>
 }

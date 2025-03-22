@@ -51,7 +51,7 @@ fun TeacherCommentItemRow(
     commentInfo: CommentInfo,
     like: Boolean,
     onDeleteButtonClicked: () -> Unit,
-    onLikeButtonClicked: (Boolean) -> Unit
+    onLikeButtonClicked: (Boolean, () -> Unit) -> Unit
 ) {
     var isMenuOpen by remember { mutableStateOf(false) }
     var isLike by remember { mutableStateOf(like) } // TODO API
@@ -92,7 +92,7 @@ fun TeacherCommentItemRow(
                 SpW(8.gdp)
                 GPText(
                     modifier = Modifier.weight(1f),
-                    text = commentInfo.playerInfo.nickname,
+                    text = commentInfo.playerInfo.nickname.ifEmpty { commentInfo.playerInfo.teacherName.orEmpty() },
                     textColor = GPColor.TextBlack,
                     textSize = 8.gsp,
                     fontFamily = GPFontFamily.Bold
@@ -149,8 +149,10 @@ fun TeacherCommentItemRow(
                 normalColor = GPColor.ButtonOrange,
                 pressColor = GPColor.ButtonPressOrange,
                 onClick = {
-                    onLikeButtonClicked(like)
-                    isLike = !isLike
+                    onLikeButtonClicked(like) {
+                        isLike = !isLike
+                    }
+//                    isLike = !isLike
                 },
                 shadow = false,
                 shape = RectangleShape

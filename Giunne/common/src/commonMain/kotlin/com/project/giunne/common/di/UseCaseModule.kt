@@ -17,6 +17,8 @@ import com.project.giunne.common.domain.usecase.community.GetCommentList
 import com.project.giunne.common.domain.usecase.community.GetPostingDetail
 import com.project.giunne.common.domain.usecase.community.GetPostingDetailList
 import com.project.giunne.common.domain.usecase.community.PostComment
+import com.project.giunne.common.domain.usecase.community.PostCommentLike
+import com.project.giunne.common.domain.usecase.community.PostCommentUnlike
 import com.project.giunne.common.domain.usecase.mypage.GetInventoryItemListUseCase
 import com.project.giunne.common.domain.usecase.mypage.PutInventoryItemUseCase
 import com.project.giunne.common.domain.usecase.roadmap.CreateRecreationUseCase
@@ -68,4 +70,6 @@ val useCaseModule: Module = module {
     single { GetPostingDetailList(get()) }
     single { GetCommentList(get()) }
     single { PostComment(get()) }
+    single { PostCommentLike(get()) }
+    single { PostCommentUnlike(get()) }
 }
