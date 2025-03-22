@@ -87,7 +87,7 @@ fun TeacherExerciseRoadmapScreen(
                         roadMapComponent.checkedStudent(studentCheck, checked)
                     },
                     onConfirm = {
-                        roadMapComponent.modifyQuestState(roadMapState.checkedIdSet)
+                        roadMapComponent.modifyQuestState(1, roadMapState.studentList.map { it.id }, roadMapState.checkedIdSet)
                     },
                 )
             } else {

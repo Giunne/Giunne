@@ -1,7 +1,6 @@
 package com.project.giunne.common.presentation.main.teacher
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -56,6 +55,7 @@ import com.project.giunne.common.presentation.community.teacher.TeacherCommunity
 import com.project.giunne.common.presentation.community.teacher.TeacherCommunityScreen
 import com.project.giunne.common.presentation.friend.teacher.TeacherFriendScreen
 import com.project.giunne.common.presentation.home.teacher.TeacherHomeScreen
+import com.project.giunne.common.presentation.home.teacher.recreation.TeacherRecreationScreen
 import com.project.giunne.common.presentation.main.dummy.notiList
 import com.project.giunne.common.presentation.mypage.teacher.TeacherMyPageScreen
 import com.project.giunne.common.presentation.notification.NotificationScreen
@@ -91,7 +91,6 @@ fun TeacherMainScreen(
 
     val childStack by component.childStack.subscribeAsState()
     val activeComponent = childStack.active.instance
-    var testOptionItem by remember { mutableStateOf("선택해주세요.") }
 
     val notificationState by NotificationUtil.uiState.collectAsState()
     val animatedDP by animateDpAsState(
@@ -128,13 +127,6 @@ fun TeacherMainScreen(
             )
         }
     ) {
-        /* TODO("Default 화면 나중에 API 통신 후 구현") */
-//        TeacherEmptyHomeScreen(
-//            modifier = Modifier.fillMaxSize(),
-//            roadMapTitle = "",
-//            onValueChange = {},
-//            onCreateRoadMapClick = {}
-//        )
         Box {
             Column(
                 modifier = Modifier
@@ -152,13 +144,15 @@ fun TeacherMainScreen(
                         is TeacherMainComponent.TeacherChild.TeacherMyPageChild -> "내정보"
                         is TeacherMainComponent.TeacherChild.TeacherShopChild -> "꾸미기"
                         is TeacherMainComponent.TeacherChild.TeacherGachaChild -> ""
+                        is TeacherMainComponent.TeacherChild.TeacherRecreationChild -> "진행할 로드맵 변경"
                     },
                     leftIcon = {
                         when(activeComponent) {
                             is TeacherMainComponent.TeacherChild.TeacherCommunityChild,
                             is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild,
                             is TeacherMainComponent.TeacherChild.TeacherShopChild,
-                            is TeacherMainComponent.TeacherChild.TeacherGachaChild -> {
+                            is TeacherMainComponent.TeacherChild.TeacherGachaChild,
+                            is TeacherMainComponent.TeacherChild.TeacherRecreationChild -> {
                                 GPBackButton(
                                     onClick = {
                                         component.navigateBack()
@@ -213,6 +207,7 @@ fun TeacherMainScreen(
                     is TeacherMainComponent.TeacherChild.TeacherShopChild -> Unit
                     is TeacherMainComponent.TeacherChild.TeacherGachaChild -> Unit
                     is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild -> Unit
+                    is TeacherMainComponent.TeacherChild.TeacherRecreationChild -> Unit
                 }
             }
 
@@ -376,6 +371,9 @@ private fun TeacherChildren(
                 component = child.component,
                 navigateToCommunity = {
                     component.navigateToCommunity(CertPage.RoadMap)
+                },
+                navigateToRecreation = {
+                    component.navigateToRecreation()
                 }
             )
             is TeacherMainComponent.TeacherChild.TeacherRoadmapChild -> TeacherRoadmapScreen(component = child.component)
@@ -411,6 +409,12 @@ private fun TeacherChildren(
             is TeacherMainComponent.TeacherChild.TeacherGachaChild -> GachaScreen {
 
             }
+            is TeacherMainComponent.TeacherChild.TeacherRecreationChild -> TeacherRecreationScreen(
+                component = child.component,
+                onBackClick = {
+                    component.navigateBack()
+                }
+            )
         }
     }
 }
@@ -437,6 +441,7 @@ private val TeacherMainComponent.TeacherChild.index: Int
             is TeacherMainComponent.TeacherChild.TeacherMyPageChild -> 6
             is TeacherMainComponent.TeacherChild.TeacherShopChild -> 7
             is TeacherMainComponent.TeacherChild.TeacherGachaChild -> 8
+            is TeacherMainComponent.TeacherChild.TeacherRecreationChild -> 9
         }
 
 private fun StackAnimator.flipSide(): StackAnimator =

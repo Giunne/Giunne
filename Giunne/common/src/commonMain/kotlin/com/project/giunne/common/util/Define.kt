@@ -4,25 +4,22 @@ import com.project.giunne.common.data.remote.response.AuthResponse
 
 private const val TAG = "Define"
 object Define {
+    val loginId: String
+        get() = PreferencesUtil.settingsRepository!!.idPref.get()
+
     var playerId: Long
-//        get() {
-//            val id = PreferencesUtil.settingsRepository!!.playerPref.get().toLong()
-//            GLog.d(TAG, "Get Player Id => $id")
-//            return id
-//        }
         get() = PreferencesUtil.settingsRepository!!.playerPref.get().toLong()
         set(value) { PreferencesUtil.settingsRepository!!.playerPref.set(value.toString()) }
+
+    var recreationId: Int
+        get() = PreferencesUtil.settingsRepository!!.recreationIdPref.get().toInt()
+        set(value) { PreferencesUtil.settingsRepository!!.recreationIdPref.set(value.toString()) }
 
     var userRole: String
         get() = PreferencesUtil.settingsRepository!!.rolePref.get()
         set(value) { PreferencesUtil.settingsRepository!!.rolePref.set(value) }
 
     var accessToken: String
-//        get() {
-//            val token = PreferencesUtil.settingsRepository!!.accessTokenPref.get()
-//            GLog.d(TAG, "Get Access Token Event => $token")
-//            return token
-//        }
         get() = PreferencesUtil.settingsRepository!!.accessTokenPref.get()
         set(value) { PreferencesUtil.settingsRepository!!.accessTokenPref.set(value) }
 

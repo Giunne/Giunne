@@ -20,6 +20,7 @@ import com.project.giunne.common.domain.usecase.community.PostComment
 import com.project.giunne.common.domain.usecase.mypage.GetInventoryItemListUseCase
 import com.project.giunne.common.domain.usecase.mypage.PutInventoryItemUseCase
 import com.project.giunne.common.domain.usecase.roadmap.CreateRecreationUseCase
+import com.project.giunne.common.domain.usecase.roadmap.GetRecreationTeacherListUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetAllRoadMapUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetQuestCodeUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetSearchRecreationUseCase
@@ -50,6 +51,7 @@ val useCaseModule: Module = module {
     single { CreateAvatarUseCase(get()) }
     single { LoginRecreationUseCase(get()) }
     single { GetUserAvatarListUseCase(get()) }
+    single { GetRecreationTeacherListUseCase(get()) }
     single { GetAllRoadMapUseCase(get()) }
     single { GetTeacherCourseUseCase(get()) }
     single { ModifyQuestInfoUseCase(get()) }

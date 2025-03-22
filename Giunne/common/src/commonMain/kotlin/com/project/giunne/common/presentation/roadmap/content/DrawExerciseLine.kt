@@ -19,6 +19,11 @@ fun DrawExerciseLine(
     questInfoList: List<StudentCourseInfo>,
     connect: List<ConnectNode>
 ) {
+    val allCheckMultipleConfirm = questInfoList
+        .filter { it.courseName == "4-a.CORE" || it.courseName == "4-b.CORE" || it.courseName == "4-c.CORE"  }
+        .all { studentCourseInfo ->
+            studentCourseInfo.questInfo.questStateInfo.questProgress == "CONFIRM"
+        }
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -33,7 +38,9 @@ fun DrawExerciseLine(
                 val fromQuestStateInfo = fromCourseInfo.questInfo.questStateInfo
                 val fromStatus = fromQuestStateInfo.questProgress
                 val defaultColor = if (from.boxSize == 30f) GPColor.MainOrangeColor else GPColor.ButtonLightGray
-                val color = if (fromStatus == "CONFIRM" && from.boxSize != 30f) {
+                val color = if (fromStatus == "CONFIRM" && fromCourseInfo.courseName != "4-b.CORE" && from.boxSize != 30f) {
+                    GPColor.Green
+                } else if (fromCourseInfo.courseName == "4-b.CORE" && allCheckMultipleConfirm) {
                     GPColor.Green
                 } else {
                     defaultColor
