@@ -57,6 +57,7 @@ interface CommunityService {
 
     @GET(GET_POSTING_LIST)
     suspend fun getPostingList(
+        @Query("roadMapId") roadMapId: Long,
         @Query("questName") questName: String,
         @Query("nickName") nickName: String,
         @Query("pageIndex") pageIndex: Int,
@@ -68,5 +69,6 @@ interface CommunityService {
         @Query("roadmapId") roadmapId: Long,
         @Query("pageIndex") pageIndex: Int,
         @Query("pageSize") pageSize: Int = 1000,
+        @Query("sortDirection") sortDirection: String = "ASC",
     ): BaseResponse<QuestTypeListResponse>
 }

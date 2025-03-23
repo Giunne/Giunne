@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import com.project.giunne.common.data.remote.response.QuestTypeInfo
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.content.Loader
@@ -61,18 +62,26 @@ internal fun StudentCommunityScreen(
         when (pageType) {
             CertPage.RoadMap -> {
                 component.callPostingList(
-                    questName = "",
-                    nickName = "",
+                    roadMapId = 1,
+                    questName = communityState.roadmapFilter,
+                    nickName = communityState.searchText,
                     pageIndex = 1,
-                    sortDirection = "DESC",
+                    sortDirection = communityState.datePriority.code,
+                )
+                component.callQuestTypeList(
+                    roadmapId = 1
                 )
             }
             CertPage.Running -> {
                 component.callPostingList(
-                    questName = "",
-                    nickName = "",
+                    roadMapId = 2,
+                    questName = communityState.runningFilter,
+                    nickName = communityState.searchText,
                     pageIndex = 1,
-                    sortDirection = "DESC",
+                    sortDirection = communityState.datePriority.code,
+                )
+                component.callQuestTypeList(
+                    roadmapId = 2
                 )
             }
         }
@@ -90,10 +99,17 @@ internal fun StudentCommunityScreen(
     LaunchedEffect(endOfListReached) {
         if (endOfListReached && communityState.paginationInfo.currentPage != communityState.paginationInfo.totalPage) {
             component.callPostingList(
-                questName = "",
-                nickName = "",
+                roadMapId = when (pageType) {
+                    CertPage.RoadMap -> 1
+                    CertPage.Running -> 2
+                },
+                questName = when (pageType) {
+                    CertPage.RoadMap -> communityState.roadmapFilter
+                    CertPage.Running -> communityState.runningFilter
+                },
+                nickName = communityState.searchText,
                 pageIndex = communityState.paginationInfo.currentPage + 1,
-                sortDirection = "DESC",
+                sortDirection = communityState.datePriority.code,
             )
         }
     }
@@ -116,11 +132,24 @@ internal fun StudentCommunityScreen(
                     .padding(horizontal = 16.gdp)
                     .height(52.gdp),
                 pageType = pageType,
+                searchText = communityState.searchText,
+                onSearchTextChanged = { component.onSearchTextChanged(it) },
                 datePriority = communityState.datePriority,
-                roadmapFilter = communityState.roadmapFilter,
-                runningFilter = communityState.runningFilter,
+                roadmapFilter = communityState.roadmapFilter.ifEmpty { "전체" },
+                runningFilter = communityState.runningFilter.ifEmpty { "전체" },
                 onSearchButtonClicked = {
-                    component.onClickSearchButton(it)
+                    component.onClickSearchButton(
+                        roadMapId = when (pageType) {
+                            CertPage.RoadMap -> 1
+                            CertPage.Running -> 2
+                        },
+                        questName = when (pageType) {
+                            CertPage.RoadMap -> communityState.roadmapFilter
+                            CertPage.Running -> communityState.runningFilter
+                        },
+                        nickName = communityState.searchText,
+                        sortDirection = communityState.datePriority.code,
+                    )
                 },
                 onDatePriorityButtonClicked = { component.onClickDatePriorityButton() },
                 onRoadmapFilterButtonClicked = { component.onClickRoadmapFilterButton() },
@@ -163,19 +192,17 @@ internal fun StudentCommunityScreen(
                 onSelect = { text ->
                     component.onSelectRoadmapFilter(text)
                     component.dismissRoadmapFilterDialog()
+                    component.onClickSearchButton(
+                        roadMapId = when (pageType) {
+                            CertPage.RoadMap -> 1
+                            CertPage.Running -> 2
+                        },
+                        questName = text,
+                        nickName = communityState.searchText,
+                        sortDirection = communityState.datePriority.code,
+                    )
                 },
-                filterList = listOf( /* TODO API */
-                    "1단계 버드독", "2단계 데드버그", "3단계 비스트", "4-a단계 하이플랭크", "4-b단계 플랭크", "5-c단계 플랭크 앤 플랭크",
-                    "1단계 버드독", "2단계 데드버그", "3단계 비스트", "4-a단계 하이플랭크", "4-b단계 플랭크", "5-c단계 플랭크 앤 플랭크",
-                    "1단계 버드독", "2단계 데드버그", "3단계 비스트", "4-a단계 하이플랭크", "4-b단계 플랭크", "5-c단계 플랭크 앤 플랭크",
-                    "1단계 버드독", "2단계 데드버그", "3단계 비스트", "4-a단계 하이플랭크", "4-b단계 플랭크", "5-c단계 플랭크 앤 플랭크",
-                    "1단계 버드독", "2단계 데드버그", "3단계 비스트", "4-a단계 하이플랭크", "4-b단계 플랭크", "5-c단계 플랭크 앤 플랭크",
-                    "1단계 버드독", "2단계 데드버그", "3단계 비스트", "4-a단계 하이플랭크", "4-b단계 플랭크", "5-c단계 플랭크 앤 플랭크",
-                    "1단계 버드독", "2단계 데드버그", "3단계 비스트", "4-a단계 하이플랭크", "4-b단계 플랭크", "5-c단계 플랭크 앤 플랭크",
-                    "1단계 버드독", "2단계 데드버그", "3단계 비스트", "4-a단계 하이플랭크", "4-b단계 플랭크", "5-c단계 플랭크 앤 플랭크",
-                    "1단계 버드독", "2단계 데드버그", "3단계 비스트", "4-a단계 하이플랭크", "4-b단계 플랭크", "5-c단계 플랭크 앤 플랭크",
-                    "1단계 버드독", "2단계 데드버그", "3단계 비스트", "4-a단계 하이플랭크", "4-b단계 플랭크", "5-c단계 플랭크 앤 플랭크",
-                ),
+                filterList = communityState.questTypeList
             )
         }
     }
@@ -187,10 +214,17 @@ internal fun StudentCommunityScreen(
                 onSelect = { text ->
                     component.onSelectRunningFilter(text)
                     component.dismissRunningFilterDialog()
+                    component.onClickSearchButton(
+                        roadMapId = when (pageType) {
+                            CertPage.RoadMap -> 1
+                            CertPage.Running -> 2
+                        },
+                        questName = text,
+                        nickName = communityState.searchText,
+                        sortDirection = communityState.datePriority.code,
+                    )
                 },
-                filterList = listOf( /* TODO API */
-                    "1주차", "2주차", "3주차", "4주차", "5주차"
-                ),
+                filterList = communityState.questTypeList
             )
         }
     }
@@ -205,8 +239,24 @@ internal fun StudentCommunityScreen(
                         else DatePriority.OLDEST
                     )
                     component.dismissDatePriorityDialog()
+                    component.onClickSearchButton(
+                        roadMapId = when (pageType) {
+                            CertPage.RoadMap -> 1
+                            CertPage.Running -> 2
+                        },
+                        questName = when (pageType) {
+                            CertPage.RoadMap -> communityState.roadmapFilter
+                            CertPage.Running -> communityState.runningFilter
+                        },
+                        nickName = communityState.searchText,
+                        sortDirection = if (text == "최신순") DatePriority.NEWEST.code
+                            else DatePriority.OLDEST.code
+                    )
                 },
-                filterList = listOf("최신순", "오래된순"),
+                filterList = listOf(
+                    QuestTypeInfo(questName = "최신순"),
+                    QuestTypeInfo(questName = "오래된순")
+                ),
             )
         }
     }

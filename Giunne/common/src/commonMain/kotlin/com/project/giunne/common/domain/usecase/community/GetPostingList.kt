@@ -8,6 +8,7 @@ class GetPostingList(
     private val communityRepository: CommunityRepository
 ) {
     suspend operator fun invoke(
+        roadMapId: Long,
         questName: String,
         nickName: String,
         pageIndex: Int,
@@ -15,6 +16,7 @@ class GetPostingList(
     ): PostingListResponse {
         return communityRepository
             .getPostingList(
+                roadMapId = roadMapId,
                 questName = questName,
                 nickName = nickName,
                 pageIndex = pageIndex,

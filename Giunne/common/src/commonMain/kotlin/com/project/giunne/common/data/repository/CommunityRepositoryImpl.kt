@@ -60,6 +60,7 @@ class CommunityRepositoryImpl(
     }
 
     override suspend fun getPostingList(
+        roadMapId: Long,
         questName: String,
         nickName: String,
         pageIndex: Int,
@@ -67,6 +68,7 @@ class CommunityRepositoryImpl(
     ): NetworkResult<PostingListResponse> {
         return handleApi(TAG) {
             communityService.getPostingList(
+                roadMapId = roadMapId,
                 questName = questName,
                 nickName = nickName,
                 pageIndex = pageIndex,

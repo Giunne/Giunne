@@ -25,6 +25,6 @@ interface CommunityRepository {
     suspend fun getCommentList(postId: Long, pageIndex: Int): NetworkResult<CommentListResponse>
     suspend fun postCommentLike(commentLikeRequest: CommentLikeRequest): NetworkResult<String>
     suspend fun postCommentUnlike(commentLikeRequest: CommentLikeRequest): NetworkResult<String>
-    suspend fun getPostingList(questName: String, nickName: String, pageIndex: Int, sortDirection: String, ): NetworkResult<PostingListResponse>
+    suspend fun getPostingList(roadMapId: Long, questName: String, nickName: String, pageIndex: Int, sortDirection: String, ): NetworkResult<PostingListResponse>
     suspend fun getQuestTypeList(roadmapId: Long, pageIndex: Int, ): NetworkResult<QuestTypeListResponse>
 }
