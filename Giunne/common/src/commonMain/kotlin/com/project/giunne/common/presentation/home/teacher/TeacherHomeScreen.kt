@@ -77,6 +77,7 @@ internal fun TeacherHomeScreen(
             async {
                 component.loginRecreation(Define.playerId)
                 component.getCurrentTeacherRecreation(Define.recreationId, 1)
+                component.callUploadList(1)
             }.await()
         }
         component.sideEffect.collect { event ->
@@ -146,7 +147,7 @@ internal fun TeacherHomeScreen(
 
                     RemainCheckingStudentBox(
                         modifier = Modifier.fillMaxWidth(),
-                        studentCount = 12,
+                        studentCount = teacherState.certWaitList.size,
                         onClickCommunity = navigateToCommunity
                     )
 

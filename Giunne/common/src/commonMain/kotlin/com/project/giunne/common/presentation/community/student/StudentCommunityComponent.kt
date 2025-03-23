@@ -2,22 +2,92 @@ package com.project.giunne.common.presentation.community.student
 
 import com.arkivanov.decompose.ComponentContext
 import com.project.giunne.common.base.BaseComponent
+import com.project.giunne.common.data.util.asDataThrowable
+import com.project.giunne.common.domain.usecase.community.GetPostingList
+import com.project.giunne.common.domain.usecase.community.GetQuestTypeList
 import com.project.giunne.common.presentation.community.student.intent.StudentCommunityEvent
 import com.project.giunne.common.presentation.community.student.state.DatePriority
 import com.project.giunne.common.presentation.community.student.state.StudentCommunityState
 import com.project.giunne.common.util.GLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
+import org.koin.java.KoinJavaComponent
 
 private const val TAG = "StudentCommunityCompone"
 class StudentCommunityComponent(
     componentContext: ComponentContext,
+    private val getPostingList: GetPostingList = KoinJavaComponent.get(GetPostingList::class.java),
+    private val getQuestTypeList: GetQuestTypeList = KoinJavaComponent.get(GetQuestTypeList::class.java),
 ): KoinComponent, ComponentContext by componentContext,
     BaseComponent<StudentCommunityState, StudentCommunityEvent>(initialState = StudentCommunityState()) {
 
     init {
         GLog.d(TAG, "onCreate")
+    }
+
+    fun callPostingList(
+        questName: String,
+        nickName: String,
+        pageIndex: Int,
+        sortDirection: String
+    ) {
+        scope.launch {
+            setState { copy(loading = true) }
+            runCatching {
+                getPostingList.invoke(
+                    questName = questName,
+                    nickName = nickName,
+                    pageIndex = pageIndex,
+                    sortDirection = sortDirection,
+                )
+            }.onSuccess { response ->
+                setState {
+                    copy(
+                        loading = false,
+                        postingList = (postingList + response.data).distinctBy { it.id },
+                        paginationInfo = response.paginationInfo
+                    )
+                }
+            }.onFailure {
+                setState {
+                    copy(
+                        loading = false,
+                        error = it.asDataThrowable()
+                    )
+                }
+            }
+        }
+    }
+
+    fun callQuestTypeList(
+        roadmapId: Long,
+        pageIndex: Int = 1
+    ) {
+        scope.launch {
+            setState { copy(loading = true) }
+            runCatching {
+                getQuestTypeList.invoke(
+                    roadmapId = roadmapId,
+                    pageIndex = pageIndex,
+                )
+            }.onSuccess { response ->
+                setState {
+                    copy(
+                        loading = false,
+                        questTypeList = response.data
+                    )
+                }
+            }.onFailure {
+                setState {
+                    copy(
+                        loading = false,
+                        error = it.asDataThrowable()
+                    )
+                }
+            }
+        }
     }
 
     fun onClickSearchButton(

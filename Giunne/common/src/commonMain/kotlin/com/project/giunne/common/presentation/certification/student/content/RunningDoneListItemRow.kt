@@ -14,7 +14,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import coil3.compose.AsyncImage
 import com.project.giunne.Res
+import com.project.giunne.common.data.remote.response.StudentQuestInfo
+import com.project.giunne.common.data.util.DefineUrl.IMAGE_BASE_URL
 import com.project.giunne.common.presentation.certification.student.dummy.RoadmapDoneDto
 import com.project.giunne.common.presentation.certification.student.dummy.RunningDoneDto
 import com.project.giunne.common.presentation.common.shape.GPSquircleBorderShape
@@ -31,7 +34,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun RunningDoneListItemRow(
     modifier: Modifier = Modifier,
-    doneItem: RunningDoneDto
+    historyItem: StudentQuestInfo
 ) {
     Row(
         modifier = modifier
@@ -53,18 +56,17 @@ fun RunningDoneListItemRow(
             borderColor = GPColor.BackgroundGray_F6F6F6,
             borderWidth = 1.gdp,
             content = {
-                Image(
-                    modifier = Modifier.size(26.gdp),
-                    painter = painterResource(Res.drawable.icon_running),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(GPColor.ButtonBlack)
+                AsyncImage(
+                    modifier = Modifier.size(32.gdp),
+                    model = IMAGE_BASE_URL + historyItem.thumbnailUrl,
+                    contentDescription = null
                 )
             }
         )
         SpW(8.gdp)
         GPText(
             modifier = Modifier.weight(1f),
-            text = doneItem.date,
+            text = historyItem.questName, // TODO 날짜
             textColor = GPColor.TextBlack,
             textSize = 14.gsp,
             fontFamily = GPFontFamily.Bold
@@ -82,7 +84,7 @@ fun RunningDoneListItemRow(
         ) {
             GPText(
                 modifier = Modifier.height(14.gdp),
-                text = doneItem.exp.toString() + " exp",
+                text = historyItem.rewardExp.toString() + " exp",
                 textColor = GPColor.MainOrangeColor,
                 textSize = 12.gsp,
                 fontFamily = GPFontFamily.Bold,
@@ -90,7 +92,7 @@ fun RunningDoneListItemRow(
             GPText(
                 modifier = Modifier
                     .height(14.gdp),
-                text = doneItem.coin.toString() + " 코인",
+                text = historyItem.rewardPoint.toString() + " 코인",
                 textColor = GPColor.MainOrangeColor,
                 textSize = 12.gsp,
                 fontFamily = GPFontFamily.Bold,

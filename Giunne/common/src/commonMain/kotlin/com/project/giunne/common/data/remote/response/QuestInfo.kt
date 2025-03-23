@@ -22,27 +22,31 @@ data class CourseInfo(
 
 @Serializable
 data class QuestInfo(
-    @SerialName("cooperationType") val cooperationType: String = "",
-    @SerialName("currentApproveCount") val currentApproveCount: Int = 0,
-    @SerialName("deadline") val deadline: String = "",
-    @SerialName("difficultyLevel") val difficultyLevel: Int = 0,
-    @SerialName("guideUrl") val guideUrl: String = "",
     @SerialName("id") val id: Int = 0,
+    @SerialName("questName") val questName: String = "",
+    @SerialName("difficultyLevel") val difficultyLevel: Int = 0,
     @SerialName("isTeam") val isTeam: Boolean = false,
+    @SerialName("deadline") val deadline: String = "",
+    @SerialName("sortSeq") val sortSeq: Int = 0,
+    @SerialName("needApproveCount") val needApproveCount: Int = 0,
+    @SerialName("rewardPoint") val rewardPoint: Int = 0,
+    @SerialName("rewardExp") val rewardExp: Int = 0,
+    @SerialName("trainingDescription") val trainingDescription: String = "",
+    @SerialName("guideUrl") val guideUrl: String = "",
+    @SerialName("needLevel") val needLevel: Int = 0,
     @SerialName("maxPlayer") val maxPlayer: Int = 0,
     @SerialName("minPlayer") val minPlayer: Int = 0,
-    @SerialName("needApproveCount") val needApproveCount: Int = 0,
-    @SerialName("needLevel") val needLevel: Int = 0,
-    @SerialName("questDescription") val questDescription: String = "",
-    @SerialName("questName") val questName: String = "",
-    @SerialName("questStateInfos") val questStateInfos: List<QuestStateInfo> = listOf(),
     @SerialName("questType") val questType: String = "",
-    @SerialName("rewardExp") val rewardExp: Int = 0,
-    @SerialName("rewardPoint") val rewardPoint: Int = 0,
-    @SerialName("sortSeq") val sortSeq: Int = 0,
-    @SerialName("trainingDescription") val trainingDescription: String = "",
-    @SerialName("trainingType") val trainingType: String = ""
-)
+    @SerialName("cooperationType") val cooperationType: String = "",
+    @SerialName("trainingType") val trainingType: String = "",
+    @SerialName("currentApproveCount") val currentApproveCount: Int = 0,
+    @SerialName("questDescription") val questDescription: String = "",
+    @SerialName("questStateInfos") val questStateInfos: List<QuestStateInfo> = listOf(),
+) {
+    fun getQuestTitle(): String {
+        return trainingType.convertType() + " " + questName.replace(".", "단계 ")
+    }
+}
 
 @Serializable
 data class QuestStateInfo(

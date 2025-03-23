@@ -11,13 +11,15 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,9 +33,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import coil3.compose.AsyncImage
 import com.project.giunne.Res
-import com.project.giunne.common.presentation.certification.student.state.CertPage
+import com.project.giunne.common.data.remote.request.CommentLikeRequest
+import com.project.giunne.common.data.remote.request.CommentRequest
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPIconButton
+import com.project.giunne.common.presentation.common.content.Loader
+import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.dialog.GPConfirmDialog
 import com.project.giunne.common.presentation.common.player.ImageViewer
 import com.project.giunne.common.presentation.common.player.VideoPlayer
@@ -44,8 +49,7 @@ import com.project.giunne.common.presentation.community.content.CommentInputRow
 import com.project.giunne.common.presentation.community.content.CommunityDetailInfoRow
 import com.project.giunne.common.presentation.community.content.GradeDialog
 import com.project.giunne.common.presentation.community.content.TeacherCommunityCommentColumn
-import com.project.giunne.common.presentation.community.student.dummy.CommunityDto
-import com.project.giunne.common.presentation.community.student.dummy.commentTestList
+import com.project.giunne.common.presentation.community.student.intent.CommunityStore
 import com.project.giunne.common.presentation.community.student.intent.GradeStore
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GLog
@@ -63,7 +67,7 @@ private const val TAG = "TeacherCommunityDetailScreen"
 @Composable
 internal fun TeacherCommunityDetailScreen(
     modifier: Modifier = Modifier,
-    communityDto: CommunityDto?
+    postId: Long?
 ) {
     GLog.d(TAG, "onCreate")
 
@@ -76,10 +80,39 @@ internal fun TeacherCommunityDetailScreen(
     val gradeStore = remember { GradeStore() }
     val gradeState by gradeStore.uiState.collectAsState()
 
+    val communityStore = remember { CommunityStore() }
+    val communityState by communityStore.uiState.collectAsState()
+
+    val scrollState = rememberLazyListState()
+
     /////test/////
     var fullVideo by remember { mutableStateOf(false) }
     var fullImage by remember { mutableStateOf(false) }
     //////////////
+    /////TEST///// TODO API
+    var deleteConfirmDialog by remember { mutableStateOf(false) }
+    //////////////
+
+    LaunchedEffect(Unit) {
+        GLog.d(TAG, "postId: $postId")
+        communityStore.callPostingDetail(postId = postId ?: 0)
+        communityStore.callCommentList(postId = postId ?: 0)
+    }
+
+    val endOfListReached by remember {
+        derivedStateOf {
+            val lastVisibleItem = scrollState.layoutInfo.visibleItemsInfo.lastOrNull()
+            val totalItemsCount = scrollState.layoutInfo.totalItemsCount
+
+            communityState.paginationInfo.hasNextPage && lastVisibleItem != null && lastVisibleItem.index >= totalItemsCount - 1
+        }
+    }
+
+    LaunchedEffect(endOfListReached) {
+        if (endOfListReached && communityState.paginationInfo.currentPage != communityState.paginationInfo.totalPage) {
+            communityStore.loadNextPage(postId ?: 0, communityState.paginationInfo.currentPage + 1)
+        }
+    }
 
     Scaffold(
         modifier = Modifier
@@ -92,13 +125,13 @@ internal fun TeacherCommunityDetailScreen(
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (communityDto != null) {
+            if (postId != null) {
                 CommunityDetailInfoRow(
                     modifier = Modifier
                         .padding(horizontal = 16.gdp)
                         .fillMaxWidth()
                         .height(76.gdp),
-                    communityDto = communityDto
+                    postingDetailInfo = communityState.postingDetailInfo
                 )
                 Box(
                     modifier = Modifier
@@ -107,10 +140,10 @@ internal fun TeacherCommunityDetailScreen(
                         .aspectRatio(1f),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (communityDto.type == CertPage.RoadMap) {
+                    if (communityState.postingDetailInfo.questInfo.questType == "ROAD_MAP") {
                         VideoPlayer(
                             modifier = Modifier.fillMaxSize(),
-                            videoPath = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4", //TODO API
+                            videoPath = communityState.postingDetailInfo.fileUrl,
                             onFullScreenClicked = { fullVideo = true }
                         )
                     } else {
@@ -136,7 +169,7 @@ internal fun TeacherCommunityDetailScreen(
                                         state = state,
                                         onSingleTapEvent = {}
                                     ),
-                                model = "https://picsum.photos/200/300",
+                                model = communityState.postingDetailInfo.fileUrl,
                                 placeholder = painterResource(Res.drawable.image_loader_1),
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop
@@ -172,7 +205,7 @@ internal fun TeacherCommunityDetailScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     GPText(
-                        text = "댓글 " + commentTestList.size.toString(),
+                        text = "댓글 " + communityState.paginationInfo.totalCount,
                         textSize = 14.gsp,
                         fontFamily = GPFontFamily.Bold,
                         textColor = GPColor.TextBlack
@@ -182,22 +215,52 @@ internal fun TeacherCommunityDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
-                    commentList = commentTestList
+                    listState = scrollState,
+                    commentList = communityState.commentList,
+                    callLike = { commentId, onSuccess ->
+                        communityStore.callCommentLike(CommentLikeRequest(commentId)) { onSuccess() }
+                    },
+                    callUnlike = { commentId, onSuccess ->
+                        communityStore.callCommentUnlike(CommentLikeRequest(commentId)) { onSuccess() }
+                    }
                 )
                 CommentInputRow(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    onSendButtonClicked = {  }, // TODO API
+                    onSendButtonClicked = { content ->
+                        communityStore.callPostComment(
+                            commentRequest = CommentRequest(
+                                postId = postId,
+                                content = content
+                            ),
+                            onSuccess = {
+                                communityStore.callCommentList(postId = postId)
+                            }
+                        )
+                    },
                     onCertButtonClicked = { gradeStore.onClickGradeButton() }
                 )
             }
         }
     }
 
+    with(deleteConfirmDialog) {
+        if (this) {
+            GPConfirmDialog(
+                title = "",
+                content = "삭제할까요?",
+                onConfirmClicked = {
+                    deleteConfirmDialog = false
+                }, //TODO API
+                onCancelClicked = { deleteConfirmDialog = false },
+            )
+        }
+    }
+
     with(fullVideo) {
         if (this) {
             VideoWindowPlayer(
-                videoPath = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+                videoPath = communityState.postingDetailInfo.fileUrl,
                 dismiss = { fullVideo = false }
             )
         }
@@ -206,7 +269,7 @@ internal fun TeacherCommunityDetailScreen(
     with(fullImage) {
         if (this) {
             ImageViewer(
-                imagePath = "https://picsum.photos/200/300",
+                imagePath = communityState.postingDetailInfo.fileUrl,
                 dismiss = { fullImage = false }
             )
         }
@@ -215,8 +278,7 @@ internal fun TeacherCommunityDetailScreen(
     with(gradeState.gradeDialog) {
         if (this) {
             GradeDialog(
-                rootName = communityDto?.rootName.orEmpty(),
-                questLevel = communityDto?.content.orEmpty(),
+                questName = communityState.postingDetailInfo.questInfo.getQuestTitle(),
                 onCloseButtonClicked = { gradeStore.dismissGradeDialog() },
                 onConfirmButtonClicked = { star, isChecked ->
                     gradeStore.onClickConfirmButton()
@@ -237,5 +299,19 @@ internal fun TeacherCommunityDetailScreen(
                 onCancelClicked = { gradeStore.dismissConfirmDialog() },
             )
         }
+    }
+
+    with(communityState.error) {
+        if (this != null) {
+            GPAlertDialog(
+                dismiss = { communityStore.dismissErrorDialog() },
+                title = "게시판 에러",
+                content = this.message.orEmpty(),
+            )
+        }
+    }
+
+    if (communityState.loading) {
+        Loader()
     }
 }

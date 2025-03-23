@@ -9,6 +9,7 @@ import com.project.giunne.common.data.remote.response.Recreation
 import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.avatar.CreateAvatarUseCase
 import com.project.giunne.common.domain.usecase.avatar.LoginRecreationUseCase
+import com.project.giunne.common.domain.usecase.certification.GetUploadList
 import com.project.giunne.common.domain.usecase.roadmap.CreateRecreationUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetRecreationTeacherListUseCase
 import com.project.giunne.common.presentation.home.teacher.state.TeacherHomeEvent
@@ -29,6 +30,7 @@ class TeacherHomeComponent(
     private val getRecreationTeacherListUseCase: GetRecreationTeacherListUseCase = KoinJavaComponent.get(GetRecreationTeacherListUseCase::class.java),
     private val loginRecreationUseCase: LoginRecreationUseCase = KoinJavaComponent.get(
         LoginRecreationUseCase::class.java),
+    private val getUploadList: GetUploadList = KoinJavaComponent.get(GetUploadList::class.java),
 ): KoinComponent, ComponentContext by componentContext, BaseComponent<TeacherHomeState, TeacherHomeEvent>(
     initialState = TeacherHomeState()
 ) {
@@ -142,6 +144,31 @@ class TeacherHomeComponent(
                 setState {
                     copy(
                         isLoading = false,
+                        error = it.asDataThrowable()
+                    )
+                }
+            }
+        }
+    }
+
+    fun callUploadList(
+        roadmapId: Long
+    ) {
+        scope.launch {
+//            setState { copy(loading = true) }
+            runCatching {
+                getUploadList.invoke(roadmapId)
+            }.onSuccess { response ->
+                setState {
+                    copy(
+//                        loading = false,
+                        certWaitList = response
+                    )
+                }
+            }.onFailure {
+                setState {
+                    copy(
+//                        loading = false,
                         error = it.asDataThrowable()
                     )
                 }

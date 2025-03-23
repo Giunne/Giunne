@@ -26,7 +26,11 @@ data class QuestUploadInfo(
     @SerialName("questPostInfo") val questPostInfo: List<QuestPostInfo> = listOf(),
     @SerialName("questStateInfo") val questStateInfos: QuestStateInfo = QuestStateInfo(),
     @SerialName("playerInfo") val playerInfo: AvatarUserResponse = AvatarUserResponse(),
-)
+) {
+    fun getQuestTitle(): String {
+        return trainingType.convertType() + " " + questName.replace(".", "단계 ")
+    }
+}
 
 @Serializable
 data class QuestPostInfo(

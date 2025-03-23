@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
 import com.project.giunne.Res
+import com.project.giunne.common.data.remote.response.QuestUploadInfo
 import com.project.giunne.common.presentation.certification.student.content.PageSelectRow
 import com.project.giunne.common.presentation.certification.student.content.RoadMapCertScreen
 import com.project.giunne.common.presentation.certification.student.content.RunningCertScreen
@@ -36,6 +38,7 @@ import com.project.giunne.common.presentation.certification.student.state.CertPa
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
+import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.scrollbar.VerticalScrollbar
 import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
@@ -59,18 +62,21 @@ internal fun TeacherCertificationScreen(
     component: TeacherCertificationComponent,
     modifier: Modifier = Modifier,
     onCommunityButtonClicked: (CertPage) -> Unit,
-    navigateToDetail: (CommunityDto) -> Unit,
+    navigateToDetail: (Long, String) -> Unit,
 ) {
     GLog.d(TAG, "onCreate")
 
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
 
-    ///// test /////
-    var loading by remember { mutableStateOf(false) }
-    ////////////////
-
     val certificationState by component.uiState.collectAsState()
+
+    LaunchedEffect(certificationState.pageType) {
+        when (certificationState.pageType) {
+            CertPage.RoadMap -> { component.callUploadList(1) }
+            CertPage.Running -> { component.callUploadList(2) }
+        }
+    }
 
     Scaffold(
         modifier = Modifier
@@ -111,7 +117,6 @@ internal fun TeacherCertificationScreen(
             modifier = Modifier
                 .background(GPColor.BackgroundLightGray)
                 .fillMaxSize(),
-//                .padding(horizontal = 16.gdp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             PageSelectRow(
@@ -126,42 +131,61 @@ internal fun TeacherCertificationScreen(
                     .padding(horizontal = 8.gdp),
                 page = certificationState.pageType,
                 onRoadmapClicked = {
-                    scope.launch { /* TODO API */
-                        loading = true
-                        delay(1000)
-                        loading = false
+                    scope.launch {
                         component.onClickRoadmapTap()
                     }
                 },
                 onRunningClicked = {
-                    scope.launch { /* TODO API */
-                        loading = true
-                        delay(1000)
-                        loading = false
+                    scope.launch {
                         component.onClickRunningTap()
                     }
                 }
             )
+
             when(certificationState.pageType) {
                 CertPage.RoadMap -> {
                     TeacherRoadMapCertScreen(
                         modifier = Modifier.fillMaxSize(),
-                        certWaitingList = roadmapCommunityList,
-                        onItemClicked = { navigateToDetail(it) },
+                        certWaitingList = certificationState.uploadList,
+                        onItemClicked = {
+                            component.callPostingDetailList(
+                                playerId = it.playerInfo.id.toLong(),
+                                questId = it.id.toLong(),
+                            ) { postId, title ->
+                                navigateToDetail(postId, title)
+                            }
+                        },
                     )
                 }
                 CertPage.Running -> {
                     TeacherRunningCertScreen(
                         modifier = Modifier.fillMaxSize(),
-                        certWaitingList = runningCommunityList,
-                        onItemClicked = { navigateToDetail(it) }
+                        certWaitingList = certificationState.uploadList,
+                        onItemClicked = {
+                            component.callPostingDetailList(
+                                playerId = it.playerInfo.id.toLong(),
+                                questId = it.id.toLong(),
+                            ) { postId, title ->
+                                navigateToDetail(postId, title)
+                            }
+                        },
                     )
                 }
             }
         }
     }
 
-    if (loading) {
+    with(certificationState.error) {
+        if (this != null) {
+            GPAlertDialog(
+                dismiss = { component.dismissErrorDialog() },
+                title = "인증 화면 에러",
+                content = certificationState.error?.message.orEmpty(),
+            )
+        }
+    }
+
+    if (certificationState.loading) {
         Loader()
     }
 }

@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.project.giunne.common.data.remote.response.QuestUploadInfo
 import com.project.giunne.common.presentation.common.scrollbar.VerticalScrollbar
 import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
@@ -28,8 +29,8 @@ private const val TAG = "RoadMapCertScreen"
 @Composable
 fun TeacherRoadMapCertScreen(
     modifier: Modifier = Modifier,
-    certWaitingList: List<CommunityDto>, //TODO API
-    onItemClicked: (CommunityDto) -> Unit
+    certWaitingList: List<QuestUploadInfo>, //TODO API
+    onItemClicked: (QuestUploadInfo) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val scrollState = rememberLazyListState()
@@ -76,12 +77,10 @@ fun TeacherRoadMapCertScreen(
                     count = certWaitingList.size
                 ) {
                     TeacherCertItemRow(
-                        name = certWaitingList[it].name,
-                        painter = painterResource(certWaitingList[it].character),
-                        date = certWaitingList[it].date,
-                        rootName = certWaitingList[it].rootName,
-                        content = certWaitingList[it].content,
-                        onClick = { onItemClicked(certWaitingList[it]) },
+                        questUploadInfo = certWaitingList[it],
+                        onClick = {
+                            onItemClicked(certWaitingList[it])
+                        },
                     )
                 }
             }
