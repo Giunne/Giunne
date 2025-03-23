@@ -16,6 +16,8 @@ import com.project.giunne.common.domain.usecase.common.GetSchoolListUseCase
 import com.project.giunne.common.domain.usecase.community.GetCommentList
 import com.project.giunne.common.domain.usecase.community.GetPostingDetail
 import com.project.giunne.common.domain.usecase.community.GetPostingDetailList
+import com.project.giunne.common.domain.usecase.community.GetPostingList
+import com.project.giunne.common.domain.usecase.community.GetQuestTypeList
 import com.project.giunne.common.domain.usecase.community.PostComment
 import com.project.giunne.common.domain.usecase.community.PostCommentLike
 import com.project.giunne.common.domain.usecase.community.PostCommentUnlike
@@ -72,4 +74,6 @@ val useCaseModule: Module = module {
     single { PostComment(get()) }
     single { PostCommentLike(get()) }
     single { PostCommentUnlike(get()) }
+    single { GetPostingList(get()) }
+    single { GetQuestTypeList(get()) }
 }

@@ -6,6 +6,8 @@ import com.project.giunne.common.data.remote.response.CommentInfo
 import com.project.giunne.common.data.remote.response.CommentListResponse
 import com.project.giunne.common.data.remote.response.PostingDetailListResponse
 import com.project.giunne.common.data.remote.response.PostingDetailResponse
+import com.project.giunne.common.data.remote.response.PostingListResponse
+import com.project.giunne.common.data.remote.response.QuestTypeListResponse
 import com.project.giunne.common.data.service.CommunityService
 import com.project.giunne.common.data.util.NetworkResult
 import com.project.giunne.common.data.util.handleApi
@@ -54,6 +56,34 @@ class CommunityRepositoryImpl(
     override suspend fun postCommentUnlike(commentLikeRequest: CommentLikeRequest): NetworkResult<String> {
         return handleApi(TAG) {
             communityService.postCommentUnlike(commentLikeRequest = commentLikeRequest)
+        }
+    }
+
+    override suspend fun getPostingList(
+        questName: String,
+        nickName: String,
+        pageIndex: Int,
+        sortDirection: String
+    ): NetworkResult<PostingListResponse> {
+        return handleApi(TAG) {
+            communityService.getPostingList(
+                questName = questName,
+                nickName = nickName,
+                pageIndex = pageIndex,
+                sortDirection = sortDirection,
+            )
+        }
+    }
+
+    override suspend fun getQuestTypeList(
+        roadmapId: Long,
+        pageIndex: Int
+    ): NetworkResult<QuestTypeListResponse> {
+        return handleApi(TAG) {
+            communityService.getQuestTypeList(
+                roadmapId = roadmapId,
+                pageIndex = pageIndex,
+            )
         }
     }
 }

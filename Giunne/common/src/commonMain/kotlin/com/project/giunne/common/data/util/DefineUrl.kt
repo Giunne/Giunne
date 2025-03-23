@@ -58,4 +58,6 @@ object DefineUrl {
     const val GET_COMMENT_LIST = "quest/post/comment"
     const val POST_COMMENT_LIKE = "quest/post/comment/like"
     const val POST_COMMENT_UNLIKE = "quest/post/comment/unlike"
+    const val GET_POSTING_LIST = "quest/quest/upload"
+    const val GET_QUEST_TYPE = "quest/quest/quest-type"
 }

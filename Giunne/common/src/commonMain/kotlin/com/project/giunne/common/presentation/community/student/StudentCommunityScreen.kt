@@ -13,7 +13,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,14 +57,46 @@ internal fun StudentCommunityScreen(
     val scrollState = rememberLazyListState()
     val communityState by component.uiState.collectAsState()
 
-    ///// test /////
-    var list by remember { mutableStateOf(
-        when(pageType) {
-            CertPage.RoadMap -> roadmapCommunityList
-            else -> runningCommunityList
+    LaunchedEffect(Unit) {
+        when (pageType) {
+            CertPage.RoadMap -> {
+                component.callPostingList(
+                    questName = "",
+                    nickName = "",
+                    pageIndex = 1,
+                    sortDirection = "DESC",
+                )
+            }
+            CertPage.Running -> {
+                component.callPostingList(
+                    questName = "",
+                    nickName = "",
+                    pageIndex = 1,
+                    sortDirection = "DESC",
+                )
+            }
         }
-    ) }
-    ////////////////
+    }
+
+    val endOfListReached by remember {
+        derivedStateOf {
+            val lastVisibleItem = scrollState.layoutInfo.visibleItemsInfo.lastOrNull()
+            val totalItemsCount = scrollState.layoutInfo.totalItemsCount
+
+            communityState.paginationInfo.hasNextPage && lastVisibleItem != null && lastVisibleItem.index >= totalItemsCount - 1
+        }
+    }
+
+    LaunchedEffect(endOfListReached) {
+        if (endOfListReached && communityState.paginationInfo.currentPage != communityState.paginationInfo.totalPage) {
+            component.callPostingList(
+                questName = "",
+                nickName = "",
+                pageIndex = communityState.paginationInfo.currentPage + 1,
+                sortDirection = "DESC",
+            )
+        }
+    }
 
     Scaffold(
         modifier = Modifier
@@ -101,17 +135,16 @@ internal fun StudentCommunityScreen(
                     state = scrollState
                 ) {
                     items(
-                        count = list.size
+                        count = communityState.postingList.size
                     ) {
                         CommunityItemRow(
-                            name = list[it].name,
-                            painter = painterResource(list[it].character),
-                            date = list[it].date,
-                            commentCount = list[it].commentCount,
-                            rootName = list[it].rootName,
-                            content = list[it].content,
-                            type = pageType,
-//                            onClick = { navigateToDetail(list[it]) },
+                            postingInfo = communityState.postingList[it],
+                            onClick = {
+                                navigateToDetail(
+                                    communityState.postingList[it].id,
+                                    communityState.postingList[it].getQuestTitle()
+                                )
+                            },
                         )
                     }
                 }

@@ -5,10 +5,14 @@ import com.project.giunne.common.data.remote.request.CommentRequest
 import com.project.giunne.common.data.remote.response.CommentListResponse
 import com.project.giunne.common.data.remote.response.PostingDetailListResponse
 import com.project.giunne.common.data.remote.response.PostingDetailResponse
+import com.project.giunne.common.data.remote.response.PostingListResponse
+import com.project.giunne.common.data.remote.response.QuestTypeListResponse
 import com.project.giunne.common.data.util.BaseResponse
 import com.project.giunne.common.data.util.DefineUrl.GET_COMMENT_LIST
 import com.project.giunne.common.data.util.DefineUrl.GET_POSTING_DETAIL
 import com.project.giunne.common.data.util.DefineUrl.GET_POSTING_DETAIL_LIST
+import com.project.giunne.common.data.util.DefineUrl.GET_POSTING_LIST
+import com.project.giunne.common.data.util.DefineUrl.GET_QUEST_TYPE
 import com.project.giunne.common.data.util.DefineUrl.POST_COMMENT
 import com.project.giunne.common.data.util.DefineUrl.POST_COMMENT_LIKE
 import com.project.giunne.common.data.util.DefineUrl.POST_COMMENT_UNLIKE
@@ -50,4 +54,19 @@ interface CommunityService {
     suspend fun postCommentUnlike(
         @Body commentLikeRequest: CommentLikeRequest
     ): BaseResponse<String>
+
+    @GET(GET_POSTING_LIST)
+    suspend fun getPostingList(
+        @Query("questName") questName: String,
+        @Query("nickName") nickName: String,
+        @Query("pageIndex") pageIndex: Int,
+        @Query("sortDirection") sortDirection: String,
+    ): BaseResponse<PostingListResponse>
+
+    @GET(GET_QUEST_TYPE)
+    suspend fun getQuestTypeList(
+        @Query("roadmapId") roadmapId: Long,
+        @Query("pageIndex") pageIndex: Int,
+        @Query("pageSize") pageSize: Int = 1000,
+    ): BaseResponse<QuestTypeListResponse>
 }

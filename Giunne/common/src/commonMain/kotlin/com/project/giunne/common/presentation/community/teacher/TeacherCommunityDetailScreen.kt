@@ -221,7 +221,7 @@ internal fun TeacherCommunityDetailScreen(
                         communityStore.callCommentLike(CommentLikeRequest(commentId)) { onSuccess() }
                     },
                     callUnlike = { commentId, onSuccess ->
-                        communityStore.callCommentLike(CommentLikeRequest(commentId)) { onSuccess() }
+                        communityStore.callCommentUnlike(CommentLikeRequest(commentId)) { onSuccess() }
                     }
                 )
                 CommentInputRow(
