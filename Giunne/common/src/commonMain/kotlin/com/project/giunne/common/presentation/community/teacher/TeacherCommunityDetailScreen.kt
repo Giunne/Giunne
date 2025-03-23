@@ -35,6 +35,7 @@ import coil3.compose.AsyncImage
 import com.project.giunne.Res
 import com.project.giunne.common.data.remote.request.CommentLikeRequest
 import com.project.giunne.common.data.remote.request.CommentRequest
+import com.project.giunne.common.data.remote.request.GradeStudentRequest
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPIconButton
 import com.project.giunne.common.presentation.common.content.Loader
@@ -61,9 +62,11 @@ import com.project.giunne.common.util.onZoomEvent
 import com.project.giunne.common.util.rememberZoomState
 import com.project.giunne.icon_expand
 import com.project.giunne.image_loader_1
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
 private const val TAG = "TeacherCommunityDetailScreen"
+
 @Composable
 internal fun TeacherCommunityDetailScreen(
     modifier: Modifier = Modifier,
@@ -279,13 +282,30 @@ internal fun TeacherCommunityDetailScreen(
         if (this) {
             GradeDialog(
                 questName = communityState.postingDetailInfo.questInfo.getQuestTitle(),
+
                 onCloseButtonClicked = { gradeStore.dismissGradeDialog() },
                 onConfirmButtonClicked = { star, isChecked ->
-                    gradeStore.onClickConfirmButton()
+                    gradeStore.onClickConfirmButton(
+                        star,
+                        isChecked
+                    )
                 }
             )
         }
     }
+
+    if (gradeState.successDialog) {
+        GPAlertDialog(
+            dismiss = {
+                gradeStore.dismissSuccessDialog()
+                gradeStore.dismissGradeDialog()
+
+            },
+            title = "학생 채점",
+            content = "채점되었습니다!",
+        )
+    }
+
 
     with(gradeState.confirmDialog) {
         if (this) {
@@ -294,8 +314,15 @@ internal fun TeacherCommunityDetailScreen(
                 content = "채점할까요?",
                 onConfirmClicked = {
                     gradeStore.dismissConfirmDialog()
-                    gradeStore.dismissGradeDialog()
-                }, //TODO API
+                    gradeStore.gradingStudent(
+                        GradeStudentRequest(
+                            questPostId = postId ?: 0,
+                            isPass = true,
+                            hasExtraPoints = gradeState.hasExtraPoints,
+                            starPoint = gradeState.starPoint
+                        ),
+                    )
+                },
                 onCancelClicked = { gradeStore.dismissConfirmDialog() },
             )
         }
@@ -306,6 +333,16 @@ internal fun TeacherCommunityDetailScreen(
             GPAlertDialog(
                 dismiss = { communityStore.dismissErrorDialog() },
                 title = "게시판 에러",
+                content = this.message.orEmpty(),
+            )
+        }
+    }
+
+    with(gradeState.error) {
+        if (this != null) {
+            GPAlertDialog(
+                dismiss = { gradeStore.dismissErrorDialog() },
+                title = "학생 인증 에러",
                 content = this.message.orEmpty(),
             )
         }

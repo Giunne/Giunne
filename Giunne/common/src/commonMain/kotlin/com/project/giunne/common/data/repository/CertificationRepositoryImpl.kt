@@ -1,5 +1,6 @@
 package com.project.giunne.common.data.repository
 
+import com.project.giunne.common.data.remote.request.GradeStudentRequest
 import com.project.giunne.common.data.remote.response.QuestUploadInfo
 import com.project.giunne.common.data.remote.response.StudentQuestInfo
 import com.project.giunne.common.data.service.CertificationService
@@ -26,6 +27,12 @@ class CertificationRepositoryImpl(
     override suspend fun getUploadList(roadmapId: Long): NetworkResult<List<QuestUploadInfo>> {
         return handleApi(TAG) {
             certificationService.getUploadList(roadmapId = roadmapId)
+        }
+    }
+
+    override suspend fun postGradeStudent(gradeStudentRequest: GradeStudentRequest): NetworkResult<String> {
+        return handleApi(TAG) {
+            certificationService.postGradeStudent(gradeStudentRequest = gradeStudentRequest)
         }
     }
 }

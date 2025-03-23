@@ -12,6 +12,7 @@ import com.project.giunne.common.domain.usecase.avatar.LoginRecreationUseCase
 import com.project.giunne.common.domain.usecase.certification.GetCertificationHistory
 import com.project.giunne.common.domain.usecase.certification.GetCertificationProgress
 import com.project.giunne.common.domain.usecase.certification.GetUploadList
+import com.project.giunne.common.domain.usecase.certification.PostGradeStudentUseCase
 import com.project.giunne.common.domain.usecase.common.GetSchoolListUseCase
 import com.project.giunne.common.domain.usecase.community.GetCommentList
 import com.project.giunne.common.domain.usecase.community.GetPostingDetail
@@ -76,4 +77,5 @@ val useCaseModule: Module = module {
     single { PostCommentUnlike(get()) }
     single { GetPostingList(get()) }
     single { GetQuestTypeList(get()) }
+    single { PostGradeStudentUseCase(get()) }
 }

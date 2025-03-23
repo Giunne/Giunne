@@ -3,8 +3,10 @@ package com.project.giunne.common.presentation.community.student.intent
 import com.project.giunne.common.base.BaseStore
 import com.project.giunne.common.data.remote.request.CommentLikeRequest
 import com.project.giunne.common.data.remote.request.CommentRequest
+import com.project.giunne.common.data.remote.request.GradeStudentRequest
 import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.certification.GetUploadList
+import com.project.giunne.common.domain.usecase.certification.PostGradeStudentUseCase
 import com.project.giunne.common.domain.usecase.community.GetCommentList
 import com.project.giunne.common.domain.usecase.community.GetPostingDetail
 import com.project.giunne.common.domain.usecase.community.GetPostingDetailList
