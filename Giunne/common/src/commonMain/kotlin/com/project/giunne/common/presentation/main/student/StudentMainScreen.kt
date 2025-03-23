@@ -404,7 +404,7 @@ private fun StudentChildren(
             is StudentMainComponent.StudentChild.StudentHomeChild -> StudentHomeScreen(
                 component = child.component,
                 navigateToCommunity = {
-                    component.navigateToCommunity(CertPage.RoadMap)
+                    component.navigateToCertification()
                 },
                 navigateToSearchRoadMap = {
                     component.navigateToSearchRoadMap()

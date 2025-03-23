@@ -70,12 +70,12 @@ fun TeacherCheckingBox(
 
         BorderButton(
             modifier = Modifier.wrapContentSize(),
-            title = "게시판 보러가기",
+            title = "보러가기",
             content = {
                 Icon(
                     modifier = Modifier.height(12.gdp),
                     painter = painterResource(Res.drawable.icon_next),
-                    contentDescription = "게시판 보러가기",
+                    contentDescription = "현황 보러가기",
                     tint = GPColor.MainOrangeColor
                 )
             },
