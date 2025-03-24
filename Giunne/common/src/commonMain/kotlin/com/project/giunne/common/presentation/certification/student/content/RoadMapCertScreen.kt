@@ -17,9 +17,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import coil3.compose.AsyncImage
 import com.project.giunne.Res
 import com.project.giunne.common.data.remote.response.StudentQuestInfo
 import com.project.giunne.common.data.remote.response.convertType
+import com.project.giunne.common.data.util.DefineUrl.IMAGE_BASE_URL
 import com.project.giunne.common.presentation.certification.student.intent.VideoUploadStore
 import com.project.giunne.common.presentation.certification.student.state.CertProgress
 import com.project.giunne.common.presentation.certification.student.state.VideoUploadState
@@ -86,9 +88,9 @@ fun RoadMapCertScreen(
                     roadmapName = uploadProgressItem.questName,
                     progressText = "선생님이 확인중이에요!",
                     icon = {
-                        Image(
+                        AsyncImage(
                             modifier = Modifier.size(48.gdp),
-                            painter = painterResource(Res.drawable.roadcon_3_beast), // TODO 썸네일 파라미터 나오면
+                            model = IMAGE_BASE_URL + uploadProgressItem.thumbnailUrl,
                             contentDescription = null
                         )
                     },

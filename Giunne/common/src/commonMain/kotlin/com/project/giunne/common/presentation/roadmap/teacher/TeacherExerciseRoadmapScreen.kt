@@ -51,7 +51,7 @@ fun TeacherExerciseRoadmapScreen(
         if (isChecked && isShow) {
             roadMapComponent.loadStudentList(
                 /* TODO(선생님용 Recreation 접속 API 나오면 ID로 변경) */
-                recreationId = 19,
+                recreationId = 18,
                 id = courseInfo.id
             )
         }

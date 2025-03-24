@@ -13,9 +13,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import coil3.compose.AsyncImage
 import com.project.giunne.Res
 import com.project.giunne.common.data.remote.response.StudentQuestInfo
 import com.project.giunne.common.data.remote.response.convertType
+import com.project.giunne.common.data.util.DefineUrl.IMAGE_BASE_URL
 import com.project.giunne.common.presentation.certification.student.dummy.RoadmapDoneDto
 import com.project.giunne.common.presentation.common.shape.GPSquircleBorderShape
 import com.project.giunne.common.presentation.common.spacer.SpW
@@ -53,9 +55,9 @@ fun RoadmapDoneListItemRow(
             borderColor = GPColor.BackgroundGray_F6F6F6,
             borderWidth = 1.gdp,
             content = {
-                Image(
+                AsyncImage(
                     modifier = Modifier.size(32.gdp),
-                    painter = painterResource(Res.drawable.roadcon_3_beast), // TODO 썸네일 파라미터 나오면
+                    model = IMAGE_BASE_URL + historyItem.thumbnailUrl,
                     contentDescription = null
                 )
             }

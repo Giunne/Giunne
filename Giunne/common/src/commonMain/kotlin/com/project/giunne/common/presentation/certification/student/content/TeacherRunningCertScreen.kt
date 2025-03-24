@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import com.project.giunne.Res
+import com.project.giunne.common.data.remote.response.QuestUploadInfo
 import com.project.giunne.common.presentation.certification.student.dummy.runningDoneList
 import com.project.giunne.common.presentation.certification.student.intent.ImageUploadStore
 import com.project.giunne.common.presentation.common.picker.ImagePicker
@@ -43,8 +44,8 @@ private const val TAG = "RunningCertScreen"
 @Composable
 fun TeacherRunningCertScreen(
     modifier: Modifier = Modifier,
-    certWaitingList: List<CommunityDto>, //TODO API
-    onItemClicked: (CommunityDto) -> Unit
+    certWaitingList: List<QuestUploadInfo>, //TODO API
+    onItemClicked: (QuestUploadInfo) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val scrollState = rememberLazyListState()
@@ -91,12 +92,10 @@ fun TeacherRunningCertScreen(
                     count = certWaitingList.size
                 ) {
                     TeacherCertItemRow(
-                        name = certWaitingList[it].name,
-                        painter = painterResource(certWaitingList[it].character),
-                        date = certWaitingList[it].date,
-                        rootName = certWaitingList[it].rootName,
-                        content = certWaitingList[it].content,
-                        onClick = { onItemClicked(certWaitingList[it]) },
+                        questUploadInfo = certWaitingList[it],
+                        onClick = {
+                            onItemClicked(certWaitingList[it])
+                        },
                     )
                 }
             }

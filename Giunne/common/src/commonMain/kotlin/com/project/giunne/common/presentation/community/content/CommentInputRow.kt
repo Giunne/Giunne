@@ -26,6 +26,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.common.button.GPButton
+import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.common.textfield.GPTextField
@@ -81,6 +82,7 @@ fun CommentInputRow(
             keyboardActions = KeyboardActions(
                 onDone = {
                     onSendButtonClicked(text)
+                    text = ""
                 }
             ),
         )
@@ -92,7 +94,11 @@ fun CommentInputRow(
                     color = if (text.isNotEmpty()) GPColor.BackgroundFrameOrange
                         else GPColor.Transparent,
                     shape = CircleShape
-                ),
+                )
+                .noRippleClickable {
+                    onSendButtonClicked(text)
+                    text = ""
+                },
             contentAlignment = Alignment.Center
         ) {
             Image(
@@ -100,7 +106,7 @@ fun CommentInputRow(
                 painter = painterResource(Res.drawable.icon_arrow_up),
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(
-                    if (text.isNotEmpty()) GPColor.TextBlack
+                    if (text.isNotEmpty()) GPColor.White
                     else GPColor.ButtonGray,
                 )
             )

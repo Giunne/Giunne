@@ -60,8 +60,7 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun GradeDialog(
-    rootName: String,
-    questLevel: String,
+    questName: String,
     onCloseButtonClicked: () -> Unit,
     onConfirmButtonClicked: (Int, Boolean) -> Unit,
 ) {
@@ -93,7 +92,7 @@ fun GradeDialog(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 GPText(
-                    text = "$rootName $questLevel ",
+                    text = "$questName ",
                     textColor = GPColor.MainOrangeColor,
                     textSize = 18.gsp,
                     fontFamily = GPFontFamily.Bold

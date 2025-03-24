@@ -13,7 +13,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,9 +24,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import com.project.giunne.common.data.remote.response.QuestUploadInfo
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.content.Loader
+import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.scrollbar.VerticalScrollbar
 import com.project.giunne.common.presentation.community.content.CommunityItemRow
 import com.project.giunne.common.presentation.community.content.SearchRow
@@ -43,7 +47,7 @@ private const val TAG = "TeacherCommunityScreen"
 internal fun TeacherCommunityScreen(
     component: TeacherCommunityComponent,
     modifier: Modifier = Modifier,
-    navigateToDetail: (CommunityDto) -> Unit,
+    navigateToDetail: (Long, String) -> Unit,
     pageType: CertPage
 ) {
     GLog.d(TAG, "onCreate")
@@ -54,14 +58,46 @@ internal fun TeacherCommunityScreen(
     val scrollState = rememberLazyListState()
     val communityState by component.uiState.collectAsState()
 
-    ///// test /////
-    var list by remember { mutableStateOf(
-        when(pageType) {
-            CertPage.RoadMap -> roadmapCommunityList
-            else -> runningCommunityList
+    LaunchedEffect(Unit) {
+        when (pageType) {
+            CertPage.RoadMap -> {
+                component.callPostingList(
+                    questName = "",
+                    nickName = "",
+                    pageIndex = 1,
+                    sortDirection = "DESC",
+                )
+            }
+            CertPage.Running -> {
+                component.callPostingList(
+                    questName = "",
+                    nickName = "",
+                    pageIndex = 1,
+                    sortDirection = "DESC",
+                )
+            }
         }
-    ) }
-    ////////////////
+    }
+
+    val endOfListReached by remember {
+        derivedStateOf {
+            val lastVisibleItem = scrollState.layoutInfo.visibleItemsInfo.lastOrNull()
+            val totalItemsCount = scrollState.layoutInfo.totalItemsCount
+
+            communityState.paginationInfo.hasNextPage && lastVisibleItem != null && lastVisibleItem.index >= totalItemsCount - 1
+        }
+    }
+
+    LaunchedEffect(endOfListReached) {
+        if (endOfListReached && communityState.paginationInfo.currentPage != communityState.paginationInfo.totalPage) {
+            component.callPostingList(
+                questName = "",
+                nickName = "",
+                pageIndex = communityState.paginationInfo.currentPage + 1,
+                sortDirection = "DESC",
+            )
+        }
+    }
 
     Scaffold(
         modifier = Modifier
@@ -100,17 +136,16 @@ internal fun TeacherCommunityScreen(
                     state = scrollState
                 ) {
                     items(
-                        count = list.size
+                        count = communityState.postingList.size
                     ) {
                         CommunityItemRow(
-                            name = list[it].name,
-                            painter = painterResource(list[it].character),
-                            date = list[it].date,
-                            commentCount = list[it].commentCount,
-                            rootName = list[it].rootName,
-                            content = list[it].content,
-                            type = pageType,
-                            onClick = { navigateToDetail(list[it]) },
+                            postingInfo = communityState.postingList[it],
+                            onClick = {
+                                navigateToDetail(
+                                    communityState.postingList[it].id,
+                                    communityState.postingList[it].getQuestTitle()
+                                )
+                            },
                         )
                     }
                 }
@@ -173,6 +208,16 @@ internal fun TeacherCommunityScreen(
                     component.dismissDatePriorityDialog()
                 },
                 filterList = listOf("최신순", "오래된순"),
+            )
+        }
+    }
+
+    with(communityState.error) {
+        if (this != null) {
+            GPAlertDialog(
+                title = "게시판 에러",
+                content = this.message.toString(),
+                dismiss = { component.dismissErrorDialog() }
             )
         }
     }

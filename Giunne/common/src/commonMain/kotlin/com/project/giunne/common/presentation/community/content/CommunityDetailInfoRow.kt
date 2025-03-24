@@ -2,10 +2,14 @@ package com.project.giunne.common.presentation.community.content
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.project.giunne.common.data.remote.response.PostingDetailListResponse
+import com.project.giunne.common.data.remote.response.PostingDetailResponse
+import com.project.giunne.common.presentation.common.charactor.GPSmallCharacter
 import com.project.giunne.common.presentation.common.shape.GPSquircleShape
 import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
@@ -19,33 +23,32 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun CommunityDetailInfoRow(
     modifier: Modifier = Modifier,
-    communityDto: CommunityDto
+    postingDetailInfo: PostingDetailResponse = PostingDetailResponse()
 ) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         GPSquircleShape(
-            modifier = Modifier
-                .size(56.gdp),
-            backgroundColor = GPColor.BackgroundGray_F6F6F6
-        ) {
-            Image(
-                modifier = Modifier.size(48.gdp),
-                painter = painterResource(communityDto.character),
-                contentDescription = null
-            )
-        }
+            modifier = Modifier.size(56.gdp),
+            backgroundColor = GPColor.BackgroundLightGray,
+            content = {
+                GPSmallCharacter(
+                    modifier = Modifier.fillMaxSize(),
+                    wearingItems = postingDetailInfo.playerInfo.wearingItems
+                )
+            }
+        )
         SpW(8.gdp)
         GPText(
             modifier = Modifier.weight(1f),
-            text = communityDto.name,
+            text = postingDetailInfo.playerInfo.nickname,
             textColor = GPColor.TextBlack_232323,
             textSize = 14.gsp,
             fontFamily = GPFontFamily.Regular
         )
         GPText(
-            text = communityDto.date,
+            text = postingDetailInfo.updateTime.substringBefore('T'),
             textColor = GPColor.TextLightGray,
             fontFamily = GPFontFamily.Bold,
             textSize = 12.gsp

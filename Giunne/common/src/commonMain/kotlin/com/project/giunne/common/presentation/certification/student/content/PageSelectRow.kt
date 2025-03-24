@@ -7,6 +7,7 @@ import androidx.compose.animation.core.TwoWayConverter
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.animateValueAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -17,6 +18,7 @@ import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -28,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
@@ -73,16 +76,10 @@ fun PageSelectRow(
         },
     )
 
-    val containerWidth = 312.gdp
-    val boxWidth = 152.gdp
-    val offsetX = remember(containerWidth, boxWidth) {
-        ((containerWidth.value - boxWidth.value) * 1f).roundToInt().dp
-    }
-
-    val animatedDP by animateDpAsState(
+    val animatedFloat by animateFloatAsState(
         targetValue = when (page) {
-            CertPage.RoadMap -> 0.gdp
-            CertPage.Running -> offsetX
+            CertPage.RoadMap -> -1f
+            CertPage.Running -> 1f
         }
     )
 
@@ -91,10 +88,10 @@ fun PageSelectRow(
     ){
         Box(
             modifier = Modifier
-                .offset(x = animatedDP)
-                .align(Alignment.CenterStart)
+                .align(BiasAlignment(animatedFloat, 0f))
                 .height(48.gdp)
-                .width(152.gdp)
+                .fillMaxSize(0.5f)
+//                .width(152.gdp)
                 .background(
                     color = GPColor.MainOrangeColor,
                     shape = RoundedCornerShape(12.gdp)

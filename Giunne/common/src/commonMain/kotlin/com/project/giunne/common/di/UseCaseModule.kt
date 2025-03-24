@@ -12,10 +12,21 @@ import com.project.giunne.common.domain.usecase.avatar.LoginRecreationUseCase
 import com.project.giunne.common.domain.usecase.certification.GetCertificationHistory
 import com.project.giunne.common.domain.usecase.certification.GetCertificationProgress
 import com.project.giunne.common.domain.usecase.certification.PostUploadFileUseCase
+import com.project.giunne.common.domain.usecase.certification.GetUploadList
+import com.project.giunne.common.domain.usecase.certification.PostGradeStudentUseCase
 import com.project.giunne.common.domain.usecase.common.GetSchoolListUseCase
+import com.project.giunne.common.domain.usecase.community.GetCommentList
+import com.project.giunne.common.domain.usecase.community.GetPostingDetail
+import com.project.giunne.common.domain.usecase.community.GetPostingDetailList
+import com.project.giunne.common.domain.usecase.community.GetPostingList
+import com.project.giunne.common.domain.usecase.community.GetQuestTypeList
+import com.project.giunne.common.domain.usecase.community.PostComment
+import com.project.giunne.common.domain.usecase.community.PostCommentLike
+import com.project.giunne.common.domain.usecase.community.PostCommentUnlike
 import com.project.giunne.common.domain.usecase.mypage.GetInventoryItemListUseCase
 import com.project.giunne.common.domain.usecase.mypage.PutInventoryItemUseCase
 import com.project.giunne.common.domain.usecase.roadmap.CreateRecreationUseCase
+import com.project.giunne.common.domain.usecase.roadmap.GetRecreationTeacherListUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetAllRoadMapUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetQuestCodeUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetSearchRecreationUseCase
@@ -46,6 +57,7 @@ val useCaseModule: Module = module {
     single { CreateAvatarUseCase(get()) }
     single { LoginRecreationUseCase(get()) }
     single { GetUserAvatarListUseCase(get()) }
+    single { GetRecreationTeacherListUseCase(get()) }
     single { GetAllRoadMapUseCase(get()) }
     single { GetTeacherCourseUseCase(get()) }
     single { ModifyQuestInfoUseCase(get()) }
@@ -58,4 +70,14 @@ val useCaseModule: Module = module {
     single { GetCertificationProgress(get()) }
     single { GetCertificationHistory(get()) }
     single { PostUploadFileUseCase(get()) }
+    single { GetUploadList(get()) }
+    single { GetPostingDetail(get()) }
+    single { GetPostingDetailList(get()) }
+    single { GetCommentList(get()) }
+    single { PostComment(get()) }
+    single { PostCommentLike(get()) }
+    single { PostCommentUnlike(get()) }
+    single { GetPostingList(get()) }
+    single { GetQuestTypeList(get()) }
+    single { PostGradeStudentUseCase(get()) }
 }

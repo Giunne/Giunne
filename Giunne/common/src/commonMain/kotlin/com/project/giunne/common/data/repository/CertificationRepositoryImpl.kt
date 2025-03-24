@@ -1,5 +1,6 @@
 package com.project.giunne.common.data.repository
 
+import com.project.giunne.common.data.remote.request.GradeStudentRequest
 import com.project.giunne.common.data.remote.response.QuestUploadInfo
 import com.project.giunne.common.data.remote.response.StudentQuestInfo
 import com.project.giunne.common.data.service.CertificationService
@@ -8,11 +9,8 @@ import com.project.giunne.common.data.util.handleApi
 import com.project.giunne.common.domain.repository.CertificationRepository
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
-import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
-import java.io.File
-import java.nio.file.Files
 
 private const val TAG = "CertificationRepositoryImpl"
 class CertificationRepositoryImpl(
@@ -51,6 +49,12 @@ class CertificationRepositoryImpl(
                     })
                 })
             certificationService.postUploadFile(questId, multipart)
+        }
+    }
+
+    override suspend fun postGradeStudent(gradeStudentRequest: GradeStudentRequest): NetworkResult<String> {
+        return handleApi(TAG) {
+            certificationService.postGradeStudent(gradeStudentRequest = gradeStudentRequest)
         }
     }
 }

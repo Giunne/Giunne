@@ -26,7 +26,7 @@ object DefineUrl {
     /* Recreation */
     const val URL_SEARCH_RECREATION = "member/recreation"
     const val URL_CREATE_RECREATION = "member/recreation"
-    const val URL_STUDENT_JOIN_RECREATION = "member/recreation/join"
+    const val URL_TEACHER_RECREATION_LIST = "member/recreation/my-recreation"
 
     /* Avatar */
     const val URL_AVATAR_LOGIN = "member/avatar/login"
@@ -51,4 +51,15 @@ object DefineUrl {
     const val GET_CERT_HISTORY = "quest/certification/student/history"
     const val POST_UPLOAD_FILE = "quest/certification/student"
     const val GET_UPLOAD_LIST = "quest/certification/teacher"
+    const val POST_CERT_STUDENT  = "quest/certification/teacher/certificate"
+
+    /* Community */
+    const val GET_POSTING_DETAIL_LIST = "quest/post"
+    const val GET_POSTING_DETAIL = "quest/post"
+    const val POST_COMMENT = "quest/post"
+    const val GET_COMMENT_LIST = "quest/post/comment"
+    const val POST_COMMENT_LIKE = "quest/post/comment/like"
+    const val POST_COMMENT_UNLIKE = "quest/post/comment/unlike"
+    const val GET_POSTING_LIST = "quest/quest/upload"
+    const val GET_QUEST_TYPE = "quest/quest/quest-type"
 }

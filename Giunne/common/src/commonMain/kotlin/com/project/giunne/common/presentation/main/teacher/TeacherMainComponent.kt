@@ -8,12 +8,14 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.value.Value
+import com.project.giunne.common.data.remote.response.QuestUploadInfo
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.certification.teacher.TeacherCertificationComponent
 import com.project.giunne.common.presentation.community.student.dummy.CommunityDto
 import com.project.giunne.common.presentation.community.teacher.TeacherCommunityComponent
 import com.project.giunne.common.presentation.friend.teacher.TeacherFriendComponent
 import com.project.giunne.common.presentation.home.teacher.TeacherHomeComponent
+import com.project.giunne.common.presentation.home.teacher.recreation.TeacherRecreationComponent
 import com.project.giunne.common.presentation.mypage.teacher.TeacherMyPageComponent
 import com.project.giunne.common.presentation.roadmap.teacher.TeacherRoadmapComponent
 import kotlinx.serialization.Serializable
@@ -39,11 +41,12 @@ class TeacherMainComponent(
         class TeacherRoadmapChild(val component: TeacherRoadmapComponent) : TeacherChild()
         class TeacherCertificationChild(val component: TeacherCertificationComponent) : TeacherChild()
         class TeacherCommunityChild(val component: TeacherCommunityComponent, val pageType: CertPage) : TeacherChild()
-        class TeacherCommunityDetailChild(val communityDto: CommunityDto) : TeacherChild()
+        class TeacherCommunityDetailChild(val postId: Long, val title: String) : TeacherChild()
         class TeacherFriendsChild(val component: TeacherFriendComponent) : TeacherChild()
         class TeacherMyPageChild(val component: TeacherMyPageComponent) : TeacherChild()
         class TeacherShopChild(val component: TeacherMyPageComponent) : TeacherChild()
         class TeacherGachaChild(val component: TeacherMyPageComponent) : TeacherChild()
+        class TeacherRecreationChild(val component: TeacherRecreationComponent) : TeacherChild()
     }
 
     private fun child(config: TeacherMainConfig, componentContext: ComponentContext): TeacherChild =
@@ -57,11 +60,12 @@ class TeacherMainComponent(
                 component = TeacherCommunityComponent(componentContext),
                 pageType = config.pageType
             )
-            is TeacherMainConfig.CommunityDetail -> TeacherChild.TeacherCommunityDetailChild(config.communityDto)
+            is TeacherMainConfig.CommunityDetail -> TeacherChild.TeacherCommunityDetailChild(config.postId, config.title)
             is TeacherMainConfig.Friends -> TeacherChild.TeacherFriendsChild(TeacherFriendComponent(componentContext))
             is TeacherMainConfig.MyPage -> TeacherChild.TeacherMyPageChild(TeacherMyPageComponent(componentContext))
             is TeacherMainConfig.Shop -> TeacherChild.TeacherShopChild(TeacherMyPageComponent(componentContext))
             is TeacherMainConfig.Gacha -> TeacherChild.TeacherGachaChild(TeacherMyPageComponent(componentContext))
+            is TeacherMainConfig.Recreation -> TeacherChild.TeacherRecreationChild(TeacherRecreationComponent(componentContext))
         }
 
     @Serializable
@@ -79,7 +83,7 @@ class TeacherMainComponent(
         data class Community(val pageType: CertPage) : TeacherMainConfig
 
         @Serializable
-        data class CommunityDetail(val communityDto: CommunityDto) : TeacherMainConfig
+        data class CommunityDetail(val postId: Long, val title: String) : TeacherMainConfig
 
         @Serializable
         data object Friends : TeacherMainConfig
@@ -92,6 +96,9 @@ class TeacherMainComponent(
 
         @Serializable
         data object Gacha : TeacherMainConfig
+
+        @Serializable
+        data object Recreation : TeacherMainConfig
     }
 
     fun navigateToHome() {
@@ -113,9 +120,9 @@ class TeacherMainComponent(
     }
 
     fun navigateToCommunityDetail(
-        communityDto: CommunityDto
+        postId: Long, title: String
     ) {
-        navigation.push(TeacherMainConfig.CommunityDetail(communityDto))
+        navigation.push(TeacherMainConfig.CommunityDetail(postId, title))
     }
 
     fun navigateToFriends() {
@@ -132,6 +139,10 @@ class TeacherMainComponent(
 
     fun navigateToGacha() {
         navigation.push(TeacherMainConfig.Gacha)
+    }
+
+    fun navigateToRecreation() {
+        navigation.push(TeacherMainConfig.Recreation)
     }
 
     fun navigateBack() {

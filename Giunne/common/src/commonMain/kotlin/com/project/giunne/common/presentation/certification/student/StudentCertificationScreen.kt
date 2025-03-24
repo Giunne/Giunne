@@ -66,9 +66,17 @@ internal fun StudentCertificationScreen(
     val checkProgressItem = certificationState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.CHECK.code }
     val uploadProgressItem = certificationState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.UPLOAD.code }
 
-    LaunchedEffect(Unit) {
-        component.callCertificationProgressList(1) //TODO
-        component.callCertificationHistoryList(1) //TODO
+    LaunchedEffect(certificationState.pageType) {
+        when (certificationState.pageType) {
+            CertPage.RoadMap -> {
+                component.callCertificationProgressList(1)
+                component.callCertificationHistoryList(1)
+            }
+            CertPage.Running -> {
+                component.callCertificationProgressList(2)
+                component.callCertificationHistoryList(2)
+            }
+        }
     }
 
     Scaffold(
@@ -125,12 +133,12 @@ internal fun StudentCertificationScreen(
                     .padding(horizontal = 8.gdp),
                 page = certificationState.pageType,
                 onRoadmapClicked = {
-                    scope.launch { /* TODO API */
+                    scope.launch {
                         component.onClickRoadmapTap()
                     }
                 },
                 onRunningClicked = {
-                    scope.launch { /* TODO API */
+                    scope.launch {
                         component.onClickRunningTap()
                     }
                 }
@@ -155,7 +163,8 @@ internal fun StudentCertificationScreen(
                         onCertButtonClicked = {
                             component.onClickRunningCertButton()
                         },
-                        step = null
+                        runningProgressList = certificationState.runningProgressList,
+                        runningHistoryList = certificationState.runningHistoryList,
                     )
                 }
             }

@@ -38,7 +38,8 @@ class StudentCertificationComponent(
                 setState {
                     copy(
                         loading = false,
-                        roadmapProgressList = response
+                        roadmapProgressList = response,
+                        runningProgressList = response
                     )
                 }
             }.onFailure {
@@ -63,7 +64,8 @@ class StudentCertificationComponent(
                 setState {
                     copy(
                         loading = false,
-                        roadmapHistoryList = response
+                        roadmapHistoryList = response,
+                        runningHistoryList = response
                     )
                 }
             }.onFailure {
