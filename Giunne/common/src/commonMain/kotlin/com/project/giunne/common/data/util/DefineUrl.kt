@@ -50,6 +50,7 @@ object DefineUrl {
     const val GET_CERT_PROGRESS = "quest/certification/student/in-progress"
     const val GET_CERT_HISTORY = "quest/certification/student/history"
     const val GET_UPLOAD_LIST = "quest/certification/teacher"
+    const val POST_CERT_STUDENT  = "quest/certification/teacher/certificate"
 
     /* Community */
     const val GET_POSTING_DETAIL_LIST = "quest/post"
