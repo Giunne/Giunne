@@ -8,6 +8,7 @@ import com.project.giunne.common.data.util.DefineUrl.GET_CERT_HISTORY
 import com.project.giunne.common.data.util.DefineUrl.GET_CERT_PROGRESS
 import com.project.giunne.common.data.util.DefineUrl.GET_UPLOAD_LIST
 import com.project.giunne.common.data.util.DefineUrl.POST_CERT_STUDENT
+import com.project.giunne.common.data.util.DefineUrl.POST_UPLOAD_FILE
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.POST
