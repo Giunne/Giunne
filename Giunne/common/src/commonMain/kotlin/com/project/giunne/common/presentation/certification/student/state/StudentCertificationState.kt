@@ -9,6 +9,9 @@ data class StudentCertificationState(
     val runningCertConfirmDialog: Boolean = false,
 
     val loading: Boolean = false,
+    val uploadDialog: Boolean = false,
+    val successUpload: Boolean = false,
+    val progress: Float = 0f,
 
     val roadmapProgressList: List<StudentQuestInfo> = listOf(),
     val runningProgressList: List<StudentQuestInfo> = listOf(),

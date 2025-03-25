@@ -11,18 +11,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import com.project.giunne.Res
 import com.project.giunne.common.data.remote.response.StudentQuestInfo
-import com.project.giunne.common.presentation.certification.student.dummy.runningDoneList
 import com.project.giunne.common.presentation.certification.student.intent.ImageUploadStore
-import com.project.giunne.common.presentation.certification.student.state.CertProgress
+import com.project.giunne.common.presentation.certification.student.state.ImageUploadState
 import com.project.giunne.common.presentation.common.picker.ImagePicker
 import com.project.giunne.common.presentation.common.player.ImageViewer
 import com.project.giunne.common.presentation.common.spacer.SpH
@@ -32,25 +27,19 @@ import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_running
-import kotlinx.serialization.json.JsonNull.content
 import org.jetbrains.compose.resources.painterResource
 
 private const val TAG = "RunningCertScreen"
 @Composable
 fun RunningCertScreen(
     modifier: Modifier = Modifier,
+    imageUploadStore: ImageUploadStore,
+    imageUploadState: ImageUploadState,
     onCertButtonClicked: () -> Unit,
-    runningProgressList: List<StudentQuestInfo>,
+    checkProgressItem: StudentQuestInfo?,
+    uploadProgressItem: StudentQuestInfo?,
     runningHistoryList: List<StudentQuestInfo>,
 ) {
-    val scope = rememberCoroutineScope()
-
-    val imageUploadStore = remember { ImageUploadStore(scope) }
-    val imageUploadState by imageUploadStore.state.collectAsState()
-
-    val checkProgressItem = runningProgressList.find { it.questStateInfo.questProgress == CertProgress.CHECK.code }
-    val uploadProgressItem = runningProgressList.find { it.questStateInfo.questProgress == CertProgress.UPLOAD.code }
-
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -65,11 +54,11 @@ fun RunningCertScreen(
                         )
                         .fillMaxWidth()
                         .height(262.gdp),
-                    weekText = checkProgressItem.questName, /* TODO API */
+                    weekText = checkProgressItem.questName,
                     image = imageUploadState.imageFile,
                     onUploadButtonClicked = {
                         imageUploadStore.onClickImageUploadButton()
-                    }, /* TODO API */
+                    },
                     onCertButtonClicked = { onCertButtonClicked() },
                     onExpandButtonClicked = { imageUploadStore.onClickImageExpandButton() },
                     onResetButtonClicked = { imageUploadStore.onClickImageResetButton() },

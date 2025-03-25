@@ -23,11 +23,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
 import com.project.giunne.Res
+import com.project.giunne.common.data.remote.response.convertType
 import com.project.giunne.common.presentation.certification.student.content.PageSelectRow
 import com.project.giunne.common.presentation.certification.student.content.RoadMapCertScreen
 import com.project.giunne.common.presentation.certification.student.content.RoadmapCertConfirmDialog
 import com.project.giunne.common.presentation.certification.student.content.RunningCertConfirmDialog
 import com.project.giunne.common.presentation.certification.student.content.RunningCertScreen
+import com.project.giunne.common.presentation.certification.student.content.UploadFileProgressDialog
+import com.project.giunne.common.presentation.certification.student.intent.ImageUploadStore
 import com.project.giunne.common.presentation.certification.student.intent.VideoUploadStore
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.certification.student.state.CertProgress
@@ -43,10 +46,8 @@ import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_arrow_right
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
-import java.io.File
 
 private const val TAG = "StudentCertificationScreen"
 @Composable
@@ -63,10 +64,12 @@ internal fun StudentCertificationScreen(
     val certificationState by component.uiState.collectAsState()
     val videoUploadStore = remember { VideoUploadStore(scope) }
     val videoUploadState by videoUploadStore.state.collectAsState()
+    val imageUploadStore = remember { ImageUploadStore(scope) }
+    val imageUploadState by imageUploadStore.state.collectAsState()
     val checkProgressItem = certificationState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.CHECK.code }
     val uploadProgressItem = certificationState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.UPLOAD.code }
 
-    LaunchedEffect(certificationState.pageType) {
+    LaunchedEffect(certificationState.pageType, certificationState.successUpload) {
         when (certificationState.pageType) {
             CertPage.RoadMap -> {
                 component.callCertificationProgressList(1)
@@ -160,10 +163,13 @@ internal fun StudentCertificationScreen(
                 CertPage.Running -> {
                     RunningCertScreen(
                         modifier = Modifier.fillMaxSize(),
+                        imageUploadStore = imageUploadStore,
+                        imageUploadState = imageUploadState,
                         onCertButtonClicked = {
                             component.onClickRunningCertButton()
                         },
-                        runningProgressList = certificationState.runningProgressList,
+                        checkProgressItem = checkProgressItem,
+                        uploadProgressItem = uploadProgressItem,
                         runningHistoryList = certificationState.runningHistoryList,
                     )
                 }
@@ -184,14 +190,35 @@ internal fun StudentCertificationScreen(
                                     item.id.toLong(),
                                     file.toByteArray(),
                                     file.getMimeType()
-                                )
+                                ) { bytesSentTotal, contentLength ->
+                                    if (0 < contentLength) {
+                                        component.updateProgress(bytesSentTotal.toFloat() / contentLength)
+                                    }
+                                }
                             }
                         }
                     }
-                }, /* TODO API */
-                levelText = "3단계 비스트", /* TODO API */
+                },
+                levelText = checkProgressItem?.trainingType?.convertType() + checkProgressItem?.questName?.replace(".", "단계 "),
             )
         }
+    }
+
+    if (certificationState.successUpload) {
+        GPAlertDialog(
+            title = "인증 파일 업로드",
+            content = "성공적으로 파일을 업로드했습니다!",
+            dismiss = { component.dismissSuccessUploadDialog() }
+        )
+    }
+
+    if (certificationState.uploadDialog) {
+        UploadFileProgressDialog(
+            progress = certificationState.progress,
+            onDismiss = {
+                component.dismissUploadDialog()
+            }
+        )
     }
 
     with(certificationState.runningCertConfirmDialog) {
@@ -201,9 +228,25 @@ internal fun StudentCertificationScreen(
                 onConfirmButtonClicked = {
                     component.dismissRunningCertDialog()
                     scope.launch {
+                        component.dismissRoadmapCertDialog()
+                        scope.launch {
+                            checkProgressItem?.let { item ->
+                                imageUploadState.imageFile?.let { file ->
+                                    component.uploadFile(
+                                        item.id.toLong(),
+                                        file.toByteArray(),
+                                        file.getMimeType()
+                                    ) { bytesSentTotal, contentLength ->
+                                        if (0 < contentLength) {
+                                            component.updateProgress(bytesSentTotal.toFloat() / contentLength)
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
-                }, /* TODO API */
-                weekText = "2주차", /* TODO API */
+                },
+                weekText = checkProgressItem?.questName.orEmpty()
             )
         }
     }

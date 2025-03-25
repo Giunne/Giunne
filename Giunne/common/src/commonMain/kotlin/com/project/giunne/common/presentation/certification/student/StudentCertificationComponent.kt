@@ -6,17 +6,15 @@ import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.certification.GetCertificationHistory
 import com.project.giunne.common.domain.usecase.certification.GetCertificationProgress
 import com.project.giunne.common.domain.usecase.certification.PostUploadFileUseCase
-import com.project.giunne.common.domain.usecase.roadmap.GetAllRoadMapUseCase
 import com.project.giunne.common.presentation.certification.student.intent.StudentCertificationEvent
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.certification.student.state.StudentCertificationState
 import com.project.giunne.common.util.GLog
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.java.KoinJavaComponent
-import java.io.File
+import kotlin.coroutines.cancellation.CancellationException
 
 private const val TAG = "StudentCertificationComponent"
 class StudentCertificationComponent(
@@ -26,6 +24,9 @@ class StudentCertificationComponent(
     private val postUploadFileUseCase: PostUploadFileUseCase = KoinJavaComponent.get(PostUploadFileUseCase::class.java)
 ): KoinComponent, ComponentContext by componentContext,
     BaseComponent<StudentCertificationState, StudentCertificationEvent>(initialState = StudentCertificationState()) {
+
+
+    private var uploadJob: Job? = null
 
     fun callCertificationProgressList(
         roadmapId: Long
@@ -82,19 +83,30 @@ class StudentCertificationComponent(
     fun uploadFile(
         questId: Long,
         byteArray: ByteArray,
-        mimeType: String
+        mimeType: String,
+        onProgress: (Long, Long) -> Unit
     ) {
-        scope.launch {
+        uploadJob = scope.launch {
             runCatching {
-                postUploadFileUseCase(questId, byteArray, mimeType)
+                setState { copy(uploadDialog = true) }
+                postUploadFileUseCase(questId, byteArray, mimeType, onProgress)
             }.onSuccess {
-                setState { copy(loading = false) }
-            }.onFailure {
                 setState {
                     copy(
-                        loading = false,
-                        error = it.asDataThrowable()
+                        uploadDialog = false,
+                        successUpload = true
                     )
+                }
+            }.onFailure {
+                if (it is CancellationException) {
+                    setState { copy(loading = false) }
+                } else {
+                    setState {
+                        copy(
+                            loading = false,
+                            error = it.asDataThrowable()
+                        )
+                    }
                 }
             }
         }
@@ -140,6 +152,23 @@ class StudentCertificationComponent(
         setState {
             copy(error = null)
         }
+    }
+
+    fun updateProgress(progress: Float) {
+        setState { copy(progress = progress) }
+    }
+
+    fun dismissUploadDialog() {
+        uploadJob?.cancel()
+        setState {
+            copy(
+                uploadDialog = false
+            )
+        }
+    }
+
+    fun dismissSuccessUploadDialog() {
+        setState { copy(successUpload = false) }
     }
 
     init {
