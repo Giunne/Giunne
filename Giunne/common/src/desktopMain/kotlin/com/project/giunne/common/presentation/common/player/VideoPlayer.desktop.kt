@@ -23,7 +23,6 @@ actual fun VideoWindowPlayer(
     dismiss: () -> Unit,
     videoPath: String,
 ) {
-//    val videoPath = "https://hu-sh.synology.me:10004/upload/20250218_231157.mp4"
     val componentController = remember(videoPath) { JfxComponentController() }
     val frameController = remember(videoPath) { JfxFrameController() }
 
