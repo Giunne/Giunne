@@ -10,11 +10,12 @@ import com.project.giunne.common.presentation.certification.student.intent.Stude
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.certification.student.state.StudentCertificationState
 import com.project.giunne.common.util.GLog
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.java.KoinJavaComponent
-import kotlin.coroutines.cancellation.CancellationException
 
 private const val TAG = "StudentCertificationComponent"
 class StudentCertificationComponent(
@@ -24,7 +25,6 @@ class StudentCertificationComponent(
     private val postUploadFileUseCase: PostUploadFileUseCase = KoinJavaComponent.get(PostUploadFileUseCase::class.java)
 ): KoinComponent, ComponentContext by componentContext,
     BaseComponent<StudentCertificationState, StudentCertificationEvent>(initialState = StudentCertificationState()) {
-
 
     private var uploadJob: Job? = null
 
@@ -86,27 +86,22 @@ class StudentCertificationComponent(
         mimeType: String,
         onProgress: (Long, Long) -> Unit
     ) {
-        uploadJob = scope.launch {
-            runCatching {
+        uploadJob = CoroutineScope(Dispatchers.IO).launch {
+            try {
                 setState { copy(uploadDialog = true) }
                 postUploadFileUseCase(questId, byteArray, mimeType, onProgress)
-            }.onSuccess {
                 setState {
                     copy(
                         uploadDialog = false,
                         successUpload = true
                     )
                 }
-            }.onFailure {
-                if (it is CancellationException) {
-                    setState { copy(loading = false) }
-                } else {
-                    setState {
-                        copy(
-                            loading = false,
-                            error = it.asDataThrowable()
-                        )
-                    }
+            } catch (e: Exception) {
+                setState {
+                    copy(
+                        uploadDialog = false,
+                        error = e.asDataThrowable()
+                    )
                 }
             }
         }

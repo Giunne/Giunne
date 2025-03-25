@@ -183,17 +183,15 @@ internal fun StudentCertificationScreen(
                 onDismissButtonClicked = { component.dismissRoadmapCertDialog() },
                 onConfirmButtonClicked = {
                     component.dismissRoadmapCertDialog()
-                    scope.launch {
-                        checkProgressItem?.let { item ->
-                            videoUploadState.videoFile?.let { file ->
-                                component.uploadFile(
-                                    item.id.toLong(),
-                                    file.toByteArray(),
-                                    file.getMimeType()
-                                ) { bytesSentTotal, contentLength ->
-                                    if (0 < contentLength) {
-                                        component.updateProgress(bytesSentTotal.toFloat() / contentLength)
-                                    }
+                    checkProgressItem?.let { item ->
+                        videoUploadState.videoFile?.let { file ->
+                            component.uploadFile(
+                                item.id.toLong(),
+                                file.toByteArray(),
+                                file.getMimeType()
+                            ) { bytesSentTotal, contentLength ->
+                                if (0 < contentLength) {
+                                    component.updateProgress(bytesSentTotal.toFloat() / contentLength)
                                 }
                             }
                         }
@@ -229,17 +227,15 @@ internal fun StudentCertificationScreen(
                     component.dismissRunningCertDialog()
                     scope.launch {
                         component.dismissRoadmapCertDialog()
-                        scope.launch {
-                            checkProgressItem?.let { item ->
-                                imageUploadState.imageFile?.let { file ->
-                                    component.uploadFile(
-                                        item.id.toLong(),
-                                        file.toByteArray(),
-                                        file.getMimeType()
-                                    ) { bytesSentTotal, contentLength ->
-                                        if (0 < contentLength) {
-                                            component.updateProgress(bytesSentTotal.toFloat() / contentLength)
-                                        }
+                        checkProgressItem?.let { item ->
+                            imageUploadState.imageFile?.let { file ->
+                                component.uploadFile(
+                                    item.id.toLong(),
+                                    file.toByteArray(),
+                                    file.getMimeType()
+                                ) { bytesSentTotal, contentLength ->
+                                    if (0 < contentLength) {
+                                        component.updateProgress(bytesSentTotal.toFloat() / contentLength)
                                     }
                                 }
                             }
