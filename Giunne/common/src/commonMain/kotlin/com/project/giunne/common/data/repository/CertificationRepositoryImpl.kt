@@ -7,6 +7,7 @@ import com.project.giunne.common.data.service.CertificationService
 import com.project.giunne.common.data.util.NetworkResult
 import com.project.giunne.common.data.util.handleApi
 import com.project.giunne.common.domain.repository.CertificationRepository
+import io.ktor.client.plugins.onUpload
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import io.ktor.http.Headers
@@ -37,7 +38,8 @@ class CertificationRepositoryImpl(
     override suspend fun postUploadFile(
         questId: Long,
         byteArray: ByteArray,
-        mimeType: String
+        mimeType: String,
+        onProgress: (Long, Long) -> Unit
     ): NetworkResult<String> {
         return handleApi(TAG) {
             val extension = mimeType.substringAfter("/")
@@ -48,7 +50,11 @@ class CertificationRepositoryImpl(
                         append(HttpHeaders.ContentDisposition,  "filename=Student-$questId-${byteArray.hashCode()}.$extension")
                     })
                 })
-            certificationService.postUploadFile(questId, multipart)
+            certificationService.postUploadFile(questId, multipart) {
+                onUpload { bytesSentTotal, contentLength ->
+                    onProgress(bytesSentTotal, contentLength)
+                }
+            }
         }
     }
 

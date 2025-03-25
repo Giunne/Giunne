@@ -10,10 +10,11 @@ class PostUploadFileUseCase(
     suspend operator fun invoke(
         questId: Long,
         byteArray: ByteArray,
-        mimeType: String
+        mimeType: String,
+        onProgress: (Long, Long) -> Unit
     ): String {
         return certificationRepository
-            .postUploadFile(questId, byteArray, mimeType)
+            .postUploadFile(questId, byteArray, mimeType, onProgress)
             .successOr("")
     }
 }

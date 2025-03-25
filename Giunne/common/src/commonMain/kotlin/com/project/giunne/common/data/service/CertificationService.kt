@@ -13,6 +13,8 @@ import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Query
+import de.jensklingenberg.ktorfit.http.ReqBuilder
+import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.forms.MultiPartFormDataContent
 
 interface CertificationService {
@@ -34,7 +36,8 @@ interface CertificationService {
     @POST(POST_UPLOAD_FILE)
     suspend fun postUploadFile(
         @Query("questId") questId: Long,
-        @Body file: MultiPartFormDataContent
+        @Body file: MultiPartFormDataContent,
+        @ReqBuilder ext: HttpRequestBuilder.() -> Unit
     ): BaseResponse<String>
 
     @POST(POST_CERT_STUDENT)
