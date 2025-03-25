@@ -37,6 +37,7 @@ import com.project.giunne.common.util.gsp
 fun ExerciseRoadmapScreen(
     modifier: Modifier = Modifier,
     roadMapState: StudentRoadMapState,
+    navigateToCertification: () -> Unit,
 ) {
     var offsetX by remember { mutableStateOf(0f) }
     var offsetY by remember { mutableStateOf(0f) }
@@ -65,6 +66,10 @@ fun ExerciseRoadmapScreen(
                     ?.map { it.title }
                     ?.distinct()
                     ?: listOf(),
+                onConfirm = {
+                    isShow = false
+                    navigateToCertification()
+                }
             )
         }
 

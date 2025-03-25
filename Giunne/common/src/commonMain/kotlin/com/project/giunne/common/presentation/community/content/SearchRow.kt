@@ -37,15 +37,17 @@ import org.jetbrains.compose.resources.painterResource
 fun SearchRow(
     modifier: Modifier = Modifier,
     pageType: CertPage,
+    searchText: String,
+    onSearchTextChanged: (String) -> Unit,
     datePriority: DatePriority,
     roadmapFilter: String,
     runningFilter: String,
-    onSearchButtonClicked: (String) -> Unit,
+    onSearchButtonClicked: () -> Unit,
     onDatePriorityButtonClicked: () -> Unit,
     onRoadmapFilterButtonClicked: () -> Unit,
     onRunningFilterButtonClicked: () -> Unit,
 ) {
-    var searchText by remember { mutableStateOf("") } /* TODO MVI */
+//    var searchText by remember { mutableStateOf("") } /* TODO MVI */
 
     Row(
         modifier = modifier,
@@ -67,7 +69,7 @@ fun SearchRow(
                 fontFamily = GPFontFamily.Medium
             ),
             value = searchText,
-            onValueChange = { searchText = it },
+            onValueChange = { onSearchTextChanged(it) },
             paddingHorizontal = 10.gdp,
             placeholder = {
                 GPText(
@@ -91,7 +93,7 @@ fun SearchRow(
             ),
             keyboardActions = KeyboardActions(
                 onSearch = {
-                    onSearchButtonClicked(searchText)
+                    onSearchButtonClicked()
                 }
             ),
         )

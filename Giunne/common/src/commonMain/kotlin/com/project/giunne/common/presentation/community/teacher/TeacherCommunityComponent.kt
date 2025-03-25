@@ -26,6 +26,7 @@ class TeacherCommunityComponent(
     }
 
     fun callPostingList(
+        roadMapId: Long,
         questName: String,
         nickName: String,
         pageIndex: Int,
@@ -35,6 +36,7 @@ class TeacherCommunityComponent(
             setState { copy(loading = true) }
             runCatching {
                 getPostingList.invoke(
+                    roadMapId = roadMapId,
                     questName = questName,
                     nickName = nickName,
                     pageIndex = pageIndex,
@@ -44,7 +46,8 @@ class TeacherCommunityComponent(
                 setState {
                     copy(
                         loading = false,
-                        postingList = (postingList + response.data).distinctBy { it.id },
+                        postingList = if (pageIndex == 1) response.data
+                            else (postingList + response.data).distinctBy { it.id },
                         paginationInfo = response.paginationInfo
                     )
                 }
@@ -89,9 +92,24 @@ class TeacherCommunityComponent(
     }
 
     fun onClickSearchButton(
+        roadMapId: Long,
+        questName: String,
+        nickName: String,
+        sortDirection: String
+    ) {
+        callPostingList(
+            roadMapId = roadMapId,
+            questName = questName,
+            nickName = nickName,
+            pageIndex = 1,
+            sortDirection = sortDirection,
+        )
+    }
+
+    fun onSearchTextChanged(
         text: String
     ) {
-
+        setState { copy(searchText = text) }
     }
 
     fun onSelectDatePriority(

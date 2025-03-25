@@ -17,8 +17,9 @@ import com.project.giunne.common.util.gsp
 fun ExerciseActionButtons(
     modifier: Modifier = Modifier,
     isEditable: Boolean = false,
+    progressState: String = "",
     onClose: () -> Unit = {},
-    onConfirm: () -> Unit = {}
+    onConfirm: (() -> Unit)? = {},
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -41,21 +42,45 @@ fun ExerciseActionButtons(
             )
         }
 
-        GPButton(
-            modifier = Modifier
-                .height(48.gdp)
-                .weight(1f),
-            normalColor = GPColor.ButtonOrange,
-            pressColor = GPColor.ButtonPressOrange,
-            hoverColor = GPColor.ButtonHoverOrange,
-            onClick = { onConfirm() },
-        ) {
-            GPText(
-                text = if (isEditable) "수정하기" else "인증하기",
-                textSize = 14.gsp,
-                fontFamily = GPFontFamily.Bold,
-                textColor = GPColor.White
-            )
+        if (onConfirm != null) {
+            GPButton(
+                modifier = Modifier
+                    .height(48.gdp)
+                    .weight(1f),
+                normalColor = GPColor.ButtonOrange,
+                pressColor = GPColor.ButtonPressOrange,
+                hoverColor = GPColor.ButtonHoverOrange,
+                onClick = { onConfirm() },
+            ) {
+                GPText(
+                    text = if (isEditable) "수정하기" else "인증완료",
+                    textSize = 14.gsp,
+                    fontFamily = GPFontFamily.Bold,
+                    textColor = GPColor.White
+                )
+            }
+        } else {
+            GPButton(
+                modifier = Modifier
+                    .height(48.gdp)
+                    .weight(1f),
+                normalColor = GPColor.ButtonLightGray,
+                pressColor = GPColor.ButtonPressLightGray,
+                hoverColor = GPColor.ButtonHoverLightGray,
+                onClick = {  },
+            ) {
+                GPText(
+                    text = when (progressState) {
+                        "LOCK_OPEN" -> "체크 전"
+                        "UPLOAD" -> "확인 중"
+                        "CONFIRM" -> "인증완료"
+                        else -> ""
+                    },
+                    textSize = 14.gsp,
+                    fontFamily = GPFontFamily.Bold,
+                    textColor = GPColor.White
+                )
+            }
         }
     }
 }

@@ -6,10 +6,11 @@ import com.project.giunne.common.data.remote.response.StudentPostingInfo
 import com.project.giunne.common.data.util.DataThrowable
 
 data class StudentCommunityState(
+    val searchText: String = "",
     val datePriority: DatePriority = DatePriority.NEWEST,
     val datePrioritySelectDialog: Boolean = false,
-    val roadmapFilter: String = "전체",
-    val runningFilter: String = "전체",
+    val roadmapFilter: String = "",
+    val runningFilter: String = "",
     val roadmapFilterDialog: Boolean = false,
     val runningFilterDialog: Boolean = false,
 

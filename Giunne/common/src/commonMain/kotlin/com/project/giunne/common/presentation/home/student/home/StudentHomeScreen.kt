@@ -25,6 +25,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.project.giunne.common.data.remote.response.convertType
+import com.project.giunne.common.presentation.certification.student.state.CertProgress
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
@@ -35,6 +37,7 @@ import com.project.giunne.common.presentation.home.student.content.StudentCharac
 import com.project.giunne.common.presentation.home.student.content.StudentRoadMapLevelBox
 import com.project.giunne.common.presentation.home.student.content.TeacherCheckingBox
 import com.project.giunne.common.presentation.home.student.state.StudentHomeEvent
+import com.project.giunne.common.presentation.roadmap.node.NodeStatus
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.AvatarUtil
 import com.project.giunne.common.util.Define
@@ -128,14 +131,22 @@ internal fun StudentHomeScreen(
                         )
                         TeacherCheckingBox(
                             modifier = Modifier.fillMaxWidth(),
-                            /*TODO(나중에 API나오면 상태에 따라 문구 변경)*/
-                            teacherStateTitle = "확인중",
+                            teacherConfirm = when {
+                                homeState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.CHECK.code } != null -> NodeStatus.CHECK
+                                homeState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.UPLOAD.code } != null -> NodeStatus.UPLOAD
+                                else -> NodeStatus.LOCK_OPEN
+                            },
                             onClickCommunity = navigateToCommunity
                         )
                         StudentRoadMapLevelBox(
                             modifier = Modifier.fillMaxWidth(),
-                            /*TODO(나중에 API나오면 상태에 따라 문구 변경)*/
-                            roadMapLevel = "3"
+                            roadMapLevel = when {
+                                homeState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.CHECK.code } != null ->
+                                    homeState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.CHECK.code }!!.getQuestTitle()
+                                homeState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.UPLOAD.code } != null ->
+                                    homeState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.UPLOAD.code }!!.getQuestTitle()
+                                else -> ""
+                            },
                         )
                         Spacer(modifier = Modifier.height(8.gdp))
                     }

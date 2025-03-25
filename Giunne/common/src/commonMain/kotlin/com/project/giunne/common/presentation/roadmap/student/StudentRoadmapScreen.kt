@@ -34,6 +34,7 @@ private const val TAG = "StudentRoadmapScreen"
 internal fun StudentRoadmapScreen(
     component: StudentRoadmapComponent,
     modifier: Modifier = Modifier,
+    navigateToCertification: () -> Unit
 ) {
     GLog.d(TAG, "onCreate")
 
@@ -90,7 +91,8 @@ internal fun StudentRoadmapScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .align(Alignment.Center),
-                    roadMapState = roadMapState
+                    roadMapState = roadMapState,
+                    navigateToCertification = { navigateToCertification() }
                 )
             }
             Box(

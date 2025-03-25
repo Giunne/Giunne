@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.project.giunne.common.data.remote.response.QuestTypeInfo
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.text.GPText
@@ -34,7 +35,7 @@ fun SelectableDialog(
     modifier: Modifier = Modifier,
     dismiss: () -> Unit,
     onSelect: (String) -> Unit,
-    filterList: List<String>
+    filterList: List<QuestTypeInfo>
 ) {
     val scrollState = rememberLazyListState()
 
@@ -80,12 +81,12 @@ fun SelectableDialog(
                                     .height(42.gdp)
                                     .padding(horizontal = 16.gdp)
                                     .noRippleClickable {
-                                        onSelect(filterList[it])
+                                        onSelect(filterList[it].questName)
                                     },
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 GPText(
-                                    text = filterList[it],
+                                    text = filterList[it].questName,
                                     textSize = 16.gsp,
                                     textColor = GPColor.TextBlack,
                                     fontFamily = GPFontFamily.Bold,
