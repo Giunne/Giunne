@@ -35,14 +35,13 @@ val networkModule: Module = module {
     }
 }
 
-@OptIn(ExperimentalSerializationApi::class)
 fun createHttpClient(
     auth: Boolean = false
 ): HttpClient {
     return HttpClient {
         install(HttpTimeout) {
-            requestTimeoutMillis = 5000L
-            connectTimeoutMillis = 5000L
+            requestTimeoutMillis = 15000L
+            connectTimeoutMillis = 15000L
         }
         install(ContentNegotiation) {
             json(

@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toFile
 import coil3.compose.AsyncImage
 import com.project.giunne.common.util.GLog
@@ -30,11 +31,13 @@ private const val TAG = "ImagePicker.android"
 actual fun ImagePicker(
     callback: (PlatformFile?) -> Unit
 ) {
+    val context = LocalContext.current
+
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
             callback(
-                if (uri != null) PlatformFile(uri)
+                if (uri != null) PlatformFile(uri, context.contentResolver)
                 else null
             )
         }

@@ -5,6 +5,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.delay
 import java.io.File
 
@@ -12,11 +13,13 @@ import java.io.File
 actual fun VideoPicker(
     callback: (PlatformFile?) -> Unit
 ) {
+    val context = LocalContext.current
+
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
             callback(
-                if (uri != null) PlatformFile(uri)
+                if (uri != null) PlatformFile(uri, context.contentResolver)
                 else null
             )
         }
