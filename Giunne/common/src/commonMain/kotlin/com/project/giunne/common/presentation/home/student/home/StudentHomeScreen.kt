@@ -37,6 +37,7 @@ import com.project.giunne.common.presentation.home.student.content.StudentCharac
 import com.project.giunne.common.presentation.home.student.content.StudentRoadMapLevelBox
 import com.project.giunne.common.presentation.home.student.content.TeacherCheckingBox
 import com.project.giunne.common.presentation.home.student.state.StudentHomeEvent
+import com.project.giunne.common.presentation.roadmap.node.NodeStatus
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.AvatarUtil
 import com.project.giunne.common.util.Define
@@ -130,24 +131,21 @@ internal fun StudentHomeScreen(
                         )
                         TeacherCheckingBox(
                             modifier = Modifier.fillMaxWidth(),
-                            /*TODO(나중에 API나오면 상태에 따라 문구 변경)*/
-                            teacherStateTitle = when {
-                                homeState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.CHECK.code } != null -> "체크 완료"
-                                homeState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.UPLOAD.code } != null -> "확인중"
-                                else -> "체크 전"
+                            teacherConfirm = when {
+                                homeState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.CHECK.code } != null -> NodeStatus.CHECK
+                                homeState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.UPLOAD.code } != null -> NodeStatus.UPLOAD
+                                else -> NodeStatus.LOCK_OPEN
                             },
                             onClickCommunity = navigateToCommunity
                         )
                         StudentRoadMapLevelBox(
                             modifier = Modifier.fillMaxWidth(),
-                            /*TODO(나중에 API나오면 상태에 따라 문구 변경)*/
-//                            roadMapLevel = "3"
                             roadMapLevel = when {
                                 homeState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.CHECK.code } != null ->
-                                    homeState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.CHECK.code }!!.questName
+                                    homeState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.CHECK.code }!!.getQuestTitle()
                                 homeState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.UPLOAD.code } != null ->
-                                    homeState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.UPLOAD.code }!!.questName
-                                else -> "체크 전"
+                                    homeState.roadmapProgressList.find { it.questStateInfo.questProgress == CertProgress.UPLOAD.code }!!.getQuestTitle()
+                                else -> ""
                             },
                         )
                         Spacer(modifier = Modifier.height(8.gdp))

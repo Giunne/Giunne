@@ -48,7 +48,11 @@ data class StudentQuestInfo(
     @SerialName("trainingDescription") val trainingDescription: String = "",
     @SerialName("trainingType") val trainingType: String = "",
     @SerialName("thumbnailUrl") val thumbnailUrl: String? = ""
-)
+) {
+    fun getQuestTitle(): String {
+        return trainingType.convertType() + " " + questName.substringBefore('.').replace(".", "단계")
+    }
+}
 
 fun String.convertType(): String {
     return when (this) {

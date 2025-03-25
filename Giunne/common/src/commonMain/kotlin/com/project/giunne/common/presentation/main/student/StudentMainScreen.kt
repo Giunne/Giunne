@@ -413,7 +413,10 @@ private fun StudentChildren(
                     component.navigateToJoinRecreation()
                 }
             )
-            is StudentMainComponent.StudentChild.StudentRoadmapChild -> StudentRoadmapScreen(component = child.component)
+            is StudentMainComponent.StudentChild.StudentRoadmapChild -> StudentRoadmapScreen(
+                component = child.component,
+                navigateToCertification = { component.navigateToCertification() }
+            )
             is StudentMainComponent.StudentChild.StudentCertificationChild -> StudentCertificationScreen(
                 component = child.component,
                 onCommunityButtonClicked = { pageType ->
