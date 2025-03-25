@@ -7,6 +7,11 @@ import com.project.giunne.common.data.service.CertificationService
 import com.project.giunne.common.data.util.NetworkResult
 import com.project.giunne.common.data.util.handleApi
 import com.project.giunne.common.domain.repository.CertificationRepository
+import io.ktor.client.plugins.onUpload
+import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.client.request.forms.formData
+import io.ktor.http.Headers
+import io.ktor.http.HttpHeaders
 
 private const val TAG = "CertificationRepositoryImpl"
 class CertificationRepositoryImpl(
@@ -27,6 +32,29 @@ class CertificationRepositoryImpl(
     override suspend fun getUploadList(roadmapId: Long): NetworkResult<List<QuestUploadInfo>> {
         return handleApi(TAG) {
             certificationService.getUploadList(roadmapId = roadmapId)
+        }
+    }
+
+    override suspend fun postUploadFile(
+        questId: Long,
+        byteArray: ByteArray,
+        mimeType: String,
+        onProgress: (Long, Long) -> Unit
+    ): NetworkResult<String> {
+        return handleApi(TAG) {
+            val extension = mimeType.substringAfter("/")
+            val multipart = MultiPartFormDataContent(
+                formData {
+                    append("file", byteArray, Headers.build {
+                        append(HttpHeaders.ContentType, mimeType)
+                        append(HttpHeaders.ContentDisposition,  "filename=Student-$questId-${byteArray.hashCode()}.$extension")
+                    })
+                })
+            certificationService.postUploadFile(questId, multipart) {
+                onUpload { bytesSentTotal, contentLength ->
+                    onProgress(bytesSentTotal, contentLength)
+                }
+            }
         }
     }
 

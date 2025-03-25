@@ -11,6 +11,7 @@ import com.project.giunne.common.domain.usecase.avatar.GetUserAvatarListUseCase
 import com.project.giunne.common.domain.usecase.avatar.LoginRecreationUseCase
 import com.project.giunne.common.domain.usecase.certification.GetCertificationHistory
 import com.project.giunne.common.domain.usecase.certification.GetCertificationProgress
+import com.project.giunne.common.domain.usecase.certification.PostUploadFileUseCase
 import com.project.giunne.common.domain.usecase.certification.GetUploadList
 import com.project.giunne.common.domain.usecase.certification.PostGradeStudentUseCase
 import com.project.giunne.common.domain.usecase.common.GetSchoolListUseCase
@@ -68,6 +69,7 @@ val useCaseModule: Module = module {
     single { GetFriendsListUseCase(get()) }
     single { GetCertificationProgress(get()) }
     single { GetCertificationHistory(get()) }
+    single { PostUploadFileUseCase(get()) }
     single { GetUploadList(get()) }
     single { GetPostingDetail(get()) }
     single { GetPostingDetailList(get()) }

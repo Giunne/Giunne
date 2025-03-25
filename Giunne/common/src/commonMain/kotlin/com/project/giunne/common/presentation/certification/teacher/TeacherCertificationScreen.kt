@@ -117,6 +117,7 @@ internal fun TeacherCertificationScreen(
             modifier = Modifier
                 .background(GPColor.BackgroundLightGray)
                 .fillMaxSize(),
+//                .padding(horizontal = 16.gdp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             PageSelectRow(

@@ -5,13 +5,14 @@ import com.project.giunne.common.base.BaseComponent
 import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.certification.GetCertificationHistory
 import com.project.giunne.common.domain.usecase.certification.GetCertificationProgress
-import com.project.giunne.common.domain.usecase.roadmap.GetAllRoadMapUseCase
+import com.project.giunne.common.domain.usecase.certification.PostUploadFileUseCase
 import com.project.giunne.common.presentation.certification.student.intent.StudentCertificationEvent
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.certification.student.state.StudentCertificationState
 import com.project.giunne.common.util.GLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.java.KoinJavaComponent
@@ -21,8 +22,11 @@ class StudentCertificationComponent(
     componentContext: ComponentContext,
     private val getCertificationProgress: GetCertificationProgress = KoinJavaComponent.get(GetCertificationProgress::class.java),
     private val getCertificationHistory: GetCertificationHistory = KoinJavaComponent.get(GetCertificationHistory::class.java),
+    private val postUploadFileUseCase: PostUploadFileUseCase = KoinJavaComponent.get(PostUploadFileUseCase::class.java)
 ): KoinComponent, ComponentContext by componentContext,
     BaseComponent<StudentCertificationState, StudentCertificationEvent>(initialState = StudentCertificationState()) {
+
+    private var uploadJob: Job? = null
 
     fun callCertificationProgressList(
         roadmapId: Long
@@ -76,6 +80,33 @@ class StudentCertificationComponent(
         }
     }
 
+    fun uploadFile(
+        questId: Long,
+        byteArray: ByteArray,
+        mimeType: String,
+        onProgress: (Long, Long) -> Unit
+    ) {
+        uploadJob = CoroutineScope(Dispatchers.IO).launch {
+            try {
+                setState { copy(uploadDialog = true) }
+                postUploadFileUseCase(questId, byteArray, mimeType, onProgress)
+                setState {
+                    copy(
+                        uploadDialog = false,
+                        successUpload = true
+                    )
+                }
+            } catch (e: Exception) {
+                setState {
+                    copy(
+                        uploadDialog = false,
+                        error = e.asDataThrowable()
+                    )
+                }
+            }
+        }
+    }
+
     fun onClickRoadmapTap() {
         setState{
             copy(pageType = CertPage.RoadMap)
@@ -116,6 +147,23 @@ class StudentCertificationComponent(
         setState {
             copy(error = null)
         }
+    }
+
+    fun updateProgress(progress: Float) {
+        setState { copy(progress = progress) }
+    }
+
+    fun dismissUploadDialog() {
+        uploadJob?.cancel()
+        setState {
+            copy(
+                uploadDialog = false
+            )
+        }
+    }
+
+    fun dismissSuccessUploadDialog() {
+        setState { copy(successUpload = false) }
     }
 
     init {
