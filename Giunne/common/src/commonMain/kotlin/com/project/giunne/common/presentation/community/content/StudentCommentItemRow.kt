@@ -34,6 +34,7 @@ import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.community.student.dummy.CommentDto
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.AvatarUtil
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
@@ -99,20 +100,22 @@ fun StudentCommentItemRow(
                     textSize = 8.gsp,
                     fontFamily = GPFontFamily.Medium
                 )
-                SpW(8.gdp)
-                Box(
-                    modifier = Modifier
-                        .size(28.gdp)
-                        .noRippleClickable {
-                            isMenuOpen = !isMenuOpen
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        modifier = Modifier.size(12.gdp),
-                        painter = painterResource(Res.drawable.icon_more),
-                        contentDescription = null,
-                    )
+                if (commentInfo.playerInfo.id == AvatarUtil.uiState.value.id) {
+                    SpW(8.gdp)
+                    Box(
+                        modifier = Modifier
+                            .size(28.gdp)
+                            .noRippleClickable {
+                                isMenuOpen = !isMenuOpen
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Image(
+                            modifier = Modifier.size(12.gdp),
+                            painter = painterResource(Res.drawable.icon_more),
+                            contentDescription = null,
+                        )
+                    }
                 }
             }
             Box(
@@ -152,6 +155,7 @@ fun StudentCommentItemRow(
                 pressColor = GPColor.ButtonPressRed,
                 onClick = {
                     onDeleteButtonClicked()
+                    isMenuOpen = !isMenuOpen
                 },
                 shadow = false,
                 shape = RectangleShape

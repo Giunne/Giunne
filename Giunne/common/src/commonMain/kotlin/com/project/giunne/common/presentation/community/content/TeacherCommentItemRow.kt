@@ -97,6 +97,13 @@ fun TeacherCommentItemRow(
                     textSize = 8.gsp,
                     fontFamily = GPFontFamily.Bold
                 )
+                GPText(
+                    text = if (commentInfo.likeCount > 0) "선생님이 좋아하는 댓글♥️" else "",
+                    textColor = GPColor.TextLightGray,
+                    textSize = 8.gsp,
+                    fontFamily = GPFontFamily.Medium
+                )
+                SpW(8.gdp)
                 Box(
                     modifier = Modifier
                         .size(28.gdp)
@@ -152,7 +159,6 @@ fun TeacherCommentItemRow(
                     onLikeButtonClicked(like) {
                         isLike = !isLike
                     }
-//                    isLike = !isLike
                 },
                 shadow = false,
                 shape = RectangleShape
@@ -173,6 +179,7 @@ fun TeacherCommentItemRow(
                 pressColor = GPColor.ButtonPressRed,
                 onClick = {
                     onDeleteButtonClicked()
+                    isMenuOpen = !isMenuOpen
                 },
                 shadow = false,
                 shape = RectangleShape

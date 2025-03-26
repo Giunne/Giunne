@@ -7,6 +7,7 @@ import com.project.giunne.common.data.remote.request.GradeStudentRequest
 import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.certification.GetUploadList
 import com.project.giunne.common.domain.usecase.certification.PostGradeStudentUseCase
+import com.project.giunne.common.domain.usecase.community.DeleteComment
 import com.project.giunne.common.domain.usecase.community.GetCommentList
 import com.project.giunne.common.domain.usecase.community.GetPostingDetail
 import com.project.giunne.common.domain.usecase.community.GetPostingDetailList
@@ -22,6 +23,7 @@ class CommunityStore(
     private val getPostingDetail: GetPostingDetail = KoinJavaComponent.get(GetPostingDetail::class.java),
     private val postComment: PostComment = KoinJavaComponent.get(PostComment::class.java),
     private val getCommentList: GetCommentList = KoinJavaComponent.get(GetCommentList::class.java),
+    private val deleteComment: DeleteComment = KoinJavaComponent.get(DeleteComment::class.java),
     private val postCommentLike: PostCommentLike = KoinJavaComponent.get(PostCommentLike::class.java),
     private val postCommentUnlike: PostCommentUnlike = KoinJavaComponent.get(PostCommentUnlike::class.java),
 ): BaseStore<CommunityState>(CommunityState()) {
@@ -111,6 +113,28 @@ class CommunityStore(
                     copy(
                         commentList = (commentList + response.data).distinctBy { it.id },
                         paginationInfo = response.paginationInfo
+                    )
+                }
+            }
+        }
+    }
+
+    fun callDeleteComment(
+        postId: Long,
+        onSuccess: () -> Unit
+    ) {
+        scope.launch {
+            setState { copy(loading = true) }
+            runCatching {
+                deleteComment.invoke(postId)
+            }.onSuccess {
+                setState { copy(loading = false) }
+                onSuccess()
+            }.onFailure {
+                setState {
+                    copy(
+                        loading = false,
+                        error = it.asDataThrowable()
                     )
                 }
             }

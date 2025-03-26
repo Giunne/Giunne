@@ -43,10 +43,10 @@ fun TeacherCommunityCommentColumn(
     commentList: List<CommentInfo>,
     callLike: (Long, () -> Unit) -> Unit,
     callUnlike: (Long, () -> Unit) -> Unit,
+    onDeleteButtonClicked: (Long) -> Unit
 ) {
-    /////TEST///// TODO API
     var deleteConfirmDialog by remember { mutableStateOf(false) }
-    //////////////
+    var selectedId by remember { mutableStateOf(0) }
 
     Box(
         modifier = modifier
@@ -68,7 +68,10 @@ fun TeacherCommunityCommentColumn(
                             .wrapContentHeight(),
                         commentInfo = commentList[it],
                         like = commentList[it].likeCount > 0,
-                        onDeleteButtonClicked = { deleteConfirmDialog = true },
+                        onDeleteButtonClicked = {
+                            deleteConfirmDialog = true
+                            selectedId = commentList[it].id
+                        },
                         onLikeButtonClicked = { currentLikeState, onSuccess ->
                             if (currentLikeState) {
                                 callUnlike(commentList[it].id.toLong()) { onSuccess() }
@@ -119,8 +122,13 @@ fun TeacherCommunityCommentColumn(
                 content = "삭제할까요?",
                 onConfirmClicked = {
                     deleteConfirmDialog = false
-                }, //TODO API
-                onCancelClicked = { deleteConfirmDialog = false },
+                    onDeleteButtonClicked(selectedId.toLong())
+                    selectedId = 0
+                },
+                onCancelClicked = {
+                    deleteConfirmDialog = false
+                    selectedId = 0
+                },
             )
         }
     }

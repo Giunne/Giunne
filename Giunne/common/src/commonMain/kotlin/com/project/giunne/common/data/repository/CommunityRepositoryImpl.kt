@@ -47,6 +47,12 @@ class CommunityRepositoryImpl(
         }
     }
 
+    override suspend fun deleteComment(postId: Long): NetworkResult<String> {
+        return handleApi(TAG) {
+            communityService.deleteComment(postId = postId)
+        }
+    }
+
     override suspend fun postCommentLike(commentLikeRequest: CommentLikeRequest): NetworkResult<String> {
         return handleApi(TAG) {
             communityService.postCommentLike(commentLikeRequest = commentLikeRequest)

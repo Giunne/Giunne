@@ -1,6 +1,7 @@
 package com.project.giunne.common.di
 
 import com.project.giunne.common.domain.usecase.auth.ChangePasswordUseCase
+import com.project.giunne.common.domain.usecase.auth.CheckExistIdUseCase
 import com.project.giunne.common.domain.usecase.auth.LoginUseCase
 import com.project.giunne.common.domain.usecase.auth.LogoutUseCase
 import com.project.giunne.common.domain.usecase.auth.StudentSignupUseCase
@@ -15,6 +16,7 @@ import com.project.giunne.common.domain.usecase.certification.PostUploadFileUseC
 import com.project.giunne.common.domain.usecase.certification.GetUploadList
 import com.project.giunne.common.domain.usecase.certification.PostGradeStudentUseCase
 import com.project.giunne.common.domain.usecase.common.GetSchoolListUseCase
+import com.project.giunne.common.domain.usecase.community.DeleteComment
 import com.project.giunne.common.domain.usecase.community.GetCommentList
 import com.project.giunne.common.domain.usecase.community.GetPostingDetail
 import com.project.giunne.common.domain.usecase.community.GetPostingDetailList
@@ -80,4 +82,6 @@ val useCaseModule: Module = module {
     single { GetPostingList(get()) }
     single { GetQuestTypeList(get()) }
     single { PostGradeStudentUseCase(get()) }
+    single { DeleteComment(get()) }
+    single { CheckExistIdUseCase(get()) }
 }
