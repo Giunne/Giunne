@@ -14,16 +14,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.project.giunne.Res
 import com.project.giunne.common.data.util.TokenHandler
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
@@ -31,6 +32,7 @@ import com.project.giunne.common.presentation.common.charactor.GPMainCharacter
 import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.dialog.GPConfirmDialog
 import com.project.giunne.common.presentation.common.text.GPText
+import com.project.giunne.common.presentation.mypage.common.MyPageSettingInfo
 import com.project.giunne.common.presentation.mypage.student.content.MyPageCharacter
 import com.project.giunne.common.presentation.mypage.student.content.MyPageStudentInfoColumn
 import com.project.giunne.common.ui.theme.GPColor
@@ -40,6 +42,8 @@ import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import com.project.giunne.icon_next
+import org.jetbrains.compose.resources.painterResource
 
 private const val TAG = "StudentMyPageScreen"
 @Composable
@@ -136,9 +140,59 @@ internal fun StudentMyPageScreen(
                 MyPageStudentInfoColumn(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.gdp),
-                    onClickLogOut = { component.onClickLogoutButton() }
-                )
+                        .padding(horizontal = 16.gdp)
+                ) {
+                    MyPageSettingInfo(
+                        title = "학교",
+                        content = {
+                            GPText(
+                                text = "테스트 학교",
+                                fontFamily = GPFontFamily.Regular,
+                                textSize = 12.gsp
+                            )
+                        }
+                    )
+                    HorizontalDivider(
+                        color = GPColor.BackgroundGray_F6F6F6
+                    )
+                    MyPageSettingInfo(
+                        title = "이름",
+                        content = {
+                            GPText(
+                                text = "홍길동",
+                                fontFamily = GPFontFamily.Regular,
+                                textSize = 12.gsp
+                            )
+                        }
+                    )
+                    MyPageSettingInfo(
+                        title = "학년 & 반",
+                        content = {
+                            GPText(
+                                text = "1학년 2반",
+                                fontFamily = GPFontFamily.Regular,
+                                textSize = 12.gsp
+                            )
+                        }
+                    )
+                    HorizontalDivider(
+                        color = GPColor.BackgroundGray_F6F6F6
+                    )
+                    MyPageSettingInfo(
+                        title = "로그아웃",
+                        color = GPColor.Red,
+                        content = {
+                            Icon(
+                                painter = painterResource(Res.drawable.icon_next),
+                                contentDescription = "로그아웃",
+                                tint = GPColor.Red
+                            )
+                        },
+                        onClick = {
+                            component.onClickLogoutButton()
+                        }
+                    )
+                }
                 Spacer(modifier = Modifier.height(16.gdp))
             }
         }
