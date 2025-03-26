@@ -4,13 +4,17 @@ import com.project.giunne.common.base.BaseStore
 import com.project.giunne.common.data.remote.request.GachaRequest
 import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.avatar.GetFriendsListUseCase
+import com.project.giunne.common.domain.usecase.roadmap.GetSpecificStudentCourseUseCase
+import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.friend.state.FriendState
 import com.project.giunne.common.util.AvatarUtil
+import com.project.giunne.common.util.Define.recreationId
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent
 
 class FriendStore(
-    private val getFriendsListUseCase: GetFriendsListUseCase = KoinJavaComponent.get(GetFriendsListUseCase::class.java)
+    private val getFriendsListUseCase: GetFriendsListUseCase = KoinJavaComponent.get(GetFriendsListUseCase::class.java),
+    private val getSpecificStudentCourseUseCase: GetSpecificStudentCourseUseCase = KoinJavaComponent.get(GetSpecificStudentCourseUseCase::class.java)
 ): BaseStore<FriendState>(
     initialState = FriendState()
 ) {
@@ -33,7 +37,42 @@ class FriendStore(
         }
     }
 
+    fun getSpecificStudentCourse(
+        roadmapId: Long,
+        playerId: Int
+    ) {
+        scope.launch {
+            setState { copy(loading = true) }
+            runCatching {
+                getSpecificStudentCourseUseCase(roadmapId, playerId)
+            }.onSuccess { response ->
+                setState {
+                    copy(
+                        loading = false,
+                        showStudentCourse = true,
+                        courseMap = response.courseInfo
+                    )
+                }
+            }
+            .onFailure {
+                setState { copy(loading = false, error = it.asDataThrowable()) }
+            }
+        }
+    }
+
     fun dismissErrorDialog() {
         setState { copy(error = null) }
+    }
+
+    fun setRoadMapId(
+        pageType: CertPage,
+        roadmapId: Long
+    ) {
+        setState {
+            copy(
+                pageType = pageType,
+                roadmapId = roadmapId
+            )
+        }
     }
 }
