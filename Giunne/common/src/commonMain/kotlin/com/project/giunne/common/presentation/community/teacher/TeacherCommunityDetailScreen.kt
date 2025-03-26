@@ -282,12 +282,12 @@ internal fun TeacherCommunityDetailScreen(
         if (this) {
             GradeDialog(
                 questName = communityState.postingDetailInfo.questInfo.getQuestTitle(),
-
                 onCloseButtonClicked = { gradeStore.dismissGradeDialog() },
-                onConfirmButtonClicked = { star, isChecked ->
+                onConfirmButtonClicked = { star, isChecked, isPass ->
                     gradeStore.onClickConfirmButton(
                         star,
-                        isChecked
+                        isChecked,
+                        isPass
                     )
                 }
             )
@@ -317,7 +317,7 @@ internal fun TeacherCommunityDetailScreen(
                     gradeStore.gradingStudent(
                         GradeStudentRequest(
                             questPostId = postId ?: 0,
-                            isPass = true,
+                            isPass = gradeState.isPass,
                             hasExtraPoints = gradeState.hasExtraPoints,
                             starPoint = gradeState.starPoint
                         ),

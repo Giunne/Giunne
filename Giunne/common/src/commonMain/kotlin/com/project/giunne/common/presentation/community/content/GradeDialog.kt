@@ -28,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Matrix
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
@@ -49,20 +48,18 @@ import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
-import com.project.giunne.common.presentation.shop.content.aRankColorBrush
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_check
-import com.project.giunne.icon_student_check
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun GradeDialog(
     questName: String,
     onCloseButtonClicked: () -> Unit,
-    onConfirmButtonClicked: (Int, Boolean) -> Unit,
+    onConfirmButtonClicked: (Int, Boolean, Boolean) -> Unit,
 ) {
     var grade by remember { mutableStateOf(0) }
     var isChecked by remember { mutableStateOf(false) }
@@ -187,7 +184,24 @@ fun GradeDialog(
                     normalColor = GPColor.ButtonOrange,
                     pressColor = GPColor.ButtonPressOrange,
                     hoverColor = GPColor.ButtonHoverOrange,
-                    onClick = { onConfirmButtonClicked(grade, isChecked) },
+                    onClick = { onConfirmButtonClicked(grade, isChecked, false) },
+                ) {
+                    GPText(
+                        text = "실패",
+                        textSize = 14.gsp,
+                        fontFamily = GPFontFamily.Bold,
+                        textColor = GPColor.White
+                    )
+                }
+                SpW(10.gdp)
+                GPButton(
+                    modifier = Modifier
+                        .weight(2f)
+                        .height(44.gdp),
+                    normalColor = GPColor.ButtonOrange,
+                    pressColor = GPColor.ButtonPressOrange,
+                    hoverColor = GPColor.ButtonHoverOrange,
+                    onClick = { onConfirmButtonClicked(grade, isChecked, true) },
                 ) {
                     GPText(
                         text = "채점하기",
