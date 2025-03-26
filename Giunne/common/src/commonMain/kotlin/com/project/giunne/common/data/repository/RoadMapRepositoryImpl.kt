@@ -34,6 +34,18 @@ class RoadMapRepositoryImpl(
         }
     }
 
+    override suspend fun getSpecificStudentCourse(
+        roadmapId: Long,
+        playerId: Int
+    ): NetworkResult<StudentCourseResponse> {
+        return handleApi(TAG) {
+            roadMapService.getSpecificStudentCourse(
+                roadmapId = roadmapId,
+                playerId = playerId
+            )
+        }
+    }
+
     override suspend fun getStudentCourse(roadmapId: Long): NetworkResult<StudentCourseResponse> {
         return handleApi(TAG) {
             roadMapService.getStudentCourse(roadmapId = roadmapId)
