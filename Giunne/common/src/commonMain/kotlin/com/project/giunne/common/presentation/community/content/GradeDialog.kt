@@ -58,6 +58,8 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun GradeDialog(
     questName: String,
+    currentApproveTitle: String,
+    isLastApprove: Boolean,
     onCloseButtonClicked: () -> Unit,
     onConfirmButtonClicked: (Int, Boolean, Boolean) -> Unit,
 ) {
@@ -95,64 +97,66 @@ fun GradeDialog(
                     fontFamily = GPFontFamily.Bold
                 )
                 GPText(
-                    text = "채점",
+                    text = "채점 $currentApproveTitle",
                     textColor = GPColor.TextBlack,
                     textSize = 18.gsp,
                     fontFamily = GPFontFamily.Bold
                 )
             }
             SpH(10.gdp)
-            Row(
-                modifier = Modifier
-                    .height(50.gdp)
-                    .background(GPColor.White),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                StarShape(
-                    isCheck = grade >= 1,
-                    onClick = { grade = 1 },
-                )
-                Spacer(modifier = Modifier.width(10.gdp))
-                StarShape(
-                    isCheck = grade >= 2,
-                    onClick = { grade = 2 },
-                )
-                Spacer(modifier = Modifier.width(10.gdp))
-                StarShape(
-                    isCheck = grade >= 3,
-                    onClick = { grade = 3 },
-                )
-            }
-            SpH(10.gdp)
-            Row(
-                modifier = Modifier
-                    .noRippleClickable { isChecked = !isChecked },
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
+            if (isLastApprove) {
+                Row(
                     modifier = Modifier
-                        .size(18.gdp)
-                        .background(
-                            color = animatedColor,
-                            shape = RoundedCornerShape(12.gdp)
-                        ),
-                    contentAlignment = Alignment.Center
+                        .height(50.gdp)
+                        .background(GPColor.White),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    if (isChecked) {
-                        Image(
-                            modifier = Modifier.size(11.gdp),
-                            painter = painterResource(Res.drawable.icon_check),
-                            contentDescription = null,
-                        )
-                    }
+                    StarShape(
+                        isCheck = grade >= 1,
+                        onClick = { grade = 1 },
+                    )
+                    Spacer(modifier = Modifier.width(10.gdp))
+                    StarShape(
+                        isCheck = grade >= 2,
+                        onClick = { grade = 2 },
+                    )
+                    Spacer(modifier = Modifier.width(10.gdp))
+                    StarShape(
+                        isCheck = grade >= 3,
+                        onClick = { grade = 3 },
+                    )
                 }
-                SpW(10.gdp)
-                GPText(
-                    text = "추가 동작 여부",
-                    textSize = 14.gsp,
-                    fontFamily = GPFontFamily.Bold,
-                    textColor = GPColor.TextBlack
-                )
+                SpH(10.gdp)
+                Row(
+                    modifier = Modifier
+                        .noRippleClickable { isChecked = !isChecked },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(18.gdp)
+                            .background(
+                                color = animatedColor,
+                                shape = RoundedCornerShape(12.gdp)
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (isChecked) {
+                            Image(
+                                modifier = Modifier.size(11.gdp),
+                                painter = painterResource(Res.drawable.icon_check),
+                                contentDescription = null,
+                            )
+                        }
+                    }
+                    SpW(10.gdp)
+                    GPText(
+                        text = "추가 동작 여부",
+                        textSize = 14.gsp,
+                        fontFamily = GPFontFamily.Bold,
+                        textColor = GPColor.TextBlack
+                    )
+                }
             }
             SpH(20.gdp)
             Row(

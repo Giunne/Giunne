@@ -13,5 +13,12 @@ data class PostingDetailResponse(
     @SerialName("createTime") val createTime: String = "",
     @SerialName("updateTime") val updateTime: String = "",
     @SerialName("playerInfo") val playerInfo: AvatarUserResponse = AvatarUserResponse(),
+    @SerialName("currentApproveCount") val currentApproveCount: Int = 0,
     @SerialName("questInfo") val questInfo: QuestInfo = QuestInfo(),
-)
+) {
+    val isLastApprove: Boolean
+        get() = currentApproveCount == questInfo.needApproveCount - 1
+
+    val currentApproveTitle: String
+        get() = "(${currentApproveCount}/${questInfo.needApproveCount})"
+}

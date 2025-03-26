@@ -282,6 +282,8 @@ internal fun TeacherCommunityDetailScreen(
         if (this) {
             GradeDialog(
                 questName = communityState.postingDetailInfo.questInfo.getQuestTitle(),
+                currentApproveTitle = communityState.postingDetailInfo.currentApproveTitle,
+                isLastApprove = communityState.postingDetailInfo.isLastApprove,
                 onCloseButtonClicked = { gradeStore.dismissGradeDialog() },
                 onConfirmButtonClicked = { star, isChecked, isPass ->
                     gradeStore.onClickConfirmButton(
