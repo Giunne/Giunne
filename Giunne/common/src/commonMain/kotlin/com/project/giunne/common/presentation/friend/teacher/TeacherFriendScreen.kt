@@ -45,9 +45,8 @@ internal fun TeacherFriendScreen(
     val friendState by friendStore.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
-        friendStore.getFriendsList(
+        friendStore.getStudentList(
             recreationId = AvatarUtil.uiState.value.recreationId.toLong(),
-            id = AvatarUtil.uiState.value.id
         )
     }
 
@@ -115,6 +114,16 @@ internal fun TeacherFriendScreen(
                 content = friendState.error?.message.orEmpty(),
             )
         }
+    }
+
+    if (friendState.showStudentCourse) {
+        StudentRoadMapDialog(
+            pageType = friendState.pageType,
+            questInfoList = friendState.courseMap.values.flatten(),
+            onDismiss = {
+                friendStore.dismissStudentRoadMapDialog()
+            }
+        )
     }
 
     if(friendState.loading) {
