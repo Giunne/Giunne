@@ -9,6 +9,7 @@ import com.project.giunne.common.domain.usecase.avatar.CreateAvatarUseCase
 import com.project.giunne.common.domain.usecase.avatar.GetFriendsListUseCase
 import com.project.giunne.common.domain.usecase.avatar.GetUserAvatarListUseCase
 import com.project.giunne.common.domain.usecase.avatar.LoginRecreationUseCase
+import com.project.giunne.common.domain.usecase.avatar.ModifyStudentPointUseCase
 import com.project.giunne.common.domain.usecase.certification.GetCertificationHistory
 import com.project.giunne.common.domain.usecase.certification.GetCertificationProgress
 import com.project.giunne.common.domain.usecase.certification.PostUploadFileUseCase
@@ -82,4 +83,5 @@ val useCaseModule: Module = module {
     single { GetPostingList(get()) }
     single { GetQuestTypeList(get()) }
     single { PostGradeStudentUseCase(get()) }
+    single { ModifyStudentPointUseCase(get()) }
 }
