@@ -14,6 +14,9 @@ data class InfoState(
     val schoolSearchDialog: Boolean = false,
     val signupValidate: String? = null,
 
+    val existCheckSuccess: Boolean = false,
+    val alreadyExistDialog: Boolean = false,
+
     val pageNationInfo: PaginationInfo = PaginationInfo(),
 
     val schoolList: List<SchoolInfo> = listOf(),

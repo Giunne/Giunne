@@ -1,15 +1,18 @@
 package com.project.giunne.common.presentation.signup
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
@@ -25,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
+import com.project.giunne.Res
 import com.project.giunne.common.data.remote.request.StudentSignupRequest
 import com.project.giunne.common.data.remote.request.TeacherSignupRequest
 import com.project.giunne.common.presentation.common.addFocusCleaner
@@ -32,6 +36,7 @@ import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.spacer.SpH
+import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.common.text.GPTitleText
 import com.project.giunne.common.presentation.common.topbar.GPTopBar
@@ -46,6 +51,8 @@ import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import com.project.giunne.icon_check
+import org.jetbrains.compose.resources.painterResource
 
 private const val TAG = "SignupScreen"
 @Composable
@@ -118,24 +125,54 @@ internal fun SignupScreen(
                     SignupInputColumn(
                         titleText = "아이디",
                         text = infoState.idText,
-                        onTextChanged = { infoStore.onIdTextChanged(it) },
+                        onTextChanged = {
+                            infoStore.onIdTextChanged(it)
+                            infoStore.clearExistSuccessState()
+                        },
                         sideContent = {
-                            GPButton(
-                                modifier = Modifier
-                                    .width(80.gdp)
-                                    .height(30.gdp),
-                                shape = RoundedCornerShape(8.gdp),
-                                normalColor = GPColor.ButtonOrange,
-                                pressColor = GPColor.ButtonPressOrange,
-                                hoverColor = GPColor.ButtonHoverOrange,
-                                onClick = {  }, //TODO API
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                GPText(
-                                    text = "중복확인",
-                                    textSize = 12.gsp,
-                                    fontFamily = GPFontFamily.Bold,
-                                    textColor = GPColor.White
-                                )
+                                if(infoState.existCheckSuccess) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(20.gdp)
+                                            .background(
+                                                color = GPColor.Green,
+                                                shape = RoundedCornerShape(8.gdp)
+                                            ),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Image(
+                                            modifier = Modifier
+                                                .size(10.gdp),
+                                            painter = painterResource(Res.drawable.icon_check),
+                                            contentDescription = null
+                                        )
+                                    }
+                                    SpW(8.gdp)
+                                }
+                                GPButton(
+                                    modifier = Modifier
+                                        .width(80.gdp)
+                                        .height(30.gdp),
+                                    shape = RoundedCornerShape(8.gdp),
+                                    normalColor = if (infoState.idText.isNotEmpty()) GPColor.ButtonOrange else GPColor.ButtonLightGray,
+                                    pressColor = if (infoState.idText.isNotEmpty()) GPColor.ButtonPressOrange else GPColor.ButtonLightGray,
+                                    hoverColor = if (infoState.idText.isNotEmpty()) GPColor.ButtonHoverOrange else GPColor.ButtonLightGray,
+                                    onClick = {
+                                        if (infoState.idText.isNotEmpty()) {
+                                            infoStore.callCheckIdExist(infoState.idText)
+                                        }
+                                    },
+                                ) {
+                                    GPText(
+                                        text = "중복확인",
+                                        textSize = 12.gsp,
+                                        fontFamily = GPFontFamily.Bold,
+                                        textColor = GPColor.White
+                                    )
+                                }
                             }
                         },
                         focusManager = focusManager,
@@ -260,8 +297,8 @@ internal fun SignupScreen(
                                 studentSignupRequest = StudentSignupRequest(
                                     loginId = infoState.idText,
                                     password = infoState.passText,
-                                    userName = "",
-                                    nickname = "",
+                                    userName = infoState.idText,
+                                    nickname = infoState.idText,
                                     birth = "2000-01-01",
                                     recreationCode = infoState.codeText,
                                     schoolId = infoState.schoolInfo.id.toLong(),
@@ -307,6 +344,16 @@ internal fun SignupScreen(
                         infoStore.dismissSignupSuccessDialog()
                         navigateToLogin()
                     }
+                )
+            }
+        }
+
+        with(infoState.alreadyExistDialog) {
+            if (this) {
+                GPAlertDialog(
+                    title = "중복된 아이디",
+                    content = "이미 존재하는 아이디입니다. 다시 입력해주세요!",
+                    dismiss = { infoStore.dismissAlreadyExistDialog() }
                 )
             }
         }

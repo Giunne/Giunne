@@ -140,9 +140,6 @@ fun RoadMapDialog(
 
                 ExerciseActionButtons(
                     onClose = onDismissDialog,
-//                    onConfirm = {
-//                        if (questInfo.questStateInfo.questProgress == "CHECK") onConfirm()
-//                    }
                     progressState = questInfo.questStateInfo.questProgress,
                     onConfirm = when (questInfo.questStateInfo.questProgress) {
                         "CHECK" -> { { onConfirm() } }

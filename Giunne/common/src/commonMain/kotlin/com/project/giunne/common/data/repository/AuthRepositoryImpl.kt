@@ -5,12 +5,14 @@ import com.project.giunne.common.data.remote.request.PlayerRequest
 import com.project.giunne.common.data.remote.request.StudentSignupRequest
 import com.project.giunne.common.data.remote.request.TeacherSignupRequest
 import com.project.giunne.common.data.remote.response.AuthResponse
+import com.project.giunne.common.data.remote.response.IDExistInfo
 import com.project.giunne.common.data.remote.response.RefreshResponse
 import com.project.giunne.common.data.service.AuthService
 import com.project.giunne.common.data.util.NetworkResult
 import com.project.giunne.common.data.util.handleApi
 import com.project.giunne.common.domain.repository.AuthRepository
 import com.project.giunne.common.util.GLog
+import kotlin.math.log
 
 private const val TAG = "AuthRepositoryImpl"
 class AuthRepositoryImpl(
@@ -49,6 +51,12 @@ class AuthRepositoryImpl(
     override suspend fun changePassword(loginRequest: LoginRequest): NetworkResult<AuthResponse> {
         return handleApi(TAG) {
             authService.changePassword(loginRequest = loginRequest)
+        }
+    }
+
+    override suspend fun checkExistId(loginId: String): NetworkResult<IDExistInfo> {
+        return handleApi(TAG) {
+            authService.checkExistId(loginId = loginId)
         }
     }
 }
