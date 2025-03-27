@@ -19,6 +19,7 @@ object DefineUrl {
     const val URL_LOGOUT = "member/auth/logout"
     const val URL_REFRESH = "member/auth/access-token/issue"
     const val URL_CHANGE_PASSWORD = "member/auth/password-change"
+    const val URL_ID_CHECK = "member/auth/duplicate-id"
 
     /* Common */
     const val URL_SCHOOL_LIST = "member/school"
@@ -58,6 +59,7 @@ object DefineUrl {
     const val GET_POSTING_DETAIL = "quest/post"
     const val POST_COMMENT = "quest/post"
     const val GET_COMMENT_LIST = "quest/post/comment"
+    const val DELETE_COMMENT = "quest/post/comment"
     const val POST_COMMENT_LIKE = "quest/post/comment/like"
     const val POST_COMMENT_UNLIKE = "quest/post/comment/unlike"
     const val GET_POSTING_LIST = "quest/quest/upload"

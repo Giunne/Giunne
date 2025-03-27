@@ -6,6 +6,7 @@ import com.project.giunne.common.data.remote.request.StudentSignupRequest
 import com.project.giunne.common.data.remote.request.TeacherSignupRequest
 import com.project.giunne.common.data.remote.response.SchoolInfo
 import com.project.giunne.common.data.util.asDataThrowable
+import com.project.giunne.common.domain.usecase.auth.CheckExistIdUseCase
 import com.project.giunne.common.domain.usecase.auth.StudentSignupUseCase
 import com.project.giunne.common.domain.usecase.auth.TeacherSignupUseCase
 import com.project.giunne.common.domain.usecase.common.GetSchoolListUseCase
@@ -21,6 +22,7 @@ class InfoStore(
     private val getSchoolListUseCase: GetSchoolListUseCase = KoinJavaComponent.get(GetSchoolListUseCase::class.java),
     private val teacherSignupUseCase: TeacherSignupUseCase = KoinJavaComponent.get(TeacherSignupUseCase::class.java),
     private val studentSignupUseCase: StudentSignupUseCase = KoinJavaComponent.get(StudentSignupUseCase::class.java),
+    private val checkExistIdUseCase: CheckExistIdUseCase = KoinJavaComponent.get(CheckExistIdUseCase::class.java),
 ): BaseStore<InfoState>(InfoState()) {
     fun callTeacherSignup(
         teacherSignupRequest: TeacherSignupRequest
@@ -111,6 +113,49 @@ class InfoStore(
         }
     }
 
+    fun callCheckIdExist(
+        id: String
+    ) {
+        setState { copy(loading = true) }
+        scope.launch {
+            runCatching {
+                checkExistIdUseCase.invoke(id)
+            }.onSuccess {
+                if (it.isPresent) { // 중복인 경우
+                    setState {
+                        copy(
+                            loading = false,
+                            existCheckSuccess = false,
+                            alreadyExistDialog = true
+                        )
+                    }
+                } else {
+                    setState {
+                        copy(
+                            loading = false,
+                            existCheckSuccess = true
+                        )
+                    }
+                }
+            }.onFailure {
+                setState {
+                    copy(
+                        loading = false,
+                        error = it.asDataThrowable()
+                    )
+                }
+            }
+        }
+    }
+
+    fun clearExistSuccessState() {
+        setState { copy(existCheckSuccess = false) }
+    }
+
+    fun dismissAlreadyExistDialog() {
+        setState { copy(alreadyExistDialog = false) }
+    }
+
     fun checkSignUpValidate(
         signupType: String,
         onSuccess: () -> Unit
@@ -118,6 +163,9 @@ class InfoStore(
         when {
             uiState.value.idText.isEmpty() -> {
                 setState { copy(signupValidate = "아이디를 입력해야 합니다.") }
+            }
+            !uiState.value.existCheckSuccess -> {
+                setState { copy(signupValidate = "아이디 중복확인을 해주세요.") }
             }
             uiState.value.nameText.isEmpty() && signupType == TYPE_TEACHER -> {
                 setState { copy(signupValidate = "이름을 입력해야 합니다.") }

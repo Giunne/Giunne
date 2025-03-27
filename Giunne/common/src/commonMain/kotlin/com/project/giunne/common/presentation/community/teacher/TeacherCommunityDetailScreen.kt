@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -52,6 +54,7 @@ import com.project.giunne.common.presentation.community.content.GradeDialog
 import com.project.giunne.common.presentation.community.content.TeacherCommunityCommentColumn
 import com.project.giunne.common.presentation.community.student.intent.CommunityStore
 import com.project.giunne.common.presentation.community.student.intent.GradeStore
+import com.project.giunne.common.presentation.home.teacher.state.TeacherHomeEvent
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
@@ -88,13 +91,10 @@ internal fun TeacherCommunityDetailScreen(
 
     val scrollState = rememberLazyListState()
 
-    /////test/////
     var fullVideo by remember { mutableStateOf(false) }
     var fullImage by remember { mutableStateOf(false) }
-    //////////////
-    /////TEST///// TODO API
-    var deleteConfirmDialog by remember { mutableStateOf(false) }
-    //////////////
+
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
         GLog.d(TAG, "postId: $postId")
@@ -121,6 +121,11 @@ internal fun TeacherCommunityDetailScreen(
         modifier = Modifier
             .addFocusCleaner(focusManager)
             .fillMaxSize(),
+        snackbarHost = {
+            SnackbarHost(
+                snackbarHostState
+            )
+        }
     ) {
         Column(
             modifier = Modifier
@@ -225,6 +230,16 @@ internal fun TeacherCommunityDetailScreen(
                     },
                     callUnlike = { commentId, onSuccess ->
                         communityStore.callCommentUnlike(CommentLikeRequest(commentId)) { onSuccess() }
+                    },
+                    onDeleteButtonClicked = {
+                        communityStore.callDeleteComment(it) {
+                            communityStore.callCommentList(postId = postId)
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "삭제되었습니다."
+                                )
+                            }
+                        }
                     }
                 )
                 CommentInputRow(
@@ -244,19 +259,6 @@ internal fun TeacherCommunityDetailScreen(
                     onCertButtonClicked = { gradeStore.onClickGradeButton() }
                 )
             }
-        }
-    }
-
-    with(deleteConfirmDialog) {
-        if (this) {
-            GPConfirmDialog(
-                title = "",
-                content = "삭제할까요?",
-                onConfirmClicked = {
-                    deleteConfirmDialog = false
-                }, //TODO API
-                onCancelClicked = { deleteConfirmDialog = false },
-            )
         }
     }
 

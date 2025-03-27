@@ -44,7 +44,7 @@ fun CommentInputRow(
     modifier: Modifier = Modifier,
     focusManager: FocusManager = LocalFocusManager.current,
     onSendButtonClicked: (String) -> Unit,
-    onCertButtonClicked: () -> Unit = {}
+    onCertButtonClicked: () -> Unit = {},
 ) {
     var text by remember { mutableStateOf("") }
 
@@ -81,8 +81,10 @@ fun CommentInputRow(
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
-                    onSendButtonClicked(text)
-                    text = ""
+                    if (text.isNotEmpty()) {
+                        onSendButtonClicked(text)
+                        text = ""
+                    }
                 }
             ),
         )
@@ -96,8 +98,10 @@ fun CommentInputRow(
                     shape = CircleShape
                 )
                 .noRippleClickable {
-                    onSendButtonClicked(text)
-                    text = ""
+                    if (text.isNotEmpty()) {
+                        onSendButtonClicked(text)
+                        text = ""
+                    }
                 },
             contentAlignment = Alignment.Center
         ) {
