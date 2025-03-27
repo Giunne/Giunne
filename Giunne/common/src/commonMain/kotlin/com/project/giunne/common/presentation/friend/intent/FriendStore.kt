@@ -1,14 +1,11 @@
 package com.project.giunne.common.presentation.friend.intent
 
 import com.project.giunne.common.base.BaseStore
-import com.project.giunne.common.data.remote.request.GachaRequest
 import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.avatar.GetFriendsListUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetSpecificStudentCourseUseCase
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.friend.state.FriendState
-import com.project.giunne.common.util.AvatarUtil
-import com.project.giunne.common.util.Define.recreationId
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent
 
@@ -29,6 +26,24 @@ class FriendStore(
             }.onSuccess { response ->
                 setState {
                     copy(loading = false, friendsList = response.filter { it.id != id })
+                }
+            }
+            .onFailure {
+                setState { copy(loading = false, error = it.asDataThrowable()) }
+            }
+        }
+    }
+
+    fun getStudentList(
+        recreationId: Long
+    ) {
+        scope.launch {
+            setState { copy(loading = true) }
+            runCatching {
+                getFriendsListUseCase(recreationId)
+            }.onSuccess { response ->
+                setState {
+                    copy(loading = false, friendsList = response)
                 }
             }
             .onFailure {
@@ -60,10 +75,6 @@ class FriendStore(
         }
     }
 
-    fun dismissErrorDialog() {
-        setState { copy(error = null) }
-    }
-
     fun setRoadMapId(
         pageType: CertPage,
         roadmapId: Long
@@ -74,5 +85,13 @@ class FriendStore(
                 roadmapId = roadmapId
             )
         }
+    }
+
+    fun dismissErrorDialog() {
+        setState { copy(error = null) }
+    }
+
+    fun dismissStudentRoadMapDialog() {
+        setState { copy(showStudentCourse = false) }
     }
 }
