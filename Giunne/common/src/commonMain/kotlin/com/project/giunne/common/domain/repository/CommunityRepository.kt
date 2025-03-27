@@ -16,6 +16,7 @@ import com.project.giunne.common.data.util.NetworkResult
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.POST
+import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 
 interface CommunityRepository {
@@ -23,6 +24,7 @@ interface CommunityRepository {
     suspend fun getPostingDetail(postId: Long): NetworkResult<PostingDetailResponse>
     suspend fun postComment(commentRequest: CommentRequest): NetworkResult<Long>
     suspend fun getCommentList(postId: Long, pageIndex: Int): NetworkResult<CommentListResponse>
+    suspend fun deleteComment(postId: Long, ): NetworkResult<String>
     suspend fun postCommentLike(commentLikeRequest: CommentLikeRequest): NetworkResult<String>
     suspend fun postCommentUnlike(commentLikeRequest: CommentLikeRequest): NetworkResult<String>
     suspend fun getPostingList(roadMapId: Long, questName: String, nickName: String, pageIndex: Int, sortDirection: String, ): NetworkResult<PostingListResponse>
