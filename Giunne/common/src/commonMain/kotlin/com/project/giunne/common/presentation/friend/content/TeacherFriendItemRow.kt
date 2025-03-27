@@ -31,8 +31,10 @@ import com.project.giunne.common.util.gsp
 fun TeacherFriendItemRow(
     modifier: Modifier = Modifier,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    isPointModifyCheck: Boolean,
     friendInfo: AvatarUserResponse,
-    onClick: (Int) -> Unit
+    onClick: (Int) -> Unit,
+    content: @Composable () -> Unit
 ) {
 
     val isPressed by interactionSource.collectIsPressedAsState()
@@ -49,12 +51,14 @@ fun TeacherFriendItemRow(
     Row(
         modifier = modifier
             .background(
-                color = fillColor,
+                color = if (isPointModifyCheck) GPColor.BackgroundLightGray else fillColor,
                 shape = RoundedCornerShape(12.gdp)
             )
             .padding(8.gdp)
             .noRippleClickable(interactionSource = interactionSource) {
-                onClick(friendInfo.id)
+                if (!isPointModifyCheck) {
+                    onClick(friendInfo.id)
+                }
             },
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -78,19 +82,6 @@ fun TeacherFriendItemRow(
             fontFamily = GPFontFamily.Medium,
             textColor = GPColor.TextBlack
         )
-        Row{
-            GPText(
-                text = "레벨 ",
-                textSize = 12.gsp,
-                fontFamily = GPFontFamily.Medium,
-                textColor = GPColor.TextBlack
-            )
-            GPText(
-                text = friendInfo.level.toString(),
-                textSize = 12.gsp,
-                fontFamily = GPFontFamily.Medium,
-                textColor = GPColor.MainOrangeColor
-            )
-        }
+        content()
     }
 }

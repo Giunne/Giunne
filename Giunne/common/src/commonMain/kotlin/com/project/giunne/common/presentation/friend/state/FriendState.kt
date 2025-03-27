@@ -10,6 +10,8 @@ data class FriendState(
     val roadmapId: Long = 1,
     val friendsList: List<AvatarUserResponse> = listOf(),
     val loading: Boolean = false,
+    val showModifyCheckDialog: Boolean = false,
+    val showModifySuccessDialog: Boolean = false,
     val showStudentCourse: Boolean = false,
     val courseMap: Map<Long, List<StudentCourseInfo>> = mapOf(),
     val error: DataThrowable? = null
