@@ -5,11 +5,15 @@ import com.project.giunne.common.data.remote.response.CategoryItemResponse
 import com.project.giunne.common.data.remote.response.CategoryTypeResponse
 import com.project.giunne.common.data.remote.response.GachaResponse
 import com.project.giunne.common.data.remote.response.Item
+import com.project.giunne.common.data.remote.response.PossibleItemCountInto
+import com.project.giunne.common.data.util.BaseResponse
 import com.project.giunne.common.data.util.NetworkResult
+import de.jensklingenberg.ktorfit.http.Query
 
 interface ShopRepository {
     suspend fun getCategoryMap(): NetworkResult<Map<Long, List<CategoryTypeResponse>>>
     suspend fun getCategoryItemById(categoryItemId: Long, pageIndex: Int): NetworkResult<CategoryItemResponse>
     suspend fun getGachaType(): NetworkResult<List<GachaResponse>>
     suspend fun postGacha(gachaRequest: GachaRequest): NetworkResult<Item>
+    suspend fun getPossibleItemCount(gachaTypes: String, ): NetworkResult<PossibleItemCountInto>
 }

@@ -5,6 +5,7 @@ import com.project.giunne.common.data.remote.response.CategoryItemResponse
 import com.project.giunne.common.data.remote.response.CategoryTypeResponse
 import com.project.giunne.common.data.remote.response.GachaResponse
 import com.project.giunne.common.data.remote.response.Item
+import com.project.giunne.common.data.remote.response.PossibleItemCountInto
 import com.project.giunne.common.data.service.ShopService
 import com.project.giunne.common.data.util.NetworkResult
 import com.project.giunne.common.data.util.handleApi
@@ -38,6 +39,12 @@ class ShopRepositoryImpl(
         return handleApi(TAG) {
             GLog.d(TAG, "postGacha Request => $gachaRequest")
             shopService.postGacha(gachaRequest = gachaRequest)
+        }
+    }
+
+    override suspend fun getPossibleItemCount(gachaTypes: String): NetworkResult<PossibleItemCountInto> {
+        return handleApi(TAG) {
+            shopService.getPossibleItemCount(gachaTypes = gachaTypes)
         }
     }
 }
