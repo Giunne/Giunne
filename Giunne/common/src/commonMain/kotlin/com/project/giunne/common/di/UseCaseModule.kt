@@ -23,7 +23,9 @@ import com.project.giunne.common.domain.usecase.community.GetQuestTypeList
 import com.project.giunne.common.domain.usecase.community.PostComment
 import com.project.giunne.common.domain.usecase.community.PostCommentLike
 import com.project.giunne.common.domain.usecase.community.PostCommentUnlike
+import com.project.giunne.common.domain.usecase.mypage.GetAvatarInformationUseCase
 import com.project.giunne.common.domain.usecase.mypage.GetInventoryItemListUseCase
+import com.project.giunne.common.domain.usecase.mypage.ModifyAvatarInformationUseCase
 import com.project.giunne.common.domain.usecase.mypage.PutInventoryItemUseCase
 import com.project.giunne.common.domain.usecase.roadmap.CreateRecreationUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetRecreationTeacherListUseCase
@@ -80,4 +82,6 @@ val useCaseModule: Module = module {
     single { GetPostingList(get()) }
     single { GetQuestTypeList(get()) }
     single { PostGradeStudentUseCase(get()) }
+    single { GetAvatarInformationUseCase(get()) }
+    single { ModifyAvatarInformationUseCase(get()) }
 }
