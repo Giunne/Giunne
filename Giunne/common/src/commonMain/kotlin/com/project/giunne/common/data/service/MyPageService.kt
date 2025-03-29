@@ -7,6 +7,7 @@ import com.project.giunne.common.data.remote.response.CategoryItemResponse
 import com.project.giunne.common.data.util.BaseResponse
 import com.project.giunne.common.data.util.DefineUrl.GET_AVATAR_INFORMATION
 import com.project.giunne.common.data.util.DefineUrl.GET_INVENTORY_ITEM_BY_ID
+import com.project.giunne.common.data.util.DefineUrl.MODIFY_AVATAR_INFORMATION
 import com.project.giunne.common.data.util.DefineUrl.PUT_INVENTORY_ITEM
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
@@ -28,7 +29,7 @@ interface MyPageService {
     @GET(GET_AVATAR_INFORMATION)
     suspend fun getMyInformation(): BaseResponse<AvatarInformationResponse>
 
-    @PUT
+    @PUT(MODIFY_AVATAR_INFORMATION)
     suspend fun modifyAvatarInformation(
         @Body avatarModifyRequest: AvatarModifyRequest
     ): BaseResponse<String>
