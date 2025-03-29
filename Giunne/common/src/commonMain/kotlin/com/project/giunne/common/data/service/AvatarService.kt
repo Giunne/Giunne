@@ -5,9 +5,11 @@ import com.project.giunne.common.data.remote.request.AvatarLoginRequest
 import com.project.giunne.common.data.remote.response.AvatarResponse
 import com.project.giunne.common.data.remote.response.AvatarUserListResponse
 import com.project.giunne.common.data.remote.response.AvatarUserResponse
+import com.project.giunne.common.data.remote.response.MyPointInfo
 import com.project.giunne.common.data.util.BaseResponse
 import com.project.giunne.common.data.util.DefineUrl.URL_AVATAR_CREATE
 import com.project.giunne.common.data.util.DefineUrl.URL_AVATAR_LOGIN
+import com.project.giunne.common.data.util.DefineUrl.URL_GET_POINT_INFO
 import com.project.giunne.common.data.util.DefineUrl.URL_RECREATION_AVATAR_LIST
 import com.project.giunne.common.data.util.DefineUrl.URL_USER_AVATAR_LIST
 import de.jensklingenberg.ktorfit.http.Body
@@ -35,4 +37,8 @@ interface AvatarService {
     suspend fun getRecreationAvatarList(
         @Query("recreationId") recreationId: Long
     ): BaseResponse<List<AvatarUserResponse>>
+
+    @GET(URL_GET_POINT_INFO)
+    suspend fun getPointInfo(
+    ): BaseResponse<MyPointInfo>
 }

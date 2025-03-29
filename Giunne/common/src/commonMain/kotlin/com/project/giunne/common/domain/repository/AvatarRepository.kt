@@ -7,6 +7,7 @@ import com.project.giunne.common.data.remote.response.AvatarResponse
 import com.project.giunne.common.data.remote.response.AvatarUserListResponse
 import com.project.giunne.common.data.remote.response.AvatarUserResponse
 import com.project.giunne.common.data.remote.response.Item
+import com.project.giunne.common.data.remote.response.MyPointInfo
 import com.project.giunne.common.data.util.BaseResponse
 import com.project.giunne.common.data.util.NetworkResult
 import de.jensklingenberg.ktorfit.http.Body
@@ -23,4 +24,5 @@ interface AvatarRepository {
 
     suspend fun getUserAvatarList(pageIndex: Int): NetworkResult<AvatarUserListResponse>
     suspend fun getRecreationAvatarList(recreationId: Long): NetworkResult<List<AvatarUserResponse>>
+    suspend fun getPointInfo(): NetworkResult<MyPointInfo>
 }

@@ -10,6 +10,8 @@ data class CommunityState(
     val commentList: List<CommentInfo> = listOf(),
     val paginationInfo: PaginationInfo = PaginationInfo(),
 
+    val invalidNumericDialog: Boolean = false,
+    val selectedLikeCommentId: Long? = null,
     val loading: Boolean = false,
     val error: DataThrowable? = null
 )

@@ -18,7 +18,9 @@ data class AvatarUserResponse(
     val teacherLoginId: String = "",
     val teacherName: String? = null,
     val wearingItemIds: List<Int> = listOf(),
-    val wearingItems: List<WearingItem> = listOf()
+    val wearingItems: List<WearingItem> = listOf(),
+
+    val myPoint: Int = 0
 )
 
 @Serializable

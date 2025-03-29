@@ -51,6 +51,7 @@ import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.community.content.CommentInputRow
 import com.project.giunne.common.presentation.community.content.CommunityDetailInfoRow
 import com.project.giunne.common.presentation.community.content.GradeDialog
+import com.project.giunne.common.presentation.community.content.SendLikeDialog
 import com.project.giunne.common.presentation.community.content.TeacherCommunityCommentColumn
 import com.project.giunne.common.presentation.community.student.intent.CommunityStore
 import com.project.giunne.common.presentation.community.student.intent.GradeStore
@@ -61,6 +62,7 @@ import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.ZoomStore
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import com.project.giunne.common.util.isNumeric
 import com.project.giunne.common.util.onZoomEvent
 import com.project.giunne.common.util.rememberZoomState
 import com.project.giunne.icon_expand
@@ -226,10 +228,16 @@ internal fun TeacherCommunityDetailScreen(
                     listState = scrollState,
                     commentList = communityState.commentList,
                     callLike = { commentId, onSuccess ->
-                        communityStore.callCommentLike(CommentLikeRequest(commentId)) { onSuccess() }
+                        communityStore.onClickLikeButton(commentId)
+                        onSuccess()
                     },
                     callUnlike = { commentId, onSuccess ->
-                        communityStore.callCommentUnlike(CommentLikeRequest(commentId)) { onSuccess() }
+                        communityStore.callCommentUnlike(
+                            CommentLikeRequest(commentId, 0, 0)
+                        ) {
+                            communityStore.callCommentList(postId = postId)
+                            onSuccess()
+                        }
                     },
                     onDeleteButtonClicked = {
                         communityStore.callDeleteComment(it) {
@@ -276,6 +284,39 @@ internal fun TeacherCommunityDetailScreen(
             ImageViewer(
                 imagePath = communityState.postingDetailInfo.fileUrl,
                 dismiss = { fullImage = false }
+            )
+        }
+    }
+
+    with(communityState.selectedLikeCommentId) {
+        if (this != null) {
+            SendLikeDialog(
+                commentId = this,
+                onConfirmClicked = { point, exp ->
+                    if (point.isNumeric() && exp.isNumeric()) {
+                        communityStore.callCommentLike(
+                            CommentLikeRequest(this, point.toLong(), exp.toLong())
+                        ) {
+                            communityStore.dismissSendLikeDialog()
+                            communityStore.callCommentList(postId = postId ?: 0)
+                        }
+                    } else {
+                        communityStore.onInvalidNumeric()
+                    }
+                },
+                onCancelClicked = {
+                    communityStore.dismissSendLikeDialog()
+                },
+            )
+        }
+    }
+
+    with(communityState.invalidNumericDialog) {
+        if (this) {
+            GPAlertDialog(
+                dismiss = { communityStore.dismissInvalidNumericDialog() },
+                title = "좋아요 요청 에러",
+                content = "잘못된 숫자 입력입니다. 다시 입력해주세요."
             )
         }
     }
