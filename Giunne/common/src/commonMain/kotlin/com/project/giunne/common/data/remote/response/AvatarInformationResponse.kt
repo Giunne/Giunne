@@ -14,6 +14,11 @@ data class AvatarInformationResponse(
     val schoolId: Int = 0,
     @SerialName("schoolName")
     val schoolName: String = "",
+    @SerialName("nickName")
+    val nickName: String = "nickName",
     @SerialName("studentNumber")
     val studentNumber: Int = 0
-)
+) {
+    val gradeAndClass: String
+        get() = "${classNumber}학년 ${grade}반"
+}
