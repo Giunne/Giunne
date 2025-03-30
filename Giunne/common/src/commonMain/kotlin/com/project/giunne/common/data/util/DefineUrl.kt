@@ -11,6 +11,7 @@ object DefineUrl {
     const val GET_CATEGORY_ROOT = "items/category/root"
     const val GET_GACHA_TYPE = "items/order/gacha-type"
     const val POST_GACHA = "items/order/gacha"
+    const val GET_POSSIBLE_ITEM_COUNT = "items/order/count-possible-gacha"
 
     /* Auth */
     const val URL_TEACHER_SIGNUP = "member/auth/signup/teacher"
@@ -19,6 +20,7 @@ object DefineUrl {
     const val URL_LOGOUT = "member/auth/logout"
     const val URL_REFRESH = "member/auth/access-token/issue"
     const val URL_CHANGE_PASSWORD = "member/auth/password-change"
+    const val URL_ID_CHECK = "member/auth/duplicate-id"
 
     /* Common */
     const val URL_SCHOOL_LIST = "member/school"
@@ -32,11 +34,14 @@ object DefineUrl {
     const val URL_AVATAR_LOGIN = "member/avatar/login"
     const val URL_AVATAR_CREATE = "member/avatar/create"
     const val URL_USER_AVATAR_LIST = "member/avatar"
+    const val URL_GET_POINT_INFO = "member/avatar/point"
+    const val URL_MODIFY_USER_POINT = "member/avatar/point"
 
     /* RoadMap */
     const val URL_ROADMAP_LIST = "quest/roadmap"
     const val URL_MODIFY_QUEST = "quest/quest"
     const val URL_TEACHER_ROADMAP_COURSE = "quest/course/teacher/road-map"
+    const val URL_SPECIFIC_STUDENT_ROADMAP_COURSE = "quest/course/teacher/road-map-view"
     const val URL_STUDENT_ROADMAP_COURSE = "quest/course/road-map"
     const val URL_QUEST_STATE = "quest/quest-state/quest-progress"
     const val URL_QUEST_CODE = "quest/quest-state/common-code"
@@ -60,6 +65,7 @@ object DefineUrl {
     const val GET_POSTING_DETAIL = "quest/post"
     const val POST_COMMENT = "quest/post"
     const val GET_COMMENT_LIST = "quest/post/comment"
+    const val DELETE_COMMENT = "quest/post/comment"
     const val POST_COMMENT_LIKE = "quest/post/comment/like"
     const val POST_COMMENT_UNLIKE = "quest/post/comment/unlike"
     const val GET_POSTING_LIST = "quest/quest/upload"

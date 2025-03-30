@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -62,6 +64,7 @@ import com.project.giunne.common.util.rememberZoomState
 import com.project.giunne.icon_expand
 import com.project.giunne.icon_upload_image
 import com.project.giunne.image_loader_1
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
 private const val TAG = "StudentCommunityDetailScreen"
@@ -81,10 +84,10 @@ fun StudentCommunityDetailScreen(
 
     val scrollState = rememberLazyListState()
 
-    /////test/////
     var fullVideo by remember { mutableStateOf(false) }
     var fullImage by remember { mutableStateOf(false) }
-    //////////////
+
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
         GLog.d(TAG, "postId: $postId")
@@ -111,6 +114,11 @@ fun StudentCommunityDetailScreen(
         modifier = Modifier
             .addFocusCleaner(focusManager)
             .fillMaxSize(),
+        snackbarHost = {
+            SnackbarHost(
+                snackbarHostState
+            )
+        }
     ) {
         Column(
             modifier = Modifier
@@ -211,7 +219,17 @@ fun StudentCommunityDetailScreen(
                         .fillMaxWidth()
                         .weight(1f),
                     listState = scrollState,
-                    commentList = communityState.commentList
+                    commentList = communityState.commentList,
+                    onDeleteButtonClicked = {
+                        communityStore.callDeleteComment(it) {
+                            communityStore.callCommentList(postId = postId)
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "삭제되었습니다."
+                                )
+                            }
+                        }
+                    }
                 )
                 CommentInputRow(
                     modifier = Modifier

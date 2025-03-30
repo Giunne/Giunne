@@ -8,6 +8,7 @@ import com.project.giunne.common.data.remote.response.PostingDetailResponse
 import com.project.giunne.common.data.remote.response.PostingListResponse
 import com.project.giunne.common.data.remote.response.QuestTypeListResponse
 import com.project.giunne.common.data.util.BaseResponse
+import com.project.giunne.common.data.util.DefineUrl.DELETE_COMMENT
 import com.project.giunne.common.data.util.DefineUrl.GET_COMMENT_LIST
 import com.project.giunne.common.data.util.DefineUrl.GET_POSTING_DETAIL
 import com.project.giunne.common.data.util.DefineUrl.GET_POSTING_DETAIL_LIST
@@ -17,6 +18,7 @@ import com.project.giunne.common.data.util.DefineUrl.POST_COMMENT
 import com.project.giunne.common.data.util.DefineUrl.POST_COMMENT_LIKE
 import com.project.giunne.common.data.util.DefineUrl.POST_COMMENT_UNLIKE
 import de.jensklingenberg.ktorfit.http.Body
+import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Path
@@ -44,6 +46,11 @@ interface CommunityService {
         @Path("postId") postId: Long,
         @Query("pageIndex") pageIndex: Int,
     ): BaseResponse<CommentListResponse>
+
+    @DELETE("$DELETE_COMMENT/{postId}")
+    suspend fun deleteComment(
+        @Path("postId") postId: Long,
+    ): BaseResponse<String>
 
     @POST(POST_COMMENT_LIKE)
     suspend fun postCommentLike(

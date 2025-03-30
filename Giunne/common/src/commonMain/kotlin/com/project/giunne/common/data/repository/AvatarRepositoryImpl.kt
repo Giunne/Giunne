@@ -2,14 +2,17 @@ package com.project.giunne.common.data.repository
 
 import com.project.giunne.common.data.remote.request.AvatarCreateRequest
 import com.project.giunne.common.data.remote.request.AvatarLoginRequest
+import com.project.giunne.common.data.remote.request.StudentPointRequest
 import com.project.giunne.common.data.remote.response.AvatarResponse
 import com.project.giunne.common.data.remote.response.AvatarUserListResponse
 import com.project.giunne.common.data.remote.response.AvatarUserResponse
+import com.project.giunne.common.data.remote.response.MyPointInfo
 import com.project.giunne.common.data.service.AvatarService
 import com.project.giunne.common.data.util.NetworkResult
 import com.project.giunne.common.data.util.TokenHandler.handleTokenForResponse
 import com.project.giunne.common.data.util.handleApi
 import com.project.giunne.common.domain.repository.AvatarRepository
+import com.project.giunne.common.util.Define.recreationId
 
 private const val TAG = "AvatarRepositoryImpl"
 class AvatarRepositoryImpl(
@@ -38,6 +41,18 @@ class AvatarRepositoryImpl(
 
         return handleApi(TAG) {
             avatarService.getRecreationAvatarList(recreationId = recreationId)
+        }
+    }
+
+    override suspend fun getPointInfo(): NetworkResult<MyPointInfo> {
+        return handleApi(TAG) {
+            avatarService.getPointInfo()
+        }
+    }
+
+    override suspend fun modifyStudentPoint(studentPointRequest: StudentPointRequest): NetworkResult<String> {
+        return handleApi(TAG) {
+            avatarService.modifyStudentPoint(studentPointRequest)
         }
     }
 }

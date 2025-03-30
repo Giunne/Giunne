@@ -5,10 +5,12 @@ import com.project.giunne.common.data.remote.response.CategoryItemResponse
 import com.project.giunne.common.data.remote.response.CategoryTypeResponse
 import com.project.giunne.common.data.remote.response.GachaResponse
 import com.project.giunne.common.data.remote.response.Item
+import com.project.giunne.common.data.remote.response.PossibleItemCountInto
 import com.project.giunne.common.data.util.BaseResponse
 import com.project.giunne.common.data.util.DefineUrl.GET_CATEGORY_ITEM_BY_ID
 import com.project.giunne.common.data.util.DefineUrl.GET_CATEGORY_ROOT
 import com.project.giunne.common.data.util.DefineUrl.GET_GACHA_TYPE
+import com.project.giunne.common.data.util.DefineUrl.GET_POSSIBLE_ITEM_COUNT
 import com.project.giunne.common.data.util.DefineUrl.POST_GACHA
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
@@ -34,4 +36,9 @@ interface ShopService {
     suspend fun postGacha(
         @Body gachaRequest: GachaRequest,
     ): BaseResponse<Item>
+
+    @GET(GET_POSSIBLE_ITEM_COUNT)
+    suspend fun getPossibleItemCount(
+        @Query("gachaTypes") gachaTypes: String,
+    ): BaseResponse<PossibleItemCountInto>
 }

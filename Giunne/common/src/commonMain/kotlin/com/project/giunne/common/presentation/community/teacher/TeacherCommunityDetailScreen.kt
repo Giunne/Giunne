@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -49,15 +51,18 @@ import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.community.content.CommentInputRow
 import com.project.giunne.common.presentation.community.content.CommunityDetailInfoRow
 import com.project.giunne.common.presentation.community.content.GradeDialog
+import com.project.giunne.common.presentation.community.content.SendLikeDialog
 import com.project.giunne.common.presentation.community.content.TeacherCommunityCommentColumn
 import com.project.giunne.common.presentation.community.student.intent.CommunityStore
 import com.project.giunne.common.presentation.community.student.intent.GradeStore
+import com.project.giunne.common.presentation.home.teacher.state.TeacherHomeEvent
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.ZoomStore
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import com.project.giunne.common.util.isNumeric
 import com.project.giunne.common.util.onZoomEvent
 import com.project.giunne.common.util.rememberZoomState
 import com.project.giunne.icon_expand
@@ -88,13 +93,10 @@ internal fun TeacherCommunityDetailScreen(
 
     val scrollState = rememberLazyListState()
 
-    /////test/////
     var fullVideo by remember { mutableStateOf(false) }
     var fullImage by remember { mutableStateOf(false) }
-    //////////////
-    /////TEST///// TODO API
-    var deleteConfirmDialog by remember { mutableStateOf(false) }
-    //////////////
+
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
         GLog.d(TAG, "postId: $postId")
@@ -121,6 +123,11 @@ internal fun TeacherCommunityDetailScreen(
         modifier = Modifier
             .addFocusCleaner(focusManager)
             .fillMaxSize(),
+        snackbarHost = {
+            SnackbarHost(
+                snackbarHostState
+            )
+        }
     ) {
         Column(
             modifier = Modifier
@@ -221,10 +228,26 @@ internal fun TeacherCommunityDetailScreen(
                     listState = scrollState,
                     commentList = communityState.commentList,
                     callLike = { commentId, onSuccess ->
-                        communityStore.callCommentLike(CommentLikeRequest(commentId)) { onSuccess() }
+                        communityStore.onClickLikeButton(commentId)
+                        onSuccess()
                     },
                     callUnlike = { commentId, onSuccess ->
-                        communityStore.callCommentUnlike(CommentLikeRequest(commentId)) { onSuccess() }
+                        communityStore.callCommentUnlike(
+                            CommentLikeRequest(commentId, 0, 0)
+                        ) {
+                            communityStore.callCommentList(postId = postId)
+                            onSuccess()
+                        }
+                    },
+                    onDeleteButtonClicked = {
+                        communityStore.callDeleteComment(it) {
+                            communityStore.callCommentList(postId = postId)
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "삭제되었습니다."
+                                )
+                            }
+                        }
                     }
                 )
                 CommentInputRow(
@@ -247,19 +270,6 @@ internal fun TeacherCommunityDetailScreen(
         }
     }
 
-    with(deleteConfirmDialog) {
-        if (this) {
-            GPConfirmDialog(
-                title = "",
-                content = "삭제할까요?",
-                onConfirmClicked = {
-                    deleteConfirmDialog = false
-                }, //TODO API
-                onCancelClicked = { deleteConfirmDialog = false },
-            )
-        }
-    }
-
     with(fullVideo) {
         if (this) {
             VideoWindowPlayer(
@@ -278,16 +288,51 @@ internal fun TeacherCommunityDetailScreen(
         }
     }
 
+    with(communityState.selectedLikeCommentId) {
+        if (this != null) {
+            SendLikeDialog(
+                commentId = this,
+                onConfirmClicked = { point, exp ->
+                    if (point.isNumeric() && exp.isNumeric()) {
+                        communityStore.callCommentLike(
+                            CommentLikeRequest(this, point.toLong(), exp.toLong())
+                        ) {
+                            communityStore.dismissSendLikeDialog()
+                            communityStore.callCommentList(postId = postId ?: 0)
+                        }
+                    } else {
+                        communityStore.onInvalidNumeric()
+                    }
+                },
+                onCancelClicked = {
+                    communityStore.dismissSendLikeDialog()
+                },
+            )
+        }
+    }
+
+    with(communityState.invalidNumericDialog) {
+        if (this) {
+            GPAlertDialog(
+                dismiss = { communityStore.dismissInvalidNumericDialog() },
+                title = "좋아요 요청 에러",
+                content = "잘못된 숫자 입력입니다. 다시 입력해주세요."
+            )
+        }
+    }
+
     with(gradeState.gradeDialog) {
         if (this) {
             GradeDialog(
                 questName = communityState.postingDetailInfo.questInfo.getQuestTitle(),
-
+                currentApproveTitle = communityState.postingDetailInfo.currentApproveTitle,
+                isLastApprove = communityState.postingDetailInfo.isLastApprove,
                 onCloseButtonClicked = { gradeStore.dismissGradeDialog() },
-                onConfirmButtonClicked = { star, isChecked ->
+                onConfirmButtonClicked = { star, isChecked, isPass ->
                     gradeStore.onClickConfirmButton(
                         star,
-                        isChecked
+                        isChecked,
+                        isPass
                     )
                 }
             )
@@ -317,7 +362,7 @@ internal fun TeacherCommunityDetailScreen(
                     gradeStore.gradingStudent(
                         GradeStudentRequest(
                             questPostId = postId ?: 0,
-                            isPass = true,
+                            isPass = gradeState.isPass,
                             hasExtraPoints = gradeState.hasExtraPoints,
                             starPoint = gradeState.starPoint
                         ),

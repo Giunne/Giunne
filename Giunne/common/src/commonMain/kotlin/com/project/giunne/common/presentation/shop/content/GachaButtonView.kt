@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.project.giunne.common.presentation.common.button.GPButton
+import com.project.giunne.common.presentation.common.noRippleClickableWithoutHover
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
@@ -45,21 +46,41 @@ fun GachaButtonView(
             )
         }
 
-        GPButton(
-            modifier = Modifier
-                .weight(1f)
-                .height(48.gdp),
-            normalColor = GPColor.ButtonOrange,
-            pressColor = GPColor.ButtonPressOrange,
-            hoverColor = GPColor.ButtonHoverOrange,
-            onClick = { onGachaClick() },
-        ) {
-            GPText(
-                text = "${gachaCost}포인트로 뽑기",
-                textSize = 14.gsp,
-                fontFamily = GPFontFamily.Bold,
-                textColor = GPColor.White
-            )
+        if (gachaCost > remainPoint) {
+            GPButton(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(48.gdp)
+                    .noRippleClickableWithoutHover {  },
+                normalColor = GPColor.ButtonLightGray,
+                pressColor = GPColor.ButtonLightGray,
+                hoverColor = GPColor.ButtonLightGray,
+                onClick = {  },
+            ) {
+                GPText(
+                    text = "${gachaCost}포인트로 뽑기",
+                    textSize = 14.gsp,
+                    fontFamily = GPFontFamily.Bold,
+                    textColor = GPColor.White
+                )
+            }
+        } else {
+            GPButton(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(48.gdp),
+                normalColor = GPColor.ButtonOrange,
+                pressColor = GPColor.ButtonPressOrange,
+                hoverColor = GPColor.ButtonHoverOrange,
+                onClick = { onGachaClick() },
+            ) {
+                GPText(
+                    text = "${gachaCost}포인트로 뽑기",
+                    textSize = 14.gsp,
+                    fontFamily = GPFontFamily.Bold,
+                    textColor = GPColor.White
+                )
+            }
         }
     }
 }

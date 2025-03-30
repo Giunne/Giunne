@@ -28,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Matrix
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
@@ -49,20 +48,20 @@ import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
-import com.project.giunne.common.presentation.shop.content.aRankColorBrush
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_check
-import com.project.giunne.icon_student_check
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun GradeDialog(
     questName: String,
+    currentApproveTitle: String,
+    isLastApprove: Boolean,
     onCloseButtonClicked: () -> Unit,
-    onConfirmButtonClicked: (Int, Boolean) -> Unit,
+    onConfirmButtonClicked: (Int, Boolean, Boolean) -> Unit,
 ) {
     var grade by remember { mutableStateOf(0) }
     var isChecked by remember { mutableStateOf(false) }
@@ -98,64 +97,66 @@ fun GradeDialog(
                     fontFamily = GPFontFamily.Bold
                 )
                 GPText(
-                    text = "채점",
+                    text = "채점 $currentApproveTitle",
                     textColor = GPColor.TextBlack,
                     textSize = 18.gsp,
                     fontFamily = GPFontFamily.Bold
                 )
             }
             SpH(10.gdp)
-            Row(
-                modifier = Modifier
-                    .height(50.gdp)
-                    .background(GPColor.White),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                StarShape(
-                    isCheck = grade >= 1,
-                    onClick = { grade = 1 },
-                )
-                Spacer(modifier = Modifier.width(10.gdp))
-                StarShape(
-                    isCheck = grade >= 2,
-                    onClick = { grade = 2 },
-                )
-                Spacer(modifier = Modifier.width(10.gdp))
-                StarShape(
-                    isCheck = grade >= 3,
-                    onClick = { grade = 3 },
-                )
-            }
-            SpH(10.gdp)
-            Row(
-                modifier = Modifier
-                    .noRippleClickable { isChecked = !isChecked },
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
+            if (isLastApprove) {
+                Row(
                     modifier = Modifier
-                        .size(18.gdp)
-                        .background(
-                            color = animatedColor,
-                            shape = RoundedCornerShape(12.gdp)
-                        ),
-                    contentAlignment = Alignment.Center
+                        .height(50.gdp)
+                        .background(GPColor.White),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    if (isChecked) {
-                        Image(
-                            modifier = Modifier.size(11.gdp),
-                            painter = painterResource(Res.drawable.icon_check),
-                            contentDescription = null,
-                        )
-                    }
+                    StarShape(
+                        isCheck = grade >= 1,
+                        onClick = { grade = 1 },
+                    )
+                    Spacer(modifier = Modifier.width(10.gdp))
+                    StarShape(
+                        isCheck = grade >= 2,
+                        onClick = { grade = 2 },
+                    )
+                    Spacer(modifier = Modifier.width(10.gdp))
+                    StarShape(
+                        isCheck = grade >= 3,
+                        onClick = { grade = 3 },
+                    )
                 }
-                SpW(10.gdp)
-                GPText(
-                    text = "추가 동작 여부",
-                    textSize = 14.gsp,
-                    fontFamily = GPFontFamily.Bold,
-                    textColor = GPColor.TextBlack
-                )
+                SpH(10.gdp)
+                Row(
+                    modifier = Modifier
+                        .noRippleClickable { isChecked = !isChecked },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(18.gdp)
+                            .background(
+                                color = animatedColor,
+                                shape = RoundedCornerShape(12.gdp)
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (isChecked) {
+                            Image(
+                                modifier = Modifier.size(11.gdp),
+                                painter = painterResource(Res.drawable.icon_check),
+                                contentDescription = null,
+                            )
+                        }
+                    }
+                    SpW(10.gdp)
+                    GPText(
+                        text = "추가 동작 여부",
+                        textSize = 14.gsp,
+                        fontFamily = GPFontFamily.Bold,
+                        textColor = GPColor.TextBlack
+                    )
+                }
             }
             SpH(20.gdp)
             Row(
@@ -187,7 +188,24 @@ fun GradeDialog(
                     normalColor = GPColor.ButtonOrange,
                     pressColor = GPColor.ButtonPressOrange,
                     hoverColor = GPColor.ButtonHoverOrange,
-                    onClick = { onConfirmButtonClicked(grade, isChecked) },
+                    onClick = { onConfirmButtonClicked(grade, isChecked, false) },
+                ) {
+                    GPText(
+                        text = "실패",
+                        textSize = 14.gsp,
+                        fontFamily = GPFontFamily.Bold,
+                        textColor = GPColor.White
+                    )
+                }
+                SpW(10.gdp)
+                GPButton(
+                    modifier = Modifier
+                        .weight(2f)
+                        .height(44.gdp),
+                    normalColor = GPColor.ButtonOrange,
+                    pressColor = GPColor.ButtonPressOrange,
+                    hoverColor = GPColor.ButtonHoverOrange,
+                    onClick = { onConfirmButtonClicked(grade, isChecked, true) },
                 ) {
                     GPText(
                         text = "채점하기",

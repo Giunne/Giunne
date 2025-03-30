@@ -4,6 +4,7 @@ import com.project.giunne.common.base.BaseComponent
 import com.project.giunne.common.data.remote.request.GachaRequest
 import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.shop.GetGachaTypeUseCase
+import com.project.giunne.common.domain.usecase.shop.GetPossibleItemCountUseCase
 import com.project.giunne.common.domain.usecase.shop.PostGachaUseCase
 import com.project.giunne.common.presentation.shop.state.GachaEvent
 import com.project.giunne.common.presentation.shop.state.GachaState
@@ -15,7 +16,8 @@ import org.koin.java.KoinJavaComponent
 
 class GachaStore(
     private val getGachaTypeUseCase: GetGachaTypeUseCase = KoinJavaComponent.get(GetGachaTypeUseCase::class.java),
-    private val postGachaUseCase: PostGachaUseCase = KoinJavaComponent.get(PostGachaUseCase::class.java)
+    private val postGachaUseCase: PostGachaUseCase = KoinJavaComponent.get(PostGachaUseCase::class.java),
+    private val getPossibleItemCountUseCase: GetPossibleItemCountUseCase = KoinJavaComponent.get(GetPossibleItemCountUseCase::class.java)
 ): BaseComponent<GachaState, GachaEvent>(
     scope = CoroutineScope(Dispatchers.IO),
     initialState = GachaState()
@@ -59,5 +61,24 @@ class GachaStore(
                 setState { copy(loading = false, error = it.asDataThrowable()) }
             }
 //        }
+    }
+
+    fun getPossibleItemCount(
+        gachaType: String
+    ) {
+        scope.launch {
+            setState { copy(loading = true) }
+            runCatching {
+                getPossibleItemCountUseCase.invoke(gachaType)
+            }.onSuccess {
+                setState { copy(loading = false, possibleItemCount = it.possibleCount) }
+            }.onFailure {
+                setState { copy(loading = false, error = it.asDataThrowable()) }
+            }
+        }
+    }
+
+    fun dismissErrorDialog() {
+        setState { copy(error = null) }
     }
 }

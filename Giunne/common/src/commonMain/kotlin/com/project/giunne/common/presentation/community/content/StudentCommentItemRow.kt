@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -28,12 +29,14 @@ import androidx.compose.ui.graphics.RectangleShape
 import com.project.giunne.Res
 import com.project.giunne.common.data.remote.response.CommentInfo
 import com.project.giunne.common.presentation.common.button.GPIconButton
+import com.project.giunne.common.presentation.common.charactor.GPSmallCharacter
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.shape.GPSquircleShape
 import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.community.student.dummy.CommentDto
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.AvatarUtil
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
@@ -75,16 +78,15 @@ fun StudentCommentItemRow(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 GPSquircleShape(
-                    modifier = Modifier
-                        .size(28.gdp),
-                    backgroundColor = GPColor.BackgroundGray_F6F6F6
-                ) {
-                    Image(
-                        modifier = Modifier.size(24.gdp),
-                        painter = painterResource(Res.drawable.test_character), //TODO API
-                        contentDescription = null
-                    )
-                }
+                    modifier = Modifier.size(28.gdp),
+                    backgroundColor = GPColor.BackgroundGray_F6F6F6,
+                    content = {
+                        GPSmallCharacter(
+                            modifier = Modifier.fillMaxSize(),
+                            wearingItems = commentInfo.playerInfo.wearingItems
+                        )
+                    }
+                )
                 SpW(8.gdp)
                 GPText(
                     modifier = Modifier.weight(1f),
@@ -99,20 +101,22 @@ fun StudentCommentItemRow(
                     textSize = 8.gsp,
                     fontFamily = GPFontFamily.Medium
                 )
-                SpW(8.gdp)
-                Box(
-                    modifier = Modifier
-                        .size(28.gdp)
-                        .noRippleClickable {
-                            isMenuOpen = !isMenuOpen
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        modifier = Modifier.size(12.gdp),
-                        painter = painterResource(Res.drawable.icon_more),
-                        contentDescription = null,
-                    )
+                if (commentInfo.playerInfo.id == AvatarUtil.uiState.value.id) {
+                    SpW(8.gdp)
+                    Box(
+                        modifier = Modifier
+                            .size(28.gdp)
+                            .noRippleClickable {
+                                isMenuOpen = !isMenuOpen
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Image(
+                            modifier = Modifier.size(12.gdp),
+                            painter = painterResource(Res.drawable.icon_more),
+                            contentDescription = null,
+                        )
+                    }
                 }
             }
             Box(
@@ -152,6 +156,7 @@ fun StudentCommentItemRow(
                 pressColor = GPColor.ButtonPressRed,
                 onClick = {
                     onDeleteButtonClicked()
+                    isMenuOpen = !isMenuOpen
                 },
                 shadow = false,
                 shape = RectangleShape

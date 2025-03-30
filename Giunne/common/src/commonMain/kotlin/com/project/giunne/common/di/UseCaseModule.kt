@@ -1,20 +1,24 @@
 package com.project.giunne.common.di
 
 import com.project.giunne.common.domain.usecase.auth.ChangePasswordUseCase
+import com.project.giunne.common.domain.usecase.auth.CheckExistIdUseCase
 import com.project.giunne.common.domain.usecase.auth.LoginUseCase
 import com.project.giunne.common.domain.usecase.auth.LogoutUseCase
 import com.project.giunne.common.domain.usecase.auth.StudentSignupUseCase
 import com.project.giunne.common.domain.usecase.auth.TeacherSignupUseCase
 import com.project.giunne.common.domain.usecase.avatar.CreateAvatarUseCase
 import com.project.giunne.common.domain.usecase.avatar.GetFriendsListUseCase
+import com.project.giunne.common.domain.usecase.avatar.GetMyPointUseCase
 import com.project.giunne.common.domain.usecase.avatar.GetUserAvatarListUseCase
 import com.project.giunne.common.domain.usecase.avatar.LoginRecreationUseCase
+import com.project.giunne.common.domain.usecase.avatar.ModifyStudentPointUseCase
 import com.project.giunne.common.domain.usecase.certification.GetCertificationHistory
 import com.project.giunne.common.domain.usecase.certification.GetCertificationProgress
 import com.project.giunne.common.domain.usecase.certification.PostUploadFileUseCase
 import com.project.giunne.common.domain.usecase.certification.GetUploadList
 import com.project.giunne.common.domain.usecase.certification.PostGradeStudentUseCase
 import com.project.giunne.common.domain.usecase.common.GetSchoolListUseCase
+import com.project.giunne.common.domain.usecase.community.DeleteComment
 import com.project.giunne.common.domain.usecase.community.GetCommentList
 import com.project.giunne.common.domain.usecase.community.GetPostingDetail
 import com.project.giunne.common.domain.usecase.community.GetPostingDetailList
@@ -32,6 +36,7 @@ import com.project.giunne.common.domain.usecase.roadmap.GetRecreationTeacherList
 import com.project.giunne.common.domain.usecase.roadmap.GetAllRoadMapUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetQuestCodeUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetSearchRecreationUseCase
+import com.project.giunne.common.domain.usecase.roadmap.GetSpecificStudentCourseUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetStudentCourseUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetTeacherCourseUseCase
 import com.project.giunne.common.domain.usecase.roadmap.ModifyQuestInfoUseCase
@@ -39,6 +44,7 @@ import com.project.giunne.common.domain.usecase.roadmap.ModifyQuestStateUseCase
 import com.project.giunne.common.domain.usecase.shop.GetCategoryItemListUseCase
 import com.project.giunne.common.domain.usecase.shop.GetCategoryMapUseCase
 import com.project.giunne.common.domain.usecase.shop.GetGachaTypeUseCase
+import com.project.giunne.common.domain.usecase.shop.GetPossibleItemCountUseCase
 import com.project.giunne.common.domain.usecase.shop.PostGachaUseCase
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -65,6 +71,7 @@ val useCaseModule: Module = module {
     single { ModifyQuestInfoUseCase(get()) }
     single { GetQuestCodeUseCase(get()) }
     single { GetStudentCourseUseCase(get()) }
+    single { GetSpecificStudentCourseUseCase(get()) }
     single { ModifyQuestStateUseCase(get()) }
     single { GetInventoryItemListUseCase(get()) }
     single { PutInventoryItemUseCase(get()) }
@@ -84,4 +91,9 @@ val useCaseModule: Module = module {
     single { PostGradeStudentUseCase(get()) }
     single { GetAvatarInformationUseCase(get()) }
     single { ModifyAvatarInformationUseCase(get()) }
+    single { DeleteComment(get()) }
+    single { CheckExistIdUseCase(get()) }
+    single { GetMyPointUseCase(get()) }
+    single { GetPossibleItemCountUseCase(get()) }
+    single { ModifyStudentPointUseCase(get()) }
 }

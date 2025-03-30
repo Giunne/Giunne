@@ -14,6 +14,7 @@ import com.project.giunne.common.domain.usecase.roadmap.CreateRecreationUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetRecreationTeacherListUseCase
 import com.project.giunne.common.presentation.home.teacher.state.TeacherHomeEvent
 import com.project.giunne.common.presentation.home.teacher.state.TeacherHomeState
+import com.project.giunne.common.util.AvatarUtil
 import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.GLog
 import kotlinx.coroutines.async
@@ -40,6 +41,7 @@ class TeacherHomeComponent(
             if (Define.playerId != 0L) {
                 async {
                     loginRecreation(Define.playerId)
+                    AvatarUtil.getRecreationList(Define.playerId, 1)
                     getCurrentTeacherRecreation(Define.recreationId, 1)
                 }.await()
             }

@@ -13,6 +13,7 @@ interface RoadMapRepository {
     suspend fun getAllRoadMapList(): NetworkResult<List<RoadMapInfo>>
     suspend fun modifyQuestInfo(modifyQuestInfoRequest: ModifyQuestInfoRequest): NetworkResult<QuestInfo>
     suspend fun getTeacherCourse(roadmapId: Long): NetworkResult<CourseResponse>
+    suspend fun getSpecificStudentCourse(roadmapId: Long, playerId: Int): NetworkResult<StudentCourseResponse>
     suspend fun getStudentCourse(roadmapId: Long): NetworkResult<StudentCourseResponse>
     suspend fun getQuestCode(): NetworkResult<QuestCodeResponse>
     suspend fun modifyQuestState(questStateRequest: QuestStateRequest): NetworkResult<String>

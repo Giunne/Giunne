@@ -7,6 +7,7 @@ import com.project.giunne.common.data.remote.request.GradeStudentRequest
 import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.certification.GetUploadList
 import com.project.giunne.common.domain.usecase.certification.PostGradeStudentUseCase
+import com.project.giunne.common.domain.usecase.community.DeleteComment
 import com.project.giunne.common.domain.usecase.community.GetCommentList
 import com.project.giunne.common.domain.usecase.community.GetPostingDetail
 import com.project.giunne.common.domain.usecase.community.GetPostingDetailList
@@ -22,6 +23,7 @@ class CommunityStore(
     private val getPostingDetail: GetPostingDetail = KoinJavaComponent.get(GetPostingDetail::class.java),
     private val postComment: PostComment = KoinJavaComponent.get(PostComment::class.java),
     private val getCommentList: GetCommentList = KoinJavaComponent.get(GetCommentList::class.java),
+    private val deleteComment: DeleteComment = KoinJavaComponent.get(DeleteComment::class.java),
     private val postCommentLike: PostCommentLike = KoinJavaComponent.get(PostCommentLike::class.java),
     private val postCommentUnlike: PostCommentUnlike = KoinJavaComponent.get(PostCommentUnlike::class.java),
 ): BaseStore<CommunityState>(CommunityState()) {
@@ -117,6 +119,36 @@ class CommunityStore(
         }
     }
 
+    fun callDeleteComment(
+        postId: Long,
+        onSuccess: () -> Unit
+    ) {
+        scope.launch {
+            setState { copy(loading = true) }
+            runCatching {
+                deleteComment.invoke(postId)
+            }.onSuccess {
+                setState { copy(loading = false) }
+                onSuccess()
+            }.onFailure {
+                setState {
+                    copy(
+                        loading = false,
+                        error = it.asDataThrowable()
+                    )
+                }
+            }
+        }
+    }
+
+    fun onClickLikeButton(
+        commentId: Long
+    ) {
+        setState {
+            copy(selectedLikeCommentId = commentId)
+        }
+    }
+
     fun callCommentLike(
         commentLikeRequest: CommentLikeRequest,
         onSuccess: () -> Unit
@@ -159,6 +191,18 @@ class CommunityStore(
                 }
             }
         }
+    }
+
+    fun onInvalidNumeric() {
+        setState { copy(invalidNumericDialog = true) }
+    }
+
+    fun dismissInvalidNumericDialog() {
+        setState { copy(invalidNumericDialog = false) }
+    }
+
+    fun dismissSendLikeDialog() {
+        setState { copy(selectedLikeCommentId = null) }
     }
 
     fun dismissErrorDialog() {

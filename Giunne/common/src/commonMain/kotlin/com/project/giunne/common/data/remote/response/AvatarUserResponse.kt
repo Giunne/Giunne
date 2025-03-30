@@ -11,6 +11,7 @@ data class AvatarUserResponse(
     val level: Int = 0,
     val nickname: String = "",
     val point: Int = 0,
+    val pointBuffer: Int = point,
     val recreationCode: String = "",
     val recreationId: Int = 0,
     val recreationName: String = "",
@@ -18,7 +19,9 @@ data class AvatarUserResponse(
     val teacherLoginId: String = "",
     val teacherName: String? = null,
     val wearingItemIds: List<Int> = listOf(),
-    val wearingItems: List<WearingItem> = listOf()
+    val wearingItems: List<WearingItem> = listOf(),
+
+    val myPoint: Int = 0
 )
 
 @Serializable

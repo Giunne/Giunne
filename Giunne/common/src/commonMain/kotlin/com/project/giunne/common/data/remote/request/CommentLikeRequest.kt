@@ -6,4 +6,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CommentLikeRequest(
     @SerialName("postId") val postId: Long,
+    @SerialName("rewardPoint") val rewardPoint: Long,
+    @SerialName("rewardExp") val rewardExp: Long,
 )
