@@ -8,6 +8,7 @@ import com.project.giunne.common.data.remote.response.Item
 import com.project.giunne.common.data.remote.response.PossibleItemCountInto
 import com.project.giunne.common.data.service.ShopService
 import com.project.giunne.common.data.util.NetworkResult
+import com.project.giunne.common.data.util.TokenHandler.handleTokenForResponse
 import com.project.giunne.common.data.util.handleApi
 import com.project.giunne.common.domain.repository.ShopRepository
 import com.project.giunne.common.util.GLog
@@ -18,33 +19,43 @@ class ShopRepositoryImpl(
 ): ShopRepository {
     override suspend fun getCategoryMap(): NetworkResult<Map<Long, List<CategoryTypeResponse>>> {
         return handleApi(TAG) {
-            shopService.getCategoryMap()
+            handleTokenForResponse {
+                shopService.getCategoryMap()
+            }
         }
     }
 
     override suspend fun getCategoryItemById(categoryItemId: Long, pageIndex: Int): NetworkResult<CategoryItemResponse> {
         return handleApi(TAG) {
-            shopService.getCategoryItemById(categoryItemId, pageIndex)
+            handleTokenForResponse {
+                shopService.getCategoryItemById(categoryItemId, pageIndex)
+            }
         }
     }
 
     override suspend fun getGachaType(): NetworkResult<List<GachaResponse>> {
         return handleApi(TAG) {
-            GLog.d(TAG, "getGachaType Request => ")
-            shopService.getGachaType()
+            handleTokenForResponse {
+                GLog.d(TAG, "getGachaType Request => ")
+                shopService.getGachaType()
+            }
         }
     }
 
     override suspend fun postGacha(gachaRequest: GachaRequest): NetworkResult<Item> {
         return handleApi(TAG) {
-            GLog.d(TAG, "postGacha Request => $gachaRequest")
-            shopService.postGacha(gachaRequest = gachaRequest)
+            handleTokenForResponse {
+                GLog.d(TAG, "postGacha Request => $gachaRequest")
+                shopService.postGacha(gachaRequest = gachaRequest)
+            }
         }
     }
 
     override suspend fun getPossibleItemCount(gachaTypes: String): NetworkResult<PossibleItemCountInto> {
         return handleApi(TAG) {
-            shopService.getPossibleItemCount(gachaTypes = gachaTypes)
+            handleTokenForResponse {
+                shopService.getPossibleItemCount(gachaTypes = gachaTypes)
+            }
         }
     }
 }

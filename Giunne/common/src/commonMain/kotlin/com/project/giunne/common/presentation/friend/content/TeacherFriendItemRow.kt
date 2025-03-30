@@ -75,13 +75,18 @@ fun TeacherFriendItemRow(
             }
         )
         SpW(16.gdp)
-        GPText(
+        Row(
             modifier = Modifier.weight(1f),
-            text = friendInfo.nickname,
-            textSize = 14.gsp,
-            fontFamily = GPFontFamily.Medium,
-            textColor = GPColor.TextBlack
-        )
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            GPText(
+                modifier = Modifier.weight(1f),
+                text = friendInfo.nickname,
+                textSize = 14.gsp,
+                fontFamily = GPFontFamily.Medium,
+                textColor = GPColor.TextBlack
+            )
+        }
         content()
     }
 }

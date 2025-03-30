@@ -9,6 +9,7 @@ import com.project.giunne.common.data.remote.response.RoadMapInfo
 import com.project.giunne.common.data.remote.response.StudentCourseResponse
 import com.project.giunne.common.data.service.RoadMapService
 import com.project.giunne.common.data.util.NetworkResult
+import com.project.giunne.common.data.util.TokenHandler.handleTokenForResponse
 import com.project.giunne.common.data.util.handleApi
 import com.project.giunne.common.domain.repository.RoadMapRepository
 
@@ -18,19 +19,25 @@ class RoadMapRepositoryImpl(
 ): RoadMapRepository {
     override suspend fun getAllRoadMapList(): NetworkResult<List<RoadMapInfo>> {
         return handleApi(TAG) {
-            roadMapService.getAllRoadMapList()
+            handleTokenForResponse {
+                roadMapService.getAllRoadMapList()
+            }
         }
     }
 
     override suspend fun modifyQuestInfo(modifyQuestInfoRequest: ModifyQuestInfoRequest): NetworkResult<QuestInfo> {
         return handleApi(TAG) {
-            roadMapService.modifyQuestInfo(modifyQuestInfoRequest = modifyQuestInfoRequest)
+            handleTokenForResponse {
+                roadMapService.modifyQuestInfo(modifyQuestInfoRequest = modifyQuestInfoRequest)
+            }
         }
     }
 
     override suspend fun getTeacherCourse(roadmapId: Long): NetworkResult<CourseResponse> {
         return handleApi(TAG) {
-            roadMapService.getTeacherCourse(roadmapId = roadmapId)
+            handleTokenForResponse {
+                roadMapService.getTeacherCourse(roadmapId = roadmapId)
+            }
         }
     }
 
@@ -39,28 +46,36 @@ class RoadMapRepositoryImpl(
         playerId: Int
     ): NetworkResult<StudentCourseResponse> {
         return handleApi(TAG) {
-            roadMapService.getSpecificStudentCourse(
-                roadmapId = roadmapId,
-                playerId = playerId
-            )
+            handleTokenForResponse {
+                roadMapService.getSpecificStudentCourse(
+                    roadmapId = roadmapId,
+                    playerId = playerId
+                )
+            }
         }
     }
 
     override suspend fun getStudentCourse(roadmapId: Long): NetworkResult<StudentCourseResponse> {
         return handleApi(TAG) {
-            roadMapService.getStudentCourse(roadmapId = roadmapId)
+            handleTokenForResponse {
+                roadMapService.getStudentCourse(roadmapId = roadmapId)
+            }
         }
     }
 
     override suspend fun getQuestCode(): NetworkResult<QuestCodeResponse> {
         return handleApi(TAG) {
-            roadMapService.getQuestCode()
+            handleTokenForResponse {
+                roadMapService.getQuestCode()
+            }
         }
     }
 
     override suspend fun modifyQuestState(questStateRequest: QuestStateRequest): NetworkResult<String> {
         return handleApi(TAG) {
-            roadMapService.modifyQuestState(questStateRequest)
+            handleTokenForResponse {
+                roadMapService.modifyQuestState(questStateRequest)
+            }
         }
     }
 }

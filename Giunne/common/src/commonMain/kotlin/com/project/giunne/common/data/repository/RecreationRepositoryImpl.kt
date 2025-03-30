@@ -6,6 +6,7 @@ import com.project.giunne.common.data.remote.response.RecreationListTeacherRespo
 import com.project.giunne.common.data.remote.response.RecreationSearchResponse
 import com.project.giunne.common.data.service.RecreationService
 import com.project.giunne.common.data.util.NetworkResult
+import com.project.giunne.common.data.util.TokenHandler.handleTokenForResponse
 import com.project.giunne.common.data.util.handleApi
 import com.project.giunne.common.domain.repository.RecreationRepository
 
@@ -18,26 +19,32 @@ class RecreationRepositoryImpl(
         pageIndex: Int
     ): NetworkResult<RecreationSearchResponse> {
         return handleApi(TAG) {
-            service.searchRecreation(
-                searchQuery = searchQuery,
-                pageIndex = pageIndex
-            )
+            handleTokenForResponse {
+                service.searchRecreation(
+                    searchQuery = searchQuery,
+                    pageIndex = pageIndex
+                )
+            }
         }
     }
 
     override suspend fun createRecreation(recreationRequest: RecreationRequest): NetworkResult<RecreationCreateResponse> {
         return handleApi(TAG) {
-            service.createRecreation(
-                recreationRequest = recreationRequest
-            )
+            handleTokenForResponse {
+                service.createRecreation(
+                    recreationRequest = recreationRequest
+                )
+            }
         }
     }
 
     override suspend fun getTeacherRecreationList(pageIndex: Int): NetworkResult<RecreationListTeacherResponse> {
         return handleApi(TAG) {
-            service.getTeacherRecreationList(
-                pageIndex = pageIndex
-            )
+            handleTokenForResponse {
+                service.getTeacherRecreationList(
+                    pageIndex = pageIndex
+                )
+            }
         }
     }
 }

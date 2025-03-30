@@ -5,6 +5,7 @@ import com.project.giunne.common.data.remote.response.QuestUploadInfo
 import com.project.giunne.common.data.remote.response.StudentQuestInfo
 import com.project.giunne.common.data.service.CertificationService
 import com.project.giunne.common.data.util.NetworkResult
+import com.project.giunne.common.data.util.TokenHandler.handleTokenForResponse
 import com.project.giunne.common.data.util.handleApi
 import com.project.giunne.common.domain.repository.CertificationRepository
 import io.ktor.client.plugins.onUpload
@@ -19,19 +20,25 @@ class CertificationRepositoryImpl(
 ): CertificationRepository {
     override suspend fun getCertificationProgress(roadmapId: Long): NetworkResult<List<StudentQuestInfo>> {
         return handleApi(TAG) {
-            certificationService.getCertificationProgress(roadmapId = roadmapId)
+            handleTokenForResponse{
+                certificationService.getCertificationProgress(roadmapId = roadmapId)
+            }
         }
     }
 
     override suspend fun getCertificationHistory(roadmapId: Long): NetworkResult<List<StudentQuestInfo>> {
         return handleApi(TAG) {
-            certificationService.getCertificationHistory(roadmapId = roadmapId)
+            handleTokenForResponse {
+                certificationService.getCertificationHistory(roadmapId = roadmapId)
+            }
         }
     }
 
     override suspend fun getUploadList(roadmapId: Long): NetworkResult<List<QuestUploadInfo>> {
         return handleApi(TAG) {
-            certificationService.getUploadList(roadmapId = roadmapId)
+            handleTokenForResponse {
+                certificationService.getUploadList(roadmapId = roadmapId)
+            }
         }
     }
 
@@ -42,17 +49,19 @@ class CertificationRepositoryImpl(
         onProgress: (Long, Long) -> Unit
     ): NetworkResult<String> {
         return handleApi(TAG) {
-            val extension = mimeType.substringAfter("/")
-            val multipart = MultiPartFormDataContent(
-                formData {
-                    append("file", byteArray, Headers.build {
-                        append(HttpHeaders.ContentType, mimeType)
-                        append(HttpHeaders.ContentDisposition,  "filename=Student-$questId-${byteArray.hashCode()}.$extension")
+            handleTokenForResponse {
+                val extension = mimeType.substringAfter("/")
+                val multipart = MultiPartFormDataContent(
+                    formData {
+                        append("file", byteArray, Headers.build {
+                            append(HttpHeaders.ContentType, mimeType)
+                            append(HttpHeaders.ContentDisposition,  "filename=Student-$questId-${byteArray.hashCode()}.$extension")
+                        })
                     })
-                })
-            certificationService.postUploadFile(questId, multipart) {
-                onUpload { bytesSentTotal, contentLength ->
-                    onProgress(bytesSentTotal, contentLength)
+                certificationService.postUploadFile(questId, multipart) {
+                    onUpload { bytesSentTotal, contentLength ->
+                        onProgress(bytesSentTotal, contentLength)
+                    }
                 }
             }
         }
@@ -60,7 +69,9 @@ class CertificationRepositoryImpl(
 
     override suspend fun postGradeStudent(gradeStudentRequest: GradeStudentRequest): NetworkResult<String> {
         return handleApi(TAG) {
-            certificationService.postGradeStudent(gradeStudentRequest = gradeStudentRequest)
+            handleTokenForResponse {
+                certificationService.postGradeStudent(gradeStudentRequest = gradeStudentRequest)
+            }
         }
     }
 }
