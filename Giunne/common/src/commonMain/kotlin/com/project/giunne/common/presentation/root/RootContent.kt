@@ -125,7 +125,8 @@ private fun Children(
             is RootComponent.Child.SplashChild -> SplashScreen()
             is RootComponent.Child.LoginChild -> LoginScreen(
                 component = child.component,
-                navigateSignup = { component.navigateToSignupType() }
+                navigateSignup = { component.navigateToSignupType() },
+                exitProgram = { exitProgram() }
             )
             is RootComponent.Child.SignupTypeChild -> SignupTypeSelectScreen(
                 onClickBackButton = { component.navigateBack() },
@@ -146,7 +147,8 @@ private fun Children(
             )
             is RootComponent.Child.TeacherMainChild -> TeacherMainScreen(
                 component = child.component,
-                onLogout = { component.navigateToLogin() }
+                onLogout = { component.navigateToLogin() },
+                exitProgram = { exitProgram() }
             )
         }
     }

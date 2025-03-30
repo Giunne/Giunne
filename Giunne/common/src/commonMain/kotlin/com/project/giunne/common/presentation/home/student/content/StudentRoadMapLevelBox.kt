@@ -26,39 +26,41 @@ fun StudentRoadMapLevelBox(
     modifier: Modifier,
     roadMapLevel: String
 ) {
-    RowWithDropShadow(
-        modifier = modifier
-            .padding(horizontal = 16.gdp)
-    ) {
-        GPSquircleShape(
-            modifier = Modifier
-                .size(56.gdp),
-            backgroundColor = GPColor.BackgroundLightGray
+    if (roadMapLevel.isNotEmpty()) {
+        RowWithDropShadow(
+            modifier = modifier
+                .padding(horizontal = 16.gdp)
         ) {
-            Icon(
-                modifier = Modifier.size((56 / 3).gdp),
-                tint = GPColor.MainOrangeColor,
-                painter = painterResource(Res.drawable.icon_student_progress),
-                contentDescription = null
+            GPSquircleShape(
+                modifier = Modifier
+                    .size(56.gdp),
+                backgroundColor = GPColor.BackgroundLightGray
+            ) {
+                Icon(
+                    modifier = Modifier.size((56 / 3).gdp),
+                    tint = GPColor.MainOrangeColor,
+                    painter = painterResource(Res.drawable.icon_student_progress),
+                    contentDescription = null
+                )
+
+            }
+            Spacer(modifier = Modifier.width(10.gdp))
+
+            GPAnnotatedText(
+                text = buildAnnotatedString {
+                    append("현재 나는 ")
+                    withStyle(
+                        style = SpanStyle(
+                            color = GPColor.MainOrangeColor,
+                            fontSize = 18.gsp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    ) {
+                        append("${roadMapLevel}단계 ")
+                    }
+                    append("진행중이에요!")
+                },
             )
-
         }
-        Spacer(modifier = Modifier.width(10.gdp))
-
-        GPAnnotatedText(
-            text = buildAnnotatedString {
-                append("현재 나는 ")
-                withStyle(
-                    style = SpanStyle(
-                        color = GPColor.MainOrangeColor,
-                        fontSize = 18.gsp,
-                        fontWeight = FontWeight.Bold
-                    )
-                ) {
-                    append("${roadMapLevel}단계 ")
-                }
-                append("진행중이에요!")
-            },
-        )
     }
 }

@@ -14,19 +14,20 @@ actual object DpUtil {
 
     /* 비율이 다른 기기 추가시 추가 */
     actual fun convert(num: Int): Float {
-//        return if (sw <= 720) { num * 0.43f } // 최소 너비 720 이하일 때
-//        else { num * 0.4715f } // 720 초과
-        return if (sw <= 720) { num * 1.13f } // 최소 너비 720 이하일 때
-        else { num * 1.15f } // 720 초과
+        return if (sw <= 360) { num * 1.00f }
+        else if (sw <= 420) { num * 1.13f }
+        else { num * 1.13f }
     }
 
     actual fun convert(num: Float): Float {
-        return if (sw <= 720) { num * 1.14f } // 최소 너비 720 이하일 때
-        else { num * 1.2f } // 720 초과
+        return if (sw <= 360) { num * 1.00f }
+        else if (sw <= 420) { num * 1.13f }
+        else { num * 1.13f }
     }
 
     actual fun wConvert(num: Int): Float {
-        return if (sw <= 720) { num * 0.43f } // 최소 너비 720 이하일 때
-        else { num * 0.4715f } // 720 초과
+        return if (sw <= 360) { num * 1.00f }
+        else if (sw <= 420) { num * 1.13f }
+        else { num * 1.13f }
     }
 }

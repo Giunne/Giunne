@@ -8,12 +8,13 @@
 
     <application
         android:name="com.project.giunne.android.MainApplication"
-        android:label="giunnae"
+        android:label="기운내"
         android:allowBackup="false"
         android:supportsRtl="true"
         android:largeHeap="true"
         android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:icon="@mipmap/ic_launcher"
+        android:theme="@style/Theme.GiunneStyle">
 
         <activity
             android:name="com.project.giunne.android.MainActivity"

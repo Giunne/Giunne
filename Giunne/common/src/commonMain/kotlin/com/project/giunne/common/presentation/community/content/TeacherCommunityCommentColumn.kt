@@ -12,10 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,13 +20,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.project.giunne.Res
-import com.project.giunne.character_cat_level_2
+import com.project.giunne.character_cat_level_1
 import com.project.giunne.common.data.remote.response.CommentInfo
-import com.project.giunne.common.data.remote.response.PaginationInfo
 import com.project.giunne.common.presentation.common.dialog.GPConfirmDialog
 import com.project.giunne.common.presentation.common.scrollbar.VerticalScrollbar
 import com.project.giunne.common.presentation.common.text.GPText
-import com.project.giunne.common.presentation.community.student.state.CommunityState
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
@@ -97,7 +92,7 @@ fun TeacherCommunityCommentColumn(
                 ) {
                     Image(
                         modifier = Modifier.size(64.gdp),
-                        painter = painterResource(Res.drawable.character_cat_level_2),
+                        painter = painterResource(Res.drawable.character_cat_level_1),
                         contentDescription = null
                     )
                     Row(

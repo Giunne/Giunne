@@ -184,12 +184,12 @@ fun StudentMainScreen(
                         }
                     },
                     rightIcon = {
-                        GPNotificationBadge(
-                            count = notiList.filter { !it.isRead }.size,
-                            onClick = {
-                                NotificationUtil.onClickNotificationButton()
-                            }
-                        )
+//                        GPNotificationBadge(
+//                            count = notiList.filter { !it.isRead }.size,
+//                            onClick = {
+//                                NotificationUtil.onClickNotificationButton()
+//                            }
+//                        )
                     }
                 )
                 StudentChildren(

@@ -17,9 +17,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -39,15 +45,20 @@ import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.common.textfield.GPTextField
+import com.project.giunne.common.presentation.notification.NotificationUtil
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.BackHandler
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.PermissionController
+import com.project.giunne.common.util.exitProgram
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_lock
 import com.project.giunne.icon_person
 import com.project.giunne.image_logo_rb
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
 private const val TAG = "LoginScreen"
@@ -56,19 +67,42 @@ internal fun LoginScreen(
     component: LoginComponent,
     navigateSignup: () -> Unit,
     modifier: Modifier = Modifier,
+    exitProgram: () -> Unit
 ) {
     GLog.d(TAG, "onCreate")
 
+    val scope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
     val loginState by component.uiState.collectAsState()
 
+    val snackbarState =  remember { SnackbarHostState() }
+    var backPress by remember { mutableStateOf(false) }
+
     PermissionController()
+
+    BackHandler {
+        scope.launch {
+            if (backPress == false) {
+                backPress = true
+                snackbarState.showSnackbar("뒤로가기를 한번 더 누르면 종료됩니다.")
+                delay(2000)
+                backPress = false
+            } else {
+                exitProgram()
+            }
+        }
+    }
 
     Scaffold(
         modifier = Modifier
             .addFocusCleaner(focusManager)
             .fillMaxSize()
             .imePadding(),
+        snackbarHost = {
+            SnackbarHost(
+                snackbarState
+            )
+        }
     ) {
         Column(
             modifier = modifier
@@ -233,7 +267,7 @@ internal fun LoginScreen(
                         text = "아직 회원이 아니신가요?",
                         textSize = 12.gsp,
                         textColor = GPColor.MainOrangeColor,
-                        fontFamily = GPFontFamily.Regular
+                        fontFamily = GPFontFamily.Bold
                     )
                     GPText(
                         modifier = Modifier
@@ -241,7 +275,7 @@ internal fun LoginScreen(
                         text = "아이디 / 비밀번호 찾기",
                         textSize = 12.gsp,
                         textColor = GPColor.ButtonLightGray,
-                        fontFamily = GPFontFamily.Regular
+                        fontFamily = GPFontFamily.Bold
                     )
                 }
             }

@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.project.giunne.Res
-import com.project.giunne.character_cat_level_2
+import com.project.giunne.character_cat_level_1
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
@@ -32,7 +32,7 @@ fun EmptyBox() {
         ) {
             Image(
                 modifier = Modifier.size(128.gdp),
-                painter = painterResource(Res.drawable.character_cat_level_2),
+                painter = painterResource(Res.drawable.character_cat_level_1),
                 contentDescription = null
             )
             Row(

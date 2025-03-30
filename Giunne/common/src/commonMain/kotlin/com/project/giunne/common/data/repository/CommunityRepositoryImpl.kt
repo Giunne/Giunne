@@ -10,6 +10,7 @@ import com.project.giunne.common.data.remote.response.PostingListResponse
 import com.project.giunne.common.data.remote.response.QuestTypeListResponse
 import com.project.giunne.common.data.service.CommunityService
 import com.project.giunne.common.data.util.NetworkResult
+import com.project.giunne.common.data.util.TokenHandler.handleTokenForResponse
 import com.project.giunne.common.data.util.handleApi
 import com.project.giunne.common.domain.repository.CommunityRepository
 
@@ -22,19 +23,25 @@ class CommunityRepositoryImpl(
         questId: Long
     ): NetworkResult<PostingDetailListResponse> {
         return handleApi(TAG) {
-            communityService.getPostingDetailList(playerId = playerId, questId = questId)
+            handleTokenForResponse {
+                communityService.getPostingDetailList(playerId = playerId, questId = questId)
+            }
         }
     }
 
     override suspend fun getPostingDetail(postId: Long): NetworkResult<PostingDetailResponse> {
         return handleApi(TAG) {
-            communityService.getPostingDetail(postId = postId)
+            handleTokenForResponse {
+                communityService.getPostingDetail(postId = postId)
+            }
         }
     }
 
     override suspend fun postComment(commentRequest: CommentRequest): NetworkResult<Long> {
         return handleApi(TAG) {
-            communityService.postComment(commentRequest = commentRequest)
+            handleTokenForResponse {
+                communityService.postComment(commentRequest = commentRequest)
+            }
         }
     }
 
@@ -43,25 +50,33 @@ class CommunityRepositoryImpl(
         pageIndex: Int,
     ): NetworkResult<CommentListResponse> {
         return handleApi(TAG) {
-            communityService.getCommentList(postId = postId, pageIndex = pageIndex)
+            handleTokenForResponse {
+                communityService.getCommentList(postId = postId, pageIndex = pageIndex)
+            }
         }
     }
 
     override suspend fun deleteComment(postId: Long): NetworkResult<String> {
         return handleApi(TAG) {
-            communityService.deleteComment(postId = postId)
+            handleTokenForResponse {
+                communityService.deleteComment(postId = postId)
+            }
         }
     }
 
     override suspend fun postCommentLike(commentLikeRequest: CommentLikeRequest): NetworkResult<String> {
         return handleApi(TAG) {
-            communityService.postCommentLike(commentLikeRequest = commentLikeRequest)
+            handleTokenForResponse {
+                communityService.postCommentLike(commentLikeRequest = commentLikeRequest)
+            }
         }
     }
 
     override suspend fun postCommentUnlike(commentLikeRequest: CommentLikeRequest): NetworkResult<String> {
         return handleApi(TAG) {
-            communityService.postCommentUnlike(commentLikeRequest = commentLikeRequest)
+            handleTokenForResponse {
+                communityService.postCommentUnlike(commentLikeRequest = commentLikeRequest)
+            }
         }
     }
 
@@ -73,13 +88,15 @@ class CommunityRepositoryImpl(
         sortDirection: String
     ): NetworkResult<PostingListResponse> {
         return handleApi(TAG) {
-            communityService.getPostingList(
-                roadMapId = roadMapId,
-                questName = questName,
-                nickName = nickName,
-                pageIndex = pageIndex,
-                sortDirection = sortDirection,
-            )
+            handleTokenForResponse {
+                communityService.getPostingList(
+                    roadMapId = roadMapId,
+                    questName = questName,
+                    nickName = nickName,
+                    pageIndex = pageIndex,
+                    sortDirection = sortDirection,
+                )
+            }
         }
     }
 
@@ -88,10 +105,12 @@ class CommunityRepositoryImpl(
         pageIndex: Int
     ): NetworkResult<QuestTypeListResponse> {
         return handleApi(TAG) {
-            communityService.getQuestTypeList(
-                roadmapId = roadmapId,
-                pageIndex = pageIndex,
-            )
+            handleTokenForResponse {
+                communityService.getQuestTypeList(
+                    roadmapId = roadmapId,
+                    pageIndex = pageIndex,
+                )
+            }
         }
     }
 }

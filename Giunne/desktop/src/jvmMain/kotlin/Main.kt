@@ -1,5 +1,6 @@
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
@@ -69,18 +70,15 @@ fun main() {
             width = 360.dp * size,
             height = 780.dp * size,
             position = WindowPosition(Alignment.TopEnd),
-//            position = WindowPosition((-100).dp, 0.dp),
-            isMinimized = false
+            isMinimized = false,
         )
 
         Window(
             onCloseRequest = ::exitApplication,
             title = stringResource(Res.string.app_title) + " - 1.0.0",
-            state = windowState
+            state = windowState,
+            resizable = false
         ) {
-
-//            windowState.size = DpSize(780.dp, 360.dp)
-
             GiunnaeTheme {
                 RootContent(
                     root,

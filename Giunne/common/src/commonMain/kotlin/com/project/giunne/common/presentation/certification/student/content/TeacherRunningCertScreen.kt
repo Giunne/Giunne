@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import com.project.giunne.Res
+import com.project.giunne.character_cat_level_1
 import com.project.giunne.common.data.remote.response.QuestUploadInfo
 import com.project.giunne.common.presentation.certification.student.dummy.runningDoneList
 import com.project.giunne.common.presentation.certification.student.intent.ImageUploadStore
@@ -82,27 +83,55 @@ fun TeacherRunningCertScreen(
             }
         }
         Box {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.gdp),
-                state = scrollState
-            ) {
-                items(
-                    count = certWaitingList.size
+            if (certWaitingList.isNotEmpty()) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.gdp),
+                    state = scrollState
                 ) {
-                    TeacherCertItemRow(
-                        questUploadInfo = certWaitingList[it],
-                        onClick = {
-                            onItemClicked(certWaitingList[it])
-                        },
-                    )
+                    items(
+                        count = certWaitingList.size
+                    ) {
+                        TeacherCertItemRow(
+                            questUploadInfo = certWaitingList[it],
+                            onClick = {
+                                onItemClicked(certWaitingList[it])
+                            },
+                        )
+                    }
+                }
+                VerticalScrollbar(
+                    modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
+                    state = scrollState
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            modifier = Modifier.size(64.gdp),
+                            painter = painterResource(Res.drawable.character_cat_level_1),
+                            contentDescription = null
+                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            GPText(
+                                text = "학생들이 아직 인증을 올리지 않았어요.",
+                                textSize = 14.gsp,
+                                fontFamily = GPFontFamily.Bold,
+                                textColor = GPColor.TextBlack
+                            )
+                        }
+                    }
                 }
             }
-            VerticalScrollbar(
-                modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
-                state = scrollState
-            )
         }
     }
 }

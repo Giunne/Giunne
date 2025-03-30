@@ -6,6 +6,7 @@ import com.project.giunne.common.data.remote.response.AvatarInformationResponse
 import com.project.giunne.common.data.remote.response.CategoryItemResponse
 import com.project.giunne.common.data.service.MyPageService
 import com.project.giunne.common.data.util.NetworkResult
+import com.project.giunne.common.data.util.TokenHandler.handleTokenForResponse
 import com.project.giunne.common.data.util.handleApi
 import com.project.giunne.common.domain.repository.MyPageRepository
 
@@ -15,7 +16,9 @@ class MyPageRepositoryImpl(
 ): MyPageRepository {
     override suspend fun putInventoryItem(putInventoryItemRequest: PutInventoryItemRequest): NetworkResult<String> {
         return handleApi(TAG) {
-            myPageService.putInventoryItem(putInventoryItemRequest = putInventoryItemRequest)
+            handleTokenForResponse {
+                myPageService.putInventoryItem(putInventoryItemRequest = putInventoryItemRequest)
+            }
         }
     }
 
@@ -24,19 +27,25 @@ class MyPageRepositoryImpl(
         pageIndex: Int
     ): NetworkResult<CategoryItemResponse> {
         return handleApi(TAG) {
-            myPageService.getInventoryItemById(categoryId, pageIndex)
+            handleTokenForResponse {
+                myPageService.getInventoryItemById(categoryId, pageIndex)
+            }
         }
     }
 
     override suspend fun getMyInformation(): NetworkResult<AvatarInformationResponse> {
         return handleApi(TAG) {
-            myPageService.getMyInformation()
+            handleTokenForResponse {
+                myPageService.getMyInformation()
+            }
         }
     }
 
     override suspend fun modifyAvatarInformation(avatarModifyRequest: AvatarModifyRequest): NetworkResult<String> {
         return handleApi(TAG) {
-            myPageService.modifyAvatarInformation(avatarModifyRequest)
+            handleTokenForResponse {
+                myPageService.modifyAvatarInformation(avatarModifyRequest)
+            }
         }
     }
 }

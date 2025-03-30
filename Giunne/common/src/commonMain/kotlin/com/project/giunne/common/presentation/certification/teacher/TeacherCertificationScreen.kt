@@ -97,7 +97,7 @@ internal fun TeacherCertificationScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     GPText(
-                        text = "게시판", /* TODO String */
+                        text = "게시판",
                         textSize = 14.gsp,
                         fontFamily = GPFontFamily.Bold,
                         textColor = GPColor.White
@@ -117,7 +117,6 @@ internal fun TeacherCertificationScreen(
             modifier = Modifier
                 .background(GPColor.BackgroundLightGray)
                 .fillMaxSize(),
-//                .padding(horizontal = 16.gdp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             PageSelectRow(

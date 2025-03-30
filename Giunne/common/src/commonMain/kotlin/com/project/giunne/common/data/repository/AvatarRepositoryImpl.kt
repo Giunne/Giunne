@@ -26,13 +26,17 @@ class AvatarRepositoryImpl(
 
     override suspend fun createAvatar(avatarCreateRequest: AvatarCreateRequest): NetworkResult<AvatarResponse> {
         return handleApi(TAG) {
-            avatarService.createAvatar(avatarCreateRequest)
+            handleTokenForResponse {
+                avatarService.createAvatar(avatarCreateRequest)
+            }
         }
     }
 
     override suspend fun getUserAvatarList(pageIndex: Int): NetworkResult<AvatarUserListResponse> {
         return handleApi(TAG) {
-            avatarService.getUserAvatarList(pageIndex)
+            handleTokenForResponse {
+                avatarService.getUserAvatarList(pageIndex)
+            }
         }
     }
 
@@ -46,13 +50,17 @@ class AvatarRepositoryImpl(
 
     override suspend fun getPointInfo(): NetworkResult<MyPointInfo> {
         return handleApi(TAG) {
-            avatarService.getPointInfo()
+            handleTokenForResponse {
+                avatarService.getPointInfo()
+            }
         }
     }
 
     override suspend fun modifyStudentPoint(studentPointRequest: StudentPointRequest): NetworkResult<String> {
         return handleApi(TAG) {
-            avatarService.modifyStudentPoint(studentPointRequest)
+            handleTokenForResponse {
+                avatarService.modifyStudentPoint(studentPointRequest)
+            }
         }
     }
 }
