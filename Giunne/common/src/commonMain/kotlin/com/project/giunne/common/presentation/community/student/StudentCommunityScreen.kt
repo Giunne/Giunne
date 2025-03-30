@@ -30,6 +30,7 @@ import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.scrollbar.VerticalScrollbar
 import com.project.giunne.common.presentation.community.content.CommunityItemRow
+import com.project.giunne.common.presentation.community.content.EmptyBox
 import com.project.giunne.common.presentation.community.content.SearchRow
 import com.project.giunne.common.presentation.community.content.SelectableDialog
 import com.project.giunne.common.presentation.community.student.dummy.CommunityDto
@@ -155,32 +156,35 @@ internal fun StudentCommunityScreen(
                 onRoadmapFilterButtonClicked = { component.onClickRoadmapFilterButton() },
                 onRunningFilterButtonClicked = { component.onClickRunningFilterButton() },
             )
-//            EmptyBox()
             Box {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.gdp),
-                    state = scrollState
-                ) {
-                    items(
-                        count = communityState.postingList.size
+                if (communityState.postingList.isNotEmpty()) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 16.gdp),
+                        state = scrollState
                     ) {
-                        CommunityItemRow(
-                            postingInfo = communityState.postingList[it],
-                            onClick = {
-                                navigateToDetail(
-                                    communityState.postingList[it].id,
-                                    communityState.postingList[it].getQuestTitle()
-                                )
-                            },
-                        )
+                        items(
+                            count = communityState.postingList.size
+                        ) {
+                            CommunityItemRow(
+                                postingInfo = communityState.postingList[it],
+                                onClick = {
+                                    navigateToDetail(
+                                        communityState.postingList[it].id,
+                                        communityState.postingList[it].getQuestTitle()
+                                    )
+                                },
+                            )
+                        }
                     }
+                    VerticalScrollbar(
+                        modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
+                        state = scrollState
+                    )
+                } else {
+                    EmptyBox()
                 }
-                VerticalScrollbar(
-                    modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
-                    state = scrollState
-                )
             }
         }
     }
