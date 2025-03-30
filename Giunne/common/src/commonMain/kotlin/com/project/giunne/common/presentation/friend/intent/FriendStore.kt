@@ -9,8 +9,6 @@ import com.project.giunne.common.domain.usecase.roadmap.GetSpecificStudentCourse
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.friend.state.FriendState
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent
 
@@ -31,7 +29,7 @@ class FriendStore(
                 getFriendsListUseCase(recreationId)
             }.onSuccess { response ->
                 setState {
-                    copy(loading = false, friendsList = response.filter { it.id != id })
+                    copy(loading = false, friendsList = response.filter { it.id != id || it.nickname.isNotEmpty() })
                 }
             }
             .onFailure {
