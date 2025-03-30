@@ -83,7 +83,8 @@ import org.jetbrains.compose.resources.painterResource
 fun TeacherMainScreen(
     modifier: Modifier = Modifier,
     component: TeacherMainComponent,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    exitProgram: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val snackbarState =  remember { SnackbarHostState() }
