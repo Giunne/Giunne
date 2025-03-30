@@ -63,6 +63,8 @@ data class QuestStateInfo(
     val rewardExp: Int = 0,
     @SerialName("rewardPoint")
     val rewardPoint: Int = 0,
+    @SerialName("currentApproveCount")
+    val currentApproveCount: Int = 0,
     @SerialName("starPoint")
     val starPoint: Int = 0,
     val isChecked: Boolean = false,

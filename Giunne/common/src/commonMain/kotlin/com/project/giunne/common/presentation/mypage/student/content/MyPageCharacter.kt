@@ -59,7 +59,7 @@ fun MyPageCharacter(
                     level = level
                 )
                 GPText(
-                    text = "${percent * 100}%"
+                    text = "${(percent * 100).toInt()}%"
                 )
             }
             Spacer(modifier = Modifier.height(8.gdp))
