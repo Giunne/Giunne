@@ -117,8 +117,8 @@ internal fun TeacherHomeScreen(
                         .fillMaxWidth()
                         .weight(1f)
                         .background(GPColor.BackgroundLightGray),
-                    description = "아직 생성한 로드맵이 없습니다.",
-                    highlightRegex = 7..9
+                    description = "로드맵을 선택해주세요.",
+                    highlightRegex = 0..2
                 )
             } else {
                 Column(

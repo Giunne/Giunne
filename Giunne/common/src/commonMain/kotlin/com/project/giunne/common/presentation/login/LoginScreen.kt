@@ -233,7 +233,7 @@ internal fun LoginScreen(
                         text = "아직 회원이 아니신가요?",
                         textSize = 12.gsp,
                         textColor = GPColor.MainOrangeColor,
-                        fontFamily = GPFontFamily.Regular
+                        fontFamily = GPFontFamily.Bold
                     )
                     GPText(
                         modifier = Modifier
@@ -241,7 +241,7 @@ internal fun LoginScreen(
                         text = "아이디 / 비밀번호 찾기",
                         textSize = 12.gsp,
                         textColor = GPColor.ButtonLightGray,
-                        fontFamily = GPFontFamily.Regular
+                        fontFamily = GPFontFamily.Bold
                     )
                 }
             }
