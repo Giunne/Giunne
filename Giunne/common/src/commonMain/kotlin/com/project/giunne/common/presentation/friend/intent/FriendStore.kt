@@ -31,7 +31,10 @@ class FriendStore(
                 getFriendsListUseCase(recreationId)
             }.onSuccess { response ->
                 setState {
-                    copy(loading = false, friendsList = response.filter { it.id != id })
+                    copy(
+                        loading = false,
+                        friendsList = response.filter { it.id != id && it.nickname.isNotEmpty() }
+                    )
                 }
             }
             .onFailure {

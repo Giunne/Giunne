@@ -1,5 +1,6 @@
 package com.project.giunne.common.presentation.certification.student.content
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,11 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.project.giunne.Res
+import com.project.giunne.character_cat_level_1
 import com.project.giunne.common.data.remote.response.QuestUploadInfo
 import com.project.giunne.common.presentation.common.scrollbar.VerticalScrollbar
 import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
-import com.project.giunne.common.presentation.community.student.dummy.CommunityDto
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
@@ -29,7 +32,7 @@ private const val TAG = "RoadMapCertScreen"
 @Composable
 fun TeacherRoadMapCertScreen(
     modifier: Modifier = Modifier,
-    certWaitingList: List<QuestUploadInfo>, //TODO API
+    certWaitingList: List<QuestUploadInfo>,
     onItemClicked: (QuestUploadInfo) -> Unit
 ) {
     val scope = rememberCoroutineScope()
@@ -67,27 +70,55 @@ fun TeacherRoadMapCertScreen(
             }
         }
         Box {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.gdp),
-                state = scrollState
-            ) {
-                items(
-                    count = certWaitingList.size
+            if (certWaitingList.isNotEmpty()) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.gdp),
+                    state = scrollState
                 ) {
-                    TeacherCertItemRow(
-                        questUploadInfo = certWaitingList[it],
-                        onClick = {
-                            onItemClicked(certWaitingList[it])
-                        },
-                    )
+                    items(
+                        count = certWaitingList.size
+                    ) {
+                        TeacherCertItemRow(
+                            questUploadInfo = certWaitingList[it],
+                            onClick = {
+                                onItemClicked(certWaitingList[it])
+                            },
+                        )
+                    }
+                }
+                VerticalScrollbar(
+                    modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
+                    state = scrollState
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            modifier = Modifier.size(64.gdp),
+                            painter = painterResource(Res.drawable.character_cat_level_1),
+                            contentDescription = null
+                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            GPText(
+                                text = "학생들이 아직 인증을 올리지 않았어요.",
+                                textSize = 14.gsp,
+                                fontFamily = GPFontFamily.Bold,
+                                textColor = GPColor.TextBlack
+                            )
+                        }
+                    }
                 }
             }
-            VerticalScrollbar(
-                modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
-                state = scrollState
-            )
         }
     }
 }

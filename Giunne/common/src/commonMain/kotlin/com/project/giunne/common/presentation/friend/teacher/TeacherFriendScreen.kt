@@ -1,5 +1,6 @@
 package com.project.giunne.common.presentation.friend.teacher
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,6 +28,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import com.project.giunne.Res
+import com.project.giunne.character_cat_level_1
 import com.project.giunne.common.data.remote.request.GradeStudentRequest
 import com.project.giunne.common.presentation.certification.student.content.PageSelectRow
 import com.project.giunne.common.presentation.certification.student.state.CertPage
@@ -49,6 +53,7 @@ import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import kotlinx.serialization.json.JsonNull.content
+import org.jetbrains.compose.resources.painterResource
 
 private const val TAG = "TeacherFriendScreen"
 @Composable
@@ -112,50 +117,112 @@ internal fun TeacherFriendScreen(
 
             SpH(8.gdp)
 
-            LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .background(color = GPColor.BackgroundLightGray),
-            ) {
-                items(
-                    count = friendState.friendsList.size
+            if (friendState.friendsList.isNotEmpty()) {
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(1f)
+                        .background(color = GPColor.BackgroundLightGray),
                 ) {
-                    TeacherFriendItemRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(64.gdp)
-                            .padding(horizontal = 16.gdp),
-                        friendInfo = friendState.friendsList[it],
-                        isPointModifyCheck = isPointModifyCheck,
-                        onClick = { playerId ->
-                            friendStore.getSpecificStudentCourse(1, playerId)
-                        }
+                    items(
+                        count = friendState.friendsList.size
                     ) {
-                        if (isPointModifyCheck) {
-                            TeacherModifyStudentPoint(
-                                point = friendState.friendsList[it].pointBuffer.toString(),
-                                onPointChanged = { point ->
-                                    friendStore.modifyStudentPointLocal(
-                                        index = it,
-                                        point = point
-                                    )
-                                }
-                            )
-                        } else {
-                            Row {
-                                GPText(
-                                    text = "레벨 ",
-                                    textSize = 12.gsp,
-                                    fontFamily = GPFontFamily.Medium,
-                                    textColor = GPColor.TextBlack
-                                )
-                                GPText(
-                                    text = friendState.friendsList[it].level.toString(),
-                                    textSize = 12.gsp,
-                                    fontFamily = GPFontFamily.Medium,
-                                    textColor = GPColor.MainOrangeColor
-                                )
+                        TeacherFriendItemRow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(64.gdp)
+                                .padding(horizontal = 16.gdp),
+                            friendInfo = friendState.friendsList[it],
+                            isPointModifyCheck = isPointModifyCheck,
+                            onClick = { playerId ->
+                                friendStore.getSpecificStudentCourse(1, playerId)
                             }
+                        ) {
+                            if (isPointModifyCheck) {
+                                TeacherModifyStudentPoint(
+                                    point = friendState.friendsList[it].pointBuffer.toString(),
+                                    onPointChanged = { point ->
+                                        friendStore.modifyStudentPointLocal(
+                                            index = it,
+                                            point = point
+                                        )
+                                    }
+                                )
+                            } else {
+                                Column(
+                                    horizontalAlignment = Alignment.End
+                                ) {
+                                    Row {
+                                        GPText(
+                                            text = friendState.friendsList[it].level.toString(),
+                                            textSize = 12.gsp,
+                                            fontFamily = GPFontFamily.Medium,
+                                            textColor = GPColor.MainOrangeColor
+                                        )
+                                        GPText(
+                                            text = " 레벨",
+                                            textSize = 12.gsp,
+                                            fontFamily = GPFontFamily.Medium,
+                                            textColor = GPColor.TextBlack
+                                        )
+                                    }
+                                    SpH(2.gdp)
+                                    Row {
+                                        GPText(
+                                            text = friendState.friendsList[it].exp.toString(),
+                                            textSize = 12.gsp,
+                                            fontFamily = GPFontFamily.Medium,
+                                            textColor = GPColor.MainOrangeColor
+                                        )
+                                        GPText(
+                                            text = " exp",
+                                            textSize = 12.gsp,
+                                            fontFamily = GPFontFamily.Medium,
+                                            textColor = GPColor.TextBlack
+                                        )
+                                    }
+                                    SpH(2.gdp)
+                                    Row {
+                                        GPText(
+                                            text = friendState.friendsList[it].point.toString(),
+                                            textSize = 12.gsp,
+                                            fontFamily = GPFontFamily.Medium,
+                                            textColor = GPColor.MainOrangeColor
+                                        )
+                                        GPText(
+                                            text = " 코인",
+                                            textSize = 12.gsp,
+                                            fontFamily = GPFontFamily.Medium,
+                                            textColor = GPColor.TextBlack
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                Box(
+                    modifier = Modifier
+                        .weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            modifier = Modifier.size(64.gdp),
+                            painter = painterResource(Res.drawable.character_cat_level_1),
+                            contentDescription = null
+                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            GPText(
+                                text = "로드맵에 속한 학생들이 없어요.",
+                                textSize = 14.gsp,
+                                fontFamily = GPFontFamily.Bold,
+                                textColor = GPColor.TextBlack
+                            )
                         }
                     }
                 }
