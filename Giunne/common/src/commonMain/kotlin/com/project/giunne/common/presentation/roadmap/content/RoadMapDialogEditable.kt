@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.project.giunne.Res
@@ -213,9 +215,15 @@ fun RoadMapDialogEditable(
                                 color = GPColor.MainOrangeColor
                             ),
                             value = rewardExp,
-                            onValueChange = {
-                                rewardExp = it
-                            }
+                            onValueChange = { exp ->
+                                if (exp.length <= 8 && exp.all { it.isDigit() }) {
+                                    rewardExp = exp
+                                }
+                            },
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number
+                            )
                         )
                     }
                 }
@@ -246,9 +254,15 @@ fun RoadMapDialogEditable(
                                 fontSize = 12.gsp,
                                 color = GPColor.MainOrangeColor
                             ),
-                            onValueChange = {
-                                rewardCoin = it
-                            }
+                            onValueChange = { coin ->
+                                if (coin.length <= 8 && coin.all { it.isDigit() }) {
+                                    rewardCoin = coin
+                                }
+                            },
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number
+                            )
                         )
                     }
                 }
