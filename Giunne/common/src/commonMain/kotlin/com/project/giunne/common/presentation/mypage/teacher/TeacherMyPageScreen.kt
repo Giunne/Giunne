@@ -69,19 +69,21 @@ internal fun TeacherMyPageScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 16.gdp),
                 ) {
-                    MyPageSettingInfo(
-                        title = "학교",
-                        content = {
-                            GPText(
-                                text = myPageState.avatarInformation.schoolName,
-                                fontFamily = GPFontFamily.Regular,
-                                textSize = 12.gsp
-                            )
-                        }
-                    )
-                    HorizontalDivider(
-                        color = GPColor.BackgroundGray_F6F6F6
-                    )
+                    if (Define.playerId != 0L) {
+                        MyPageSettingInfo(
+                            title = "학교",
+                            content = {
+                                GPText(
+                                    text = myPageState.avatarInformation.schoolName,
+                                    fontFamily = GPFontFamily.Regular,
+                                    textSize = 12.gsp
+                                )
+                            }
+                        )
+                        HorizontalDivider(
+                            color = GPColor.BackgroundGray_F6F6F6
+                        )
+                    }
                     MyPageSettingInfo(
                         title = "로그아웃",
                         color = GPColor.Red,
