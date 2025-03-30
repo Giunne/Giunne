@@ -22,6 +22,7 @@ kotlin {
                 implementation(libs.compose.ui.util)
                 implementation(compose.desktop.currentOs)
                 implementation(libs.skiko.macos)
+                implementation(libs.skiko.window)
                 implementation(libs.slf4j)
 
                 api("org.openjfx:javafx-base:22")
@@ -40,9 +41,23 @@ compose.desktop {
         mainClass = "MainKt"
         nativeDistributions {
             modules("java.sql", "java.instrument", "java.compiler", "jdk.unsupported")
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(TargetFormat.Exe)
             packageName = "Giunne"
             packageVersion = "1.0.0"
+            windows {
+                packageVersion = "1.0.0"
+                exePackageVersion = "1.0.0"
+                dirChooser = true
+                menuGroup = "Giunne"
+                console = false
+                version = "1.0.0"
+                shortcut = true
+            }
+            buildTypes.release.proguard {
+                configurationFiles.from(project.file("proguard-rules.pro"))
+                isEnabled.set(true)
+                obfuscate.set(true)
+            }
         }
         jvmArgs += listOf(
             "-Xmx2G"
@@ -54,9 +69,3 @@ javafx {
     version = "22"
     modules("javafx.base", "javafx.media", "javafx.swing", "javafx.controls", "javafx.graphics")
 }
-
-//buildscript {
-//    dependencies {
-//        classpath (libs.multiplatform.resources.generator)
-//    }
-//}

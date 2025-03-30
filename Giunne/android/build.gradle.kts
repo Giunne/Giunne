@@ -1,3 +1,8 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import com.squareup.javapoet.FieldSpec
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
@@ -8,6 +13,9 @@ plugins {
 
 group = "com.project.giunne"
 version = "1.0-SNAPSHOT"
+
+val versionProps = Properties()
+versionProps.load(FileInputStream(rootDir.path + "/gradle.properties"))
 
 repositories {
     mavenCentral()
@@ -26,8 +34,8 @@ android {
         applicationId = "com.project.giunne.android"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0-SNAPSHOT"
+        versionCode = versionProps["appVersionCode"].toString().toInt()
+        versionName = versionProps["appVersionName"].toString()
 
         multiDexEnabled = true
     }
@@ -40,16 +48,17 @@ android {
     }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            //noinspection GradlePath
+            applicationIdSuffix = ".release"
+            isMinifyEnabled = true
+            multiDexEnabled = true
+            proguardFiles("proguard-rules.pro")
         }
     }
     buildFeatures {
         viewBinding = true
         compose = true
     }
-//    composeOptions {
-//        kotlinCompilerExtensionVersion = "1.5.3"
-//    }
 }
 
 tasks.register("BuildAndRun") {
@@ -61,9 +70,3 @@ tasks.register("BuildAndRun") {
         }
     }
 }
-
-//buildscript {
-//    dependencies {
-//        classpath (libs.multiplatform.resources.generator)
-//    }
-//}
