@@ -90,9 +90,9 @@ fun ExerciseRoadmapScreen(
         }
 
         val text = if (offsetY in 0f..height / 2) {
-            "3명이 한팀을 이루어야 해요!"
+            "모두 협력해 보아요."
         } else if (offsetY in height / 2..height && offsetX in -width..0f) {
-            "2명이 한팀을 이루어야 해요!"
+            "3명이 한팀을 이루어야 해요!"
         } else {
             "혼자 해내야 해요!"
         }
