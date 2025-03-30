@@ -49,7 +49,7 @@ class AvatarRepositoryImpl(
             avatarService.getPointInfo()
         }
     }
-    
+
     override suspend fun modifyStudentPoint(studentPointRequest: StudentPointRequest): NetworkResult<String> {
         return handleApi(TAG) {
             avatarService.modifyStudentPoint(studentPointRequest)

@@ -42,6 +42,7 @@ import com.project.giunne.common.domain.usecase.roadmap.ModifyQuestStateUseCase
 import com.project.giunne.common.domain.usecase.shop.GetCategoryItemListUseCase
 import com.project.giunne.common.domain.usecase.shop.GetCategoryMapUseCase
 import com.project.giunne.common.domain.usecase.shop.GetGachaTypeUseCase
+import com.project.giunne.common.domain.usecase.shop.GetPossibleItemCountUseCase
 import com.project.giunne.common.domain.usecase.shop.PostGachaUseCase
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -89,5 +90,6 @@ val useCaseModule: Module = module {
     single { DeleteComment(get()) }
     single { CheckExistIdUseCase(get()) }
     single { GetMyPointUseCase(get()) }
+    single { GetPossibleItemCountUseCase(get()) }
     single { ModifyStudentPointUseCase(get()) }
 }

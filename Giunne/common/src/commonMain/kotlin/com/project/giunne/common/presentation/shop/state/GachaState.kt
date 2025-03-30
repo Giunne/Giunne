@@ -11,6 +11,8 @@ data class GachaState(
     val generalGachaInfo: GachaResponse = GachaResponse(),
     val premiumGachaInfo: GachaResponse = GachaResponse(),
     val randomItem: Item = Item(),
+    val possibleItemCount: Int = 0,
+
     val loading: Boolean = false,
     val error: DataThrowable? = null
 )
