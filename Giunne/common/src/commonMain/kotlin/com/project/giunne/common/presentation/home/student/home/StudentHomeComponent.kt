@@ -21,7 +21,6 @@ private const val TAG = "StudentHomeComponent"
 class StudentHomeComponent(
     componentContext: ComponentContext,
     private val loginRecreationUseCase: LoginRecreationUseCase = KoinJavaComponent.get(LoginRecreationUseCase::class.java),
-    private val getAvatarListUseCase: GetUserAvatarListUseCase = KoinJavaComponent.get(GetUserAvatarListUseCase::class.java),
     private val getCertificationProgress: GetCertificationProgress = KoinJavaComponent.get(GetCertificationProgress::class.java),
 ): KoinComponent, ComponentContext by componentContext, BaseComponent<StudentHomeState, StudentHomeEvent>(
     initialState = StudentHomeState()

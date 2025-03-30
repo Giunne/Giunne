@@ -10,6 +10,7 @@ import com.project.giunne.common.domain.usecase.avatar.CreateAvatarUseCase
 import com.project.giunne.common.domain.usecase.avatar.GetFriendsListUseCase
 import com.project.giunne.common.domain.usecase.avatar.GetUserAvatarListUseCase
 import com.project.giunne.common.domain.usecase.avatar.LoginRecreationUseCase
+import com.project.giunne.common.domain.usecase.avatar.ModifyStudentPointUseCase
 import com.project.giunne.common.domain.usecase.certification.GetCertificationHistory
 import com.project.giunne.common.domain.usecase.certification.GetCertificationProgress
 import com.project.giunne.common.domain.usecase.certification.PostUploadFileUseCase
@@ -32,6 +33,7 @@ import com.project.giunne.common.domain.usecase.roadmap.GetRecreationTeacherList
 import com.project.giunne.common.domain.usecase.roadmap.GetAllRoadMapUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetQuestCodeUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetSearchRecreationUseCase
+import com.project.giunne.common.domain.usecase.roadmap.GetSpecificStudentCourseUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetStudentCourseUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetTeacherCourseUseCase
 import com.project.giunne.common.domain.usecase.roadmap.ModifyQuestInfoUseCase
@@ -65,6 +67,7 @@ val useCaseModule: Module = module {
     single { ModifyQuestInfoUseCase(get()) }
     single { GetQuestCodeUseCase(get()) }
     single { GetStudentCourseUseCase(get()) }
+    single { GetSpecificStudentCourseUseCase(get()) }
     single { ModifyQuestStateUseCase(get()) }
     single { GetInventoryItemListUseCase(get()) }
     single { PutInventoryItemUseCase(get()) }
@@ -84,4 +87,5 @@ val useCaseModule: Module = module {
     single { PostGradeStudentUseCase(get()) }
     single { DeleteComment(get()) }
     single { CheckExistIdUseCase(get()) }
+    single { ModifyStudentPointUseCase(get()) }
 }

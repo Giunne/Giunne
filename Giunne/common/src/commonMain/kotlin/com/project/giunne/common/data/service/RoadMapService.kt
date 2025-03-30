@@ -12,6 +12,7 @@ import com.project.giunne.common.data.util.DefineUrl.URL_MODIFY_QUEST
 import com.project.giunne.common.data.util.DefineUrl.URL_QUEST_CODE
 import com.project.giunne.common.data.util.DefineUrl.URL_QUEST_STATE
 import com.project.giunne.common.data.util.DefineUrl.URL_ROADMAP_LIST
+import com.project.giunne.common.data.util.DefineUrl.URL_SPECIFIC_STUDENT_ROADMAP_COURSE
 import com.project.giunne.common.data.util.DefineUrl.URL_STUDENT_ROADMAP_COURSE
 import com.project.giunne.common.data.util.DefineUrl.URL_TEACHER_ROADMAP_COURSE
 import de.jensklingenberg.ktorfit.http.Body
@@ -33,6 +34,12 @@ interface RoadMapService {
     suspend fun getTeacherCourse(
         @Query("roadmapId") roadmapId: Long
     ): BaseResponse<CourseResponse>
+
+    @GET(URL_SPECIFIC_STUDENT_ROADMAP_COURSE)
+    suspend fun getSpecificStudentCourse(
+        @Query("roadmapId") roadmapId: Long,
+        @Query("playerId") playerId: Int,
+    ): BaseResponse<StudentCourseResponse>
 
     @GET(URL_STUDENT_ROADMAP_COURSE)
     suspend fun getStudentCourse(

@@ -99,24 +99,6 @@ val avatarList = listOf(
     Avatar(Animal.CharacterTigerLevel4, "호랭", 4),
 )
 
-val friendList = listOf(
-    FriendInfo(avatarList[0], "코어 3", "1주차"),
-    FriendInfo(avatarList[1], "코어 3", "1주차"),
-    FriendInfo(avatarList[2], "코어 3", "1주차"),
-    FriendInfo(avatarList[3], "코어 3", "1주차"),
-    FriendInfo(avatarList[4], "코어 3", "1주차"),
-    FriendInfo(avatarList[5], "코어 3", "1주차"),
-    FriendInfo(avatarList[6], "코어 3", "1주차"),
-    FriendInfo(avatarList[7], "코어 3", "1주차"),
-    FriendInfo(avatarList[8], "코어 3", "1주차"),
-)
-
-data class FriendInfo(
-    val avatar: Avatar,
-    val roadmapProcess: String,
-    val runningProcess: String
-)
-
 data class Avatar(
     val avatar: Animal,
     val name: String,
