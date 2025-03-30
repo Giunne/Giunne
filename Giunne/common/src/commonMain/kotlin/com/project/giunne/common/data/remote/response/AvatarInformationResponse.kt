@@ -20,5 +20,5 @@ data class AvatarInformationResponse(
     val studentNumber: Int = 0
 ) {
     val gradeAndClass: String
-        get() = "${classNumber}학년 ${grade}반"
+        get() = "${grade}학년 ${classNumber}반"
 }
