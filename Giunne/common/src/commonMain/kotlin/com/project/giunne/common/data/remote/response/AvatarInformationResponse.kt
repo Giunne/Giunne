@@ -17,7 +17,7 @@ data class AvatarInformationResponse(
     @SerialName("nickName")
     val nickName: String = "nickName",
     @SerialName("studentNumber")
-    val studentNumber: Int = 0
+    val studentNumber: Int? = 0
 ) {
     val gradeAndClass: String
         get() = "${grade}학년 ${classNumber}반"
