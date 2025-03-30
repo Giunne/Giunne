@@ -141,6 +141,14 @@ class CommunityStore(
         }
     }
 
+    fun onClickLikeButton(
+        commentId: Long
+    ) {
+        setState {
+            copy(selectedLikeCommentId = commentId)
+        }
+    }
+
     fun callCommentLike(
         commentLikeRequest: CommentLikeRequest,
         onSuccess: () -> Unit
@@ -183,6 +191,18 @@ class CommunityStore(
                 }
             }
         }
+    }
+
+    fun onInvalidNumeric() {
+        setState { copy(invalidNumericDialog = true) }
+    }
+
+    fun dismissInvalidNumericDialog() {
+        setState { copy(invalidNumericDialog = false) }
+    }
+
+    fun dismissSendLikeDialog() {
+        setState { copy(selectedLikeCommentId = null) }
     }
 
     fun dismissErrorDialog() {

@@ -2,14 +2,14 @@ package com.project.giunne.common.util
 
 import com.project.giunne.common.base.BaseStore
 import com.project.giunne.common.data.remote.response.AvatarUserResponse
-import com.project.giunne.common.data.util.DefineUrl.IMAGE_BASE_URL
+import com.project.giunne.common.domain.usecase.avatar.GetMyPointUseCase
 import com.project.giunne.common.domain.usecase.avatar.GetUserAvatarListUseCase
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent
 
 object AvatarUtil: BaseStore<AvatarUserResponse>(AvatarUserResponse()) {
     private val getAvatarListUseCase: GetUserAvatarListUseCase = KoinJavaComponent.get(GetUserAvatarListUseCase::class.java)
-
+    private val getMyPointUseCase: GetMyPointUseCase = KoinJavaComponent.get(GetMyPointUseCase::class.java)
 
     fun setUserInfo(
         avatarUserResponse: AvatarUserResponse
@@ -46,6 +46,22 @@ object AvatarUtil: BaseStore<AvatarUserResponse>(AvatarUserResponse()) {
                 setUserInfo(
                     avatarUserResponse = response.data.find { it.id.toLong() == playerId } ?: AvatarUserResponse()
                 )
+            }.onFailure {
+
+            }
+        }
+    }
+
+    fun getMyPointInfo() {
+        scope.launch {
+            runCatching {
+                getMyPointUseCase.invoke()
+            }.onSuccess {
+                setState {
+                    copy(
+                        myPoint = it.point
+                    )
+                }
             }.onFailure {
 
             }

@@ -27,6 +27,7 @@ import com.project.giunne.common.presentation.shop.content.GachaItemList
 import com.project.giunne.common.presentation.shop.content.sRankColorBrush
 import com.project.giunne.common.presentation.shop.intent.GachaStore
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.AvatarUtil
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
@@ -41,6 +42,7 @@ fun GachaScreen(
 
     LaunchedEffect(Unit) {
         gachaStore.getGachaType()
+        AvatarUtil.getMyPointInfo()
     }
 
     if (gachaState.loading) {
@@ -130,10 +132,10 @@ fun GachaScreen(
                     .wrapContentHeight()
                     .padding(16.gdp),
                 gachaCost = if (isAdvanced) gachaState.premiumGachaInfo.price else gachaState.generalGachaInfo.price,
-                remainPoint = gachaState.remainPoint,
+                remainPoint = AvatarUtil.uiState.value.myPoint,
                 onGachaClick = {
                     onGachaClick(if(!isAdvanced) GachaType.GENERAL else GachaType.PREMIUM)
-                }
+                },
             )
         }
     }
