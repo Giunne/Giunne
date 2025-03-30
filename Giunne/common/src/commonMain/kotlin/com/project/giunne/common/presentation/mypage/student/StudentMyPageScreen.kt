@@ -106,61 +106,63 @@ internal fun StudentMyPageScreen(
                 verticalArrangement = Arrangement.spacedBy(16.gdp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                GPMainCharacter(
-                    modifier = Modifier.size(256.gdp),
-                    wearingItems = userInfoState.value.wearingItems
-                )
+                if (Define.playerId != 0L) {
+                    GPMainCharacter(
+                        modifier = Modifier.size(256.gdp),
+                        wearingItems = userInfoState.value.wearingItems
+                    )
 
-                MyPageCharacter(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.gdp),
-                    wearingItems = userInfoState.value.wearingItems,
-                    level = userInfoState.value.level,
-                    percent = userInfoState.value.exp / totalExp.toFloat()
-                )
+                    MyPageCharacter(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.gdp),
+                        wearingItems = userInfoState.value.wearingItems,
+                        level = userInfoState.value.level,
+                        percent = userInfoState.value.exp / totalExp.toFloat()
+                    )
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.gdp)
-                ) {
-                    GPButton(
+                    Row(
                         modifier = Modifier
-                            .weight(1f)
-                            .height(56.gdp),
-                        normalColor = GPColor.ButtonLightGray,
-                        pressColor = GPColor.ButtonPressLightGray,
-                        hoverColor = GPColor.ButtonHoverLightGray,
-                        onClick = {
-                            navigateToGacha()
-                        },
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.gdp)
                     ) {
-                        GPText(
-                            text = "뽑기",
-                            textSize = 14.gsp,
-                            fontFamily = GPFontFamily.Bold,
-                            textColor = GPColor.White
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(8.gdp))
-                    GPButton(
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(56.gdp),
-                        normalColor = GPColor.ButtonOrange,
-                        pressColor = GPColor.ButtonPressOrange,
-                        hoverColor = GPColor.ButtonHoverOrange,
-                        onClick = {
-                            navigateToShop()
-                        },
-                    ) {
-                        GPText(
-                            text = "꾸미기",
-                            textSize = 14.gsp,
-                            fontFamily = GPFontFamily.Bold,
-                            textColor = GPColor.White
-                        )
+                        GPButton(
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(56.gdp),
+                            normalColor = GPColor.ButtonLightGray,
+                            pressColor = GPColor.ButtonPressLightGray,
+                            hoverColor = GPColor.ButtonHoverLightGray,
+                            onClick = {
+                                navigateToGacha()
+                            },
+                        ) {
+                            GPText(
+                                text = "뽑기",
+                                textSize = 14.gsp,
+                                fontFamily = GPFontFamily.Bold,
+                                textColor = GPColor.White
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(8.gdp))
+                        GPButton(
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(56.gdp),
+                            normalColor = GPColor.ButtonOrange,
+                            pressColor = GPColor.ButtonPressOrange,
+                            hoverColor = GPColor.ButtonHoverOrange,
+                            onClick = {
+                                navigateToShop()
+                            },
+                        ) {
+                            GPText(
+                                text = "꾸미기",
+                                textSize = 14.gsp,
+                                fontFamily = GPFontFamily.Bold,
+                                textColor = GPColor.White
+                            )
+                        }
                     }
                 }
 
@@ -169,42 +171,44 @@ internal fun StudentMyPageScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 16.gdp)
                 ) {
-                    MyPageSettingInfo(
-                        title = "학교",
-                        content = {
-                            GPText(
-                                text = myPageState.avatarInformation.schoolName,
-                                fontFamily = GPFontFamily.Regular,
-                                textSize = 12.gsp
-                            )
-                        }
-                    )
-                    HorizontalDivider(
-                        color = GPColor.BackgroundGray_F6F6F6
-                    )
-                    MyPageSettingInfo(
-                        title = "이름",
-                        content = {
-                            GPText(
-                                text = myPageState.avatarInformation.nickName,
-                                fontFamily = GPFontFamily.Regular,
-                                textSize = 12.gsp
-                            )
-                        }
-                    )
-                    MyPageSettingInfo(
-                        title = "학년 & 반",
-                        content = {
-                            GPText(
-                                text = myPageState.avatarInformation.gradeAndClass,
-                                fontFamily = GPFontFamily.Regular,
-                                textSize = 12.gsp
-                            )
-                        }
-                    )
-                    HorizontalDivider(
-                        color = GPColor.BackgroundGray_F6F6F6
-                    )
+                    if (Define.playerId != 0L) {
+                        MyPageSettingInfo(
+                            title = "학교",
+                            content = {
+                                GPText(
+                                    text = myPageState.avatarInformation.schoolName,
+                                    fontFamily = GPFontFamily.Regular,
+                                    textSize = 12.gsp
+                                )
+                            }
+                        )
+                        HorizontalDivider(
+                            color = GPColor.BackgroundGray_F6F6F6
+                        )
+                        MyPageSettingInfo(
+                            title = "이름",
+                            content = {
+                                GPText(
+                                    text = myPageState.avatarInformation.nickName,
+                                    fontFamily = GPFontFamily.Regular,
+                                    textSize = 12.gsp
+                                )
+                            }
+                        )
+                        MyPageSettingInfo(
+                            title = "학년 & 반",
+                            content = {
+                                GPText(
+                                    text = myPageState.avatarInformation.gradeAndClass,
+                                    fontFamily = GPFontFamily.Regular,
+                                    textSize = 12.gsp
+                                )
+                            }
+                        )
+                        HorizontalDivider(
+                            color = GPColor.BackgroundGray_F6F6F6
+                        )
+                    }
                     MyPageSettingInfo(
                         title = "로그아웃",
                         color = GPColor.Red,
@@ -220,26 +224,28 @@ internal fun StudentMyPageScreen(
                         }
                     )
                 }
-                GPButton(
-                    modifier = Modifier
-                        .padding(horizontal = 16.gdp)
-                        .fillMaxWidth()
-                        .height(56.gdp),
-                    normalColor = GPColor.ButtonOrange,
-                    pressColor = GPColor.ButtonPressOrange,
-                    hoverColor = GPColor.ButtonHoverOrange,
-                    onClick = {
-                        component.showMyPageModifyDialog()
-                    },
-                ) {
-                    GPText(
-                        text = "내정보 수정",
-                        textSize = 14.gsp,
-                        fontFamily = GPFontFamily.Bold,
-                        textColor = GPColor.White
-                    )
+                if (Define.playerId != 0L) {
+                    GPButton(
+                        modifier = Modifier
+                            .padding(horizontal = 16.gdp)
+                            .fillMaxWidth()
+                            .height(56.gdp),
+                        normalColor = GPColor.ButtonOrange,
+                        pressColor = GPColor.ButtonPressOrange,
+                        hoverColor = GPColor.ButtonHoverOrange,
+                        onClick = {
+                            component.showMyPageModifyDialog()
+                        },
+                    ) {
+                        GPText(
+                            text = "내정보 수정",
+                            textSize = 14.gsp,
+                            fontFamily = GPFontFamily.Bold,
+                            textColor = GPColor.White
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(16.gdp))
                 }
-                Spacer(modifier = Modifier.height(16.gdp))
             }
         }
     }
