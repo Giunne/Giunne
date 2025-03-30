@@ -9,7 +9,7 @@ data class GradeStudentRequest(
     @SerialName("hasExtraPoints")
     val hasExtraPoints: Boolean = false,
     @SerialName("isPass")
-    val isPass: Boolean = false,
+    val isPass: Boolean,
     @SerialName("questPostId")
     val questPostId: Long = 0,
     @SerialName("starPoint")

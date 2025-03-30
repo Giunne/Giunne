@@ -11,6 +11,7 @@ data class AvatarUserResponse(
     val level: Int = 0,
     val nickname: String = "",
     val point: Int = 0,
+    val pointBuffer: Int = point,
     val recreationCode: String = "",
     val recreationId: Int = 0,
     val recreationName: String = "",
