@@ -87,7 +87,7 @@ fun RunningCertScreen(
                             colorFilter = ColorFilter.tint(GPColor.ButtonBlack)
                         )
                     },
-                    percent = ((1 + uploadProgressItem.currentApproveCount) * 2).toFloat() / (3 * uploadProgressItem.needApproveCount).toFloat(),
+                    percent = ((1 + uploadProgressItem.questStateInfo.currentApproveCount) * 2).toFloat() / (3 * uploadProgressItem.needApproveCount).toFloat(),
                 )
             }
             else -> {
