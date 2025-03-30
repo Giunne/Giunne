@@ -28,7 +28,6 @@ data class StudentCourseInfo(
 @Serializable
 data class StudentQuestInfo(
     @SerialName("cooperationType") val cooperationType: String = "",
-    @SerialName("currentApproveCount") val currentApproveCount: Int = 0,
     @SerialName("deadline") val deadline: String = "",
     @SerialName("difficultyLevel") val difficultyLevel: Int = 0,
     @SerialName("guideUrl") val guideUrl: String = "",

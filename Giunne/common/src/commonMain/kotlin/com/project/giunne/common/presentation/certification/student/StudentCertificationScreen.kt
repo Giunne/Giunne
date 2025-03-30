@@ -101,7 +101,7 @@ internal fun StudentCertificationScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     GPText(
-                        text = "게시판", /* TODO String */
+                        text = "게시판",
                         textSize = 14.gsp,
                         fontFamily = GPFontFamily.Bold,
                         textColor = GPColor.White
