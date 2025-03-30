@@ -44,7 +44,6 @@ class AvatarRepositoryImpl(
         }
     }
 
-
     override suspend fun getPointInfo(): NetworkResult<MyPointInfo> {
         return handleApi(TAG) {
             avatarService.getPointInfo()
