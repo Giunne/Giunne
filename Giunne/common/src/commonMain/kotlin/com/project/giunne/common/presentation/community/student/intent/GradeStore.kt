@@ -44,13 +44,15 @@ class GradeStore(
 
     fun onClickConfirmButton(
         star: Int,
-        isChecked: Boolean
+        isChecked: Boolean,
+        isPass: Boolean
     ) {
         setState {
             copy(
                 confirmDialog = true,
                 starPoint = star,
-                hasExtraPoints = isChecked
+                hasExtraPoints = isChecked,
+                isPass = isPass
             )
         }
     }

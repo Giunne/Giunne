@@ -35,11 +35,13 @@ object DefineUrl {
     const val URL_AVATAR_CREATE = "member/avatar/create"
     const val URL_USER_AVATAR_LIST = "member/avatar"
     const val URL_GET_POINT_INFO = "member/avatar/point"
+    const val URL_MODIFY_USER_POINT = "member/avatar/point"
 
     /* RoadMap */
     const val URL_ROADMAP_LIST = "quest/roadmap"
     const val URL_MODIFY_QUEST = "quest/quest"
     const val URL_TEACHER_ROADMAP_COURSE = "quest/course/teacher/road-map"
+    const val URL_SPECIFIC_STUDENT_ROADMAP_COURSE = "quest/course/teacher/road-map-view"
     const val URL_STUDENT_ROADMAP_COURSE = "quest/course/road-map"
     const val URL_QUEST_STATE = "quest/quest-state/quest-progress"
     const val URL_QUEST_CODE = "quest/quest-state/common-code"

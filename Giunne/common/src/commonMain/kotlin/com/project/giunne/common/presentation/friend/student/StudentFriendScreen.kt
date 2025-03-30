@@ -13,14 +13,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.friend.content.StudentFriendItemRow
-import com.project.giunne.common.presentation.friend.dummy.friendList
 import com.project.giunne.common.presentation.friend.intent.FriendStore
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.AvatarUtil
@@ -36,7 +34,6 @@ internal fun StudentFriendScreen(
     GLog.d(TAG, "onCreate")
 
     val focusManager = LocalFocusManager.current
-    val scope = rememberCoroutineScope()
     val friendStore = remember { FriendStore() }
     val friendState by friendStore.uiState.collectAsState()
 
