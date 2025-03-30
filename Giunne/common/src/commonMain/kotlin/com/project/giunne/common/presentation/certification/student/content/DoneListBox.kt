@@ -34,7 +34,7 @@ fun DoneListBox(
             ) {
                 GPText(
                     modifier = Modifier.padding(start = 4.gdp),
-                    text = "완료 내역", /* TODO string */
+                    text = "완료 내역",
                     textSize = 18.gsp,
                     fontFamily = GPFontFamily.Bold,
                     textColor = GPColor.TextBlack
