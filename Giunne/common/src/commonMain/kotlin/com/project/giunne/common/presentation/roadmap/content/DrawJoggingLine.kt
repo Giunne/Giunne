@@ -55,8 +55,8 @@ fun DrawJoggingLine(
 
                     drawLine(
                         color = if (status == "CONFIRM") GPColor.Green else GPColor.BorderLightGray,
-                        start = Offset(centerX + boxSize * 0.5f, centerY),
-                        end = Offset(rightCenterX - boxSize * 0.5f, centerY),
+                        start = Offset(centerX, centerY),
+                        end = Offset(rightCenterX, centerY),
                         strokeWidth = boxSize * 0.2f
                     )
                 }
@@ -66,27 +66,27 @@ fun DrawJoggingLine(
                  * 1. 왼쪽과 오른쪽 번갈아 가며 하나씩 연결 해야함
                  * 2. ex) 12-13, 10-9, 7-6 ...
                  */
-                if (rowIndex / 2 == 0 && colIndex == 0) {
+                if (rowIndex % 2 == 0 && colIndex == 0 && index != 12) {
                     // 아래 박스와 연결
                     val bottomBoxTop = startY + (rowIndex + 1) * (boxSize + spacing)
                     val bottomCenterY = bottomBoxTop + boxSize / 2
 
                     drawLine(
                         color = if (status == "CONFIRM") GPColor.Green else GPColor.BorderLightGray,
-                        start = Offset(centerX, centerY + boxSize * 0.5f),
-                        end = Offset(centerX, bottomCenterY - boxSize * 0.5f),
+                        start = Offset(centerX, centerY),
+                        end = Offset(centerX, bottomCenterY),
                         strokeWidth = boxSize * 0.2f
                     )
                 }
 
-                if (rowIndex / 2 == 1 && colIndex == 2) {
+                if (rowIndex % 2 == 1 && colIndex == 2) {
                     // 아래 박스와 연결
                     val bottomBoxTop = startY + (rowIndex + 1) * (boxSize + spacing)
                     val bottomCenterY = bottomBoxTop + boxSize / 2
                     drawLine(
                         color = if (status == "CONFIRM") GPColor.Green else GPColor.BorderLightGray,
-                        start = Offset(centerX, centerY + boxSize * 0.5f),
-                        end = Offset(centerX, bottomCenterY - boxSize * 0.5f),
+                        start = Offset(centerX, centerY),
+                        end = Offset(centerX, bottomCenterY),
                         strokeWidth = boxSize * 0.2f
                     )
                 }

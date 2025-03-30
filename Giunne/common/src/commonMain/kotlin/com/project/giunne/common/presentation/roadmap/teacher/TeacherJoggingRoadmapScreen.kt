@@ -124,7 +124,7 @@ fun TeacherJoggingRoadmapScreen(
             modifier = Modifier
                 .width(360.gdp)
                 .height(500.gdp),
-            columns = GridCells.Fixed(3),
+            columns = GridCells.FixedSize(64.gdp),
             contentPadding = PaddingValues(48.gdp),
             horizontalArrangement = Arrangement.spacedBy(16.gdp),
             verticalArrangement = Arrangement.spacedBy(16.gdp),
