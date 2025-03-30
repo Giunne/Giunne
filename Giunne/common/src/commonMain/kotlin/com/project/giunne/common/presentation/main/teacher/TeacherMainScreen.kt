@@ -65,6 +65,7 @@ import com.project.giunne.common.presentation.shop.GachaScreen
 import com.project.giunne.common.presentation.shop.ShopScreen
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.BackHandler
+import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.exitProgram
 import com.project.giunne.common.util.gdp
@@ -253,44 +254,46 @@ fun TeacherBottomNav(
                     component.navigateToHome()
             },
         )
-        NavItem(
-            modifier = Modifier
-                .fillMaxHeight()
-                .weight(1f),
-            title = "로드맵",
-            icon = painterResource(Res.drawable.icon_roadmap),
-            onTop = activeComponent is TeacherMainComponent.TeacherChild.TeacherRoadmapChild,
-            onClick = {
-                if (activeComponent !is TeacherMainComponent.TeacherChild.TeacherRoadmapChild)
-                    component.navigateToRoadmap()
-            },
-        )
-        NavItem(
-            modifier = Modifier
-                .fillMaxHeight()
-                .weight(1f),
-            title = "인증",
-            icon = painterResource(Res.drawable.icon_certification),
-            onTop = activeComponent is TeacherMainComponent.TeacherChild.TeacherCertificationChild
-                    || activeComponent is TeacherMainComponent.TeacherChild.TeacherCommunityChild
-                    || activeComponent is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild,
-            onClick = {
-                if (activeComponent !is TeacherMainComponent.TeacherChild.TeacherCertificationChild)
-                    component.navigateToCertification()
-            },
-        )
-        NavItem(
-            modifier = Modifier
-                .fillMaxHeight()
-                .weight(1f),
-            title = "학생들",
-            icon = painterResource(Res.drawable.icon_friends),
-            onTop = activeComponent is TeacherMainComponent.TeacherChild.TeacherFriendsChild,
-            onClick = {
-                if (activeComponent !is TeacherMainComponent.TeacherChild.TeacherFriendsChild)
-                    component.navigateToFriends()
-            },
-        )
+        if (Define.playerId != 0L) {
+            NavItem(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f),
+                title = "로드맵",
+                icon = painterResource(Res.drawable.icon_roadmap),
+                onTop = activeComponent is TeacherMainComponent.TeacherChild.TeacherRoadmapChild,
+                onClick = {
+                    if (activeComponent !is TeacherMainComponent.TeacherChild.TeacherRoadmapChild)
+                        component.navigateToRoadmap()
+                },
+            )
+            NavItem(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f),
+                title = "인증",
+                icon = painterResource(Res.drawable.icon_certification),
+                onTop = activeComponent is TeacherMainComponent.TeacherChild.TeacherCertificationChild
+                        || activeComponent is TeacherMainComponent.TeacherChild.TeacherCommunityChild
+                        || activeComponent is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild,
+                onClick = {
+                    if (activeComponent !is TeacherMainComponent.TeacherChild.TeacherCertificationChild)
+                        component.navigateToCertification()
+                },
+            )
+            NavItem(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f),
+                title = "학생들",
+                icon = painterResource(Res.drawable.icon_friends),
+                onTop = activeComponent is TeacherMainComponent.TeacherChild.TeacherFriendsChild,
+                onClick = {
+                    if (activeComponent !is TeacherMainComponent.TeacherChild.TeacherFriendsChild)
+                        component.navigateToFriends()
+                },
+            )
+        }
         NavItem(
             modifier = Modifier
                 .fillMaxHeight()

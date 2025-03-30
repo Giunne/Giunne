@@ -31,6 +31,7 @@ import com.project.giunne.common.presentation.roadmap.node.roadMap4
 import com.project.giunne.common.presentation.roadmap.node.roadMap5
 import com.project.giunne.common.presentation.roadmap.teacher.state.RoadMapState
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.AvatarUtil
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
@@ -50,8 +51,7 @@ fun TeacherExerciseRoadmapScreen(
     LaunchedEffect(isShow) {
         if (isChecked && isShow) {
             roadMapComponent.loadStudentList(
-                /* TODO(선생님용 Recreation 접속 API 나오면 ID로 변경) */
-                recreationId = 18,
+                recreationId = AvatarUtil.uiState.value.recreationId.toLong(),
                 id = courseInfo.id
             )
         }

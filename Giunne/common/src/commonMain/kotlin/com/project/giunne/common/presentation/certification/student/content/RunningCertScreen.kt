@@ -22,6 +22,7 @@ import com.project.giunne.common.presentation.common.picker.ImagePicker
 import com.project.giunne.common.presentation.common.player.ImageViewer
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.text.GPText
+import com.project.giunne.common.presentation.shop.content.EmptyItemList
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
@@ -130,17 +131,26 @@ fun RunningCertScreen(
                 .fillMaxWidth()
                 .padding(vertical = 8.gdp, horizontal = 4.gdp),
             content = {
-                LazyColumn{
-                    items(
-                        count = runningHistoryList.size
-                    ) {
-                        RunningDoneListItemRow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(68.gdp),
-                            historyItem = runningHistoryList[it]
-                        )
-                        SpH(4.gdp)
+                if (runningHistoryList.isEmpty()) {
+                    EmptyItemList(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        description = "완료된 내역이 아직 없습니다!"
+                    )
+                } else {
+                    LazyColumn{
+                        items(
+                            count = runningHistoryList.size
+                        ) {
+                            RunningDoneListItemRow(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(68.gdp),
+                                historyItem = runningHistoryList[it]
+                            )
+                            SpH(4.gdp)
+                        }
                     }
                 }
             }
