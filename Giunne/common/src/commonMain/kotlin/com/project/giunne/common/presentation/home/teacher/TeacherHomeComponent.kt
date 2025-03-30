@@ -110,6 +110,7 @@ class TeacherHomeComponent(
                         grade = 1,
                         classNumber = 1,
                         characterNo = 1,
+                        studentNumber = 1,
                         nickName = ""
                     )
                 )
