@@ -42,25 +42,27 @@ compose.desktop {
         nativeDistributions {
             modules("java.sql", "java.instrument", "java.compiler", "jdk.unsupported")
             targetFormats(TargetFormat.Exe)
+            copyright = "Giunne all rights reserved."
+            vendor = "Giunne"
             packageName = "Giunne"
             packageVersion = "1.0.0"
+            includeAllModules = true
+            description = "Giunne Project"
             windows {
-                packageVersion = "1.0.0"
-                exePackageVersion = "1.0.0"
-                dirChooser = true
-                menuGroup = "Giunne"
-                console = false
-                version = "1.0.0"
+                iconFile.set(file(project.file("giunne_icon.ico")))
                 shortcut = true
+                menu = true
+                menuGroup = "Giunne"
             }
             buildTypes.release.proguard {
                 configurationFiles.from(project.file("proguard-rules.pro"))
-                isEnabled.set(true)
-                obfuscate.set(true)
+                isEnabled.set(false)
+                obfuscate.set(false)
             }
         }
         jvmArgs += listOf(
-            "-Xmx2G"
+            "-Xmx2G",
+            "-Dfile.encoding=UTF-8"
         )
     }
 }
