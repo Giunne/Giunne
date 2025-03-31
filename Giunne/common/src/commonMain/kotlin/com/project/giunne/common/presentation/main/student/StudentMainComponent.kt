@@ -43,7 +43,7 @@ class StudentMainComponent(
         class SearchRoadMapChild(val component: SearchRoadMapComponent): StudentChild()
         class StudentSelectCharacterChild(val component: StudentSelectCharacterComponent, val recreationId: Int): StudentChild()
         class StudentRoadmapChild(val component: StudentRoadmapComponent) : StudentChild()
-        class StudentCertificationChild(val component: StudentCertificationComponent) : StudentChild()
+        class StudentCertificationChild(val component: StudentCertificationComponent, val pageType: CertPage) : StudentChild()
         class StudentCommunityChild(val component: StudentCommunityComponent, val pageType: CertPage) : StudentChild()
         class StudentCommunityDetailChild(val postId: Long, val title: String) : StudentChild()
         class StudentFriendsChild(val component: StudentFriendComponent) : StudentChild()
@@ -59,7 +59,7 @@ class StudentMainComponent(
             is StudentMainConfig.Home -> StudentChild.StudentHomeChild(StudentHomeComponent(componentContext))
             is StudentMainConfig.SearchRoadMap -> StudentChild.SearchRoadMapChild(SearchRoadMapComponent(componentContext))
             is StudentMainConfig.Roadmap -> StudentChild.StudentRoadmapChild(StudentRoadmapComponent(componentContext))
-            is StudentMainConfig.Certification -> StudentChild.StudentCertificationChild(StudentCertificationComponent(componentContext))
+            is StudentMainConfig.Certification -> StudentChild.StudentCertificationChild(StudentCertificationComponent(componentContext, config.pageType), config.pageType)
             is StudentMainConfig.Community -> StudentChild.StudentCommunityChild(StudentCommunityComponent(componentContext), config.pageType)
             is StudentMainConfig.CommunityDetail -> StudentChild.StudentCommunityDetailChild(config.postId, config.title)
             is StudentMainConfig.Friends -> StudentChild.StudentFriendsChild(StudentFriendComponent(componentContext))
@@ -86,7 +86,7 @@ class StudentMainComponent(
         data object Roadmap : StudentMainConfig
 
         @Serializable
-        data object Certification : StudentMainConfig
+        data class Certification(val pageType: CertPage) : StudentMainConfig
 
         @Serializable
         data class Community(val pageType: CertPage) : StudentMainConfig
@@ -121,8 +121,10 @@ class StudentMainComponent(
         navigation.replaceAll(StudentMainConfig.Roadmap)
     }
 
-    fun navigateToCertification() {
-        navigation.replaceAll(StudentMainConfig.Certification)
+    fun navigateToCertification(
+        pageType: CertPage
+    ) {
+        navigation.replaceAll(StudentMainConfig.Certification(pageType))
     }
 
     fun navigateToCommunity(

@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.project.giunne.common.data.remote.response.StudentCourseInfo
+import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.toggle.GPToggleButton
@@ -34,7 +35,7 @@ private const val TAG = "StudentRoadmapScreen"
 internal fun StudentRoadmapScreen(
     component: StudentRoadmapComponent,
     modifier: Modifier = Modifier,
-    navigateToCertification: () -> Unit
+    navigateToCertification: (CertPage) -> Unit
 ) {
     GLog.d(TAG, "onCreate")
 
@@ -70,6 +71,10 @@ internal fun StudentRoadmapScreen(
                     questInfo = courseInfo.questInfo,
                     onDismissDialog = {
                         isShow = false
+                    },
+                    onConfirm = {
+                        isShow = false
+                        navigateToCertification(CertPage.Running)
                     }
                 )
             }
@@ -92,7 +97,7 @@ internal fun StudentRoadmapScreen(
                         .fillMaxSize()
                         .align(Alignment.Center),
                     roadMapState = roadMapState,
-                    navigateToCertification = { navigateToCertification() }
+                    navigateToCertification = { navigateToCertification(CertPage.RoadMap) }
                 )
             }
             Box(

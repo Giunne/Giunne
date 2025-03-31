@@ -14,6 +14,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import com.project.giunne.Res
+import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.shape.GPSquircleShape
 import com.project.giunne.common.presentation.common.text.GPAnnotatedText
 import com.project.giunne.common.presentation.home.common.BorderButton
@@ -22,13 +23,16 @@ import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_next
+import com.project.giunne.icon_running
 import com.project.giunne.icon_student_check
+import com.project.giunne.roadcon_1_birddog
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun RemainCheckingStudentBox(
     modifier: Modifier,
     studentCount: Int,
+    certType: CertPage,
     onClickCommunity: () -> Unit
 ) {
     RowWithDropShadow(
@@ -41,10 +45,18 @@ fun RemainCheckingStudentBox(
             backgroundColor = GPColor.BackgroundLightGray
         ) {
             Icon(
-                modifier = Modifier.size((56 / 3).gdp),
-                tint = GPColor.MainOrangeColor,
-                painter = painterResource(Res.drawable.icon_student_check),
-                contentDescription = null
+                modifier = Modifier.size(
+                    when (certType) {
+                        CertPage.RoadMap -> 34.gdp
+                        CertPage.Running -> 28.gdp
+                    }
+                ),
+                tint = GPColor.TextBlack,
+                painter = when (certType) {
+                    CertPage.RoadMap -> painterResource(Res.drawable.roadcon_1_birddog)
+                    CertPage.Running -> painterResource(Res.drawable.icon_running)
+                },
+                contentDescription = null,
             )
         }
 
@@ -70,7 +82,7 @@ fun RemainCheckingStudentBox(
 
         BorderButton(
             modifier = Modifier.wrapContentSize(),
-            title = "게시판 보러가기",
+            title = "보러가기",
             content = {
                 Icon(
                     modifier = Modifier.height(12.gdp),

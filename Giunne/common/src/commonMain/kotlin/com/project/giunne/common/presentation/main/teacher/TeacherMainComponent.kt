@@ -54,7 +54,7 @@ class TeacherMainComponent(
             is TeacherMainConfig.Home -> TeacherChild.TeacherHomeChild(TeacherHomeComponent(componentContext))
             is TeacherMainConfig.Roadmap -> TeacherChild.TeacherRoadmapChild(TeacherRoadmapComponent(componentContext))
             is TeacherMainConfig.Certification -> TeacherChild.TeacherCertificationChild(
-                component = TeacherCertificationComponent(componentContext)
+                component = TeacherCertificationComponent(componentContext, config.pageType)
             )
             is TeacherMainConfig.Community -> TeacherChild.TeacherCommunityChild(
                 component = TeacherCommunityComponent(componentContext),
@@ -77,7 +77,7 @@ class TeacherMainComponent(
         data object Roadmap : TeacherMainConfig
 
         @Serializable
-        data object Certification : TeacherMainConfig
+        data class Certification(val pageType: CertPage) : TeacherMainConfig
 
         @Serializable
         data class Community(val pageType: CertPage) : TeacherMainConfig
@@ -109,8 +109,10 @@ class TeacherMainComponent(
         navigation.replaceAll(TeacherMainConfig.Roadmap)
     }
 
-    fun navigateToCertification() {
-        navigation.replaceAll(TeacherMainConfig.Certification)
+    fun navigateToCertification(
+        pageType: CertPage
+    ) {
+        navigation.replaceAll(TeacherMainConfig.Certification(pageType))
     }
 
     fun navigateToCommunity(
