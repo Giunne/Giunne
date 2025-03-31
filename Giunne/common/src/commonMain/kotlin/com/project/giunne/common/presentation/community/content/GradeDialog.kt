@@ -208,7 +208,7 @@ fun GradeDialog(
                     onClick = { onConfirmButtonClicked(grade, isChecked, true) },
                 ) {
                     GPText(
-                        text = "채점하기",
+                        text = if (isLastApprove) "채점하기" else "통과하기",
                         textSize = 14.gsp,
                         fontFamily = GPFontFamily.Bold,
                         textColor = GPColor.White
