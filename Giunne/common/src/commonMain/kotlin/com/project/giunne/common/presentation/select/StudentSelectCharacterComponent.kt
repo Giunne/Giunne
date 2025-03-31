@@ -41,10 +41,10 @@ class StudentSelectCharacterComponent(
                 setState {
                     copy(
                         isLoading = false,
+                        successJoinDialog = true,
                         avatarResponse = response
                     )
                 }
-                postSideEffect(SelectCharacterEvent.Success)
             }.onFailure {
                 setState {
                     copy(
@@ -54,6 +54,10 @@ class StudentSelectCharacterComponent(
                 }
             }
         }
+    }
+
+    fun dismissSuccessJoinDialog() {
+        setState { copy(successJoinDialog = false) }
     }
 
     fun dismissErrorDialog() {

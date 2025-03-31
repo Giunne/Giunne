@@ -20,7 +20,6 @@ import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,10 +31,10 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.project.giunne.common.presentation.common.button.GPButton
+import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.common.textfield.GPTextFieldWithClose
 import com.project.giunne.common.presentation.select.content.SelectCharacterPage
-import com.project.giunne.common.presentation.select.state.SelectCharacterEvent
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.extension.addFocusCleaner
@@ -60,16 +59,6 @@ fun StudentCharacterSelectScreen(
     val isEnabled by remember {
         derivedStateOf {
             gradeText.isNotEmpty() && classText.isNotEmpty() && nameText.isNotEmpty()
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        component.sideEffect.collect { event ->
-            when (event) {
-                is SelectCharacterEvent.Success -> {
-                    navigateToHome()
-                }
-            }
         }
     }
 
@@ -211,6 +200,27 @@ fun StudentCharacterSelectScreen(
                 textSize = 14.gsp,
                 fontFamily = GPFontFamily.Bold,
                 textColor = GPColor.White
+            )
+        }
+    }
+
+    if (selectCharacterState.successJoinDialog) {
+        GPAlertDialog(
+            dismiss = {
+                component.dismissSuccessJoinDialog()
+                navigateToHome()
+            },
+            title = "로드맵에 가입",
+            content = "성공적으로 가입되었습니다!",
+        )
+    }
+
+    with(selectCharacterState.error) {
+        if (this != null) {
+            GPAlertDialog(
+                dismiss = { component.dismissErrorDialog() },
+                title = "로드맵 가입 에러",
+                content = selectCharacterState.error?.message.orEmpty(),
             )
         }
     }
