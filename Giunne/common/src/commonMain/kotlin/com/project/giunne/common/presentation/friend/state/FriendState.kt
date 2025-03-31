@@ -12,6 +12,10 @@ data class FriendState(
     val loading: Boolean = false,
     val showModifyCheckDialog: Boolean = false,
     val showModifySuccessDialog: Boolean = false,
+
+    val selectedPointAvatar: AvatarUserResponse? = null,
+    val selectedExpAvatar: AvatarUserResponse? = null,
+
     val showStudentCourse: Boolean = false,
     val courseMap: Map<Long, List<StudentCourseInfo>> = mapOf(),
     val error: DataThrowable? = null

@@ -36,6 +36,7 @@ object DefineUrl {
     const val URL_USER_AVATAR_LIST = "member/avatar"
     const val URL_GET_POINT_INFO = "member/avatar/point"
     const val URL_MODIFY_USER_POINT = "member/avatar/point"
+    const val URL_MODIFY_USER_EXP = "member/avatar/increase-experience"
 
     /* RoadMap */
     const val URL_ROADMAP_LIST = "quest/roadmap"

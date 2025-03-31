@@ -2,6 +2,7 @@ package com.project.giunne.common.data.service
 
 import com.project.giunne.common.data.remote.request.AvatarCreateRequest
 import com.project.giunne.common.data.remote.request.AvatarLoginRequest
+import com.project.giunne.common.data.remote.request.StudentExpRequest
 import com.project.giunne.common.data.remote.request.StudentPointRequest
 import com.project.giunne.common.data.remote.response.AvatarResponse
 import com.project.giunne.common.data.remote.response.AvatarUserListResponse
@@ -11,6 +12,7 @@ import com.project.giunne.common.data.util.BaseResponse
 import com.project.giunne.common.data.util.DefineUrl.URL_AVATAR_CREATE
 import com.project.giunne.common.data.util.DefineUrl.URL_AVATAR_LOGIN
 import com.project.giunne.common.data.util.DefineUrl.URL_GET_POINT_INFO
+import com.project.giunne.common.data.util.DefineUrl.URL_MODIFY_USER_EXP
 import com.project.giunne.common.data.util.DefineUrl.URL_MODIFY_USER_POINT
 import com.project.giunne.common.data.util.DefineUrl.URL_RECREATION_AVATAR_LIST
 import com.project.giunne.common.data.util.DefineUrl.URL_USER_AVATAR_LIST
@@ -48,5 +50,10 @@ interface AvatarService {
     @PUT(URL_MODIFY_USER_POINT)
     suspend fun modifyStudentPoint(
         @Body studentPointRequest: StudentPointRequest
+    ): BaseResponse<String>
+
+    @POST(URL_MODIFY_USER_EXP)
+    suspend fun modifyStudentExp(
+        @Body studentExpRequest: StudentExpRequest
     ): BaseResponse<String>
 }

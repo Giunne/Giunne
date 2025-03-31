@@ -11,6 +11,7 @@ import com.project.giunne.common.domain.usecase.avatar.GetFriendsListUseCase
 import com.project.giunne.common.domain.usecase.avatar.GetMyPointUseCase
 import com.project.giunne.common.domain.usecase.avatar.GetUserAvatarListUseCase
 import com.project.giunne.common.domain.usecase.avatar.LoginRecreationUseCase
+import com.project.giunne.common.domain.usecase.avatar.ModifyStudentExpUseCase
 import com.project.giunne.common.domain.usecase.avatar.ModifyStudentPointUseCase
 import com.project.giunne.common.domain.usecase.certification.GetCertificationHistory
 import com.project.giunne.common.domain.usecase.certification.GetCertificationProgress
@@ -96,4 +97,5 @@ val useCaseModule: Module = module {
     single { GetMyPointUseCase(get()) }
     single { GetPossibleItemCountUseCase(get()) }
     single { ModifyStudentPointUseCase(get()) }
+    single { ModifyStudentExpUseCase(get()) }
 }

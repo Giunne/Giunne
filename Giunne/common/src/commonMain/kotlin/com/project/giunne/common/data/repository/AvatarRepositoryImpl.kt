@@ -2,6 +2,7 @@ package com.project.giunne.common.data.repository
 
 import com.project.giunne.common.data.remote.request.AvatarCreateRequest
 import com.project.giunne.common.data.remote.request.AvatarLoginRequest
+import com.project.giunne.common.data.remote.request.StudentExpRequest
 import com.project.giunne.common.data.remote.request.StudentPointRequest
 import com.project.giunne.common.data.remote.response.AvatarResponse
 import com.project.giunne.common.data.remote.response.AvatarUserListResponse
@@ -60,6 +61,14 @@ class AvatarRepositoryImpl(
         return handleApi(TAG) {
             handleTokenForResponse {
                 avatarService.modifyStudentPoint(studentPointRequest)
+            }
+        }
+    }
+
+    override suspend fun modifyStudentExp(studentExpRequest: StudentExpRequest): NetworkResult<String> {
+        return handleApi(TAG) {
+            handleTokenForResponse {
+                avatarService.modifyStudentExp(studentExpRequest)
             }
         }
     }
