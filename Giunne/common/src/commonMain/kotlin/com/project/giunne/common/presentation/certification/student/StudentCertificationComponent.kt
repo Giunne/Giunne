@@ -20,11 +20,14 @@ import org.koin.java.KoinJavaComponent
 private const val TAG = "StudentCertificationComponent"
 class StudentCertificationComponent(
     componentContext: ComponentContext,
+    initialPageType: CertPage,
     private val getCertificationProgress: GetCertificationProgress = KoinJavaComponent.get(GetCertificationProgress::class.java),
     private val getCertificationHistory: GetCertificationHistory = KoinJavaComponent.get(GetCertificationHistory::class.java),
     private val postUploadFileUseCase: PostUploadFileUseCase = KoinJavaComponent.get(PostUploadFileUseCase::class.java)
 ): KoinComponent, ComponentContext by componentContext,
-    BaseComponent<StudentCertificationState, StudentCertificationEvent>(initialState = StudentCertificationState()) {
+    BaseComponent<StudentCertificationState, StudentCertificationEvent>(
+        initialState = StudentCertificationState(pageType = initialPageType)
+    ) {
 
     private var uploadJob: Job? = null
 

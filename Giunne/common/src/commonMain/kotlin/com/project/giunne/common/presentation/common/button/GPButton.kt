@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
+import androidx.compose.ui.unit.Dp
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.util.gdp
 
@@ -50,6 +51,43 @@ internal fun GPButton(
                 interactionSource = interactionSource
             ) { onClick() }
             .padding(horizontal = 16.gdp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        content()
+    }
+}
+
+@Composable
+internal fun GPButton(
+    modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    normalColor: Color,
+    pressColor: Color,
+    hoverColor: Color? = null,
+    onClick: () -> Unit,
+    horizontalPadding: Dp,
+    shape: Shape = RoundedCornerShape(12.gdp),
+    content: @Composable (RowScope.() -> Unit),
+) {
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val isHovered by interactionSource.collectIsHoveredAsState()
+
+    Row(
+        modifier = modifier
+            .background(
+                color = when {
+                    isPressed -> pressColor
+                    isHovered -> hoverColor ?: normalColor
+                    else -> normalColor
+                },
+                shape = shape
+            )
+            .pointerHoverIcon(icon = PointerIcon.Hand)
+            .noRippleClickable(
+                interactionSource = interactionSource
+            ) { onClick() }
+            .padding(horizontal = horizontalPadding),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {

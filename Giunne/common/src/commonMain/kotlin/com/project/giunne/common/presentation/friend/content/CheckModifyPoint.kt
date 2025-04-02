@@ -29,7 +29,7 @@ fun CheckModifyPoint(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         GPText(
-            text = "학생 포인트 수정",
+            text = "학생 리워드 수정",
             textSize = 12.gsp
         )
         GPCheckbox(

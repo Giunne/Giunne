@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.project.giunne.common.data.remote.request.RecreationRequest
+import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
@@ -54,7 +55,7 @@ private const val TAG = "TeacherHomeScreen"
 internal fun TeacherHomeScreen(
     component: TeacherHomeComponent,
     modifier: Modifier = Modifier,
-    navigateToCommunity: () -> Unit,
+    navigateToCommunity: (CertPage) -> Unit,
     navigateToRecreation: () -> Unit
 ) {
     GLog.d(TAG, "onCreate")
@@ -77,7 +78,8 @@ internal fun TeacherHomeScreen(
             async {
                 component.loginRecreation(Define.playerId)
                 component.getCurrentTeacherRecreation(Define.recreationId, 1)
-                component.callUploadList(1)
+                component.callTrainingUploadList()
+                component.callRunningUploadList()
             }.await()
         }
         component.sideEffect.collect { event ->
@@ -147,8 +149,16 @@ internal fun TeacherHomeScreen(
 
                     RemainCheckingStudentBox(
                         modifier = Modifier.fillMaxWidth(),
-                        studentCount = teacherState.certWaitList.size,
-                        onClickCommunity = navigateToCommunity
+                        studentCount = teacherState.certTrainingWaitList.size,
+                        certType = CertPage.RoadMap,
+                        onClickCommunity = { navigateToCommunity(CertPage.RoadMap) }
+                    )
+
+                    RemainCheckingStudentBox(
+                        modifier = Modifier.fillMaxWidth(),
+                        studentCount = teacherState.certRunningWaitList.size,
+                        certType = CertPage.Running,
+                        onClickCommunity = { navigateToCommunity(CertPage.Running) }
                     )
 
                     ResultRoadMapItem(

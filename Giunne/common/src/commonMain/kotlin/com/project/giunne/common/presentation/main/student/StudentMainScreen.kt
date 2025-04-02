@@ -311,7 +311,7 @@ fun StudentBottomNav(
                         || activeComponent is StudentMainComponent.StudentChild.StudentCommunityDetailChild,
                 onClick = {
                     if (activeComponent !is StudentMainComponent.StudentChild.StudentCertificationChild)
-                        component.navigateToCertification()
+                        component.navigateToCertification(CertPage.RoadMap)
                 },
             )
             NavItem(
@@ -407,7 +407,7 @@ private fun StudentChildren(
             is StudentMainComponent.StudentChild.StudentHomeChild -> StudentHomeScreen(
                 component = child.component,
                 navigateToCommunity = {
-                    component.navigateToCertification()
+                    component.navigateToCertification(CertPage.RoadMap)
                 },
                 navigateToSearchRoadMap = {
                     component.navigateToSearchRoadMap()
@@ -418,13 +418,17 @@ private fun StudentChildren(
             )
             is StudentMainComponent.StudentChild.StudentRoadmapChild -> StudentRoadmapScreen(
                 component = child.component,
-                navigateToCertification = { component.navigateToCertification() }
+                navigateToCertification = { pageType ->
+                    component.navigateToCertification(pageType)
+                }
             )
             is StudentMainComponent.StudentChild.StudentCertificationChild -> StudentCertificationScreen(
                 component = child.component,
                 onCommunityButtonClicked = { pageType ->
                     component.navigateToCommunity(pageType)
-                }
+                },
+                pageType = if (activeComponent is StudentMainComponent.StudentChild.StudentCertificationChild)
+                    activeComponent.pageType else CertPage.RoadMap
             )
             is StudentMainComponent.StudentChild.StudentCommunityChild -> StudentCommunityScreen(
                 component = child.component,

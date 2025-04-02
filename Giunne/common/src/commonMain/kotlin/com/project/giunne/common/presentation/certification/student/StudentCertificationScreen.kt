@@ -34,6 +34,7 @@ import com.project.giunne.common.presentation.certification.student.intent.Image
 import com.project.giunne.common.presentation.certification.student.intent.VideoUploadStore
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.certification.student.state.CertProgress
+import com.project.giunne.common.presentation.certification.student.state.StudentCertificationState
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
@@ -54,7 +55,8 @@ private const val TAG = "StudentCertificationScreen"
 internal fun StudentCertificationScreen(
     component: StudentCertificationComponent,
     modifier: Modifier = Modifier,
-    onCommunityButtonClicked: (CertPage) -> Unit
+    onCommunityButtonClicked: (CertPage) -> Unit,
+    pageType: CertPage
 ) {
     GLog.d(TAG, "onCreate")
 

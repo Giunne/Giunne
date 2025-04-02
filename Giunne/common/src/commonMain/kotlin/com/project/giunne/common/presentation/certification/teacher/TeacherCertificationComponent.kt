@@ -17,10 +17,11 @@ import org.koin.java.KoinJavaComponent
 private const val TAG = "TeacherCertificationComponent"
 class TeacherCertificationComponent(
     componentContext: ComponentContext,
+    initialPage: CertPage,
     private val getUploadList: GetUploadList = KoinJavaComponent.get(GetUploadList::class.java),
     private val getPostingDetailList: GetPostingDetailList = KoinJavaComponent.get(GetPostingDetailList::class.java),
 ): KoinComponent, ComponentContext by componentContext,
-    BaseComponent<TeacherCertificationState, TeacherCertificationEvent>(initialState = TeacherCertificationState()) {
+    BaseComponent<TeacherCertificationState, TeacherCertificationEvent>(initialState = TeacherCertificationState(pageType = initialPage)) {
 
     fun callUploadList(
         roadmapId: Long

@@ -45,13 +45,13 @@ import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.common.textfield.GPTextField
-import com.project.giunne.common.presentation.notification.NotificationUtil
+import com.project.giunne.common.presentation.login.content.PasswordSetupDialog
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.BackHandler
+import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.PermissionController
-import com.project.giunne.common.util.exitProgram
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_lock
@@ -259,7 +259,7 @@ internal fun LoginScreen(
                         .padding(16.gdp)
                         .height(30.gdp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.Start
                 ) {
                     GPText(
                         modifier = Modifier
@@ -269,16 +269,40 @@ internal fun LoginScreen(
                         textColor = GPColor.MainOrangeColor,
                         fontFamily = GPFontFamily.Bold
                     )
-                    GPText(
-                        modifier = Modifier
-                            .noRippleClickable {  },
-                        text = "아이디 / 비밀번호 찾기",
-                        textSize = 12.gsp,
-                        textColor = GPColor.ButtonLightGray,
-                        fontFamily = GPFontFamily.Bold
-                    )
+//                    GPText(
+//                        modifier = Modifier
+//                            .noRippleClickable {  },
+//                        text = "아이디 / 비밀번호 찾기",
+//                        textSize = 12.gsp,
+//                        textColor = GPColor.ButtonLightGray,
+//                        fontFamily = GPFontFamily.Bold
+//                    )
                 }
             }
+        }
+    }
+
+    with(loginState.passwordSetupDialog) {
+        if (this) {
+            PasswordSetupDialog(
+                onConfirmClicked = {
+                    component.callChangePasswordStudent(it)
+                },
+                onCancelClicked = {
+                    Define.clearInfo()
+                    component.dismissPasswordSetupDialog()
+                },
+            )
+        }
+    }
+
+    with(loginState.passwordChangeSuccessDialog) {
+        if (this) {
+            GPAlertDialog(
+                title = "비밀번호 변경",
+                content = "비밀번호 변경에 성공했어요!",
+                dismiss = { component.dismissPasswordChangeSuccessDialog() }
+            )
         }
     }
 

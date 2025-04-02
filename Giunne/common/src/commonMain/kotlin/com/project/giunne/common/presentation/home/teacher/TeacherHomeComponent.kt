@@ -154,18 +154,39 @@ class TeacherHomeComponent(
         }
     }
 
-    fun callUploadList(
-        roadmapId: Long
-    ) {
+    fun callTrainingUploadList() {
         scope.launch {
 //            setState { copy(loading = true) }
             runCatching {
-                getUploadList.invoke(roadmapId)
+                getUploadList.invoke(1)
             }.onSuccess { response ->
                 setState {
                     copy(
 //                        loading = false,
-                        certWaitList = response
+                        certTrainingWaitList = response
+                    )
+                }
+            }.onFailure {
+                setState {
+                    copy(
+//                        loading = false,
+                        error = it.asDataThrowable()
+                    )
+                }
+            }
+        }
+    }
+
+    fun callRunningUploadList() {
+        scope.launch {
+//            setState { copy(loading = true) }
+            runCatching {
+                getUploadList.invoke(2)
+            }.onSuccess { response ->
+                setState {
+                    copy(
+//                        loading = false,
+                        certTrainingWaitList = response
                     )
                 }
             }.onFailure {

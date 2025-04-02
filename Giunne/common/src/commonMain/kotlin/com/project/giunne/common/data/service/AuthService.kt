@@ -1,6 +1,8 @@
 package com.project.giunne.common.data.service
 
 import com.project.giunne.common.data.remote.request.LoginRequest
+import com.project.giunne.common.data.remote.request.PasswordChangeRequest
+import com.project.giunne.common.data.remote.request.PasswordResetRequest
 import com.project.giunne.common.data.remote.request.PlayerRequest
 import com.project.giunne.common.data.remote.request.StudentSignupRequest
 import com.project.giunne.common.data.remote.request.TeacherSignupRequest
@@ -13,6 +15,7 @@ import com.project.giunne.common.data.util.DefineUrl.URL_ID_CHECK
 import com.project.giunne.common.data.util.DefineUrl.URL_LOGIN
 import com.project.giunne.common.data.util.DefineUrl.URL_LOGOUT
 import com.project.giunne.common.data.util.DefineUrl.URL_REFRESH
+import com.project.giunne.common.data.util.DefineUrl.URL_RESET_PASSWORD
 import com.project.giunne.common.data.util.DefineUrl.URL_STUDENT_SIGNUP
 import com.project.giunne.common.data.util.DefineUrl.URL_TEACHER_SIGNUP
 import com.project.giunne.common.util.Define
@@ -20,6 +23,7 @@ import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Header
 import de.jensklingenberg.ktorfit.http.POST
+import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Query
 import de.jensklingenberg.ktorfit.http.Url
 

@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,10 +15,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.project.giunne.Res
 import com.project.giunne.common.data.remote.response.StudentQuestInfo
-import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.ui.theme.GPColor
-import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_attach_money
@@ -29,7 +25,8 @@ import com.project.giunne.icon_exp
 @Composable
 fun StudentJoggingDialog(
     questInfo: StudentQuestInfo,
-    onDismissDialog: () -> Unit = {},
+    onDismissDialog: () -> Unit = {  },
+    onConfirm: () -> Unit
 ) {
     Dialog(
         onDismissRequest = onDismissDialog,
@@ -97,22 +94,14 @@ fun StudentJoggingDialog(
 
             Spacer(modifier = Modifier.height(16.gdp))
 
-            GPButton(
-                modifier = Modifier
-                    .height(48.gdp)
-                    .fillMaxWidth(),
-                normalColor = GPColor.ButtonLightGray,
-                pressColor = GPColor.ButtonPressLightGray,
-                hoverColor = GPColor.ButtonHoverLightGray,
-                onClick = { onDismissDialog() },
-            ) {
-                GPText(
-                    text = "닫기",
-                    textSize = 14.gsp,
-                    fontFamily = GPFontFamily.Bold,
-                    textColor = GPColor.TextBlack
-                )
-            }
+            StudentJoggingActionButtons(
+                onClose = onDismissDialog,
+                progressState = questInfo.questStateInfo.questProgress,
+                onConfirm = when (questInfo.questStateInfo.questProgress) {
+                    "CHECK" -> { { onConfirm() } }
+                    else -> null
+                }
+            )
         }
     }
 }

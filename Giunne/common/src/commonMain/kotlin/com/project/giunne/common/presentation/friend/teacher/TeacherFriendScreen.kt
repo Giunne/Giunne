@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,6 +32,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import com.project.giunne.Res
 import com.project.giunne.character_cat_level_1
 import com.project.giunne.common.data.remote.request.GradeStudentRequest
+import com.project.giunne.common.data.remote.request.PasswordResetRequest
+import com.project.giunne.common.data.remote.request.StudentExpRequest
+import com.project.giunne.common.data.remote.request.StudentPointRequest
 import com.project.giunne.common.presentation.certification.student.content.PageSelectRow
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.addFocusCleaner
@@ -39,8 +43,11 @@ import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.dialog.GPConfirmDialog
 import com.project.giunne.common.presentation.common.spacer.SpH
+import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.friend.content.CheckModifyPoint
+import com.project.giunne.common.presentation.friend.content.ModifyExpDialog
+import com.project.giunne.common.presentation.friend.content.ModifyPointDialog
 import com.project.giunne.common.presentation.friend.content.StudentRoadMapDialog
 import com.project.giunne.common.presentation.friend.content.TeacherFriendItemRow
 import com.project.giunne.common.presentation.friend.content.TeacherModifyStudentPoint
@@ -52,6 +59,7 @@ import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import com.project.giunne.common.util.isNumeric
 import kotlinx.serialization.json.JsonNull.content
 import org.jetbrains.compose.resources.painterResource
 
@@ -66,7 +74,7 @@ internal fun TeacherFriendScreen(
     val focusManager = LocalFocusManager.current
     val friendStore = remember { FriendStore() }
     val friendState by friendStore.uiState.collectAsState()
-    var isPointModifyCheck by remember { mutableStateOf(false) }
+//    var isPointModifyCheck by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         friendStore.getStudentList(
@@ -107,15 +115,15 @@ internal fun TeacherFriendScreen(
 
             SpH(8.gdp)
 
-            CheckModifyPoint(
-                modifier = Modifier.align(Alignment.End),
-                isChecked = isPointModifyCheck,
-                onCheckedChanged = {
-                    isPointModifyCheck = it
-                }
-            )
+//            CheckModifyPoint(
+//                modifier = Modifier.align(Alignment.End),
+//                isChecked = isPointModifyCheck,
+//                onCheckedChanged = {
+//                    isPointModifyCheck = it
+//                }
+//            )
 
-            SpH(8.gdp)
+//            SpH(8.gdp)
 
             if (friendState.friendsList.isNotEmpty()) {
                 LazyColumn(
@@ -129,75 +137,28 @@ internal fun TeacherFriendScreen(
                         TeacherFriendItemRow(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(64.gdp)
+                                .wrapContentWidth()
                                 .padding(horizontal = 16.gdp),
                             friendInfo = friendState.friendsList[it],
-                            isPointModifyCheck = isPointModifyCheck,
+                            onPointModifyButtonClicked = {
+                                friendStore.selectPointAvatar(
+                                    friendState.friendsList[it]
+                                )
+                            },
+                            onExpModifyButtonClicked = {
+                                friendStore.selectExpAvatar(
+                                    friendState.friendsList[it]
+                                )
+                            },
+                            onResetPasswordButtonClicked = {
+                                friendStore.selectResetPasswordAvatar(
+                                    friendState.friendsList[it]
+                                )
+                            },
                             onClick = { playerId ->
                                 friendStore.getSpecificStudentCourse(1, playerId)
                             }
-                        ) {
-                            if (isPointModifyCheck) {
-                                TeacherModifyStudentPoint(
-                                    point = friendState.friendsList[it].pointBuffer.toString(),
-                                    onPointChanged = { point ->
-                                        friendStore.modifyStudentPointLocal(
-                                            index = it,
-                                            point = point
-                                        )
-                                    }
-                                )
-                            } else {
-                                Column(
-                                    horizontalAlignment = Alignment.End
-                                ) {
-                                    Row {
-                                        GPText(
-                                            text = friendState.friendsList[it].level.toString(),
-                                            textSize = 12.gsp,
-                                            fontFamily = GPFontFamily.Medium,
-                                            textColor = GPColor.MainOrangeColor
-                                        )
-                                        GPText(
-                                            text = " 레벨",
-                                            textSize = 12.gsp,
-                                            fontFamily = GPFontFamily.Medium,
-                                            textColor = GPColor.TextBlack
-                                        )
-                                    }
-                                    SpH(2.gdp)
-                                    Row {
-                                        GPText(
-                                            text = friendState.friendsList[it].exp.toString(),
-                                            textSize = 12.gsp,
-                                            fontFamily = GPFontFamily.Medium,
-                                            textColor = GPColor.MainOrangeColor
-                                        )
-                                        GPText(
-                                            text = " exp",
-                                            textSize = 12.gsp,
-                                            fontFamily = GPFontFamily.Medium,
-                                            textColor = GPColor.TextBlack
-                                        )
-                                    }
-                                    SpH(2.gdp)
-                                    Row {
-                                        GPText(
-                                            text = friendState.friendsList[it].point.toString(),
-                                            textSize = 12.gsp,
-                                            fontFamily = GPFontFamily.Medium,
-                                            textColor = GPColor.MainOrangeColor
-                                        )
-                                        GPText(
-                                            text = " 코인",
-                                            textSize = 12.gsp,
-                                            fontFamily = GPFontFamily.Medium,
-                                            textColor = GPColor.TextBlack
-                                        )
-                                    }
-                                }
-                            }
-                        }
+                        )
                     }
                 }
             } else {
@@ -227,46 +188,107 @@ internal fun TeacherFriendScreen(
                     }
                 }
             }
-
-            if (isPointModifyCheck) {
-                GPButton(
-                    modifier = Modifier
-                        .padding(16.gdp)
-                        .fillMaxWidth()
-                        .height(48.gdp),
-                    normalColor = GPColor.ButtonOrange,
-                    pressColor = GPColor.ButtonPressOrange,
-                    hoverColor = GPColor.ButtonHoverOrange,
-                    onClick = { friendStore.showModifyCheckDialog() },
-                ) {
-                    GPText(
-                        text = "수정하기",
-                        textSize = 16.gsp,
-                        fontFamily = GPFontFamily.Bold,
-                        textColor = GPColor.White
-                    )
-                }
-            }
         }
     }
 
-    if (friendState.showModifyCheckDialog) {
-        GPConfirmDialog(
-            title = "학생 포인트 수정",
-            content = "변경된 학생들의 포인트를 수정할까요?",
-            onConfirmClicked = {
-                friendStore.dismissModifyCheckDialog()
-                friendStore.modifyStudentPoint()
-            },
-            onCancelClicked = { friendStore.dismissModifyCheckDialog() },
-        )
+    with (friendState.selectedPointAvatar) {
+        if (this != null) {
+            ModifyPointDialog(
+                name = this.nickname,
+                initialPoint = this.point.toString(),
+                onConfirmClicked = { modifiedPoint ->
+                    if (modifiedPoint.isNumeric()) {
+                        friendStore.modifyStudentPoint(
+                            studentPointRequest = StudentPointRequest(this.id, modifiedPoint.toInt())
+                        ) {
+                            friendStore.dismissModifyPointDialog()
+                            friendStore.getStudentList(
+                                recreationId = AvatarUtil.uiState.value.recreationId.toLong(),
+                            )
+                        }
+                    } else {
+                        friendStore.onInvalidNumeric()
+                    }
+                },
+                onCancelClicked = { friendStore.dismissModifyPointDialog() },
+            )
+        }
     }
 
-    if (friendState.showModifySuccessDialog) {
+    with (friendState.selectedExpAvatar) {
+        if (this != null) {
+            ModifyExpDialog(
+                name = this.nickname,
+                onConfirmClicked = { rewardExp ->
+                    if (rewardExp.isNumeric()) {
+                        friendStore.callModifyStudentExp(
+                            studentExpRequest = StudentExpRequest(this.id, rewardExp.toInt())
+                        ) {
+                            friendStore.dismissModifyExpDialog()
+                            friendStore.getStudentList(
+                                recreationId = AvatarUtil.uiState.value.recreationId.toLong(),
+                            )
+                        }
+                    } else {
+                        friendStore.onInvalidNumeric()
+                    }
+                },
+                onCancelClicked = { friendStore.dismissModifyExpDialog() },
+            )
+        }
+    }
+
+    with(friendState.invalidNumericDialog) {
+        if (this) {
+            GPAlertDialog(
+                dismiss = { friendStore.dismissInvalidNumericDialog() },
+                title = "잘못된 형식",
+                content = "잘못된 숫자 입력입니다. 다시 입력해주세요."
+            )
+        }
+    }
+
+    with (friendState.selectedResetConfirmAvatar) {
+        if (this != null) {
+            GPConfirmDialog(
+                title = "확인",
+                content = "선택한 학생의 비밀번호를 초기화 할까요?",
+                onConfirmClicked = {
+                    friendStore.callResetPassword(
+                        passwordResetRequest = PasswordResetRequest(
+                            avatarId = this.id.toLong(),
+                            password = "1234"
+                        )
+                    )
+                },
+                onCancelClicked = { friendStore.dismissResetConfirmDialog() },
+            )
+        }
+    }
+
+    with (friendState.resetSuccessDialog) {
+        if (this) {
+            GPAlertDialog(
+                title = "알림",
+                content = "비밀번호가 초기화 되었습니다.",
+                dismiss = { friendStore.dismissResetSuccessDialog() }
+            )
+        }
+    }
+
+    if (friendState.showPointModifySuccessDialog) {
         GPAlertDialog(
             title = "학생 포인트 수정",
             content = "포인트 수정이 완료되었습니다!",
-            dismiss = { friendStore.dismissModifySuccessDialog() }
+            dismiss = { friendStore.dismissPointModifySuccessDialog() }
+        )
+    }
+
+    if (friendState.showExpModifySuccessDialog) {
+        GPAlertDialog(
+            title = "학생 경험치 지급",
+            content = "경험치 지급이 완료되었습니다!",
+            dismiss = { friendStore.dismissExpModifySuccessDialog() }
         )
     }
 

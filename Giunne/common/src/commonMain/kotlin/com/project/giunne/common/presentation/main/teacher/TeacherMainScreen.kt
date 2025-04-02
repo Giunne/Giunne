@@ -42,10 +42,8 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.slid
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.project.giunne.Res
-import com.project.giunne.common.data.remote.response.QuestUploadInfo
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.certification.teacher.TeacherCertificationScreen
-import com.project.giunne.common.presentation.common.badge.GPNotificationBadge
 import com.project.giunne.common.presentation.common.button.GPBackButton
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.spacer.SpH
@@ -67,7 +65,6 @@ import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.BackHandler
 import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.GPFontFamily
-import com.project.giunne.common.util.exitProgram
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_certification
@@ -278,7 +275,7 @@ fun TeacherBottomNav(
                         || activeComponent is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild,
                 onClick = {
                     if (activeComponent !is TeacherMainComponent.TeacherChild.TeacherCertificationChild)
-                        component.navigateToCertification()
+                        component.navigateToCertification(CertPage.RoadMap)
                 },
             )
             NavItem(
@@ -373,8 +370,8 @@ private fun TeacherChildren(
         when (val child = it.instance) {
             is TeacherMainComponent.TeacherChild.TeacherHomeChild -> TeacherHomeScreen(
                 component = child.component,
-                navigateToCommunity = {
-                    component.navigateToCertification()
+                navigateToCommunity = { pageType ->
+                    component.navigateToCertification(pageType)
                 },
                 navigateToRecreation = {
                     component.navigateToRecreation()

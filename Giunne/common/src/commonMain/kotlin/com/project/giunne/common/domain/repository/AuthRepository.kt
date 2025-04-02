@@ -1,6 +1,8 @@
 package com.project.giunne.common.domain.repository
 
 import com.project.giunne.common.data.remote.request.LoginRequest
+import com.project.giunne.common.data.remote.request.PasswordChangeRequest
+import com.project.giunne.common.data.remote.request.PasswordResetRequest
 import com.project.giunne.common.data.remote.request.PlayerRequest
 import com.project.giunne.common.data.remote.request.StudentSignupRequest
 import com.project.giunne.common.data.remote.request.TeacherSignupRequest
@@ -8,8 +10,10 @@ import com.project.giunne.common.data.remote.response.AuthResponse
 import com.project.giunne.common.data.remote.response.IDExistInfo
 import com.project.giunne.common.data.remote.response.RefreshResponse
 import com.project.giunne.common.data.util.BaseResponse
+import com.project.giunne.common.data.util.DefineUrl.URL_RESET_PASSWORD
 import com.project.giunne.common.data.util.NetworkResult
 import de.jensklingenberg.ktorfit.http.Body
+import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Query
 
 interface AuthRepository {

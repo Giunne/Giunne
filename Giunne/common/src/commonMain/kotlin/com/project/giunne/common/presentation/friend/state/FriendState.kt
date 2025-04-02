@@ -12,7 +12,16 @@ data class FriendState(
     val friendsList: List<AvatarUserResponse> = listOf(),
     val loading: Boolean = false,
     val showModifyCheckDialog: Boolean = false,
-    val showModifySuccessDialog: Boolean = false,
+    val showPointModifySuccessDialog: Boolean = false,
+    val showExpModifySuccessDialog: Boolean = false,
+
+    val selectedPointAvatar: AvatarUserResponse? = null,
+    val selectedExpAvatar: AvatarUserResponse? = null,
+    val invalidNumericDialog: Boolean = false,
+
+    val selectedResetConfirmAvatar: AvatarUserResponse? = null,
+    val resetSuccessDialog: Boolean = false,
+
     val showStudentCourse: Boolean = false,
     val showFriendLargeAvatar: Boolean = false,
     val wearingItems: List<WearingItem> = listOf(),

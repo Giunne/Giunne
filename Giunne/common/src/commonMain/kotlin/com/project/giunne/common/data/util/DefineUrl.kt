@@ -21,6 +21,8 @@ object DefineUrl {
     const val URL_REFRESH = "member/auth/access-token/issue"
     const val URL_CHANGE_PASSWORD = "member/auth/password-change"
     const val URL_ID_CHECK = "member/auth/duplicate-id"
+    const val URL_RESET_PASSWORD = "member/avatar/teacher/password-change"
+    const val URL_CHANGE_STUDENT_PASSWORD = "member/auth/student/password-change"
 
     /* Common */
     const val URL_SCHOOL_LIST = "member/school"
@@ -36,6 +38,7 @@ object DefineUrl {
     const val URL_USER_AVATAR_LIST = "member/avatar"
     const val URL_GET_POINT_INFO = "member/avatar/point"
     const val URL_MODIFY_USER_POINT = "member/avatar/point"
+    const val URL_MODIFY_USER_EXP = "member/avatar/increase-experience"
 
     /* RoadMap */
     const val URL_ROADMAP_LIST = "quest/roadmap"
