@@ -57,6 +57,7 @@ import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import com.project.giunne.common.util.isNumeric
 import kotlinx.serialization.json.JsonNull.content
 import org.jetbrains.compose.resources.painterResource
 
@@ -315,10 +316,18 @@ internal fun TeacherFriendScreen(
                 name = this.nickname,
                 initialPoint = this.point.toString(),
                 onConfirmClicked = { modifiedPoint ->
-                    friendStore.modifyStudentPoint(
-                        studentPointRequest = StudentPointRequest(this.id, modifiedPoint.toInt())
-                    )
-                    friendStore.dismissModifyPointDialog()
+                    if (modifiedPoint.isNumeric()) {
+                        friendStore.modifyStudentPoint(
+                            studentPointRequest = StudentPointRequest(this.id, modifiedPoint.toInt())
+                        ) {
+                            friendStore.dismissModifyPointDialog()
+                            friendStore.getStudentList(
+                                recreationId = AvatarUtil.uiState.value.recreationId.toLong(),
+                            )
+                        }
+                    } else {
+                        friendStore.onInvalidNumeric()
+                    }
                 },
                 onCancelClicked = { friendStore.dismissModifyPointDialog() },
             )
@@ -330,21 +339,47 @@ internal fun TeacherFriendScreen(
             ModifyExpDialog(
                 name = this.nickname,
                 onConfirmClicked = { rewardExp ->
-                    friendStore.callModifyStudentExp(
-                        studentExpRequest = StudentExpRequest(this.id, rewardExp.toInt())
-                    )
-                    friendStore.dismissModifyExpDialog()
+                    if (rewardExp.isNumeric()) {
+                        friendStore.callModifyStudentExp(
+                            studentExpRequest = StudentExpRequest(this.id, rewardExp.toInt())
+                        ) {
+                            friendStore.dismissModifyExpDialog()
+                            friendStore.getStudentList(
+                                recreationId = AvatarUtil.uiState.value.recreationId.toLong(),
+                            )
+                        }
+                    } else {
+                        friendStore.onInvalidNumeric()
+                    }
                 },
                 onCancelClicked = { friendStore.dismissModifyExpDialog() },
             )
         }
     }
 
-    if (friendState.showModifySuccessDialog) {
+    with(friendState.invalidNumericDialog) {
+        if (this) {
+            GPAlertDialog(
+                dismiss = { friendStore.dismissInvalidNumericDialog() },
+                title = "잘못된 형식",
+                content = "잘못된 숫자 입력입니다. 다시 입력해주세요."
+            )
+        }
+    }
+
+    if (friendState.showPointModifySuccessDialog) {
         GPAlertDialog(
             title = "학생 포인트 수정",
             content = "포인트 수정이 완료되었습니다!",
-            dismiss = { friendStore.dismissModifySuccessDialog() }
+            dismiss = { friendStore.dismissPointModifySuccessDialog() }
+        )
+    }
+
+    if (friendState.showExpModifySuccessDialog) {
+        GPAlertDialog(
+            title = "학생 경험치 지급",
+            content = "경험치 지급이 완료되었습니다!",
+            dismiss = { friendStore.dismissExpModifySuccessDialog() }
         )
     }
 

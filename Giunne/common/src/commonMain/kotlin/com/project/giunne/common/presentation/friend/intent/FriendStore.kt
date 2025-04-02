@@ -97,7 +97,8 @@ class FriendStore(
     }
 
     fun modifyStudentPoint(
-        studentPointRequest: StudentPointRequest
+        studentPointRequest: StudentPointRequest,
+        onSuccess: () -> Unit
     ) {
         scope.launch {
             setState { copy(loading = true) }
@@ -107,9 +108,10 @@ class FriendStore(
                 setState {
                     copy(
                         loading = false,
-                        showModifySuccessDialog = true
+                        showPointModifySuccessDialog = true
                     )
                 }
+                onSuccess()
             }.onFailure {
                 setState {
                     copy(
@@ -123,7 +125,8 @@ class FriendStore(
     }
 
     fun callModifyStudentExp(
-        studentExpRequest: StudentExpRequest
+        studentExpRequest: StudentExpRequest,
+        onSuccess: () -> Unit
     ) {
         scope.launch {
             setState { copy(loading = true) }
@@ -133,9 +136,10 @@ class FriendStore(
                 setState {
                     copy(
                         loading = false,
-                        showModifySuccessDialog = true
+                        showExpModifySuccessDialog = true
                     )
                 }
+                onSuccess()
             }.onFailure {
                 setState {
                     copy(
@@ -177,6 +181,14 @@ class FriendStore(
         setState { copy(selectedPointAvatar = null) }
     }
 
+    fun onInvalidNumeric() {
+        setState { copy(invalidNumericDialog = true) }
+    }
+
+    fun dismissInvalidNumericDialog() {
+        setState { copy(invalidNumericDialog = false) }
+    }
+
     fun dismissModifyExpDialog() {
         setState { copy(selectedExpAvatar = null) }
     }
@@ -185,8 +197,12 @@ class FriendStore(
         setState { copy(showModifyCheckDialog = false) }
     }
 
-    fun dismissModifySuccessDialog() {
-        setState { copy(showModifySuccessDialog = false) }
+    fun dismissPointModifySuccessDialog() {
+        setState { copy(showPointModifySuccessDialog = false) }
+    }
+
+    fun dismissExpModifySuccessDialog() {
+        setState { copy(showExpModifySuccessDialog = false) }
     }
 
     fun dismissErrorDialog() {

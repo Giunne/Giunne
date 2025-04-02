@@ -104,7 +104,7 @@ fun ModifyExpDialog(
                             fontFamily = GPFontFamily.Medium
                         ),
                         keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Next,
+                            imeAction = ImeAction.Done,
                             keyboardType = KeyboardType.Number
                         ),
                         keyboardActions = KeyboardActions(
