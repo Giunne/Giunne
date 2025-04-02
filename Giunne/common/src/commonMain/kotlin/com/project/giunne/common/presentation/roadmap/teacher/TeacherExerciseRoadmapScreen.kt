@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import com.project.giunne.common.data.remote.response.CourseInfo
 import com.project.giunne.common.presentation.common.text.GPAnnotatedText
+import com.project.giunne.common.presentation.roadmap.content.AlreadyCheckedDialog
 import com.project.giunne.common.presentation.roadmap.content.RoadMapDialogEditable
 import com.project.giunne.common.presentation.roadmap.content.RoadMapTeacherExerciseStage
 import com.project.giunne.common.presentation.roadmap.content.TeacherCheckStudentDialog
@@ -211,6 +212,17 @@ fun TeacherExerciseRoadmapScreen(
             isChecked = isChecked,
             onCheckedChanged = {
                 isChecked = it
+            }
+        )
+    }
+
+    if (roadMapState.alreadyCheckedStudentSet.isNotEmpty()) {
+        AlreadyCheckedDialog(
+            title = "로드맵 채크 상황",
+            content = "이미 채크되어 있는 학생입니다.",
+            checkedSet = roadMapState.alreadyCheckedStudentSet,
+            dismiss = {
+                roadMapComponent.dismissAlreadyCheckedDialog()
             }
         )
     }
