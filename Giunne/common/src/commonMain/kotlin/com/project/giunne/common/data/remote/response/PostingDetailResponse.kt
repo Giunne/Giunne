@@ -20,5 +20,5 @@ data class PostingDetailResponse(
         get() = currentApproveCount == questInfo.needApproveCount - 1
 
     val currentApproveTitle: String
-        get() = "(${currentApproveCount}/${questInfo.needApproveCount})"
+        get() = "(${currentApproveCount + 1}/${questInfo.needApproveCount})"
 }

@@ -400,7 +400,10 @@ private fun TeacherChildren(
             )
             is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild -> TeacherCommunityDetailScreen(
                 postId = if (activeComponent is TeacherMainComponent.TeacherChild.TeacherCommunityDetailChild)
-                    activeComponent.postId else null
+                    activeComponent.postId else null,
+                navigateBack = {
+                    component.navigateBack()
+                }
             )
             is TeacherMainComponent.TeacherChild.TeacherFriendsChild -> TeacherFriendScreen(component = child.component)
             is TeacherMainComponent.TeacherChild.TeacherMyPageChild -> TeacherMyPageScreen(

@@ -40,8 +40,8 @@ fun createHttpClient(
 ): HttpClient {
     return HttpClient {
         install(HttpTimeout) {
-            requestTimeoutMillis = 15000L
-            connectTimeoutMillis = 15000L
+            requestTimeoutMillis = 60000L
+            connectTimeoutMillis = 60000L
         }
         install(ContentNegotiation) {
             json(

@@ -12,6 +12,7 @@ data class RoadMapState(
     val roadMapInfo: List<RoadMapInfo> = listOf(),
     val studentList: List<QuestStateInfo> = listOf(),
     val checkedIdSet: Set<Int> = hashSetOf(),
+    val alreadyCheckedStudentSet: Set<String> = hashSetOf(),
     val courseMap: Map<Long, List<CourseInfo>> = mapOf(),
     val error: DataThrowable? = null
 )
