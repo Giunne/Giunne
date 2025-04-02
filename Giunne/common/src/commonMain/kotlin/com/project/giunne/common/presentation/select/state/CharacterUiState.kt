@@ -40,6 +40,7 @@ data class CharacterUiState(
 
 data class SelectCharacterUiState(
     val isLoading: Boolean = false,
+    val successJoinDialog: Boolean = false,
     val characterList: List<CharacterUiState> = localCharacterList,
     val avatarResponse: AvatarResponse = AvatarResponse(),
     val error: DataThrowable? = null
