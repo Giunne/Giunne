@@ -126,7 +126,6 @@ class TeacherRoadmapComponent(
         recreationId: Long,
         id: Int
     ) {
-        println(id)
         scope.launch {
             setState { copy(isLoading = true) }
             runCatching {
@@ -218,38 +217,72 @@ class TeacherRoadmapComponent(
     }
 
     fun checkedStudent(studentCheck: QuestStateInfo, checked: Boolean) {
-        setState {
-            copy(
-                studentList = studentList.toMutableList().apply {
-                    val index = indexOf(studentCheck)
-                    this[index] = studentCheck.copy(isChecked = checked)
-                },
-                checkedIdSet = if (checked) {
-                    checkedIdSet + studentCheck.id
-                } else {
-                    checkedIdSet - studentCheck.id
-                }
-            )
+        val checkedStudent = alreadyCheckedStudentOrEmpty(studentCheck)
+        if (checkedStudent.isNotEmpty() && checked) {
+            setState { copy(alreadyCheckedStudentSet = alreadyCheckedStudentSet + checkedStudent) }
+        } else {
+            setState {
+                copy(
+                    studentList = studentList.toMutableList().apply {
+                        val index = indexOf(studentCheck)
+                        this[index] = studentCheck.copy(isChecked = checked)
+                    },
+                    checkedIdSet = if (checked) {
+                        checkedIdSet + studentCheck.id
+                    } else {
+                        checkedIdSet - studentCheck.id
+                    }
+                )
+            }
         }
     }
 
     fun checkedStudentAll(allSelected: Boolean) {
-        setState {
-            copy(
-                studentList = studentList.map { it.copy(isChecked = allSelected) },
-                checkedIdSet = if (allSelected) {
-                    studentList.map { it.id }.toSet()
-                } else {
-                    setOf()
-                }
-            )
+        val studentCheckedSet = HashSet<String>()
+        uiState.value.studentList.map {
+            val studentChecked = alreadyCheckedStudentOrEmpty(it)
+            if (studentChecked.isNotEmpty()) studentCheckedSet.add(studentChecked)
+        }
+        if (studentCheckedSet.isNotEmpty() && allSelected) {
+            setState { copy(alreadyCheckedStudentSet = alreadyCheckedStudentSet + studentCheckedSet) }
+        } else {
+            setState {
+                copy(
+                    studentList = studentList.map { it.copy(isChecked = allSelected) },
+                    checkedIdSet = if (allSelected) {
+                        studentList.map { it.id }.toSet()
+                    } else {
+                        setOf()
+                    }
+                )
+            }
         }
     }
-
 
     fun clearStudentCheckList() {
         setState {
             copy(checkedIdSet = setOf())
         }
     }
+
+    fun dismissAlreadyCheckedDialog() {
+        setState { copy(alreadyCheckedStudentSet = hashSetOf()) }
+    }
+
+    private fun alreadyCheckedStudentOrEmpty(studentCheck: QuestStateInfo): String {
+        val id = studentCheck.playerId
+        val name = studentCheck.name
+        uiState.value.courseMap.values
+            .flatten()
+            .forEach { courseInfo ->
+                println(courseInfo)
+                val student = courseInfo.questInfo.questStateInfos.find { it.playerId == id }
+                    ?: QuestStateInfo()
+                if (student.id != studentCheck.id && student.questProgress == "CHECK") {
+                    return "$name -> ${courseInfo.title}"
+                }
+            }
+            return ""
+        }
+
 }

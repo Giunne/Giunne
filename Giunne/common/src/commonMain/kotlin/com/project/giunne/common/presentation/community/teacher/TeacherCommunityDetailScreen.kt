@@ -75,7 +75,8 @@ private const val TAG = "TeacherCommunityDetailScreen"
 @Composable
 internal fun TeacherCommunityDetailScreen(
     modifier: Modifier = Modifier,
-    postId: Long?
+    postId: Long?,
+    navigateBack: () -> Unit
 ) {
     GLog.d(TAG, "onCreate")
 
@@ -344,7 +345,7 @@ internal fun TeacherCommunityDetailScreen(
             dismiss = {
                 gradeStore.dismissSuccessDialog()
                 gradeStore.dismissGradeDialog()
-
+                navigateBack()
             },
             title = "학생 채점",
             content = "채점되었습니다!",

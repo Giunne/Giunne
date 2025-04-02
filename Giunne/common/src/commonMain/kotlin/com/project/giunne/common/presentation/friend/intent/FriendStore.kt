@@ -5,6 +5,7 @@ import com.project.giunne.common.data.remote.request.PasswordResetRequest
 import com.project.giunne.common.data.remote.request.StudentExpRequest
 import com.project.giunne.common.data.remote.request.StudentPointRequest
 import com.project.giunne.common.data.remote.response.AvatarUserResponse
+import com.project.giunne.common.data.remote.response.WearingItem
 import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.avatar.GetFriendsListUseCase
 import com.project.giunne.common.domain.usecase.avatar.ModifyStudentExpUseCase
@@ -13,8 +14,6 @@ import com.project.giunne.common.domain.usecase.avatar.ResetPasswordUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetSpecificStudentCourseUseCase
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.friend.state.FriendState
-import com.project.giunne.common.util.Define.playerId
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent
 
@@ -206,6 +205,19 @@ class FriendStore(
                 }
             )
         }
+    }
+
+    fun showFriendLargeAvatar(wearingItems: List<WearingItem>) {
+        setState {
+            copy(
+                showFriendLargeAvatar = true,
+                wearingItems = wearingItems
+            )
+        }
+    }
+
+    fun dismissFriendLargeAvatar() {
+        setState { copy(showFriendLargeAvatar = false) }
     }
 
     fun showModifyCheckDialog() {

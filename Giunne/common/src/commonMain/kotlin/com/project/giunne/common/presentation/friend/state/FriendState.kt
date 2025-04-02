@@ -2,6 +2,7 @@ package com.project.giunne.common.presentation.friend.state
 
 import com.project.giunne.common.data.remote.response.AvatarUserResponse
 import com.project.giunne.common.data.remote.response.StudentCourseInfo
+import com.project.giunne.common.data.remote.response.WearingItem
 import com.project.giunne.common.data.util.DataThrowable
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 
@@ -22,6 +23,8 @@ data class FriendState(
     val resetSuccessDialog: Boolean = false,
 
     val showStudentCourse: Boolean = false,
+    val showFriendLargeAvatar: Boolean = false,
+    val wearingItems: List<WearingItem> = listOf(),
     val courseMap: Map<Long, List<StudentCourseInfo>> = mapOf(),
     val error: DataThrowable? = null
 )

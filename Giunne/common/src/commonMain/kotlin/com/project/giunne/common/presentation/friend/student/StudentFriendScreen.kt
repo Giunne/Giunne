@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -27,6 +28,7 @@ import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.text.GPText
+import com.project.giunne.common.presentation.friend.content.FriendAvatarDialog
 import com.project.giunne.common.presentation.friend.content.StudentFriendItemRow
 import com.project.giunne.common.presentation.friend.intent.FriendStore
 import com.project.giunne.common.ui.theme.GPColor
@@ -76,7 +78,10 @@ internal fun StudentFriendScreen(
                             .fillMaxWidth()
                             .height(64.gdp)
                             .padding(horizontal = 16.gdp),
-                        friendInfo = friendState.friendsList[it]
+                        friendInfo = friendState.friendsList[it],
+                        onClick = { wearingItems ->
+                            friendStore.showFriendLargeAvatar(wearingItems)
+                        }
                     )
                 }
             }
@@ -117,6 +122,19 @@ internal fun StudentFriendScreen(
                 content = friendState.error?.message.orEmpty(),
             )
         }
+    }
+
+    if (friendState.showFriendLargeAvatar) {
+        FriendAvatarDialog(
+            modifier = Modifier
+                .padding(16.gdp)
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            wearingItems = friendState.wearingItems,
+            onDismiss = {
+                friendStore.dismissFriendLargeAvatar()
+            }
+        )
     }
 
     if(friendState.loading) {

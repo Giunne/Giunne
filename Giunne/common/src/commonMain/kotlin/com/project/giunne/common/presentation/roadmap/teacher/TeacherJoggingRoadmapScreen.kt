@@ -23,6 +23,7 @@ import com.project.giunne.common.data.remote.response.CourseInfo
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.shape.GPSquircleShapeWithBorder
 import com.project.giunne.common.presentation.common.text.GPText
+import com.project.giunne.common.presentation.roadmap.content.AlreadyCheckedDialog
 import com.project.giunne.common.presentation.roadmap.content.DrawTeacherJoggingLine
 import com.project.giunne.common.presentation.roadmap.content.TeacherCheckStudentDialog
 import com.project.giunne.common.presentation.roadmap.content.TeacherCheckbox
@@ -152,6 +153,17 @@ fun TeacherJoggingRoadmapScreen(
             isChecked = isChecked,
             onCheckedChanged = {
                 isChecked = it
+            }
+        )
+    }
+
+    if (roadMapState.alreadyCheckedStudentSet.isNotEmpty()) {
+        AlreadyCheckedDialog(
+            title = "로드맵 채크 상황",
+            content = "이미 채크되어 있는 학생입니다.",
+            checkedSet = roadMapState.alreadyCheckedStudentSet,
+            dismiss = {
+                roadMapComponent.dismissAlreadyCheckedDialog()
             }
         )
     }

@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import com.project.giunne.common.data.remote.response.CourseInfo
 import com.project.giunne.common.presentation.common.text.GPAnnotatedText
+import com.project.giunne.common.presentation.roadmap.content.AlreadyCheckedDialog
 import com.project.giunne.common.presentation.roadmap.content.RoadMapDialogEditable
 import com.project.giunne.common.presentation.roadmap.content.RoadMapTeacherExerciseStage
 import com.project.giunne.common.presentation.roadmap.content.TeacherCheckStudentDialog
@@ -123,9 +124,9 @@ fun TeacherExerciseRoadmapScreen(
             offsetX.coerceIn(-width, 0f)
         }
 
-        val text = if (offsetY in 0f..height / 2) {
+        val text = if (offsetY in 0f..height * 0.6f) {
             "모두 협력해 보아요."
-        } else if (offsetY in height / 2..height && offsetX in -width..0f) {
+        } else if (offsetY in height * 0.6f..height * 1.7f && offsetX in -width..0f) {
             "3명이 한팀을 이루어야 해요!"
         } else {
             "혼자 해내야 해요!"
@@ -211,6 +212,17 @@ fun TeacherExerciseRoadmapScreen(
             isChecked = isChecked,
             onCheckedChanged = {
                 isChecked = it
+            }
+        )
+    }
+
+    if (roadMapState.alreadyCheckedStudentSet.isNotEmpty()) {
+        AlreadyCheckedDialog(
+            title = "로드맵 채크 상황",
+            content = "이미 채크되어 있는 학생입니다.",
+            checkedSet = roadMapState.alreadyCheckedStudentSet,
+            dismiss = {
+                roadMapComponent.dismissAlreadyCheckedDialog()
             }
         )
     }
