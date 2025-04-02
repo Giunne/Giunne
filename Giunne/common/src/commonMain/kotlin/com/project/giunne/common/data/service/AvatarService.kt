@@ -13,6 +13,7 @@ import com.project.giunne.common.data.remote.response.MyPointInfo
 import com.project.giunne.common.data.util.BaseResponse
 import com.project.giunne.common.data.util.DefineUrl.URL_AVATAR_CREATE
 import com.project.giunne.common.data.util.DefineUrl.URL_AVATAR_LOGIN
+import com.project.giunne.common.data.util.DefineUrl.URL_CHANGE_STUDENT_PASSWORD
 import com.project.giunne.common.data.util.DefineUrl.URL_GET_POINT_INFO
 import com.project.giunne.common.data.util.DefineUrl.URL_MODIFY_USER_EXP
 import com.project.giunne.common.data.util.DefineUrl.URL_MODIFY_USER_POINT
@@ -65,7 +66,7 @@ interface AvatarService {
         @Body passwordResetRequest: PasswordResetRequest
     ): BaseResponse<String>
 
-    @PUT(URL_RESET_PASSWORD)
+    @PUT(URL_CHANGE_STUDENT_PASSWORD)
     suspend fun changeStudentPassword(
         @Body passwordChangeRequest: PasswordChangeRequest
     ): BaseResponse<String>

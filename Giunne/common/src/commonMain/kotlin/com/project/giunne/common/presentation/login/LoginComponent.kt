@@ -7,8 +7,10 @@ import com.arkivanov.decompose.ComponentContext
 import com.project.giunne.common.base.BaseComponent
 import com.project.giunne.common.data.local.preference.SettingRepository
 import com.project.giunne.common.data.remote.request.LoginRequest
+import com.project.giunne.common.data.remote.request.PasswordChangeRequest
 import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.auth.LoginUseCase
+import com.project.giunne.common.domain.usecase.avatar.ChangeStudentPasswordUseCase
 import com.project.giunne.common.domain.usecase.common.GetSchoolListUseCase
 import com.project.giunne.common.presentation.login.intent.LoginEvent
 import com.project.giunne.common.presentation.login.state.LoginState
@@ -38,6 +40,7 @@ class LoginComponent(
     val goToTeacherMain: () -> Unit,
     private val loginUseCase: LoginUseCase = KoinJavaComponent.get(
         LoginUseCase::class.java),
+    private val changeStudentPasswordUseCase: ChangeStudentPasswordUseCase = KoinJavaComponent.get(ChangeStudentPasswordUseCase::class.java)
 ): KoinComponent, ComponentContext by componentContext,
 BaseComponent<LoginState, LoginEvent>(
     initialState = LoginState()
@@ -62,20 +65,52 @@ BaseComponent<LoginState, LoginEvent>(
                 savePrefAuthInfo(response)
                 saveLoginInfo(loginRequest.loginId)
                 setState { copy(loading = false) }
-                when(response.role) {
-                    TYPE_TEACHER -> {
-                        withContext(Dispatchers.Main) {
-                            goToTeacherMain()
+                if (loginRequest.password.length < 8) { // 초기화 신호
+                    setState { copy(passwordSetupDialog = true) }
+                } else {
+                    when(response.role) {
+                        TYPE_TEACHER -> {
+                            withContext(Dispatchers.Main) {
+                                goToTeacherMain()
+                            }
                         }
-                    }
-                    TYPE_STUDENT -> {
-                        withContext(Dispatchers.Main) {
-                            goToStudentMain()
+                        TYPE_STUDENT -> {
+                            withContext(Dispatchers.Main) {
+                                goToStudentMain()
+                            }
                         }
                     }
                 }
             }.onFailure {
                 setState { copy(loading = false, error = it.asDataThrowable()) }
+            }
+        }
+    }
+
+    fun callChangePasswordStudent(
+        password: String
+    ) {
+        scope.launch {
+            setState { copy(loading = true) }
+            runCatching {
+                changeStudentPasswordUseCase.invoke(
+                    passwordChangeRequest = PasswordChangeRequest(password)
+                )
+            }.onSuccess {
+                setState {
+                    copy(
+                        loading = false,
+                        passwordChangeSuccessDialog = true,
+                        passwordSetupDialog = false
+                    )
+                }
+            }.onFailure {
+                setState {
+                    copy(
+                        loading = false,
+                        error = it.asDataThrowable()
+                    )
+                }
             }
         }
     }
@@ -104,6 +139,13 @@ BaseComponent<LoginState, LoginEvent>(
         prefRepository.idPref.set(idText)
     }
 
+    fun dismissPasswordSetupDialog() {
+        setState { copy(passwordSetupDialog = false) }
+    }
+
+    fun dismissPasswordChangeSuccessDialog() {
+        setState { copy(passwordChangeSuccessDialog = false) }
+    }
 
     fun dismissErrorDialog() {
         setState { copy(error = null) }
