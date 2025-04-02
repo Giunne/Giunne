@@ -2,6 +2,8 @@ package com.project.giunne.common.data.service
 
 import com.project.giunne.common.data.remote.request.AvatarCreateRequest
 import com.project.giunne.common.data.remote.request.AvatarLoginRequest
+import com.project.giunne.common.data.remote.request.PasswordChangeRequest
+import com.project.giunne.common.data.remote.request.PasswordResetRequest
 import com.project.giunne.common.data.remote.request.StudentExpRequest
 import com.project.giunne.common.data.remote.request.StudentPointRequest
 import com.project.giunne.common.data.remote.response.AvatarResponse
@@ -15,6 +17,7 @@ import com.project.giunne.common.data.util.DefineUrl.URL_GET_POINT_INFO
 import com.project.giunne.common.data.util.DefineUrl.URL_MODIFY_USER_EXP
 import com.project.giunne.common.data.util.DefineUrl.URL_MODIFY_USER_POINT
 import com.project.giunne.common.data.util.DefineUrl.URL_RECREATION_AVATAR_LIST
+import com.project.giunne.common.data.util.DefineUrl.URL_RESET_PASSWORD
 import com.project.giunne.common.data.util.DefineUrl.URL_USER_AVATAR_LIST
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
@@ -55,5 +58,15 @@ interface AvatarService {
     @POST(URL_MODIFY_USER_EXP)
     suspend fun modifyStudentExp(
         @Body studentExpRequest: StudentExpRequest
+    ): BaseResponse<String>
+
+    @PUT(URL_RESET_PASSWORD)
+    suspend fun resetPassword(
+        @Body passwordResetRequest: PasswordResetRequest
+    ): BaseResponse<String>
+
+    @PUT(URL_RESET_PASSWORD)
+    suspend fun changeStudentPassword(
+        @Body passwordChangeRequest: PasswordChangeRequest
     ): BaseResponse<String>
 }

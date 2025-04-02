@@ -3,6 +3,8 @@ package com.project.giunne.common.domain.repository
 import com.project.giunne.common.data.remote.request.AvatarCreateRequest
 import com.project.giunne.common.data.remote.request.AvatarLoginRequest
 import com.project.giunne.common.data.remote.request.GachaRequest
+import com.project.giunne.common.data.remote.request.PasswordChangeRequest
+import com.project.giunne.common.data.remote.request.PasswordResetRequest
 import com.project.giunne.common.data.remote.request.StudentExpRequest
 import com.project.giunne.common.data.remote.request.StudentPointRequest
 import com.project.giunne.common.data.remote.response.AvatarResponse
@@ -29,4 +31,6 @@ interface AvatarRepository {
     suspend fun getPointInfo(): NetworkResult<MyPointInfo>
     suspend fun modifyStudentPoint(studentPointRequest: StudentPointRequest): NetworkResult<String>
     suspend fun modifyStudentExp(studentExpRequest: StudentExpRequest): NetworkResult<String>
+    suspend fun resetPassword(passwordResetRequest: PasswordResetRequest): NetworkResult<String>
+    suspend fun changeStudentPassword(passwordChangeRequest: PasswordChangeRequest): NetworkResult<String>
 }

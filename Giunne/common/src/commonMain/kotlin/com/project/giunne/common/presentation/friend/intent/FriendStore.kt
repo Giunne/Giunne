@@ -1,6 +1,7 @@
 package com.project.giunne.common.presentation.friend.intent
 
 import com.project.giunne.common.base.BaseStore
+import com.project.giunne.common.data.remote.request.PasswordResetRequest
 import com.project.giunne.common.data.remote.request.StudentExpRequest
 import com.project.giunne.common.data.remote.request.StudentPointRequest
 import com.project.giunne.common.data.remote.response.AvatarUserResponse
@@ -8,6 +9,7 @@ import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.avatar.GetFriendsListUseCase
 import com.project.giunne.common.domain.usecase.avatar.ModifyStudentExpUseCase
 import com.project.giunne.common.domain.usecase.avatar.ModifyStudentPointUseCase
+import com.project.giunne.common.domain.usecase.avatar.ResetPasswordUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetSpecificStudentCourseUseCase
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.friend.state.FriendState
@@ -20,7 +22,8 @@ class FriendStore(
     private val getFriendsListUseCase: GetFriendsListUseCase = KoinJavaComponent.get(GetFriendsListUseCase::class.java),
     private val getSpecificStudentCourseUseCase: GetSpecificStudentCourseUseCase = KoinJavaComponent.get(GetSpecificStudentCourseUseCase::class.java),
     private val modifyStudentPointUseCase: ModifyStudentPointUseCase = KoinJavaComponent.get(ModifyStudentPointUseCase::class.java),
-    private val modifyStudentExpUseCase: ModifyStudentExpUseCase = KoinJavaComponent.get(ModifyStudentExpUseCase::class.java)
+    private val modifyStudentExpUseCase: ModifyStudentExpUseCase = KoinJavaComponent.get(ModifyStudentExpUseCase::class.java),
+    private val resetPasswordUseCase: ResetPasswordUseCase = KoinJavaComponent.get(ResetPasswordUseCase::class.java)
 ): BaseStore<FriendState>(
     initialState = FriendState()
 ) {
@@ -80,6 +83,32 @@ class FriendStore(
             }
             .onFailure {
                 setState { copy(loading = false, error = it.asDataThrowable()) }
+            }
+        }
+    }
+
+    fun callResetPassword(
+        passwordResetRequest: PasswordResetRequest
+    ) {
+        scope.launch {
+            setState { copy(loading = true) }
+            runCatching {
+                resetPasswordUseCase.invoke(passwordResetRequest)
+            }.onSuccess {
+                setState {
+                    copy(
+                        loading = false,
+                        resetSuccessDialog = true,
+                        selectedResetConfirmAvatar = null
+                    )
+                }
+            }.onFailure {
+                setState {
+                    copy(
+                        loading = false,
+                        error = it.asDataThrowable()
+                    )
+                }
             }
         }
     }
@@ -152,15 +181,21 @@ class FriendStore(
     }
 
     fun selectPointAvatar(
-        selectedPointAvatar: AvatarUserResponse
+        avatar: AvatarUserResponse
     ) {
-        setState { copy(selectedPointAvatar = selectedPointAvatar) }
+        setState { copy(selectedPointAvatar = avatar) }
     }
 
     fun selectExpAvatar(
-        selectedExpAvatar: AvatarUserResponse
+        avatar: AvatarUserResponse
     ) {
-        setState { copy(selectedExpAvatar = selectedExpAvatar) }
+        setState { copy(selectedExpAvatar = avatar) }
+    }
+
+    fun selectResetPasswordAvatar(
+        avatar: AvatarUserResponse
+    ) {
+        setState { copy(selectedResetConfirmAvatar = avatar) }
     }
 
     fun modifyStudentPointLocal(index: Int, point: String) {
@@ -211,5 +246,13 @@ class FriendStore(
 
     fun dismissStudentRoadMapDialog() {
         setState { copy(showStudentCourse = false) }
+    }
+
+    fun dismissResetConfirmDialog() {
+        setState { copy(selectedResetConfirmAvatar = null) }
+    }
+
+    fun dismissResetSuccessDialog() {
+        setState { copy(resetSuccessDialog = false) }
     }
 }

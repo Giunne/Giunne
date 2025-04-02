@@ -1,6 +1,8 @@
 package com.project.giunne.common.data.repository
 
 import com.project.giunne.common.data.remote.request.LoginRequest
+import com.project.giunne.common.data.remote.request.PasswordChangeRequest
+import com.project.giunne.common.data.remote.request.PasswordResetRequest
 import com.project.giunne.common.data.remote.request.PlayerRequest
 import com.project.giunne.common.data.remote.request.StudentSignupRequest
 import com.project.giunne.common.data.remote.request.TeacherSignupRequest
@@ -11,6 +13,7 @@ import com.project.giunne.common.data.service.AuthService
 import com.project.giunne.common.data.util.NetworkResult
 import com.project.giunne.common.data.util.handleApi
 import com.project.giunne.common.domain.repository.AuthRepository
+import com.project.giunne.common.util.Define.loginId
 import com.project.giunne.common.util.GLog
 import kotlin.math.log
 

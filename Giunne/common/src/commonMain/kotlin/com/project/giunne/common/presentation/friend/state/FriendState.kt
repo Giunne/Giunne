@@ -18,6 +18,9 @@ data class FriendState(
     val selectedExpAvatar: AvatarUserResponse? = null,
     val invalidNumericDialog: Boolean = false,
 
+    val selectedResetConfirmAvatar: AvatarUserResponse? = null,
+    val resetSuccessDialog: Boolean = false,
+
     val showStudentCourse: Boolean = false,
     val courseMap: Map<Long, List<StudentCourseInfo>> = mapOf(),
     val error: DataThrowable? = null
