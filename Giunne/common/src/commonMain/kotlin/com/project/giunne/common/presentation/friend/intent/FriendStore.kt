@@ -2,6 +2,7 @@ package com.project.giunne.common.presentation.friend.intent
 
 import com.project.giunne.common.base.BaseStore
 import com.project.giunne.common.data.remote.request.StudentPointRequest
+import com.project.giunne.common.data.remote.response.WearingItem
 import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.avatar.GetFriendsListUseCase
 import com.project.giunne.common.domain.usecase.avatar.ModifyStudentPointUseCase
@@ -134,6 +135,19 @@ class FriendStore(
                 }
             )
         }
+    }
+
+    fun showFriendLargeAvatar(wearingItems: List<WearingItem>) {
+        setState {
+            copy(
+                showFriendLargeAvatar = true,
+                wearingItems = wearingItems
+            )
+        }
+    }
+
+    fun dismissFriendLargeAvatar() {
+        setState { copy(showFriendLargeAvatar = false) }
     }
 
     fun showModifyCheckDialog() {
