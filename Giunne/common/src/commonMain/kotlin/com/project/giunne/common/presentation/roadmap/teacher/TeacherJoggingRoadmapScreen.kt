@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import com.project.giunne.common.data.remote.response.CourseInfo
+import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.shape.GPSquircleShapeWithBorder
 import com.project.giunne.common.presentation.common.text.GPText
@@ -34,6 +35,7 @@ import com.project.giunne.common.util.AvatarUtil
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import kotlinx.serialization.json.JsonNull.content
 
 @Composable
 fun TeacherJoggingRoadmapScreen(
@@ -166,5 +168,15 @@ fun TeacherJoggingRoadmapScreen(
                 roadMapComponent.dismissAlreadyCheckedDialog()
             }
         )
+    }
+
+    with(roadMapState.error) {
+        if (this != null) {
+            GPAlertDialog(
+                dismiss = { roadMapComponent.dismissErrorDialog() },
+                title = "로드맵 에러",
+                content = this.message.toString(),
+            )
+        }
     }
 }
