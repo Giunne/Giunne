@@ -63,7 +63,7 @@ fun GradeDialog(
     onCloseButtonClicked: () -> Unit,
     onConfirmButtonClicked: (Int, Boolean, Boolean) -> Unit,
 ) {
-    var grade by remember { mutableStateOf(0) }
+    var grade by remember { mutableStateOf(1) }
     var isChecked by remember { mutableStateOf(false) }
 
     val animatedColor by animateColorAsState(
