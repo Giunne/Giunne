@@ -54,7 +54,7 @@ fun DrawJoggingLine(
                     val rightCenterX = rightBoxLeft + boxSize / 2
 
                     drawLine(
-                        color = if (status == "CONFIRM") GPColor.Green else GPColor.BorderLightGray,
+                        color = if (status == "CONFIRM") GPColor.MainOrangeColor else GPColor.BorderLightGray,
                         start = Offset(centerX, centerY),
                         end = Offset(rightCenterX, centerY),
                         strokeWidth = boxSize * 0.2f
@@ -72,7 +72,7 @@ fun DrawJoggingLine(
                     val bottomCenterY = bottomBoxTop + boxSize / 2
 
                     drawLine(
-                        color = if (status == "CONFIRM") GPColor.Green else GPColor.BorderLightGray,
+                        color = if (status == "CONFIRM") GPColor.MainOrangeColor else GPColor.BorderLightGray,
                         start = Offset(centerX, centerY),
                         end = Offset(centerX, bottomCenterY),
                         strokeWidth = boxSize * 0.2f
@@ -84,7 +84,7 @@ fun DrawJoggingLine(
                     val bottomBoxTop = startY + (rowIndex + 1) * (boxSize + spacing)
                     val bottomCenterY = bottomBoxTop + boxSize / 2
                     drawLine(
-                        color = if (status == "CONFIRM") GPColor.Green else GPColor.BorderLightGray,
+                        color = if (status == "CONFIRM") GPColor.MainOrangeColor else GPColor.BorderLightGray,
                         start = Offset(centerX, centerY),
                         end = Offset(centerX, bottomCenterY),
                         strokeWidth = boxSize * 0.2f

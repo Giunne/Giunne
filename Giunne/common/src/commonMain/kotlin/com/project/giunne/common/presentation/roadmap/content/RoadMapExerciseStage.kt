@@ -32,6 +32,7 @@ import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.icon_lock
+import com.project.giunne.icon_plus
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -59,12 +60,10 @@ fun RoadMapExerciseStage(
             val status = questStateInfo.questProgress
             val isBonus = questStateInfo.hasExtraPoints
             val starPoint = courseInfo.questInfo.questStateInfo.starPoint
-            val borderColor = if (node.boxSize == 30f) {
+            val borderColor = if (node.boxSize == 30f || status == "CONFIRM") {
                 GPColor.MainOrangeColor
-            } else if (status == "CONFIRM") {
-                GPColor.Green
-            } else if (isBonus) {
-                GPColor.MainOrangeColor
+            } else if (status == "CHECK" || status == "UPLOAD") {
+                GPColor.Yellow
             } else {
                 GPColor.ButtonLightGray
             }
@@ -77,7 +76,7 @@ fun RoadMapExerciseStage(
             } else {
                 GPColor.White
             }
-            Box (
+            Box(
                 modifier = Modifier.wrapContentSize(),
                 contentAlignment = Alignment.Center
             ) {
@@ -138,6 +137,17 @@ fun RoadMapExerciseStage(
                             painter = painterResource(Res.drawable.icon_lock),
                             contentDescription = "잠금",
                             tint = GPColor.MainOrangeColor
+                        )
+                    }
+
+                    if (isBonus) {
+                        Icon(
+                            modifier = Modifier
+                                .size(8.gdp)
+                                .offset(node.drawOffset.x.dp + node.boxSize.dp / 4, node.drawOffset.y.dp - node.boxSize.dp / 4),
+                            painter = painterResource(Res.drawable.icon_plus),
+                            contentDescription = "추가동작",
+                            tint = GPColor.TextBlack_232323
                         )
                     }
                 }
