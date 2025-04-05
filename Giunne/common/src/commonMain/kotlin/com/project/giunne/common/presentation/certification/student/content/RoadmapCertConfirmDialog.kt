@@ -67,7 +67,7 @@ fun RoadmapCertConfirmDialog(
                         fontFamily = GPFontFamily.Bold
                     )
                     GPText(
-                        text = " 인증 확인", /* TODO String */
+                        text = "인증 확인",
                         textSize = 18.gsp,
                         textColor = GPColor.ButtonBlack,
                         fontFamily = GPFontFamily.Bold

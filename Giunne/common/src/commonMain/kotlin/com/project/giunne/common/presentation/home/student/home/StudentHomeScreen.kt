@@ -25,11 +25,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.project.giunne.common.data.remote.response.convertType
 import com.project.giunne.common.presentation.certification.student.state.CertProgress
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
+import com.project.giunne.common.presentation.common.dialog.GPSuccessRoadMapDialog
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.home.common.EmptyResult
 import com.project.giunne.common.presentation.home.student.content.ResultRoadMapItem
@@ -41,6 +41,8 @@ import com.project.giunne.common.presentation.roadmap.node.NodeStatus
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.AvatarUtil
 import com.project.giunne.common.util.Define
+import com.project.giunne.common.util.Define.currentExerciseId
+import com.project.giunne.common.util.Define.currentJoggingId
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
@@ -65,6 +67,15 @@ internal fun StudentHomeScreen(
 
     val homeState by component.uiState.collectAsStateWithLifecycle()
     val userInfoState = AvatarUtil.uiState.collectAsState()
+
+    LaunchedEffect(Define.playerId) {
+        if (Define.playerId != 0L) {
+            async {
+                component.checkStudentRoadMapState(currentExerciseId, 1, Define.playerId.toInt())
+                component.checkStudentRoadMapState(currentJoggingId, 2, Define.playerId.toInt())
+            }.await()
+        }
+    }
 
     LaunchedEffect(Unit) {
         component.sideEffect.collect { event ->
@@ -190,6 +201,26 @@ internal fun StudentHomeScreen(
                         )
                     }
                 }
+            }
+
+            if (homeState.showSuccessExerciseDialog) {
+                GPSuccessRoadMapDialog(
+                    questName = homeState.exerciseQuestName,
+                    onDismiss = {
+                        currentExerciseId = 0
+                        component.dismissSuccessExerciseDialog()
+                    }
+                )
+            }
+
+            if (homeState.showSuccessJoggingDialog) {
+                GPSuccessRoadMapDialog(
+                    questName = homeState.joggingQuestName,
+                    onDismiss = {
+                        currentJoggingId = 0
+                        component.dismissSuccessJoggingDialog()
+                    }
+                )
             }
         }
     }

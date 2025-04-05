@@ -23,9 +23,12 @@ import com.project.giunne.common.data.remote.response.StudentCourseInfo
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.content.Loader
+import com.project.giunne.common.presentation.common.dialog.GPSuccessRoadMapDialog
 import com.project.giunne.common.presentation.common.toggle.GPToggleButton
 import com.project.giunne.common.presentation.roadmap.content.StudentJoggingDialog
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.Define.currentExerciseId
+import com.project.giunne.common.util.Define.currentJoggingId
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.gdp
 import kotlinx.coroutines.async
@@ -122,6 +125,27 @@ internal fun StudentRoadmapScreen(
                     }
                 )
             }
+        }
+
+
+        if (roadMapState.showSuccessExerciseDialog) {
+            GPSuccessRoadMapDialog(
+                questName = roadMapState.exerciseQuestName,
+                onDismiss = {
+                    currentExerciseId = 0
+                    component.dismissSuccessExerciseDialog()
+                }
+            )
+        }
+
+        if (roadMapState.showSuccessJoggingDialog) {
+            GPSuccessRoadMapDialog(
+                questName = roadMapState.joggingQuestName,
+                onDismiss = {
+                    currentJoggingId = 0
+                    component.dismissSuccessJoggingDialog()
+                }
+            )
         }
     }
 }

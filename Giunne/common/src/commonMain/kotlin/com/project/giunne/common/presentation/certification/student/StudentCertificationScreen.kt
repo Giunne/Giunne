@@ -34,7 +34,6 @@ import com.project.giunne.common.presentation.certification.student.intent.Image
 import com.project.giunne.common.presentation.certification.student.intent.VideoUploadStore
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.certification.student.state.CertProgress
-import com.project.giunne.common.presentation.certification.student.state.StudentCertificationState
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
@@ -42,6 +41,8 @@ import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.ui.theme.GPColor
+import com.project.giunne.common.util.Define.currentExerciseId
+import com.project.giunne.common.util.Define.currentJoggingId
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
@@ -208,7 +209,20 @@ internal fun StudentCertificationScreen(
         GPAlertDialog(
             title = "인증 파일 업로드",
             content = "성공적으로 파일을 업로드했습니다!",
-            dismiss = { component.dismissSuccessUploadDialog() }
+            dismiss = {
+                component.dismissSuccessUploadDialog()
+                // 현재 진행중인 로드맵 저장
+                uploadProgressItem?.let {
+                    when(certificationState.pageType) {
+                        CertPage.RoadMap -> {
+                            currentExerciseId = it.id
+                        }
+                        CertPage.Running -> {
+                            currentJoggingId = it.id
+                        }
+                    }
+                }
+            }
         )
     }
 

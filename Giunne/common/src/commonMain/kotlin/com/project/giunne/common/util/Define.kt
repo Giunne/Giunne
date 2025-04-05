@@ -27,6 +27,14 @@ object Define {
         get() = PreferencesUtil.settingsRepository!!.refreshTokenPref.get()
         set(value) { PreferencesUtil.settingsRepository!!.refreshTokenPref.set(value) }
 
+    var currentExerciseId: Int
+        get() = PreferencesUtil.settingsRepository!!.currentExerciseIdPref.get().toInt()
+        set(value) { PreferencesUtil.settingsRepository!!.currentExerciseIdPref.set(value.toString()) }
+
+    var currentJoggingId: Int
+        get() = PreferencesUtil.settingsRepository!!.currentJoggingIdPref.get().toInt()
+        set(value) { PreferencesUtil.settingsRepository!!.currentJoggingIdPref.set(value.toString()) }
+
     fun savePrefAuthInfo(
         authResponse: AuthResponse
     ) {
