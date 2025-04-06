@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.sqlDelght) apply false
     alias(libs.plugins.ktorfit) apply false
     alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.google.services) apply false
 }
 
 allprojects {
