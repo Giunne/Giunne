@@ -17,5 +17,8 @@ class GetFriendsListUseCase(
             .sortedWith(
                 comparator = compareBy<AvatarUserResponse> { it.level }.reversed()
             )
+            .mapIndexed { index, avatarUserResponse ->
+                avatarUserResponse.copy(ranking = index + 1)
+            }
     }
 }
