@@ -150,7 +150,7 @@ fun PageSelectRow(
                     )
                     SpW(2.gdp)
                     GPText(
-                        text = "러닝 인증",
+                        text = "조깅 인증",
                         textColor = runningContentColor,
                         fontFamily = GPFontFamily.Bold,
                         textSize = 16.gsp
