@@ -104,15 +104,15 @@ fun RunningCertScreen(
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+//                        GPText(
+//                            text = "선생님이 체크해줄거에요.",
+//                            textColor = GPColor.TextBlack,
+//                            textSize = 14.gsp,
+//                            fontFamily = GPFontFamily.Bold
+//                        )
+//                        SpH(10.gdp)
                         GPText(
-                            text = "선생님이 체크해줄거에요.",
-                            textColor = GPColor.TextBlack,
-                            textSize = 14.gsp,
-                            fontFamily = GPFontFamily.Bold
-                        )
-                        SpH(10.gdp)
-                        GPText(
-                            text = "체크를 받으면 사진을 올릴 수 있어요!",
+                            text = "매주 월요일 아침에 선생님이 열어줄거에요.",
                             textColor = GPColor.TextBlack,
                             textSize = 14.gsp,
                             fontFamily = GPFontFamily.Bold

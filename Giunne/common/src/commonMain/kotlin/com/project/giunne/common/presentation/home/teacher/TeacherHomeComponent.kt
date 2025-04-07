@@ -186,7 +186,7 @@ class TeacherHomeComponent(
                 setState {
                     copy(
 //                        loading = false,
-                        certTrainingWaitList = response
+                        certRunningWaitList = response
                     )
                 }
             }.onFailure {

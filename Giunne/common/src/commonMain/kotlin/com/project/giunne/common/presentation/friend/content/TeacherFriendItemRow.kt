@@ -103,6 +103,14 @@ fun TeacherFriendItemRow(
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            GPText(
+                modifier = Modifier
+                    .padding(horizontal = 4.gdp),
+                text = friendInfo.ranking.toString(),
+                textSize = 12.gsp,
+                fontFamily = GPFontFamily.Bold,
+                textColor = GPColor.TextBlack
+            )
             GPSquircleShape(
                 modifier = Modifier
                     .height(48.gdp)

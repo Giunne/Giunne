@@ -11,5 +11,14 @@ class GetFriendsListUseCase(
         return avatarRepository
             .getRecreationAvatarList(recreationId = recreationId)
             .successOr(listOf())
+            .sortedWith(
+                comparator = compareBy<AvatarUserResponse> { it.exp }.reversed()
+            )
+            .sortedWith(
+                comparator = compareBy<AvatarUserResponse> { it.level }.reversed()
+            )
+            .mapIndexed { index, avatarUserResponse ->
+                avatarUserResponse.copy(ranking = index + 1)
+            }
     }
 }

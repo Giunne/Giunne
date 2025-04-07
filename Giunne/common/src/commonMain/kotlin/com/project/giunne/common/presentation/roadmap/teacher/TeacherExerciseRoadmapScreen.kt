@@ -19,6 +19,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import com.project.giunne.common.data.remote.response.CourseInfo
+import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.text.GPAnnotatedText
 import com.project.giunne.common.presentation.roadmap.content.AlreadyCheckedDialog
 import com.project.giunne.common.presentation.roadmap.content.RoadMapDialogEditable
@@ -225,5 +226,15 @@ fun TeacherExerciseRoadmapScreen(
                 roadMapComponent.dismissAlreadyCheckedDialog()
             }
         )
+    }
+
+    with(roadMapState.error) {
+        if (this != null) {
+            GPAlertDialog(
+                dismiss = { roadMapComponent.dismissErrorDialog() },
+                title = "로드맵 에러",
+                content = this.message.toString(),
+            )
+        }
     }
 }
