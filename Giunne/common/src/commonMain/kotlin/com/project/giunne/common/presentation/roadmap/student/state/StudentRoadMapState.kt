@@ -8,6 +8,10 @@ data class StudentRoadMapState(
     val isLoading: Boolean = false,
     val roadMapInfo: List<RoadMapInfo> = listOf(),
     val courseMap: Map<Long, List<StudentCourseInfo>> = mapOf(),
+    val showSuccessExerciseDialog: Boolean = false,
+    val showSuccessJoggingDialog: Boolean = false,
+    val exerciseQuestName: String = "",
+    val joggingQuestName: String = "",
     val error: DataThrowable? = null
 )
 

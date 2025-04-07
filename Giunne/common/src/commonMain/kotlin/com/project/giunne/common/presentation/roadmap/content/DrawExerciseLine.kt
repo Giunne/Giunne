@@ -39,9 +39,9 @@ fun DrawExerciseLine(
                 val fromStatus = fromQuestStateInfo.questProgress
                 val defaultColor = if (from.boxSize == 30f) GPColor.MainOrangeColor else GPColor.ButtonLightGray
                 val color = if (fromStatus == "CONFIRM" && fromCourseInfo.courseName != "4-b.CORE" && from.boxSize != 30f) {
-                    GPColor.Green
+                    GPColor.MainOrangeColor
                 } else if (fromCourseInfo.courseName == "4-b.CORE" && allCheckMultipleConfirm) {
-                    GPColor.Green
+                    GPColor.MainOrangeColor
                 } else {
                     defaultColor
                 }
