@@ -6,6 +6,7 @@ import com.project.giunne.common.data.service.CertificationService
 import com.project.giunne.common.data.service.CommonService
 import com.project.giunne.common.data.service.CommunityService
 import com.project.giunne.common.data.service.MyPageService
+import com.project.giunne.common.data.service.NoticeService
 import com.project.giunne.common.data.service.RecreationService
 import com.project.giunne.common.data.service.RoadMapService
 import com.project.giunne.common.data.service.ShopService
@@ -42,6 +43,9 @@ val serviceModule: Module = module {
     }
     single {
         authKtorfit().create<CommunityService>()
+    }
+    single {
+        authKtorfit().create<NoticeService>()
     }
 }
 

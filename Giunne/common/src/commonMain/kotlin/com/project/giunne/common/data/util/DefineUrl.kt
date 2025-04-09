@@ -73,4 +73,11 @@ object DefineUrl {
     const val POST_COMMENT_UNLIKE = "quest/post/comment/unlike"
     const val GET_POSTING_LIST = "quest/quest/upload"
     const val GET_QUEST_TYPE = "quest/quest/quest-type"
+
+    /* Notice */
+    const val GET_NOTICE_LIST = "member/notice"
+    const val GET_NOTICE_DETAIL = "member/notice/{id}"
+    const val MODIFY_NOTICE = "member/notice"
+    const val POST_NOTICE = "member/notice"
+    const val DELETE_NOTICE = "member/notice{id}"
 }
