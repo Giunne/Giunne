@@ -59,6 +59,7 @@ fun main() {
                     lifecycle = lifecycle,
                     stateKeeper = stateKeeper,
                 ),
+                getFirebaseToken = { null }
             )
         }
 

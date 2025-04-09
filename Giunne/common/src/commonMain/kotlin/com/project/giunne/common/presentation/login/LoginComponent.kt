@@ -6,11 +6,14 @@ import androidx.compose.runtime.setValue
 import com.arkivanov.decompose.ComponentContext
 import com.project.giunne.common.base.BaseComponent
 import com.project.giunne.common.data.local.preference.SettingRepository
+import com.project.giunne.common.data.remote.request.FCMRequest
 import com.project.giunne.common.data.remote.request.LoginRequest
 import com.project.giunne.common.data.remote.request.PasswordChangeRequest
 import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.auth.LoginUseCase
 import com.project.giunne.common.domain.usecase.avatar.ChangeStudentPasswordUseCase
+import com.project.giunne.common.domain.usecase.avatar.GetFCMTokenListUseCase
+import com.project.giunne.common.domain.usecase.avatar.PostFCMTokenUseCase
 import com.project.giunne.common.domain.usecase.common.GetSchoolListUseCase
 import com.project.giunne.common.presentation.login.intent.LoginEvent
 import com.project.giunne.common.presentation.login.state.LoginState
@@ -18,6 +21,7 @@ import com.project.giunne.common.presentation.signup.SignupComponent.Companion.T
 import com.project.giunne.common.presentation.signup.SignupComponent.Companion.TYPE_TEACHER
 import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.Define.savePrefAuthInfo
+import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.studentID
 import com.project.giunne.common.util.studentPass
 import com.project.giunne.common.util.teacherID
@@ -38,9 +42,12 @@ class LoginComponent(
     private val prefRepository: SettingRepository,
     val goToStudentMain: () -> Unit,
     val goToTeacherMain: () -> Unit,
+    val getFirebaseToken: suspend () -> String?,
     private val loginUseCase: LoginUseCase = KoinJavaComponent.get(
         LoginUseCase::class.java),
-    private val changeStudentPasswordUseCase: ChangeStudentPasswordUseCase = KoinJavaComponent.get(ChangeStudentPasswordUseCase::class.java)
+    private val changeStudentPasswordUseCase: ChangeStudentPasswordUseCase = KoinJavaComponent.get(ChangeStudentPasswordUseCase::class.java),
+    private val getFCMTokenListUseCase: GetFCMTokenListUseCase = KoinJavaComponent.get(GetFCMTokenListUseCase::class.java),
+    private val postFCMTokenUseCase: PostFCMTokenUseCase = KoinJavaComponent.get(PostFCMTokenUseCase::class.java),
 ): KoinComponent, ComponentContext by componentContext,
 BaseComponent<LoginState, LoginEvent>(
     initialState = LoginState()
@@ -64,6 +71,7 @@ BaseComponent<LoginState, LoginEvent>(
 //                Define.authInfo = response
                 savePrefAuthInfo(response)
                 saveLoginInfo(loginRequest.loginId)
+                callFCMTokenList(response.memberId)
                 setState { copy(loading = false) }
                 if (loginRequest.password.length < 8) { // 초기화 신호
                     setState { copy(passwordSetupDialog = true) }
@@ -84,6 +92,46 @@ BaseComponent<LoginState, LoginEvent>(
             }.onFailure {
                 setState { copy(loading = false, error = it.asDataThrowable()) }
             }
+        }
+    }
+
+    fun callFCMTokenList(
+        memberId: Long
+    ) {
+        scope.launch {
+            setState { copy(loading = true) }
+            runCatching {
+                getFCMTokenListUseCase.invoke(memberId)
+            }.onSuccess { response ->
+                val FCMToken = getFirebaseToken()
+                if (FCMToken != null) {
+                    val existToken = response.find { it.token == FCMToken }
+                    if (existToken == null) { // 새로운 토큰 발생
+                        callPostFCMToken(
+                            fcmRequest = FCMRequest(
+                                token = FCMToken
+                            )
+                        )
+                    } else {
+                        GLog.d("FCM 토큰", "기존 FCM토큰 있음 : $FCMToken")
+                    }
+                }
+                setState { copy(loading = false) }
+            }.onFailure {
+                setState { copy(loading = false, error = it.asDataThrowable()) }
+            }
+        }
+    }
+
+    suspend fun callPostFCMToken(
+        fcmRequest: FCMRequest
+    ) {
+        runCatching {
+            postFCMTokenUseCase.invoke(fcmRequest)
+        }.onSuccess { response ->
+            GLog.d("FCM 토큰", "기존 FCM토큰 없음, 서버로 전송 : ${fcmRequest.token}")
+        }.onFailure {
+            setState { copy(error = it.asDataThrowable()) }
         }
     }
 

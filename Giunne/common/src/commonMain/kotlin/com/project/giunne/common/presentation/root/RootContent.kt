@@ -30,6 +30,7 @@ import com.project.giunne.common.presentation.signup.SignupComponent.Companion.T
 import com.project.giunne.common.presentation.signup.SignupScreen
 import com.project.giunne.common.presentation.signup.SignupTypeSelectScreen
 import com.project.giunne.common.util.Define
+import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.NanumRound
 import kotlinx.coroutines.delay
 
@@ -38,7 +39,8 @@ private const val TAG = "RootContent"
 fun RootContent(
     component: RootComponent,
     modifier: Modifier = Modifier,
-    exitProgram: () -> Unit
+    exitProgram: () -> Unit,
+    getFirebaseToken: suspend () -> String? = { null }
 ) {
     /* settings init */
     NanumRound.initFont()

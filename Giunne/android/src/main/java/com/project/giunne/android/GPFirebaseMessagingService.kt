@@ -6,7 +6,6 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.project.giunne.R
 import com.project.giunne.common.util.GLog
 
 private const val TAG = "GPFirebaseMessagingService"
@@ -34,7 +33,7 @@ class GPFirebaseMessageService : FirebaseMessagingService() {
             )
             val builder =
                 NotificationCompat.Builder(this@GPFirebaseMessageService, MainActivity.channel_id)
-//                    .setSmallIcon(R.mipmap.icon_app_small)
+//                    .setSmallIcon()
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setContentTitle(title)
                     .setContentText(body)

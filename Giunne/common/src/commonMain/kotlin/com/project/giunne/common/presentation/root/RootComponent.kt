@@ -18,7 +18,8 @@ import kotlinx.serialization.Serializable
 
 private const val TAG = "RootComponent"
 public class RootComponent(
-    componentContext: ComponentContext
+    componentContext: ComponentContext,
+    val getFirebaseToken: suspend () -> String?
 ): ComponentContext by componentContext {
     private val navigation = StackNavigation<Config>()
 
@@ -50,6 +51,7 @@ public class RootComponent(
                     prefRepository = PreferencesUtil.settingsRepository!!,
                     goToStudentMain = { navigateToStudentMain() },
                     goToTeacherMain = { navigateToTeacherMain() },
+                    getFirebaseToken = { getFirebaseToken() }
                 )
             )
             is Config.SignupType -> Child.SignupTypeChild()

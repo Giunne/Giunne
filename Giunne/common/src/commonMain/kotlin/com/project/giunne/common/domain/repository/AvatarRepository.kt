@@ -2,6 +2,7 @@ package com.project.giunne.common.domain.repository
 
 import com.project.giunne.common.data.remote.request.AvatarCreateRequest
 import com.project.giunne.common.data.remote.request.AvatarLoginRequest
+import com.project.giunne.common.data.remote.request.FCMRequest
 import com.project.giunne.common.data.remote.request.GachaRequest
 import com.project.giunne.common.data.remote.request.PasswordChangeRequest
 import com.project.giunne.common.data.remote.request.PasswordResetRequest
@@ -10,11 +11,17 @@ import com.project.giunne.common.data.remote.request.StudentPointRequest
 import com.project.giunne.common.data.remote.response.AvatarResponse
 import com.project.giunne.common.data.remote.response.AvatarUserListResponse
 import com.project.giunne.common.data.remote.response.AvatarUserResponse
+import com.project.giunne.common.data.remote.response.FCMResponse
 import com.project.giunne.common.data.remote.response.Item
 import com.project.giunne.common.data.remote.response.MyPointInfo
 import com.project.giunne.common.data.util.BaseResponse
+import com.project.giunne.common.data.util.DefineUrl.URL_GET_FCM_TOKEN_LIST
+import com.project.giunne.common.data.util.DefineUrl.URL_POST_FCM_TOKEN
 import com.project.giunne.common.data.util.NetworkResult
 import de.jensklingenberg.ktorfit.http.Body
+import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.POST
+import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 
 interface AvatarRepository {
@@ -33,4 +40,6 @@ interface AvatarRepository {
     suspend fun modifyStudentExp(studentExpRequest: StudentExpRequest): NetworkResult<String>
     suspend fun resetPassword(passwordResetRequest: PasswordResetRequest): NetworkResult<String>
     suspend fun changeStudentPassword(passwordChangeRequest: PasswordChangeRequest): NetworkResult<String>
+    suspend fun getFCMTokenList(memberId: Long): NetworkResult<List<FCMResponse>>
+    suspend fun postFCMToken(fcmRequest: FCMRequest): NetworkResult<String>
 }

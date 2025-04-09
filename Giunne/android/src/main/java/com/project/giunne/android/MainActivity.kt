@@ -17,7 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.WindowCompat
 import com.arkivanov.decompose.DefaultComponentContext
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.mmk.kmpnotifier.notification.NotifierManager
+import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
+import com.project.giunne.R
 import com.project.giunne.common.data.local.preference.SettingRepository
 import com.project.giunne.common.presentation.root.RootComponent
 import com.project.giunne.common.presentation.root.RootContent
@@ -25,6 +29,9 @@ import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.ui.theme.GiunnaeTheme
 import com.project.giunne.common.util.GLog
 import com.russhwolf.settings.SharedPreferencesSettings
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
@@ -37,11 +44,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        NotifierManager.addListener(object : NotifierManager.Listener {
-            override fun onNewToken(token: String) {
-                GLog.d(TAG, "onNewToken: $token") //Update user token in the server if needed
-            }
-        })
+//        NotifierManager.addListener(object : NotifierManager.Listener {
+//            override fun onNewToken(token: String) {
+//                GLog.d(TAG, "onNewToken: $token") //Update user token in the server if needed
+//            }
+//        })
+
+        NotifierManager.initialize(
+            configuration = NotificationPlatformConfiguration.Android(
+                notificationIconResId = android.R.drawable.star_on,
+                showPushNotification = true,
+            )
+        )
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel(channel_id, "기운내")
@@ -51,6 +65,7 @@ class MainActivity : AppCompatActivity() {
             componentContext = DefaultComponentContext(
                 lifecycle = lifecycle,
             ),
+            getFirebaseToken = { NotifierManager.getPushNotifier().getToken() }
         )
 
         // 앱이 콘텐츠를 그리는 위치를 완전히 제어할 수 있도록 하기 위한 설정
@@ -70,7 +85,10 @@ class MainActivity : AppCompatActivity() {
                 RootContent(
                     root,
                     modifier = Modifier.systemBarsPadding(),
-                    exitProgram = { this@MainActivity.finishAffinity() }
+                    exitProgram = { this@MainActivity.finishAffinity() },
+                    getFirebaseToken = {
+                        NotifierManager.getPushNotifier().getToken()
+                    }
                 )
             }
         }

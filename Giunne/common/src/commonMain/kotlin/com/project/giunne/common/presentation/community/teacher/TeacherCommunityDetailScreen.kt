@@ -254,6 +254,7 @@ internal fun TeacherCommunityDetailScreen(
                 CommentInputRow(
                     modifier = Modifier
                         .fillMaxWidth(),
+                    isPassed = communityState.postingDetailInfo.isPassed,
                     onSendButtonClicked = { content ->
                         communityStore.callPostComment(
                             commentRequest = CommentRequest(

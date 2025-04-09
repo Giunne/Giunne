@@ -2,6 +2,7 @@ package com.project.giunne.common.data.repository
 
 import com.project.giunne.common.data.remote.request.AvatarCreateRequest
 import com.project.giunne.common.data.remote.request.AvatarLoginRequest
+import com.project.giunne.common.data.remote.request.FCMRequest
 import com.project.giunne.common.data.remote.request.PasswordChangeRequest
 import com.project.giunne.common.data.remote.request.PasswordResetRequest
 import com.project.giunne.common.data.remote.request.StudentExpRequest
@@ -9,6 +10,7 @@ import com.project.giunne.common.data.remote.request.StudentPointRequest
 import com.project.giunne.common.data.remote.response.AvatarResponse
 import com.project.giunne.common.data.remote.response.AvatarUserListResponse
 import com.project.giunne.common.data.remote.response.AvatarUserResponse
+import com.project.giunne.common.data.remote.response.FCMResponse
 import com.project.giunne.common.data.remote.response.MyPointInfo
 import com.project.giunne.common.data.service.AvatarService
 import com.project.giunne.common.data.util.NetworkResult
@@ -87,6 +89,22 @@ class AvatarRepositoryImpl(
         return handleApi(TAG) {
             handleTokenForResponse {
                 avatarService.changeStudentPassword(passwordChangeRequest)
+            }
+        }
+    }
+
+    override suspend fun getFCMTokenList(memberId: Long): NetworkResult<List<FCMResponse>> {
+        return handleApi(TAG) {
+            handleTokenForResponse {
+                avatarService.getFCMTokenList(memberId)
+            }
+        }
+    }
+
+    override suspend fun postFCMToken(fcmRequest: FCMRequest): NetworkResult<String> {
+        return handleApi(TAG) {
+            handleTokenForResponse {
+                avatarService.postFCMToken(fcmRequest)
             }
         }
     }
