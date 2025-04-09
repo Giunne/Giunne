@@ -69,6 +69,7 @@ import com.project.giunne.common.presentation.shop.ShopScreen
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.BackHandler
 import com.project.giunne.common.util.Define
+import com.project.giunne.common.util.Define.playerId
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
@@ -92,6 +93,7 @@ fun StudentMainScreen(
     val scope = rememberCoroutineScope()
     val snackbarState =  remember { SnackbarHostState() }
     var backPress by remember { mutableStateOf(false) }
+    var currentPlayerId by remember { mutableStateOf(playerId) }
 
     val childStack by component.childStack.subscribeAsState()
     val activeComponent = childStack.active.instance
@@ -184,12 +186,14 @@ fun StudentMainScreen(
                         }
                     },
                     rightIcon = {
-//                        GPNotificationBadge(
-//                            count = notiList.filter { !it.isRead }.size,
-//                            onClick = {
-//                                NotificationUtil.onClickNotificationButton()
-//                            }
-//                        )
+                        if (currentPlayerId != 0L) {
+                            GPNotificationBadge(
+                                count = notiList.filter { !it.isRead }.size,
+                                onClick = {
+                                    NotificationUtil.onClickNotificationButton()
+                                }
+                            )
+                        }
                     }
                 )
                 StudentChildren(
@@ -197,6 +201,9 @@ fun StudentMainScreen(
                         .weight(1f),
                     component = component,
                     activeComponent = activeComponent,
+                    onPlayerIdChanged = { playerId ->
+                        currentPlayerId = playerId
+                    },
                     onLogout = { onLogout() }
                 )
                 when (activeComponent) {
@@ -395,6 +402,7 @@ private fun StudentChildren(
     component: StudentMainComponent,
     modifier: Modifier = Modifier,
     activeComponent: StudentMainComponent.StudentChild,
+    onPlayerIdChanged: (Long) -> Unit,
     onLogout: () -> Unit
 ) {
     Children(
@@ -489,8 +497,9 @@ private fun StudentChildren(
 
             is StudentMainComponent.StudentChild.StudentJoinRecreationChild -> StudentJoinRecreationScreen(
                 component = child.component,
-                onBackClick = {
+                onBackClick = { playerId ->
                     component.navigateBack()
+                    onPlayerIdChanged(playerId)
                 }
             )
         }

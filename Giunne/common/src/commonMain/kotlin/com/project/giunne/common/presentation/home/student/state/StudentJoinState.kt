@@ -29,7 +29,8 @@ data class StudentJoinState(
 
 sealed interface StudentJoinEvent {
     data class SuccessLogin(
-        val message: String
+        val message: String,
+        val playerId: Long
     ): StudentJoinEvent
     data class FailLogin(
         val message: String

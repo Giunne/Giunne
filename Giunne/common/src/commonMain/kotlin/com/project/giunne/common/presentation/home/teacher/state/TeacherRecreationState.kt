@@ -26,7 +26,9 @@ data class TeacherRecreationState(
 }
 
 sealed interface TeacherRecreationEvent {
-    data object SuccessLogin: TeacherRecreationEvent
+    data class SuccessLogin(
+        val playerId: Long
+    ): TeacherRecreationEvent
     data class ShowSnackBar(
         val message: String
     ): TeacherRecreationEvent

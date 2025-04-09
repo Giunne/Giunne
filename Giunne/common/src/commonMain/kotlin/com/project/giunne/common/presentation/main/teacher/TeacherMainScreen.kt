@@ -44,6 +44,7 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.project.giunne.Res
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.certification.teacher.TeacherCertificationScreen
+import com.project.giunne.common.presentation.common.badge.GPNotificationBadge
 import com.project.giunne.common.presentation.common.button.GPBackButton
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.spacer.SpH
@@ -63,7 +64,7 @@ import com.project.giunne.common.presentation.shop.GachaScreen
 import com.project.giunne.common.presentation.shop.ShopScreen
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.BackHandler
-import com.project.giunne.common.util.Define
+import com.project.giunne.common.util.Define.playerId
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
@@ -87,6 +88,7 @@ fun TeacherMainScreen(
     val scope = rememberCoroutineScope()
     val snackbarState =  remember { SnackbarHostState() }
     var backPress by remember { mutableStateOf(false) }
+    var currentPlayerId by remember { mutableStateOf(playerId) }
 
     val childStack by component.childStack.subscribeAsState()
     val activeComponent = childStack.active.instance
@@ -96,7 +98,6 @@ fun TeacherMainScreen(
         targetValue = if (notificationState.isOpen) 0.gdp else 400.gdp,
         animationSpec = tween(durationMillis = 150, easing = LinearOutSlowInEasing)
     )
-
 
     BackHandler {
         scope.launch {
@@ -175,12 +176,14 @@ fun TeacherMainScreen(
                         }
                     },
                     rightIcon = {
-//                        GPNotificationBadge(
-//                            count = notiList.filter { !it.isRead }.size,
-//                            onClick = {
-//                                NotificationUtil.onClickNotificationButton()
-//                            }
-//                        )
+                        if (currentPlayerId != 0L) {
+                            GPNotificationBadge(
+                                count = notiList.filter { !it.isRead }.size,
+                                onClick = {
+                                    NotificationUtil.onClickNotificationButton()
+                                }
+                            )
+                        }
                     }
                 )
                 TeacherChildren(
@@ -188,6 +191,9 @@ fun TeacherMainScreen(
                         .weight(1f),
                     component = component,
                     activeComponent = activeComponent,
+                    onPlayerIdChanged = { playerId ->
+                        currentPlayerId = playerId
+                    },
                     onLogout = { onLogout() }
                 )
 
@@ -251,7 +257,7 @@ fun TeacherBottomNav(
                     component.navigateToHome()
             },
         )
-        if (Define.playerId != 0L) {
+        if (playerId != 0L) {
             NavItem(
                 modifier = Modifier
                     .fillMaxHeight()
@@ -359,6 +365,7 @@ private fun TeacherChildren(
     component: TeacherMainComponent,
     modifier: Modifier = Modifier,
     activeComponent: TeacherMainComponent.TeacherChild,
+    onPlayerIdChanged: (Long) -> Unit,
     onLogout: () -> Unit
 ) {
     Children(
@@ -415,8 +422,9 @@ private fun TeacherChildren(
             }
             is TeacherMainComponent.TeacherChild.TeacherRecreationChild -> TeacherRecreationScreen(
                 component = child.component,
-                onBackClick = {
+                onBackClick = { playerId ->
                     component.navigateBack()
+                    onPlayerIdChanged(playerId)
                 }
             )
         }

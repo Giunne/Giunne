@@ -98,7 +98,7 @@ class StudentJoinRecreationComponent(
                 Define.playerId = recreationId
                 Define.accessToken = response.accessToken
                 AvatarUtil.getRecreationList(recreationId, 1)
-                postSideEffect(StudentJoinEvent.SuccessLogin("선택한 로드맵에 연결 되었습니다! 👏🏼"))
+                postSideEffect(StudentJoinEvent.SuccessLogin("선택한 로드맵에 연결 되었습니다! 👏🏼", playerId = recreationId))
             }.onFailure {
                 setState {
                     copy(
@@ -106,7 +106,7 @@ class StudentJoinRecreationComponent(
                         error = it.asDataThrowable()
                     )
                 }
-                postSideEffect(StudentJoinEvent.SuccessLogin("로드맵 로그인에 실패했습니다."))
+                postSideEffect(StudentJoinEvent.FailLogin("로드맵 로그인에 실패했습니다."))
             }
         }
     }

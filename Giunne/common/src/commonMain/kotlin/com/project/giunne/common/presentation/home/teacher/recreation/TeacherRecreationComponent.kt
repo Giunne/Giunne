@@ -99,7 +99,7 @@ class TeacherRecreationComponent(
                 Define.playerId = recreationId
                 Define.recreationId = response.recreationId.toInt()
                 Define.accessToken = response.accessToken
-                postSideEffect(TeacherRecreationEvent.SuccessLogin)
+                postSideEffect(TeacherRecreationEvent.SuccessLogin(recreationId))
             }.onFailure {
                 setState {
                     copy(
