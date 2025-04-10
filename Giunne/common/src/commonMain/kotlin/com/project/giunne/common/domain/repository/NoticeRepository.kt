@@ -12,4 +12,5 @@ interface NoticeRepository {
     suspend fun postNewNotice(createNoticeRequest: CreateNoticeRequest): NetworkResult<String>
     suspend fun modifyNotice(modifyNoticeRequest: ModifyNoticeRequest): NetworkResult<String>
     suspend fun deleteNotice(noticeId: Int): NetworkResult<String>
+    suspend fun readNotice(noticeId: Int): NetworkResult<String>
 }

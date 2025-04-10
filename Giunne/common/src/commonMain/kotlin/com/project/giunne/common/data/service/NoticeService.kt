@@ -10,6 +10,7 @@ import com.project.giunne.common.data.util.DefineUrl.GET_NOTICE_DETAIL
 import com.project.giunne.common.data.util.DefineUrl.GET_NOTICE_LIST
 import com.project.giunne.common.data.util.DefineUrl.MODIFY_NOTICE
 import com.project.giunne.common.data.util.DefineUrl.POST_NOTICE
+import com.project.giunne.common.data.util.DefineUrl.READ_NOTICE
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
@@ -45,4 +46,8 @@ interface NoticeService {
         @Path("id") noticeId: Int
     ): BaseResponse<String>
 
+    @PUT(READ_NOTICE)
+    suspend fun readNotice(
+        @Path("id") noticeId: Int
+    ): BaseResponse<String>
 }

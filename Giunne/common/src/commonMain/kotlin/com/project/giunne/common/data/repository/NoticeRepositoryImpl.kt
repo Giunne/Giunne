@@ -45,4 +45,10 @@ class NoticeRepositoryImpl(
             noticeService.deleteNotice(noticeId)
         }
     }
+
+    override suspend fun readNotice(noticeId: Int): NetworkResult<String> {
+        return handleApi(TAG) {
+            noticeService.readNotice(noticeId)
+        }
+    }
 }

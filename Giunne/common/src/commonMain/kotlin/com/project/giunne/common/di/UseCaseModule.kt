@@ -39,6 +39,7 @@ import com.project.giunne.common.domain.usecase.notice.GetNoticeDetailUseCase
 import com.project.giunne.common.domain.usecase.notice.GetNoticeListUseCase
 import com.project.giunne.common.domain.usecase.notice.ModifyNoticeUseCase
 import com.project.giunne.common.domain.usecase.notice.PostNoticeUseCase
+import com.project.giunne.common.domain.usecase.notice.ReadNoticeUseCase
 import com.project.giunne.common.domain.usecase.roadmap.CreateRecreationUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetAllRoadMapUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetQuestCodeUseCase
@@ -112,4 +113,5 @@ val useCaseModule: Module = module {
     single { ModifyNoticeUseCase(get()) }
     single { PostNoticeUseCase(get()) }
     single { DeleteNoticeUseCase(get()) }
+    single { ReadNoticeUseCase(get()) }
 }
