@@ -8,8 +8,8 @@ class ReadNoticeUseCase(
 ) {
     suspend operator fun invoke(
         noticeId: Int
-    ) {
-        noticeRepository
+    ): String {
+        return noticeRepository
             .readNotice(noticeId)
             .successOr("")
     }
