@@ -7,9 +7,14 @@ import com.project.giunne.common.data.util.DataThrowable
 data class NoticeState(
     val isLoading: Boolean = false,
     val isOpen: Boolean = false,
+    val isCreateNoticeDialog: Boolean = false,
     val error: DataThrowable? = null,
     val noticeList: List<NoticeResponse> = listOf(),
     val paginationInfo: PaginationInfo = PaginationInfo()
 )
 
-sealed interface NoticeEvent
+sealed interface NoticeEvent {
+    data class CreateNewNotice(
+        val message: String
+    ): NoticeEvent
+}

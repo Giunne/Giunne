@@ -1,6 +1,7 @@
 package com.project.giunne.common.presentation.notice.intent
 
 import com.project.giunne.common.base.BaseComponent
+import com.project.giunne.common.data.remote.request.CreateNoticeRequest
 import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.notice.DeleteNoticeUseCase
 import com.project.giunne.common.domain.usecase.notice.GetNoticeDetailUseCase
@@ -79,11 +80,60 @@ class NoticeStore(
         }
     }
 
+    fun createNewNotice(
+        recreationId: Int,
+        title: String,
+        content: String
+    ) {
+        scope.launch {
+            setState { copy(isLoading = true) }
+            runCatching {
+                postNoticeUseCase(
+                    CreateNoticeRequest(
+                        recreationId = recreationId,
+                        title = title,
+                        content = content
+                    )
+                )
+            }.onSuccess {
+                setState {
+                    copy(
+                        isLoading = false,
+                        isCreateNoticeDialog = false
+                    )
+                }
+                postSideEffect(NoticeEvent.CreateNewNotice("공지사항이 등록되었습니다!"))
+            }.onFailure {
+                setState {
+                    copy(
+                        isLoading = false,
+                        isCreateNoticeDialog = false,
+                        error = it.asDataThrowable()
+                    )
+                }
+            }
+        }
+
+    }
+
+    fun onClickCreateNoticeDialog() {
+        setState { copy(isCreateNoticeDialog = true) }
+    }
+
+    fun onDismissCreateNoticeDialog() {
+        setState { copy(isCreateNoticeDialog = false) }
+    }
+
+
     fun onClickNotificationButton() {
         setState { copy(isOpen = true) }
     }
 
     fun closeNotificationScreen() {
         setState { copy(isOpen = false) }
+    }
+
+    fun dismissErrorDialog() {
+        setState { copy(error = null) }
     }
 }
