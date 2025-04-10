@@ -109,7 +109,7 @@ fun NoticeItem(
                 fontFamily = GPFontFamily.Medium,
                 textColor = GPColor.ButtonLightGray
             )
-            if (noticeData.isRead) {
+            if (!noticeData.isRead) {
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
