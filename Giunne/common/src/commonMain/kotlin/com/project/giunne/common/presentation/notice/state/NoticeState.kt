@@ -8,13 +8,22 @@ data class NoticeState(
     val isLoading: Boolean = false,
     val isOpen: Boolean = false,
     val isCreateNoticeDialog: Boolean = false,
+    val isNoticeDetailDialog: Boolean = false,
     val error: DataThrowable? = null,
     val noticeList: List<NoticeResponse> = listOf(),
+    val currentNotice: NoticeResponse = NoticeResponse(),
     val paginationInfo: PaginationInfo = PaginationInfo()
 )
 
 sealed interface NoticeEvent {
     data class CreateNewNotice(
+        val message: String
+    ): NoticeEvent
+    data class ModifyNotice(
+        val noticeId: Int,
+        val message: String
+    ): NoticeEvent
+    data class DeleteNotice(
         val message: String
     ): NoticeEvent
 }

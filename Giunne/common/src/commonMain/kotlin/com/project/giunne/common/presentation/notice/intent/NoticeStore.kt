@@ -2,6 +2,7 @@ package com.project.giunne.common.presentation.notice.intent
 
 import com.project.giunne.common.base.BaseComponent
 import com.project.giunne.common.data.remote.request.CreateNoticeRequest
+import com.project.giunne.common.data.remote.request.ModifyNoticeRequest
 import com.project.giunne.common.data.util.asDataThrowable
 import com.project.giunne.common.domain.usecase.notice.DeleteNoticeUseCase
 import com.project.giunne.common.domain.usecase.notice.GetNoticeDetailUseCase
@@ -13,6 +14,7 @@ import com.project.giunne.common.presentation.notice.state.NoticeState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.JsonNull.content
 import org.koin.java.KoinJavaComponent
 
 class NoticeStore(
@@ -114,6 +116,85 @@ class NoticeStore(
             }
         }
 
+    }
+    fun getNoticeDetail(
+        noticeId: Int
+    ) {
+        scope.launch {
+            runCatching {
+                setState { copy(isLoading = true) }
+                getNoticeDetailUseCase(noticeId)
+            }.onSuccess { response ->
+                setState {
+                    copy(
+                        isLoading = false,
+                        isNoticeDetailDialog = true,
+                        currentNotice = response
+                    )
+                }
+            }.onFailure {
+                setState {
+                    copy(
+                        isLoading = false,
+                        error = it.asDataThrowable()
+                    )
+                }
+            }
+        }
+    }
+
+    fun modifyNotice(
+        noticeId: Int,
+        title: String,
+        content: String
+    ) {
+        scope.launch {
+            runCatching {
+                setState { copy(isLoading = true) }
+                modifyNoticeUseCase(
+                    ModifyNoticeRequest(
+                        id = noticeId,
+                        title = title,
+                        content = content
+                    )
+                )
+            }.onSuccess {
+                setState { copy(isLoading = false) }
+                postSideEffect(NoticeEvent.ModifyNotice(noticeId,"공지사항이 수정되었습니다."))
+            }.onFailure {
+                setState {
+                    copy(
+                        isLoading = false,
+                        error = it.asDataThrowable()
+                    )
+                }
+            }
+        }
+    }
+
+    fun deleteNotice(
+        noticeId: Int
+    ) {
+        scope.launch {
+            runCatching {
+                setState { copy(isLoading = true) }
+                deleteNoticeUseCase(noticeId)
+            }.onSuccess {
+                setState { copy(isLoading = false) }
+                postSideEffect(NoticeEvent.DeleteNotice("공지사항이 삭제되었습니다."))
+            }.onFailure {
+                setState {
+                    copy(
+                        isLoading = false,
+                        error = it.asDataThrowable()
+                    )
+                }
+            }
+        }
+    }
+
+    fun onDismissNoticeDetailDialog() {
+        setState { copy(isNoticeDetailDialog = false) }
     }
 
     fun onClickCreateNoticeDialog() {

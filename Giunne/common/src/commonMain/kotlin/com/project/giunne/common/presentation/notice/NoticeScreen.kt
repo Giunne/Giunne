@@ -29,9 +29,11 @@ import com.project.giunne.common.presentation.common.button.GPIconButton
 import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.topbar.GPMainTopBar
+import com.project.giunne.common.presentation.notice.content.Action
 import com.project.giunne.common.presentation.notice.content.CreateNoticeDialog
 import com.project.giunne.common.presentation.notice.content.EmptyList
 import com.project.giunne.common.presentation.notice.content.NoticeItem
+import com.project.giunne.common.presentation.notice.content.TeacherNoticeDetailDialog
 import com.project.giunne.common.presentation.notice.intent.NoticeStore
 import com.project.giunne.common.presentation.notice.state.NoticeEvent
 import com.project.giunne.common.presentation.notice.state.NoticeState
@@ -65,9 +67,17 @@ fun NoticeScreen(
         noticeStore.getNoticeList(1, Define.recreationId)
 
         noticeStore.sideEffect.collect { event ->
+            noticeStore.getNoticeList(1, Define.recreationId)
             when (event) {
                 is NoticeEvent.CreateNewNotice -> {
-                    noticeStore.getNoticeList(1, Define.recreationId)
+                    snackbarHostState.showSnackbar(event.message)
+                }
+                is NoticeEvent.DeleteNotice -> {
+                    noticeStore.onDismissNoticeDetailDialog()
+                    snackbarHostState.showSnackbar(event.message)
+                }
+                is NoticeEvent.ModifyNotice -> {
+                    noticeStore.onDismissNoticeDetailDialog()
                     snackbarHostState.showSnackbar(event.message)
                 }
             }
@@ -149,7 +159,7 @@ fun NoticeScreen(
                             .height(66.gdp),
                         noticeData = noticeData,
                         onClick = { id ->
-
+                            noticeStore.getNoticeDetail(id)
                         }
                     )
                 }
@@ -170,6 +180,30 @@ fun NoticeScreen(
                 }
             )
         }
+
+        if (noticeState.isNoticeDetailDialog) {
+            TeacherNoticeDetailDialog(
+                noticeData = noticeState.currentNotice,
+                onDismiss = {
+                    noticeStore.onDismissNoticeDetailDialog()
+                },
+                onConfirm = { action, noticeId, title, content ->
+                    when (action) {
+                        Action.MODIFY -> {
+                            noticeStore.modifyNotice(
+                                noticeId,
+                                title,
+                                content,
+                            )
+                        }
+                        Action.DELETE -> {
+                            noticeStore.deleteNotice(noticeId)
+                        }
+                    }
+                }
+            )
+        }
+
         if (noticeState.error != null) {
             GPAlertDialog(
                 title = "공지사항 에러",
