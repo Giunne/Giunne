@@ -9,12 +9,12 @@ import com.project.giunne.common.domain.usecase.notice.GetNoticeDetailUseCase
 import com.project.giunne.common.domain.usecase.notice.GetNoticeListUseCase
 import com.project.giunne.common.domain.usecase.notice.ModifyNoticeUseCase
 import com.project.giunne.common.domain.usecase.notice.PostNoticeUseCase
+import com.project.giunne.common.domain.usecase.notice.ReadNoticeUseCase
 import com.project.giunne.common.presentation.notice.state.NoticeEvent
 import com.project.giunne.common.presentation.notice.state.NoticeState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.JsonNull.content
 import org.koin.java.KoinJavaComponent
 
 class NoticeStore(
@@ -22,7 +22,8 @@ class NoticeStore(
     private val getNoticeDetailUseCase: GetNoticeDetailUseCase = KoinJavaComponent.get(GetNoticeDetailUseCase::class.java),
     private val postNoticeUseCase: PostNoticeUseCase = KoinJavaComponent.get(PostNoticeUseCase::class.java),
     private val modifyNoticeUseCase: ModifyNoticeUseCase = KoinJavaComponent.get(ModifyNoticeUseCase::class.java),
-    private val deleteNoticeUseCase: DeleteNoticeUseCase = KoinJavaComponent.get(DeleteNoticeUseCase::class.java)
+    private val deleteNoticeUseCase: DeleteNoticeUseCase = KoinJavaComponent.get(DeleteNoticeUseCase::class.java),
+    private val readNoticeUseCase: ReadNoticeUseCase = KoinJavaComponent.get(ReadNoticeUseCase::class.java)
 ): BaseComponent<NoticeState, NoticeEvent>(
     scope = CoroutineScope(Dispatchers.IO),
     initialState = NoticeState()
@@ -189,6 +190,22 @@ class NoticeStore(
                         error = it.asDataThrowable()
                     )
                 }
+            }
+        }
+    }
+
+    fun readNotice(
+        noticeId: Int
+    ) {
+        scope.launch {
+            runCatching {
+                setState { copy(isLoading = true) }
+                readNoticeUseCase(noticeId)
+            }.onSuccess {
+                setState { copy(isLoading = false) }
+                postSideEffect(NoticeEvent.ReadNotice)
+            }.onFailure {
+                setState { copy(isLoading = false) }
             }
         }
     }

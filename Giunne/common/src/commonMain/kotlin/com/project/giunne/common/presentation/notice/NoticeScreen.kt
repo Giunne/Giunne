@@ -33,6 +33,7 @@ import com.project.giunne.common.presentation.notice.content.Action
 import com.project.giunne.common.presentation.notice.content.CreateNoticeDialog
 import com.project.giunne.common.presentation.notice.content.EmptyList
 import com.project.giunne.common.presentation.notice.content.NoticeItem
+import com.project.giunne.common.presentation.notice.content.StudentNoticeDetailDialog
 import com.project.giunne.common.presentation.notice.content.TeacherNoticeDetailDialog
 import com.project.giunne.common.presentation.notice.intent.NoticeStore
 import com.project.giunne.common.presentation.notice.state.NoticeEvent
@@ -80,6 +81,7 @@ fun NoticeScreen(
                     noticeStore.onDismissNoticeDetailDialog()
                     snackbarHostState.showSnackbar(event.message)
                 }
+                is NoticeEvent.ReadNotice -> Unit
             }
         }
     }
@@ -182,26 +184,36 @@ fun NoticeScreen(
         }
 
         if (noticeState.isNoticeDetailDialog) {
-            TeacherNoticeDetailDialog(
-                noticeData = noticeState.currentNotice,
-                onDismiss = {
-                    noticeStore.onDismissNoticeDetailDialog()
-                },
-                onConfirm = { action, noticeId, title, content ->
-                    when (action) {
-                        Action.MODIFY -> {
-                            noticeStore.modifyNotice(
-                                noticeId,
-                                title,
-                                content,
-                            )
-                        }
-                        Action.DELETE -> {
-                            noticeStore.deleteNotice(noticeId)
+            if (Define.userRole == TYPE_TEACHER) {
+                TeacherNoticeDetailDialog(
+                    noticeData = noticeState.currentNotice,
+                    onDismiss = {
+                        noticeStore.onDismissNoticeDetailDialog()
+                    },
+                    onConfirm = { action, noticeId, title, content ->
+                        when (action) {
+                            Action.MODIFY -> {
+                                noticeStore.modifyNotice(
+                                    noticeId,
+                                    title,
+                                    content,
+                                )
+                            }
+                            Action.DELETE -> {
+                                noticeStore.deleteNotice(noticeId)
+                            }
                         }
                     }
-                }
-            )
+                )
+            } else {
+                StudentNoticeDetailDialog(
+                    noticeData = noticeState.currentNotice,
+                    onDismiss = {
+                        noticeStore.readNotice(noticeState.currentNotice.id)
+                        noticeStore.onDismissNoticeDetailDialog()
+                    }
+                )
+            }
         }
 
         if (noticeState.error != null) {

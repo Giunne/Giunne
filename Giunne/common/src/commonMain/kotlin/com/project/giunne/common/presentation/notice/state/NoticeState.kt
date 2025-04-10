@@ -26,4 +26,5 @@ sealed interface NoticeEvent {
     data class DeleteNotice(
         val message: String
     ): NoticeEvent
+    data object ReadNotice: NoticeEvent
 }
