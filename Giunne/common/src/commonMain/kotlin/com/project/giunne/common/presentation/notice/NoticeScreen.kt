@@ -69,7 +69,7 @@ fun NoticeScreen(
             .addFocusCleaner(focusManager),
         topBar = {
             GPMainTopBar(
-                titleText = "알림",
+                titleText = "공지사항",
                 leftIcon = {
                     GPBackButton { onBackButtonClicked() }
                 },
