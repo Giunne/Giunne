@@ -4,6 +4,7 @@ import com.project.giunne.common.data.remote.request.CreateNoticeRequest
 import com.project.giunne.common.data.remote.request.ModifyNoticeRequest
 import com.project.giunne.common.data.remote.response.NoticeListResponse
 import com.project.giunne.common.data.remote.response.NoticeResponse
+import com.project.giunne.common.data.remote.response.UnreadNoticeCountResponse
 import com.project.giunne.common.data.util.BaseResponse
 import com.project.giunne.common.data.util.DefineUrl.DELETE_NOTICE
 import com.project.giunne.common.data.util.DefineUrl.GET_NOTICE_DETAIL
@@ -11,6 +12,7 @@ import com.project.giunne.common.data.util.DefineUrl.GET_NOTICE_LIST
 import com.project.giunne.common.data.util.DefineUrl.MODIFY_NOTICE
 import com.project.giunne.common.data.util.DefineUrl.POST_NOTICE
 import com.project.giunne.common.data.util.DefineUrl.READ_NOTICE
+import com.project.giunne.common.data.util.DefineUrl.UNREAD_NOTICE_COUNT
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
@@ -50,4 +52,7 @@ interface NoticeService {
     suspend fun readNotice(
         @Path("id") noticeId: Int
     ): BaseResponse<String>
+
+    @GET(UNREAD_NOTICE_COUNT)
+    suspend fun unreadNoticeCount(): BaseResponse<UnreadNoticeCountResponse>
 }

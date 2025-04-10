@@ -4,6 +4,7 @@ import com.project.giunne.common.data.remote.request.CreateNoticeRequest
 import com.project.giunne.common.data.remote.request.ModifyNoticeRequest
 import com.project.giunne.common.data.remote.response.NoticeListResponse
 import com.project.giunne.common.data.remote.response.NoticeResponse
+import com.project.giunne.common.data.remote.response.UnreadNoticeCountResponse
 import com.project.giunne.common.data.util.NetworkResult
 
 interface NoticeRepository {
@@ -13,4 +14,5 @@ interface NoticeRepository {
     suspend fun modifyNotice(modifyNoticeRequest: ModifyNoticeRequest): NetworkResult<String>
     suspend fun deleteNotice(noticeId: Int): NetworkResult<String>
     suspend fun readNotice(noticeId: Int): NetworkResult<String>
+    suspend fun unreadNoticeCount(): NetworkResult<UnreadNoticeCountResponse>
 }
