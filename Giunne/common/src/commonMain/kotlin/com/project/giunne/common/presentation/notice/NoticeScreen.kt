@@ -120,9 +120,11 @@ fun NoticeScreen(
                         NoticeItem(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(66.gdp)
-                                .padding(vertical = 8.gdp, horizontal = 16.gdp),
-                            noticeData = noticeData
+                                .height(66.gdp),
+                            noticeData = noticeData,
+                            onClick = { id ->
+
+                            }
                         )
                     }
                 }
