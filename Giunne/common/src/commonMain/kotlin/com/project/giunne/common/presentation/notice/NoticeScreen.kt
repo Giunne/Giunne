@@ -41,6 +41,7 @@ import com.project.giunne.common.presentation.notice.state.NoticeState
 import com.project.giunne.common.presentation.signup.SignupComponent.Companion.TYPE_TEACHER
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.Define
+import com.project.giunne.common.util.callApiWithSnackbarDismiss
 import com.project.giunne.common.util.gdp
 import com.project.giunne.icon_write
 import org.jetbrains.compose.resources.painterResource
@@ -161,7 +162,9 @@ fun NoticeScreen(
                             .height(66.gdp),
                         noticeData = noticeData,
                         onClick = { id ->
-                            noticeStore.getNoticeDetail(id)
+                            callApiWithSnackbarDismiss(snackbarHostState) {
+                                noticeStore.getNoticeDetail(id)
+                            }
                         }
                     )
                 }
@@ -178,7 +181,9 @@ fun NoticeScreen(
                     noticeStore.onDismissCreateNoticeDialog()
                 },
                 onConfirm = { title, content ->
-                    noticeStore.createNewNotice(Define.recreationId, title, content)
+                    callApiWithSnackbarDismiss(snackbarHostState) {
+                        noticeStore.createNewNotice(Define.recreationId, title, content)
+                    }
                 }
             )
         }
@@ -193,14 +198,18 @@ fun NoticeScreen(
                     onConfirm = { action, noticeId, title, content ->
                         when (action) {
                             Action.MODIFY -> {
-                                noticeStore.modifyNotice(
-                                    noticeId,
-                                    title,
-                                    content,
-                                )
+                                callApiWithSnackbarDismiss(snackbarHostState) {
+                                    noticeStore.modifyNotice(
+                                        noticeId,
+                                        title,
+                                        content,
+                                    )
+                                }
                             }
                             Action.DELETE -> {
-                                noticeStore.deleteNotice(noticeId)
+                                callApiWithSnackbarDismiss(snackbarHostState) {
+                                    noticeStore.deleteNotice(noticeId)
+                                }
                             }
                         }
                     }
@@ -209,8 +218,10 @@ fun NoticeScreen(
                 StudentNoticeDetailDialog(
                     noticeData = noticeState.currentNotice,
                     onDismiss = {
-                        noticeStore.readNotice(noticeState.currentNotice.id)
-                        noticeStore.onDismissNoticeDetailDialog()
+                        callApiWithSnackbarDismiss(snackbarHostState) {
+                            noticeStore.readNotice(noticeState.currentNotice.id)
+                            noticeStore.onDismissNoticeDetailDialog()
+                        }
                     }
                 )
             }
