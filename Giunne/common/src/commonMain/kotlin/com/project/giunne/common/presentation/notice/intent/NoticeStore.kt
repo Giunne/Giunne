@@ -10,6 +10,7 @@ import com.project.giunne.common.domain.usecase.notice.GetNoticeListUseCase
 import com.project.giunne.common.domain.usecase.notice.ModifyNoticeUseCase
 import com.project.giunne.common.domain.usecase.notice.PostNoticeUseCase
 import com.project.giunne.common.domain.usecase.notice.ReadNoticeUseCase
+import com.project.giunne.common.domain.usecase.notice.UnreadNoticeCountUseCase
 import com.project.giunne.common.presentation.notice.state.NoticeEvent
 import com.project.giunne.common.presentation.notice.state.NoticeState
 import kotlinx.coroutines.CoroutineScope
@@ -23,7 +24,8 @@ class NoticeStore(
     private val postNoticeUseCase: PostNoticeUseCase = KoinJavaComponent.get(PostNoticeUseCase::class.java),
     private val modifyNoticeUseCase: ModifyNoticeUseCase = KoinJavaComponent.get(ModifyNoticeUseCase::class.java),
     private val deleteNoticeUseCase: DeleteNoticeUseCase = KoinJavaComponent.get(DeleteNoticeUseCase::class.java),
-    private val readNoticeUseCase: ReadNoticeUseCase = KoinJavaComponent.get(ReadNoticeUseCase::class.java)
+    private val readNoticeUseCase: ReadNoticeUseCase = KoinJavaComponent.get(ReadNoticeUseCase::class.java),
+    private val unreadNoticeCountUseCase: UnreadNoticeCountUseCase = KoinJavaComponent.get(UnreadNoticeCountUseCase::class.java)
 ): BaseComponent<NoticeState, NoticeEvent>(
     scope = CoroutineScope(Dispatchers.IO),
     initialState = NoticeState()
@@ -206,6 +208,17 @@ class NoticeStore(
                 postSideEffect(NoticeEvent.ReadNotice)
             }.onFailure {
                 setState { copy(isLoading = false) }
+            }
+        }
+    }
+
+
+    fun getNoticeCount() {
+        scope.launch {
+            runCatching {
+                unreadNoticeCountUseCase()
+            }.onSuccess { response ->
+                setState { copy(noticeCount = response.count) }
             }
         }
     }

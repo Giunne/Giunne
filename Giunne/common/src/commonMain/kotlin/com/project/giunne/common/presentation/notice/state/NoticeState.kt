@@ -9,6 +9,7 @@ data class NoticeState(
     val isOpen: Boolean = false,
     val isCreateNoticeDialog: Boolean = false,
     val isNoticeDetailDialog: Boolean = false,
+    val noticeCount: Int = 0,
     val error: DataThrowable? = null,
     val noticeList: List<NoticeResponse> = listOf(),
     val currentNotice: NoticeResponse = NoticeResponse(),
