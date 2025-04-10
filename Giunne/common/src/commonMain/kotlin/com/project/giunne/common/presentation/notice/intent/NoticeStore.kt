@@ -1,0 +1,89 @@
+package com.project.giunne.common.presentation.notice.intent
+
+import com.project.giunne.common.base.BaseComponent
+import com.project.giunne.common.data.util.asDataThrowable
+import com.project.giunne.common.domain.usecase.notice.DeleteNoticeUseCase
+import com.project.giunne.common.domain.usecase.notice.GetNoticeDetailUseCase
+import com.project.giunne.common.domain.usecase.notice.GetNoticeListUseCase
+import com.project.giunne.common.domain.usecase.notice.ModifyNoticeUseCase
+import com.project.giunne.common.domain.usecase.notice.PostNoticeUseCase
+import com.project.giunne.common.presentation.notice.state.NoticeEvent
+import com.project.giunne.common.presentation.notice.state.NoticeState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.koin.java.KoinJavaComponent
+
+class NoticeStore(
+    private val getNoticeListUseCase: GetNoticeListUseCase = KoinJavaComponent.get(GetNoticeListUseCase::class.java),
+    private val getNoticeDetailUseCase: GetNoticeDetailUseCase = KoinJavaComponent.get(GetNoticeDetailUseCase::class.java),
+    private val postNoticeUseCase: PostNoticeUseCase = KoinJavaComponent.get(PostNoticeUseCase::class.java),
+    private val modifyNoticeUseCase: ModifyNoticeUseCase = KoinJavaComponent.get(ModifyNoticeUseCase::class.java),
+    private val deleteNoticeUseCase: DeleteNoticeUseCase = KoinJavaComponent.get(DeleteNoticeUseCase::class.java)
+): BaseComponent<NoticeState, NoticeEvent>(
+    scope = CoroutineScope(Dispatchers.IO),
+    initialState = NoticeState()
+) {
+
+    fun getNoticeList(
+        pageIndex: Int,
+        recreationId: Int
+    ) {
+        scope.launch {
+            setState { copy(isLoading = true) }
+            runCatching {
+                getNoticeListUseCase(pageIndex, recreationId)
+            }.onSuccess { response ->
+                setState {
+                    copy(
+                        isLoading = false,
+                        noticeList = response.list,
+                        paginationInfo = response.paginationInfo
+                    )
+                }
+            }.onFailure {
+                setState {
+                    copy(
+                        isLoading = false,
+                        error = it.asDataThrowable()
+                    )
+                }
+            }
+        }
+    }
+
+    fun loadNextPage(
+        pageIndex: Int,
+        recreationId: Int
+    ) {
+        scope.launch {
+            setState { copy(isLoading = true) }
+            runCatching {
+                getNoticeListUseCase(pageIndex, recreationId)
+            }.onSuccess { response ->
+                setState {
+                    copy(
+                        isLoading = false,
+                        noticeList = (noticeList + response.list).distinctBy { it.id },
+                        paginationInfo = response.paginationInfo
+                    )
+                }
+            }.onFailure {
+                setState {
+                    copy(
+                        isLoading = false,
+                        error = it.asDataThrowable()
+                    )
+                }
+            }
+        }
+    }
+
+    fun onClickNotificationButton() {
+        setState { copy(isOpen = true) }
+    }
+
+    fun closeNotificationScreen() {
+        setState { copy(isOpen = false) }
+    }
+}

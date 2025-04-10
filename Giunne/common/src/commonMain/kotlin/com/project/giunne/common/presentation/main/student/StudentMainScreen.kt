@@ -22,7 +22,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.arkivanov.decompose.FaultyDecomposeApi
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.Direction
@@ -57,10 +57,9 @@ import com.project.giunne.common.presentation.friend.student.StudentFriendScreen
 import com.project.giunne.common.presentation.home.student.home.StudentHomeScreen
 import com.project.giunne.common.presentation.home.student.join.StudentJoinRecreationScreen
 import com.project.giunne.common.presentation.home.student.search.SearchRoadMapScreen
-import com.project.giunne.common.presentation.main.dummy.notiList
 import com.project.giunne.common.presentation.mypage.student.StudentMyPageScreen
-import com.project.giunne.common.presentation.notification.NotificationScreen
-import com.project.giunne.common.presentation.notification.NotificationUtil
+import com.project.giunne.common.presentation.notice.NoticeScreen
+import com.project.giunne.common.presentation.notice.intent.NoticeStore
 import com.project.giunne.common.presentation.roadmap.student.StudentRoadmapScreen
 import com.project.giunne.common.presentation.select.StudentCharacterSelectScreen
 import com.project.giunne.common.presentation.shop.GachaScreen
@@ -98,16 +97,18 @@ fun StudentMainScreen(
     val childStack by component.childStack.subscribeAsState()
     val activeComponent = childStack.active.instance
 
-    val notificationState by NotificationUtil.uiState.collectAsState()
+    val noticeStore by remember { mutableStateOf(NoticeStore()) }
+    val noticeState by noticeStore.uiState.collectAsStateWithLifecycle()
+
     val animatedDP by animateDpAsState(
-        targetValue = if (notificationState.isOpen) 0.gdp else 400.gdp,
+        targetValue = if (noticeState.isOpen) 0.gdp else 400.gdp,
         animationSpec = tween(durationMillis = 150, easing = LinearOutSlowInEasing)
     )
 
     BackHandler {
         scope.launch {
-            if (notificationState.isOpen) {
-                NotificationUtil.closeNotificationScreen()
+            if (noticeState.isOpen) {
+                noticeStore.closeNotificationScreen()
             } else if (childStack.backStack.isNotEmpty()) {
                 component.navigateBack()
             } else {
@@ -188,9 +189,9 @@ fun StudentMainScreen(
                     rightIcon = {
                         if (currentPlayerId != 0L) {
                             GPNotificationBadge(
-                                count = notiList.filter { !it.isRead }.size,
+                                count = 0,
                                 onClick = {
-                                    NotificationUtil.onClickNotificationButton()
+                                    noticeStore.onClickNotificationButton()
                                 }
                             )
                         }
@@ -254,14 +255,15 @@ fun StudentMainScreen(
             }
 
             if (animatedDP != 400.gdp) {
-                NotificationScreen(
+                NoticeScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .offset(x = animatedDP),
                     onBackButtonClicked = {
-                        NotificationUtil.closeNotificationScreen()
+                        noticeStore.closeNotificationScreen()
                     },
-                    notificationItemList = notiList,
+                    noticeStore = noticeStore,
+                    noticeState = noticeState
                 )
             }
         }

@@ -22,7 +22,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.arkivanov.decompose.FaultyDecomposeApi
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.Direction
@@ -55,16 +55,16 @@ import com.project.giunne.common.presentation.community.teacher.TeacherCommunity
 import com.project.giunne.common.presentation.friend.teacher.TeacherFriendScreen
 import com.project.giunne.common.presentation.home.teacher.TeacherHomeScreen
 import com.project.giunne.common.presentation.home.teacher.recreation.TeacherRecreationScreen
-import com.project.giunne.common.presentation.main.dummy.notiList
 import com.project.giunne.common.presentation.mypage.teacher.TeacherMyPageScreen
-import com.project.giunne.common.presentation.notification.NotificationScreen
-import com.project.giunne.common.presentation.notification.NotificationUtil
+import com.project.giunne.common.presentation.notice.NoticeScreen
+import com.project.giunne.common.presentation.notice.intent.NoticeStore
 import com.project.giunne.common.presentation.roadmap.teacher.TeacherRoadmapScreen
 import com.project.giunne.common.presentation.shop.GachaScreen
 import com.project.giunne.common.presentation.shop.ShopScreen
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.BackHandler
 import com.project.giunne.common.util.Define.playerId
+import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
@@ -78,6 +78,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
+private const val TAG = "TeacherMainScreen"
 @Composable
 fun TeacherMainScreen(
     modifier: Modifier = Modifier,
@@ -93,16 +94,18 @@ fun TeacherMainScreen(
     val childStack by component.childStack.subscribeAsState()
     val activeComponent = childStack.active.instance
 
-    val notificationState by NotificationUtil.uiState.collectAsState()
+    val noticeStore by remember { mutableStateOf(NoticeStore()) }
+    val noticeState by noticeStore.uiState.collectAsStateWithLifecycle()
+
     val animatedDP by animateDpAsState(
-        targetValue = if (notificationState.isOpen) 0.gdp else 400.gdp,
+        targetValue = if (noticeState.isOpen) 0.gdp else 400.gdp,
         animationSpec = tween(durationMillis = 150, easing = LinearOutSlowInEasing)
     )
 
     BackHandler {
         scope.launch {
-            if (notificationState.isOpen) {
-                NotificationUtil.closeNotificationScreen()
+            if (noticeState.isOpen) {
+                noticeStore.closeNotificationScreen()
             } else if (childStack.backStack.isNotEmpty()) {
                 component.navigateBack()
             } else {
@@ -178,9 +181,9 @@ fun TeacherMainScreen(
                     rightIcon = {
                         if (currentPlayerId != 0L) {
                             GPNotificationBadge(
-                                count = notiList.filter { !it.isRead }.size,
+                                count = 0,
                                 onClick = {
-                                    NotificationUtil.onClickNotificationButton()
+                                    noticeStore.onClickNotificationButton()
                                 }
                             )
                         }
@@ -217,14 +220,15 @@ fun TeacherMainScreen(
             }
 
             if (animatedDP != 400.gdp) {
-                NotificationScreen(
+                NoticeScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .offset(x = animatedDP),
                     onBackButtonClicked = {
-                        NotificationUtil.closeNotificationScreen()
+                        noticeStore.closeNotificationScreen()
                     },
-                    notificationItemList = notiList,
+                    noticeStore = noticeStore,
+                    noticeState = noticeState
                 )
             }
         }

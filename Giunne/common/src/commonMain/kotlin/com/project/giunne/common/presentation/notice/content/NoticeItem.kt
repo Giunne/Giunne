@@ -1,4 +1,4 @@
-package com.project.giunne.common.presentation.notification.content
+package com.project.giunne.common.presentation.notice.content
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -16,11 +14,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import com.project.giunne.Res
+import com.project.giunne.common.data.remote.response.NoticeResponse
+import com.project.giunne.common.data.remote.response.NoticeResponse.Companion.formatTimeAgo
 import com.project.giunne.common.presentation.common.shape.GPSquircleShape
 import com.project.giunne.common.presentation.common.spacer.SpH
 import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
-import com.project.giunne.common.presentation.main.dummy.Noti
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
@@ -29,9 +28,9 @@ import com.project.giunne.icon_badge
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun NotificationItem(
+fun NoticeItem(
     modifier: Modifier = Modifier,
-    notificationInfo: Noti
+    noticeData: NoticeResponse
 ) {
     Row(
         modifier = modifier,
@@ -56,17 +55,18 @@ fun NotificationItem(
             verticalArrangement = Arrangement.Center
         ) {
             GPText(
-                text = "공지",
+                text = noticeData.title,
                 textSize = 10.gsp,
                 fontFamily = GPFontFamily.Medium,
                 textColor = GPColor.ButtonLightGray
             )
             SpH(6.gdp)
             GPText(
-                text = notificationInfo.content,
+                text = noticeData.content,
                 textSize = 12.gsp,
                 fontFamily = GPFontFamily.Medium,
-                textColor = GPColor.TextBlack
+                textColor = GPColor.TextBlack,
+                maxLines = 1,
             )
         }
         Box(
@@ -76,12 +76,12 @@ fun NotificationItem(
         ){
             GPText(
                 modifier = Modifier.align(Alignment.BottomEnd),
-                text = notificationInfo.time,
+                text = noticeData.createTime.formatTimeAgo(),
                 textSize = 10.gsp,
                 fontFamily = GPFontFamily.Medium,
                 textColor = GPColor.ButtonLightGray
             )
-            if (!notificationInfo.isRead) {
+            if (true) {
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
