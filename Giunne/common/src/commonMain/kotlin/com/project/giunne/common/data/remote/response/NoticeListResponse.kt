@@ -29,7 +29,12 @@ data class NoticeResponse(
     val createTime: String = "",
     @SerialName("updateTime")
     val updateTime: String = "",
+    @SerialName("isRead")
+    val isRead: Boolean = false,
 ) {
+    val isUpdated: Boolean
+        get() = createTime != updateTime
+
     companion object {
         fun String.formatTimeAgo(): String {
             val formatter = DateTimeFormatter.ISO_DATE_TIME

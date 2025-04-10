@@ -104,12 +104,12 @@ fun NoticeItem(
         ){
             GPText(
                 modifier = Modifier.align(Alignment.BottomEnd),
-                text = noticeData.createTime.formatTimeAgo(),
+                text = if (noticeData.isUpdated) "업데이트 됨" + noticeData.createTime.formatTimeAgo() else noticeData.createTime.formatTimeAgo(),
                 textSize = 10.gsp,
                 fontFamily = GPFontFamily.Medium,
                 textColor = GPColor.ButtonLightGray
             )
-            if (true) {
+            if (noticeData.isRead) {
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
