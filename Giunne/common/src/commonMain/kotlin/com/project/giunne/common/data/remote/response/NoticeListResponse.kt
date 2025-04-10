@@ -35,30 +35,31 @@ data class NoticeResponse(
     val isUpdated: Boolean
         get() = createTime != updateTime
 
-    companion object {
-        fun String.formatTimeAgo(): String {
-            val formatter = DateTimeFormatter.ISO_DATE_TIME
-            val pastTime = LocalDateTime.parse(this, formatter)
+    val asTimeString: String
+        get() = if (isUpdated) "업데이트 됨 - " + updateTime.formatTimeAgo() else updateTime.formatTimeAgo()
 
-            val currentTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+    private fun String.formatTimeAgo(): String {
+        val formatter = DateTimeFormatter.ISO_DATE_TIME
+        val pastTime = LocalDateTime.parse(this, formatter)
 
-            // 두 시간의 차이 계산
-            val duration = Duration.between(pastTime, currentTime)
-            val minutes = duration.toMinutes()
-            val hours = duration.toHours()
-            val days = duration.toDays()
-            val months = days / 30
-            val years = days / 365
+        val currentTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
 
-            // 시간 차이에 따른 문자열 반환
-            return when {
-                minutes < 1 -> "방금 전"
-                minutes < 60 -> "${minutes}분 전"
-                hours < 24 -> "${hours}시간 전"
-                days < 30 -> "${days}일 전"
-                months < 12 -> "${months}달 전"
-                else -> "${years}년 전"
-            }
+        // 두 시간의 차이 계산
+        val duration = Duration.between(pastTime, currentTime)
+        val minutes = duration.toMinutes()
+        val hours = duration.toHours()
+        val days = duration.toDays()
+        val months = days / 30
+        val years = days / 365
+
+        // 시간 차이에 따른 문자열 반환
+        return when {
+            minutes < 1 -> "방금 전"
+            minutes < 60 -> "${minutes}분 전"
+            hours < 24 -> "${hours}시간 전"
+            days < 30 -> "${days}일 전"
+            months < 12 -> "${months}달 전"
+            else -> "${years}년 전"
         }
     }
 }

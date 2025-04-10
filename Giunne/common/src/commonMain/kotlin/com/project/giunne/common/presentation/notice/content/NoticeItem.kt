@@ -23,7 +23,6 @@ import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import com.project.giunne.Res
 import com.project.giunne.common.data.remote.response.NoticeResponse
-import com.project.giunne.common.data.remote.response.NoticeResponse.Companion.formatTimeAgo
 import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.shape.GPSquircleShape
 import com.project.giunne.common.presentation.common.spacer.SpH
@@ -104,7 +103,7 @@ fun NoticeItem(
         ){
             GPText(
                 modifier = Modifier.align(Alignment.BottomEnd),
-                text = if (noticeData.isUpdated) "업데이트 됨" + noticeData.createTime.formatTimeAgo() else noticeData.createTime.formatTimeAgo(),
+                text = noticeData.asTimeString,
                 textSize = 10.gsp,
                 fontFamily = GPFontFamily.Medium,
                 textColor = GPColor.ButtonLightGray
