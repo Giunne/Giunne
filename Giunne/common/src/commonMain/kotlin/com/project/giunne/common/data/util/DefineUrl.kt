@@ -80,5 +80,5 @@ object DefineUrl {
     const val READ_NOTICE = "member/notice/read/{id}"
     const val MODIFY_NOTICE = "member/notice"
     const val POST_NOTICE = "member/notice"
-    const val DELETE_NOTICE = "member/notice{id}"
+    const val DELETE_NOTICE = "member/notice/{id}"
 }
