@@ -160,5 +160,7 @@ buildkonfig {
     defaultConfigs {
         buildConfigField(FieldSpec.Type.STRING, "BASE_URL", getMappingValue("BASE_URL"), const = true)
         buildConfigField(FieldSpec.Type.STRING, "IMAGE_BASE_URL", getMappingValue("IMAGE_BASE_URL"), const = true)
+        buildConfigField(FieldSpec.Type.STRING, "appVersionName", rootProject.extra["appVersionName"].toString(), const = true)
+        buildConfigField(FieldSpec.Type.INT, "appVersionCode", rootProject.extra["appVersionCode"].toString(), const = true)
     }
 }
