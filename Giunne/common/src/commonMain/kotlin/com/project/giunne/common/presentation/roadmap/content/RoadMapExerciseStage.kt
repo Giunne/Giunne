@@ -31,6 +31,7 @@ import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import com.project.giunne.common.util.isNumeric
 import com.project.giunne.icon_lock
 import com.project.giunne.icon_plus
 import org.jetbrains.compose.resources.painterResource
@@ -111,12 +112,14 @@ fun RoadMapExerciseStage(
                         borderColor = borderColor
                     ) {
                         courseInfo.thumbnailUrl?.let { url ->
-                            AsyncImage(
-                                modifier = Modifier
-                                    .size((node.boxSize * 0.6).dp),
-                                model = IMAGE_BASE_URL + url,
-                                contentDescription = "운동 이미지"
-                            )
+                            if (url.isNotEmpty()) {
+                                AsyncImage(
+                                    modifier = Modifier
+                                        .size((node.boxSize * 0.6).dp),
+                                    model = IMAGE_BASE_URL + url,
+                                    contentDescription = "운동 이미지"
+                                )
+                            }
                         }
 
                         RoadMapGradeCount(

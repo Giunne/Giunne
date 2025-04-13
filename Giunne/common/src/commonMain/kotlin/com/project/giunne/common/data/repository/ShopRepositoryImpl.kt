@@ -18,44 +18,37 @@ class ShopRepositoryImpl(
     private val shopService: ShopService
 ): ShopRepository {
     override suspend fun getCategoryMap(): NetworkResult<Map<Long, List<CategoryTypeResponse>>> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                shopService.getCategoryMap()
-            }
-        }
+        val response = handleTokenForResponse { shopService.getCategoryMap() }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun getCategoryItemById(categoryItemId: Long, pageIndex: Int): NetworkResult<CategoryItemResponse> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                shopService.getCategoryItemById(categoryItemId, pageIndex)
-            }
-        }
+        val response = handleTokenForResponse { shopService.getCategoryItemById(categoryItemId, pageIndex) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun getGachaType(): NetworkResult<List<GachaResponse>> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                GLog.d(TAG, "getGachaType Request => ")
-                shopService.getGachaType()
-            }
-        }
+        val response = handleTokenForResponse { shopService.getGachaType() }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun postGacha(gachaRequest: GachaRequest): NetworkResult<Item> {
-        return handleApi(TAG) {
+        val response = handleTokenForResponse {
             handleTokenForResponse {
                 GLog.d(TAG, "postGacha Request => $gachaRequest")
                 shopService.postGacha(gachaRequest = gachaRequest)
             }
         }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun getPossibleItemCount(gachaTypes: String): NetworkResult<PossibleItemCountInto> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                shopService.getPossibleItemCount(gachaTypes = gachaTypes)
-            }
-        }
+        val response = handleTokenForResponse { shopService.getPossibleItemCount(gachaTypes = gachaTypes) }
+
+        return handleApi(TAG) { response }
     }
 }

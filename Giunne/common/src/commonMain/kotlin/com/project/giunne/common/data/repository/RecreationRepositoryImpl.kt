@@ -18,33 +18,33 @@ class RecreationRepositoryImpl(
         searchQuery: String,
         pageIndex: Int
     ): NetworkResult<RecreationSearchResponse> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                service.searchRecreation(
-                    searchQuery = searchQuery,
-                    pageIndex = pageIndex
-                )
-            }
+        val response = handleTokenForResponse {
+            service.searchRecreation(
+                searchQuery = searchQuery,
+                pageIndex = pageIndex
+            )
         }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun createRecreation(recreationRequest: RecreationRequest): NetworkResult<RecreationCreateResponse> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                service.createRecreation(
-                    recreationRequest = recreationRequest
-                )
-            }
+        val response = handleTokenForResponse {
+            service.createRecreation(
+                recreationRequest = recreationRequest
+            )
         }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun getTeacherRecreationList(pageIndex: Int): NetworkResult<RecreationListTeacherResponse> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                service.getTeacherRecreationList(
-                    pageIndex = pageIndex
-                )
-            }
+        val response = handleTokenForResponse {
+            service.getTeacherRecreationList(
+                pageIndex = pageIndex
+            )
         }
+
+        return handleApi(TAG) { response }
     }
 }

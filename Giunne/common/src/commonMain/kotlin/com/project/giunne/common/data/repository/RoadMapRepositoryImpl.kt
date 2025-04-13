@@ -18,64 +18,56 @@ class RoadMapRepositoryImpl(
     private val roadMapService: RoadMapService
 ): RoadMapRepository {
     override suspend fun getAllRoadMapList(): NetworkResult<List<RoadMapInfo>> {
-        return handleApi(TAG) {
+        val response = handleTokenForResponse {
             handleTokenForResponse {
                 roadMapService.getAllRoadMapList()
             }
         }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun modifyQuestInfo(modifyQuestInfoRequest: ModifyQuestInfoRequest): NetworkResult<QuestInfo> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                roadMapService.modifyQuestInfo(modifyQuestInfoRequest = modifyQuestInfoRequest)
-            }
-        }
+        val response = handleTokenForResponse { roadMapService.modifyQuestInfo(modifyQuestInfoRequest = modifyQuestInfoRequest) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun getTeacherCourse(roadmapId: Long): NetworkResult<CourseResponse> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                roadMapService.getTeacherCourse(roadmapId = roadmapId)
-            }
-        }
+        val response = handleTokenForResponse { roadMapService.getTeacherCourse(roadmapId = roadmapId) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun getSpecificStudentCourse(
         roadmapId: Long,
         playerId: Int
     ): NetworkResult<StudentCourseResponse> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                roadMapService.getSpecificStudentCourse(
-                    roadmapId = roadmapId,
-                    playerId = playerId
-                )
-            }
+        val response = handleTokenForResponse {
+            roadMapService.getSpecificStudentCourse(
+                roadmapId = roadmapId,
+                playerId = playerId
+            )
         }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun getStudentCourse(roadmapId: Long): NetworkResult<StudentCourseResponse> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                roadMapService.getStudentCourse(roadmapId = roadmapId)
-            }
-        }
+        val response = handleTokenForResponse { roadMapService.getStudentCourse(roadmapId = roadmapId) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun getQuestCode(): NetworkResult<QuestCodeResponse> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                roadMapService.getQuestCode()
-            }
-        }
+        val response = handleTokenForResponse { roadMapService.getQuestCode() }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun modifyQuestState(questStateRequest: QuestStateRequest): NetworkResult<String> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                roadMapService.modifyQuestState(questStateRequest)
-            }
-        }
+        val response = handleTokenForResponse { roadMapService.modifyQuestState(questStateRequest) }
+
+        return handleApi(TAG) { response }
     }
 }

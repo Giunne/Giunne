@@ -64,7 +64,9 @@ class StudentHomeComponent(
                 Define.accessToken = response.accessToken
             }.onFailure {
                 setState { copy(isLoading = false) }
-                postSideEffect(StudentHomeEvent.ErrorSnackBar("진행중인 로드맵 정보를 불러오지 못했어요. 😭"))
+                if (it.asDataThrowable().code != 401) {
+                    postSideEffect(StudentHomeEvent.ErrorSnackBar("진행중인 로드맵 정보를 불러오지 못했어요. 😭"))
+                }
             }
         }
     }

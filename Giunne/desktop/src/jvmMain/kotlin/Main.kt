@@ -19,6 +19,7 @@ import com.project.giunne.common.di.sharedModule
 import com.project.giunne.common.presentation.root.RootComponent
 import com.project.giunne.common.presentation.root.RootContent
 import com.project.giunne.common.ui.theme.GiunnaeTheme
+import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.PreferencesUtil
 import com.project.giunne.common.util.gdp
 import io.github.aakira.napier.DebugAntilog
@@ -83,7 +84,7 @@ fun main() {
 
         Window(
             onCloseRequest = ::exitApplication,
-            title = stringResource(Res.string.app_title) + " - 1.0.1",
+            title = stringResource(Res.string.app_title) + " - ${Define.versionName}",
             state = windowState,
             resizable = false
         ) {

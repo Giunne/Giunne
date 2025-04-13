@@ -92,12 +92,14 @@ fun RoadMapTeacherExerciseStage(
                         borderColor = borderColor
                     ) {
                         courseInfo.thumbnailUrl?.let { url ->
-                            AsyncImage(
-                                modifier = Modifier
-                                    .size((node.boxSize * 0.6).dp),
-                                model = IMAGE_BASE_URL + url,
-                                contentDescription = "운동 이미지"
-                            )
+                            if (url.isNotEmpty()) {
+                                AsyncImage(
+                                    modifier = Modifier
+                                        .size((node.boxSize * 0.6).dp),
+                                    model = IMAGE_BASE_URL + url,
+                                    contentDescription = "운동 이미지"
+                                )
+                            }
                         }
                     }
                 }

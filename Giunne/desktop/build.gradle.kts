@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 group = "com.project.giunne"
@@ -9,6 +10,10 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.javafx)
+}
+
+fun getMappingValue(key: String): String {
+    return gradleLocalProperties(rootDir).getProperty(key)
 }
 
 kotlin {

@@ -1,9 +1,13 @@
 package com.project.giunne.common.util
 
+import com.project.giunne.BuildKonfig
 import com.project.giunne.common.data.remote.response.AuthResponse
 
 private const val TAG = "Define"
 object Define {
+    val versionName: String
+        get() = BuildKonfig.appVersionName
+
     val loginId: String
         get() = PreferencesUtil.settingsRepository!!.idPref.get()
 

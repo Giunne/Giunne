@@ -30,7 +30,8 @@ object TokenHandler {
     suspend fun <T> handleTokenForResponse(block: suspend () -> BaseResponse<T>): BaseResponse<T> {
         val response = block()
 
-        if (response.code == 401 || response.code == 500) { // TODO 500 신호 서버 처리
+//        if (response.code == 401 || response.code == 500) { // TODO 500 신호 서버 처리
+        if (response.code == 401) { // TODO 500 신호 서버 처리
             if (!isRefreshing) {
                 isRefreshing = true
                 GLog.d(TAG, "토큰 만료 신호 - ${Define.accessToken}")
