@@ -37,7 +37,7 @@ class FriendStore(
             }.onSuccess { response ->
                 setState {
 //                    copy(loading = false, friendsList = response.filter { it.id != id && it.nickname.isNotEmpty() })
-                    copy(loading = false, friendsList = response.filter { it.nickname.isNotEmpty() })
+                    copy(loading = false, friendsList = response.filter { it.nickname.isNotEmpty() && !it.nickname.contains("선생님") })
                 }
             }
             .onFailure {
@@ -55,7 +55,7 @@ class FriendStore(
                 getFriendsListUseCase(recreationId)
             }.onSuccess { response ->
                 setState {
-                    copy(loading = false, friendsList = response.filter { it.nickname.isNotEmpty() })
+                    copy(loading = false, friendsList = response.filter { it.nickname.isNotEmpty() && !it.nickname.contains("선생님") })
                 }
             }
             .onFailure {

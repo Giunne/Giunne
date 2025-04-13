@@ -482,6 +482,9 @@ private fun StudentChildren(
                 onWearingItemClick = {
                     component.navigateFromPickingItemToShop()
                 },
+                onRetryButtonClick = {
+                    component.navigateFromPickingItemToGacha()
+                },
                 gachaType = if (activeComponent is StudentMainComponent.StudentChild.StudentPickingItemChild) {
                     activeComponent.gachaType
                 } else GachaType.GENERAL

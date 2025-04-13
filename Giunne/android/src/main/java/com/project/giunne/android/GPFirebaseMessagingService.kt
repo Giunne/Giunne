@@ -4,8 +4,10 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import androidx.core.graphics.drawable.IconCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.project.giunne.R
 import com.project.giunne.common.util.GLog
 
 private const val TAG = "GPFirebaseMessagingService"
@@ -31,9 +33,10 @@ class GPFirebaseMessageService : FirebaseMessagingService() {
                 intent,
                 PendingIntent.FLAG_IMMUTABLE
             )
+
             val builder =
                 NotificationCompat.Builder(this@GPFirebaseMessageService, MainActivity.channel_id)
-//                    .setSmallIcon()
+                    .setSmallIcon(R.drawable.image_logo)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setContentTitle(title)
                     .setContentText(body)

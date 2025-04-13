@@ -35,7 +35,7 @@ android {
     namespace = "com.project.giunne"
     compileSdk = 34
     defaultConfig {
-        applicationId = "com.project.giunne.android"
+        applicationId = "com.project.giunne"
         minSdk = 24
         targetSdk = 34
         versionCode = versionProps["appVersionCode"].toString().toInt()
@@ -53,7 +53,7 @@ android {
     buildTypes {
         getByName("release") {
             //noinspection GradlePath
-            applicationIdSuffix = ".release"
+//            applicationIdSuffix = ".release"
             isMinifyEnabled = true
             multiDexEnabled = true
             proguardFiles("proguard-rules.pro")
