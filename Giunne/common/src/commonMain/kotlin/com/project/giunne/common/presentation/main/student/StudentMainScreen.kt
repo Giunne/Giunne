@@ -22,7 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.arkivanov.decompose.FaultyDecomposeApi
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.Direction
@@ -57,10 +58,9 @@ import com.project.giunne.common.presentation.friend.student.StudentFriendScreen
 import com.project.giunne.common.presentation.home.student.home.StudentHomeScreen
 import com.project.giunne.common.presentation.home.student.join.StudentJoinRecreationScreen
 import com.project.giunne.common.presentation.home.student.search.SearchRoadMapScreen
-import com.project.giunne.common.presentation.main.dummy.notiList
 import com.project.giunne.common.presentation.mypage.student.StudentMyPageScreen
-import com.project.giunne.common.presentation.notification.NotificationScreen
-import com.project.giunne.common.presentation.notification.NotificationUtil
+import com.project.giunne.common.presentation.notice.NoticeScreen
+import com.project.giunne.common.presentation.notice.intent.NoticeStore
 import com.project.giunne.common.presentation.roadmap.student.StudentRoadmapScreen
 import com.project.giunne.common.presentation.select.StudentCharacterSelectScreen
 import com.project.giunne.common.presentation.shop.GachaScreen
@@ -69,6 +69,7 @@ import com.project.giunne.common.presentation.shop.ShopScreen
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.BackHandler
 import com.project.giunne.common.util.Define
+import com.project.giunne.common.util.Define.playerId
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
@@ -92,20 +93,27 @@ fun StudentMainScreen(
     val scope = rememberCoroutineScope()
     val snackbarState =  remember { SnackbarHostState() }
     var backPress by remember { mutableStateOf(false) }
+    var currentPlayerId by remember { mutableStateOf(playerId) }
 
     val childStack by component.childStack.subscribeAsState()
     val activeComponent = childStack.active.instance
 
-    val notificationState by NotificationUtil.uiState.collectAsState()
+    val noticeStore by remember { mutableStateOf(NoticeStore()) }
+    val noticeState by noticeStore.uiState.collectAsStateWithLifecycle()
+
     val animatedDP by animateDpAsState(
-        targetValue = if (notificationState.isOpen) 0.gdp else 400.gdp,
+        targetValue = if (noticeState.isOpen) 0.gdp else 400.gdp,
         animationSpec = tween(durationMillis = 150, easing = LinearOutSlowInEasing)
     )
 
+    SideEffect {
+        noticeStore.getNoticeCount()
+    }
+
     BackHandler {
         scope.launch {
-            if (notificationState.isOpen) {
-                NotificationUtil.closeNotificationScreen()
+            if (noticeState.isOpen) {
+                noticeStore.closeNotificationScreen()
             } else if (childStack.backStack.isNotEmpty()) {
                 component.navigateBack()
             } else {
@@ -184,12 +192,14 @@ fun StudentMainScreen(
                         }
                     },
                     rightIcon = {
-//                        GPNotificationBadge(
-//                            count = notiList.filter { !it.isRead }.size,
-//                            onClick = {
-//                                NotificationUtil.onClickNotificationButton()
-//                            }
-//                        )
+                        if (currentPlayerId != 0L) {
+                            GPNotificationBadge(
+                                count = noticeState.noticeCount,
+                                onClick = {
+                                    noticeStore.onClickNotificationButton()
+                                }
+                            )
+                        }
                     }
                 )
                 StudentChildren(
@@ -197,6 +207,9 @@ fun StudentMainScreen(
                         .weight(1f),
                     component = component,
                     activeComponent = activeComponent,
+                    onPlayerIdChanged = { playerId ->
+                        currentPlayerId = playerId
+                    },
                     onLogout = { onLogout() }
                 )
                 when (activeComponent) {
@@ -247,14 +260,15 @@ fun StudentMainScreen(
             }
 
             if (animatedDP != 400.gdp) {
-                NotificationScreen(
+                NoticeScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .offset(x = animatedDP),
                     onBackButtonClicked = {
-                        NotificationUtil.closeNotificationScreen()
+                        noticeStore.closeNotificationScreen()
                     },
-                    notificationItemList = notiList,
+                    noticeStore = noticeStore,
+                    noticeState = noticeState
                 )
             }
         }
@@ -395,6 +409,7 @@ private fun StudentChildren(
     component: StudentMainComponent,
     modifier: Modifier = Modifier,
     activeComponent: StudentMainComponent.StudentChild,
+    onPlayerIdChanged: (Long) -> Unit,
     onLogout: () -> Unit
 ) {
     Children(
@@ -489,8 +504,9 @@ private fun StudentChildren(
 
             is StudentMainComponent.StudentChild.StudentJoinRecreationChild -> StudentJoinRecreationScreen(
                 component = child.component,
-                onBackClick = {
+                onBackClick = { playerId ->
                     component.navigateBack()
+                    onPlayerIdChanged(playerId)
                 }
             )
         }

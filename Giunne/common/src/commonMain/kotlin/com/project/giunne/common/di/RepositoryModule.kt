@@ -12,6 +12,7 @@ import com.project.giunne.common.data.repository.RoadMapRepositoryImpl
 import com.project.giunne.common.data.repository.MyPageRepositoryImpl
 import com.project.giunne.common.data.repository.CertificationRepositoryImpl
 import com.project.giunne.common.data.repository.CommunityRepositoryImpl
+import com.project.giunne.common.data.repository.NoticeRepositoryImpl
 import com.project.giunne.common.domain.repository.AuthRepository
 import com.project.giunne.common.domain.repository.AvatarRepository
 import com.project.giunne.common.domain.repository.CommonRepository
@@ -21,6 +22,7 @@ import com.project.giunne.common.domain.repository.RoadMapRepository
 import com.project.giunne.common.domain.repository.ShopRepository
 import com.project.giunne.common.domain.repository.CertificationRepository
 import com.project.giunne.common.domain.repository.CommunityRepository
+import com.project.giunne.common.domain.repository.NoticeRepository
 import org.koin.dsl.bind
 
 val repositoryModule: Module = module {
@@ -33,4 +35,5 @@ val repositoryModule: Module = module {
     singleOf(::MyPageRepositoryImpl) bind MyPageRepository::class
     singleOf(::CertificationRepositoryImpl) bind CertificationRepository::class
     singleOf(::CommunityRepositoryImpl) bind CommunityRepository::class
+    singleOf(::NoticeRepositoryImpl) bind NoticeRepository::class
 }

@@ -27,7 +27,7 @@ import com.project.giunne.common.util.gsp
 @Composable
 fun GPConfirmDialog(
     modifier: Modifier = Modifier,
-    title: String,
+    title: String = "",
     content: String,
     onConfirmClicked: () -> Unit,
     onCancelClicked: () -> Unit,

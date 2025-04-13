@@ -46,7 +46,7 @@ private const val TAG = "TeacherRecreationScreen"
 @Composable
 internal fun TeacherRecreationScreen(
     component: TeacherRecreationComponent,
-    onBackClick: () -> Unit,
+    onBackClick: (Long) -> Unit,
 ) {
 
     GLog.d(TAG, "onCreate")
@@ -66,7 +66,7 @@ internal fun TeacherRecreationScreen(
         component.sideEffect.collect { event ->
             when (event) {
                 is TeacherRecreationEvent.SuccessLogin -> {
-                    onBackClick()
+                    onBackClick(event.playerId)
                 }
 
                 is TeacherRecreationEvent.ShowSnackBar -> {
