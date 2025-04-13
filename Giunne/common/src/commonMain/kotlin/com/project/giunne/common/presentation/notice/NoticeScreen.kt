@@ -28,6 +28,7 @@ import com.project.giunne.common.presentation.common.button.GPBackButton
 import com.project.giunne.common.presentation.common.button.GPIconButton
 import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
+import com.project.giunne.common.presentation.common.dialog.GPConfirmDialog
 import com.project.giunne.common.presentation.common.topbar.GPMainTopBar
 import com.project.giunne.common.presentation.notice.content.Action
 import com.project.giunne.common.presentation.notice.content.CreateNoticeDialog
@@ -44,6 +45,7 @@ import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.callApiWithSnackbarDismiss
 import com.project.giunne.common.util.gdp
 import com.project.giunne.icon_write
+import kotlinx.serialization.json.JsonNull.content
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -196,22 +198,7 @@ fun NoticeScreen(
                         noticeStore.onDismissNoticeDetailDialog()
                     },
                     onConfirm = { action, noticeId, title, content ->
-                        when (action) {
-                            Action.MODIFY -> {
-                                callApiWithSnackbarDismiss(snackbarHostState) {
-                                    noticeStore.modifyNotice(
-                                        noticeId,
-                                        title,
-                                        content,
-                                    )
-                                }
-                            }
-                            Action.DELETE -> {
-                                callApiWithSnackbarDismiss(snackbarHostState) {
-                                    noticeStore.deleteNotice(noticeId)
-                                }
-                            }
-                        }
+                        noticeStore.setNoticeActionData(action, noticeId, title, content)
                     }
                 )
             } else {
@@ -237,5 +224,36 @@ fun NoticeScreen(
             )
         }
 
+        if (noticeState.isNoticeActionDialog) {
+            with (noticeState.noticeActionState) {
+                GPConfirmDialog(
+                    content = when (action) {
+                        Action.MODIFY -> "공지사항을 수정하시겠습니까?"
+                        Action.DELETE -> "공지사항을 삭제하시겠습니까?"
+                    },
+                    onConfirmClicked = {
+                        when (action) {
+                            Action.MODIFY -> {
+                                callApiWithSnackbarDismiss(snackbarHostState) {
+                                    noticeStore.modifyNotice(
+                                        noticeId,
+                                        title,
+                                        content,
+                                    )
+                                }
+                            }
+                            Action.DELETE -> {
+                                callApiWithSnackbarDismiss(snackbarHostState) {
+                                    noticeStore.deleteNotice(noticeId)
+                                }
+                            }
+                        }
+                    },
+                    onCancelClicked = {
+                        noticeStore.onDismissNoticeActionDialog()
+                    },
+                )
+            }
+        }
     }
 }
