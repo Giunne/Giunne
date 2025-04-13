@@ -20,6 +20,7 @@ import com.project.giunne.common.presentation.root.RootComponent
 import com.project.giunne.common.presentation.root.RootContent
 import com.project.giunne.common.ui.theme.GiunnaeTheme
 import com.project.giunne.common.util.PreferencesUtil
+import com.project.giunne.common.util.gdp
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineScope
@@ -72,13 +73,13 @@ fun main() {
         val density = LocalDensity.current.density
         val size = if (1 < density) 1.3f else 1f
         val windowState = rememberWindowState(
-//            width = getScreenWidth().dp / getScreenDPI(),
-//            height = ((getScreenHeight() - (getScreenHeight() * 0.046).roundToInt())).dp / getScreenDPI(),
-            width = 360.dp * size,
-            height = 780.dp * size,
+            width = 360.gdp,
+            height = 780.gdp,
             position = WindowPosition(Alignment.TopEnd),
             isMinimized = false,
         )
+
+        println("화면 :: $density")
 
         Window(
             onCloseRequest = ::exitApplication,

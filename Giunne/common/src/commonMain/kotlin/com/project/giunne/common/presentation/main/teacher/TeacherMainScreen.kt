@@ -1,6 +1,7 @@
 package com.project.giunne.common.presentation.main.teacher
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -37,6 +38,7 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.Direction
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.StackAnimation
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.StackAnimator
+import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.isEnter
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
@@ -375,8 +377,10 @@ private fun TeacherChildren(
     Children(
         stack = component.childStack,
         modifier = modifier,
-//        animation = stackAnimation(fade()),
-        animation = tabAnimation()
+//        animation = stackAnimation(fade(
+//            tween(100)
+//        )),
+//        animation = tabAnimation()
     ) {
         when (val child = it.instance) {
             is TeacherMainComponent.TeacherChild.TeacherHomeChild -> TeacherHomeScreen(
@@ -437,11 +441,15 @@ private fun TeacherChildren(
 
 @OptIn(FaultyDecomposeApi::class)
 @Composable
-private fun tabAnimation(): StackAnimation<Any, TeacherMainComponent.TeacherChild> =
+private fun tabAnimation(
+    duration: Int = 150
+): StackAnimation<Any, TeacherMainComponent.TeacherChild> =
     stackAnimation { child, otherChild, direction ->
         val index = child.instance.index
         val otherIndex = otherChild.instance.index
-        val anim = slide()
+        val anim = slide(
+            animationSpec = tween(duration)
+        )
         if ((index > otherIndex) == direction.isEnter) anim else anim.flipSide()
     }
 
