@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,6 +32,7 @@ import com.project.giunne.common.data.remote.request.GachaType
 import com.project.giunne.common.data.util.DefineUrl
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
+import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPAnnotatedText
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.shop.content.LottieBox
@@ -50,6 +52,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun PickingItemScreen(
     onWearingItemClick: () -> Unit = {},
+    onRetryButtonClick: () -> Unit = {},
     gachaType: GachaType
 ) {
     var isProgress by remember { mutableStateOf(true) }
@@ -130,22 +133,45 @@ fun PickingItemScreen(
                 }
             }
 
-            GPButton(
+            Row(
                 modifier = Modifier
                     .padding(16.gdp)
                     .fillMaxWidth()
                     .height(48.gdp),
-                normalColor = GPColor.ButtonOrange,
-                pressColor = GPColor.ButtonPressOrange,
-                hoverColor = GPColor.ButtonHoverOrange,
-                onClick = onWearingItemClick,
             ) {
-                GPText(
-                    text = "착용하러 가기",
-                    textSize = 14.gsp,
-                    fontFamily = GPFontFamily.Bold,
-                    textColor = GPColor.White
-                )
+                GPButton(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(1f),
+                    normalColor = GPColor.ButtonOrange,
+                    pressColor = GPColor.ButtonPressOrange,
+                    hoverColor = GPColor.ButtonHoverOrange,
+                    onClick = onWearingItemClick,
+                ) {
+                    GPText(
+                        text = "착용하러 가기",
+                        textSize = 14.gsp,
+                        fontFamily = GPFontFamily.Bold,
+                        textColor = GPColor.White
+                    )
+                }
+                SpW(16.gdp)
+                GPButton(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(1f),
+                    normalColor = GPColor.ButtonBlack,
+                    pressColor = GPColor.ButtonPressBlack,
+                    hoverColor = GPColor.ButtonHoverBlack,
+                    onClick = onRetryButtonClick,
+                ) {
+                    GPText(
+                        text = "재도전!",
+                        textSize = 14.gsp,
+                        fontFamily = GPFontFamily.Bold,
+                        textColor = GPColor.White
+                    )
+                }
             }
         }
     }

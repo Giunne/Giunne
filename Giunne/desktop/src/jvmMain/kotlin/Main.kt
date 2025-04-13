@@ -28,11 +28,16 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.core.context.startKoin
+import util.getScreenDPI
+import util.getScreenHeight
+import util.getScreenWidth
 import util.runOnUiThread
+import java.awt.Dimension
 import java.awt.Toolkit
 import java.io.File
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalCoroutinesApi::class)
 fun main() {
@@ -59,14 +64,16 @@ fun main() {
                     lifecycle = lifecycle,
                     stateKeeper = stateKeeper,
                 ),
+                getFirebaseToken = { null }
             )
         }
 
     application {
         val density = LocalDensity.current.density
         val size = if (1 < density) 1.3f else 1f
-        val toolkit = Toolkit.getDefaultToolkit()
         val windowState = rememberWindowState(
+//            width = getScreenWidth().dp / getScreenDPI(),
+//            height = ((getScreenHeight() - (getScreenHeight() * 0.046).roundToInt())).dp / getScreenDPI(),
             width = 360.dp * size,
             height = 780.dp * size,
             position = WindowPosition(Alignment.TopEnd),
@@ -75,7 +82,7 @@ fun main() {
 
         Window(
             onCloseRequest = ::exitApplication,
-            title = stringResource(Res.string.app_title) + " - 1.0.0",
+            title = stringResource(Res.string.app_title) + " - 1.0.1",
             state = windowState,
             resizable = false
         ) {

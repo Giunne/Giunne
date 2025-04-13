@@ -8,12 +8,14 @@ import com.project.giunne.common.domain.usecase.auth.StudentSignupUseCase
 import com.project.giunne.common.domain.usecase.auth.TeacherSignupUseCase
 import com.project.giunne.common.domain.usecase.avatar.ChangeStudentPasswordUseCase
 import com.project.giunne.common.domain.usecase.avatar.CreateAvatarUseCase
+import com.project.giunne.common.domain.usecase.avatar.GetFCMTokenListUseCase
 import com.project.giunne.common.domain.usecase.avatar.GetFriendsListUseCase
 import com.project.giunne.common.domain.usecase.avatar.GetMyPointUseCase
 import com.project.giunne.common.domain.usecase.avatar.GetUserAvatarListUseCase
 import com.project.giunne.common.domain.usecase.avatar.LoginRecreationUseCase
 import com.project.giunne.common.domain.usecase.avatar.ModifyStudentExpUseCase
 import com.project.giunne.common.domain.usecase.avatar.ModifyStudentPointUseCase
+import com.project.giunne.common.domain.usecase.avatar.PostFCMTokenUseCase
 import com.project.giunne.common.domain.usecase.avatar.ResetPasswordUseCase
 import com.project.giunne.common.domain.usecase.certification.GetCertificationHistory
 import com.project.giunne.common.domain.usecase.certification.GetCertificationProgress
@@ -109,6 +111,8 @@ val useCaseModule: Module = module {
     single { ModifyStudentExpUseCase(get()) }
     single { ResetPasswordUseCase(get()) }
     single { ChangeStudentPasswordUseCase(get()) }
+    single { PostFCMTokenUseCase(get()) }
+    single { GetFCMTokenListUseCase(get()) }
     single { GetNoticeListUseCase(get()) }
     single { GetNoticeDetailUseCase(get()) }
     single { ModifyNoticeUseCase(get()) }

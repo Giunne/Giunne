@@ -111,7 +111,7 @@ class TeacherHomeComponent(
                         classNumber = 1,
                         characterNo = 1,
                         studentNumber = 1,
-                        nickName = ""
+                        nickName = "선생님"
                     )
                 )
             }.onSuccess {

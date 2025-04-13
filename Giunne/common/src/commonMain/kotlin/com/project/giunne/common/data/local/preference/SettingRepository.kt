@@ -16,6 +16,7 @@ class SettingRepository(
     val refreshTokenPref: SettingConfig<*> = StringSettingConfig(settings, "RE_TOKEN", "")
     val rolePref: SettingConfig<*> = StringSettingConfig(settings, "ROLE", "")
     val playerPref: SettingConfig<*> = LongSettingConfig(settings, "PLAYER", 0)
+    val memberPref: SettingConfig<*> = LongSettingConfig(settings, "MEMBER", 0)
     val recreationIdPref: SettingConfig<*> = LongSettingConfig(settings, "RECREATION", 0)
     val currentExerciseIdPref: SettingConfig<*> = LongSettingConfig(settings, "EXERCISE", 0)
     val currentJoggingIdPref: SettingConfig<*> = LongSettingConfig(settings, "JOGGING", 0)

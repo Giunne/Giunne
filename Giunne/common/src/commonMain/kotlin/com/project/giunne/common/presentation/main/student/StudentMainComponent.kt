@@ -178,6 +178,13 @@ class StudentMainComponent(
         navigation.push(StudentMainConfig.Shop)
     }
 
+    fun navigateFromPickingItemToGacha() {
+        navigation.popWhile { config ->
+            config !is StudentMainConfig.MyPage
+        }
+        navigation.push(StudentMainConfig.Gacha)
+    }
+
     fun navigateToJoinRecreation() {
         navigation.push(StudentMainConfig.JoinRecreation)
     }

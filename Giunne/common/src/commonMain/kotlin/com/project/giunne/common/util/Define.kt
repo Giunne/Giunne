@@ -11,6 +11,10 @@ object Define {
         get() = PreferencesUtil.settingsRepository!!.playerPref.get().toLong()
         set(value) { PreferencesUtil.settingsRepository!!.playerPref.set(value.toString()) }
 
+    var memberId: Long
+        get() = PreferencesUtil.settingsRepository!!.memberPref.get().toLong()
+        set(value) { PreferencesUtil.settingsRepository!!.memberPref.set(value.toString()) }
+
     var recreationId: Int
         get() = PreferencesUtil.settingsRepository!!.recreationIdPref.get().toInt()
         set(value) { PreferencesUtil.settingsRepository!!.recreationIdPref.set(value.toString()) }
@@ -39,6 +43,7 @@ object Define {
         authResponse: AuthResponse
     ) {
         userRole = authResponse.role
+        memberId = authResponse.memberId
         accessToken = authResponse.accessToken
         refreshToken = authResponse.refreshToken
     }
@@ -51,6 +56,7 @@ object Define {
 
     fun clearInfo() {
         playerId = 0
+        memberId = 0
         userRole = ""
         accessToken = ""
         refreshToken = ""

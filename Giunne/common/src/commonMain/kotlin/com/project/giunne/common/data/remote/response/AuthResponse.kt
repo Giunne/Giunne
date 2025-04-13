@@ -16,7 +16,9 @@ data class AuthResponse(
     @SerialName("refreshTokenExpireTime")
     val refreshTokenExpireTime: String = "",
     @SerialName("role")
-    val role: String = ""
+    val role: String = "",
+    @SerialName("memberId")
+    val memberId: Long = 0
 )
 
 @Serializable

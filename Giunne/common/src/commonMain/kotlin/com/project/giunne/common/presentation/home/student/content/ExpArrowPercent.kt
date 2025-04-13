@@ -65,10 +65,12 @@ fun ExpArrowPercent(
                 .offset(x = -(width / density).dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            GPText(
-                text = "${(percent * 100).toInt()}%",
-                textSize = 12.gsp,
-            )
+            if (percent != 1f) {
+                GPText(
+                    text = "${(percent * 100).toInt()}%",
+                    textSize = 12.gsp,
+                )
+            }
             Spacer(modifier = Modifier.height(2.gdp))
             Icon(
                 painter = painterResource(Res.drawable.icon_point_arrow),

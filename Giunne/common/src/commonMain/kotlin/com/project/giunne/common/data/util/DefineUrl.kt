@@ -23,6 +23,8 @@ object DefineUrl {
     const val URL_ID_CHECK = "member/auth/duplicate-id"
     const val URL_RESET_PASSWORD = "member/avatar/teacher/password-change"
     const val URL_CHANGE_STUDENT_PASSWORD = "member/auth/student/password-change"
+    const val URL_GET_FCM_TOKEN_LIST = "member/fcm"
+    const val URL_POST_FCM_TOKEN = "member/fcm"
 
     /* Common */
     const val URL_SCHOOL_LIST = "member/school"

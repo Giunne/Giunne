@@ -43,6 +43,7 @@ import org.jetbrains.compose.resources.painterResource
 fun CommentInputRow(
     modifier: Modifier = Modifier,
     focusManager: FocusManager = LocalFocusManager.current,
+    isPassed: Boolean = false,
     onSendButtonClicked: (String) -> Unit,
     onCertButtonClicked: () -> Unit = {},
 ) {
@@ -116,7 +117,7 @@ fun CommentInputRow(
             )
         }
         SpW(6.gdp)
-        if (Define.userRole == TYPE_TEACHER) {
+        if (Define.userRole == TYPE_TEACHER && !isPassed) {
             GPButton(
                 modifier = Modifier
                     .height(24.gdp),
