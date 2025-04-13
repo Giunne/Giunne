@@ -50,7 +50,7 @@ compose.desktop {
             copyright = "Giunne all rights reserved."
             vendor = "Giunne"
             packageName = "Giunne"
-            packageVersion = "1.0.0"
+            packageVersion = "1.0.3"
             includeAllModules = true
             description = "Giunne Project"
             windows {

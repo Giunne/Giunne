@@ -18,11 +18,7 @@ class RoadMapRepositoryImpl(
     private val roadMapService: RoadMapService
 ): RoadMapRepository {
     override suspend fun getAllRoadMapList(): NetworkResult<List<RoadMapInfo>> {
-        val response = handleTokenForResponse {
-            handleTokenForResponse {
-                roadMapService.getAllRoadMapList()
-            }
-        }
+        val response = handleTokenForResponse { roadMapService.getAllRoadMapList() }
 
         return handleApi(TAG) { response }
     }

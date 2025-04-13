@@ -37,10 +37,7 @@ class ShopRepositoryImpl(
 
     override suspend fun postGacha(gachaRequest: GachaRequest): NetworkResult<Item> {
         val response = handleTokenForResponse {
-            handleTokenForResponse {
-                GLog.d(TAG, "postGacha Request => $gachaRequest")
-                shopService.postGacha(gachaRequest = gachaRequest)
-            }
+            shopService.postGacha(gachaRequest = gachaRequest)
         }
 
         return handleApi(TAG) { response }
