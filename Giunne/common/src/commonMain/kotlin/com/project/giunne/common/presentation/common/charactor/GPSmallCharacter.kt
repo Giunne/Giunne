@@ -24,19 +24,21 @@ fun GPSmallCharacter(
     wearingItems: List<WearingItem>
 ) {
     val characterItem = wearingItems.find { it.categoryId == 6 } ?: wearingItems.find { it.categoryId == 1 }
-    val characterUrl = characterItem?.itemImage?.fileUrl.orEmpty()
+    val characterUrl = characterItem?.itemImage?.fileUrl
 
     var characterSize by remember { mutableStateOf(IntSize.Zero) }
 
     Box {
-        AsyncImage(
-            modifier = modifier
-                .onSizeChanged {
-                    characterSize = it
-                },
-            model = IMAGE_BASE_URL + characterUrl,
-            contentDescription = null
-        )
+        characterUrl?.let { url ->
+            AsyncImage(
+                modifier = modifier
+                    .onSizeChanged {
+                        characterSize = it
+                    },
+                model = IMAGE_BASE_URL + url,
+                contentDescription = null
+            )
+        }
         wearingItems.filter { it.categoryId != 1 && it.categoryId != 6 }.forEach { item ->
             // 이미지 크기만 측정 -> 추후 서버에 이미지 크기도 함께 저장하도록 수정
             var itemSize by remember { mutableStateOf(IntSize.Zero) }

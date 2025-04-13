@@ -15,37 +15,29 @@ class MyPageRepositoryImpl(
     private val myPageService: MyPageService
 ): MyPageRepository {
     override suspend fun putInventoryItem(putInventoryItemRequest: PutInventoryItemRequest): NetworkResult<String> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                myPageService.putInventoryItem(putInventoryItemRequest = putInventoryItemRequest)
-            }
-        }
+        val response = handleTokenForResponse { myPageService.putInventoryItem(putInventoryItemRequest = putInventoryItemRequest) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun getInventoryItemById(
         categoryId: Long,
         pageIndex: Int
     ): NetworkResult<CategoryItemResponse> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                myPageService.getInventoryItemById(categoryId, pageIndex)
-            }
-        }
+        val response = handleTokenForResponse { myPageService.getInventoryItemById(categoryId, pageIndex) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun getMyInformation(): NetworkResult<AvatarInformationResponse> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                myPageService.getMyInformation()
-            }
-        }
+        val response = handleTokenForResponse { myPageService.getMyInformation() }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun modifyAvatarInformation(avatarModifyRequest: AvatarModifyRequest): NetworkResult<String> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                myPageService.modifyAvatarInformation(avatarModifyRequest)
-            }
-        }
+        val response = handleTokenForResponse { myPageService.modifyAvatarInformation(avatarModifyRequest) }
+
+        return handleApi(TAG) { response }
     }
 }

@@ -19,27 +19,21 @@ class CertificationRepositoryImpl(
     private val certificationService: CertificationService
 ): CertificationRepository {
     override suspend fun getCertificationProgress(roadmapId: Long): NetworkResult<List<StudentQuestInfo>> {
-        return handleApi(TAG) {
-            handleTokenForResponse{
-                certificationService.getCertificationProgress(roadmapId = roadmapId)
-            }
-        }
+        val response = handleTokenForResponse { certificationService.getCertificationProgress(roadmapId = roadmapId) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun getCertificationHistory(roadmapId: Long): NetworkResult<List<StudentQuestInfo>> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                certificationService.getCertificationHistory(roadmapId = roadmapId)
-            }
-        }
+        val response = handleTokenForResponse { certificationService.getCertificationHistory(roadmapId = roadmapId) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun getUploadList(roadmapId: Long): NetworkResult<List<QuestUploadInfo>> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                certificationService.getUploadList(roadmapId = roadmapId)
-            }
-        }
+        val response = handleTokenForResponse { certificationService.getUploadList(roadmapId = roadmapId) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun postUploadFile(
@@ -48,30 +42,28 @@ class CertificationRepositoryImpl(
         mimeType: String,
         onProgress: (Long, Long) -> Unit
     ): NetworkResult<String> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                val extension = mimeType.substringAfter("/")
-                val multipart = MultiPartFormDataContent(
-                    formData {
-                        append("file", byteArray, Headers.build {
-                            append(HttpHeaders.ContentType, mimeType)
-                            append(HttpHeaders.ContentDisposition,  "filename=Student-$questId-${byteArray.hashCode()}.$extension")
-                        })
+        val response = handleTokenForResponse {
+            val extension = mimeType.substringAfter("/")
+            val multipart = MultiPartFormDataContent(
+                formData {
+                    append("file", byteArray, Headers.build {
+                        append(HttpHeaders.ContentType, mimeType)
+                        append(HttpHeaders.ContentDisposition,  "filename=Student-$questId-${byteArray.hashCode()}.$extension")
                     })
-                certificationService.postUploadFile(questId, multipart) {
-                    onUpload { bytesSentTotal, contentLength ->
-                        onProgress(bytesSentTotal, contentLength)
-                    }
+                })
+            certificationService.postUploadFile(questId, multipart) {
+                onUpload { bytesSentTotal, contentLength ->
+                    onProgress(bytesSentTotal, contentLength)
                 }
             }
         }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun postGradeStudent(gradeStudentRequest: GradeStudentRequest): NetworkResult<String> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                certificationService.postGradeStudent(gradeStudentRequest = gradeStudentRequest)
-            }
-        }
+        val response = handleTokenForResponse { certificationService.postGradeStudent(gradeStudentRequest = gradeStudentRequest) }
+
+        return handleApi(TAG) { response }
     }
 }

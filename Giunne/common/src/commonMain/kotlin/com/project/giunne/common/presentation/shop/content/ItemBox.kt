@@ -52,13 +52,15 @@ fun ItemBox(
     ) {
 
         item.thumbnailUrl?.let { thumbnailUrl ->
-            AsyncImage(
-                modifier = Modifier
-                    .width(maxWidth / 2)
-                    .wrapContentHeight(),
-                model = IMAGE_BASE_URL + thumbnailUrl,
-                contentDescription = "아이템"
-            )
+            if (thumbnailUrl.isNotEmpty()) {
+                AsyncImage(
+                    modifier = Modifier
+                        .width(maxWidth / 2)
+                        .wrapContentHeight(),
+                    model = IMAGE_BASE_URL + thumbnailUrl,
+                    contentDescription = "아이템"
+                )
+            }
         } ?: run {
             // 아이템이 2개 인건 레벨별로 이미지가 다름
             val imageUrl = if (1 < item.itemImages.size) {

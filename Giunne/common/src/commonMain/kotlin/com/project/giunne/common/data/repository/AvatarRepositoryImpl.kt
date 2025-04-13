@@ -30,82 +30,62 @@ class AvatarRepositoryImpl(
     }
 
     override suspend fun createAvatar(avatarCreateRequest: AvatarCreateRequest): NetworkResult<AvatarResponse> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                avatarService.createAvatar(avatarCreateRequest)
-            }
-        }
+        val response = handleTokenForResponse { avatarService.createAvatar(avatarCreateRequest) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun getUserAvatarList(pageIndex: Int): NetworkResult<AvatarUserListResponse> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                avatarService.getUserAvatarList(pageIndex)
-            }
-        }
+        val response = handleTokenForResponse { avatarService.getUserAvatarList(pageIndex) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun getRecreationAvatarList(recreationId: Long): NetworkResult<List<AvatarUserResponse>> {
-//        val response = handleTokenForResponse { avatarService.getRecreationAvatarList(recreationId = recreationId) }
+        val response = handleTokenForResponse { avatarService.getRecreationAvatarList(recreationId = recreationId) }
 
-        return handleApi(TAG) {
-            avatarService.getRecreationAvatarList(recreationId = recreationId)
-        }
+        return handleApi(TAG) { response }
     }
 
     override suspend fun getPointInfo(): NetworkResult<MyPointInfo> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                avatarService.getPointInfo()
-            }
-        }
+        val response = handleTokenForResponse { avatarService.getPointInfo() }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun modifyStudentPoint(studentPointRequest: StudentPointRequest): NetworkResult<String> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                avatarService.modifyStudentPoint(studentPointRequest)
-            }
-        }
+        val response = handleTokenForResponse { avatarService.modifyStudentPoint(studentPointRequest) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun modifyStudentExp(studentExpRequest: StudentExpRequest): NetworkResult<String> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                avatarService.modifyStudentExp(studentExpRequest)
-            }
-        }
+        val response = handleTokenForResponse { avatarService.modifyStudentExp(studentExpRequest) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun resetPassword(passwordResetRequest: PasswordResetRequest): NetworkResult<String> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                avatarService.resetPassword(passwordResetRequest)
-            }
-        }
+        val response = handleTokenForResponse { avatarService.resetPassword(passwordResetRequest) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun changeStudentPassword(passwordChangeRequest: PasswordChangeRequest): NetworkResult<String> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                avatarService.changeStudentPassword(passwordChangeRequest)
-            }
-        }
+        val response = handleTokenForResponse { avatarService.changeStudentPassword(passwordChangeRequest) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun getFCMTokenList(memberId: Long): NetworkResult<List<FCMResponse>> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                avatarService.getFCMTokenList(memberId)
-            }
-        }
+        val response = handleTokenForResponse { avatarService.getFCMTokenList(memberId) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun postFCMToken(fcmRequest: FCMRequest): NetworkResult<String> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                avatarService.postFCMToken(fcmRequest)
-            }
-        }
+        val response = handleTokenForResponse { avatarService.postFCMToken(fcmRequest) }
+
+        return handleApi(TAG) { response }
     }
 }

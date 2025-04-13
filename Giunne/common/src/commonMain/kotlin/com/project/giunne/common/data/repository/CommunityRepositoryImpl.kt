@@ -22,62 +22,48 @@ class CommunityRepositoryImpl(
         playerId: Long,
         questId: Long
     ): NetworkResult<PostingDetailListResponse> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                communityService.getPostingDetailList(playerId = playerId, questId = questId)
-            }
-        }
+        val response = handleTokenForResponse { communityService.getPostingDetailList(playerId = playerId, questId = questId) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun getPostingDetail(postId: Long): NetworkResult<PostingDetailResponse> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                communityService.getPostingDetail(postId = postId)
-            }
-        }
+        val response = handleTokenForResponse { communityService.getPostingDetail(postId = postId) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun postComment(commentRequest: CommentRequest): NetworkResult<Long> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                communityService.postComment(commentRequest = commentRequest)
-            }
-        }
+        val response = handleTokenForResponse { communityService.postComment(commentRequest = commentRequest) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun getCommentList(
         postId: Long,
         pageIndex: Int,
     ): NetworkResult<CommentListResponse> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                communityService.getCommentList(postId = postId, pageIndex = pageIndex)
-            }
-        }
+        val response = handleTokenForResponse { communityService.getCommentList(postId = postId, pageIndex = pageIndex) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun deleteComment(postId: Long): NetworkResult<String> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                communityService.deleteComment(postId = postId)
-            }
-        }
+        val response = handleTokenForResponse { communityService.deleteComment(postId = postId) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun postCommentLike(commentLikeRequest: CommentLikeRequest): NetworkResult<String> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                communityService.postCommentLike(commentLikeRequest = commentLikeRequest)
-            }
-        }
+        val response = handleTokenForResponse { communityService.postCommentLike(commentLikeRequest = commentLikeRequest) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun postCommentUnlike(commentLikeRequest: CommentLikeRequest): NetworkResult<String> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                communityService.postCommentUnlike(commentLikeRequest = commentLikeRequest)
-            }
-        }
+        val response = handleTokenForResponse { communityService.postCommentUnlike(commentLikeRequest = commentLikeRequest) }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun getPostingList(
@@ -87,30 +73,30 @@ class CommunityRepositoryImpl(
         pageIndex: Int,
         sortDirection: String
     ): NetworkResult<PostingListResponse> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                communityService.getPostingList(
-                    roadMapId = roadMapId,
-                    questName = questName,
-                    nickName = nickName,
-                    pageIndex = pageIndex,
-                    sortDirection = sortDirection,
-                )
-            }
+        val response = handleTokenForResponse {
+            communityService.getPostingList(
+                roadMapId = roadMapId,
+                questName = questName,
+                nickName = nickName,
+                pageIndex = pageIndex,
+                sortDirection = sortDirection,
+            )
         }
+
+        return handleApi(TAG) { response }
     }
 
     override suspend fun getQuestTypeList(
         roadmapId: Long,
         pageIndex: Int
     ): NetworkResult<QuestTypeListResponse> {
-        return handleApi(TAG) {
-            handleTokenForResponse {
-                communityService.getQuestTypeList(
-                    roadmapId = roadmapId,
-                    pageIndex = pageIndex,
-                )
-            }
+        val response = handleTokenForResponse {
+            communityService.getQuestTypeList(
+                roadmapId = roadmapId,
+                pageIndex = pageIndex,
+            )
         }
+
+        return handleApi(TAG) { response }
     }
 }
