@@ -19,9 +19,9 @@ import com.project.giunne.common.domain.usecase.avatar.PostFCMTokenUseCase
 import com.project.giunne.common.domain.usecase.avatar.ResetPasswordUseCase
 import com.project.giunne.common.domain.usecase.certification.GetCertificationHistory
 import com.project.giunne.common.domain.usecase.certification.GetCertificationProgress
-import com.project.giunne.common.domain.usecase.certification.PostUploadFileUseCase
 import com.project.giunne.common.domain.usecase.certification.GetUploadList
 import com.project.giunne.common.domain.usecase.certification.PostGradeStudentUseCase
+import com.project.giunne.common.domain.usecase.certification.PostUploadFileUseCase
 import com.project.giunne.common.domain.usecase.common.GetSchoolListUseCase
 import com.project.giunne.common.domain.usecase.community.DeleteComment
 import com.project.giunne.common.domain.usecase.community.GetCommentList
@@ -36,10 +36,17 @@ import com.project.giunne.common.domain.usecase.mypage.GetAvatarInformationUseCa
 import com.project.giunne.common.domain.usecase.mypage.GetInventoryItemListUseCase
 import com.project.giunne.common.domain.usecase.mypage.ModifyAvatarInformationUseCase
 import com.project.giunne.common.domain.usecase.mypage.PutInventoryItemUseCase
+import com.project.giunne.common.domain.usecase.notice.DeleteNoticeUseCase
+import com.project.giunne.common.domain.usecase.notice.GetNoticeDetailUseCase
+import com.project.giunne.common.domain.usecase.notice.GetNoticeListUseCase
+import com.project.giunne.common.domain.usecase.notice.ModifyNoticeUseCase
+import com.project.giunne.common.domain.usecase.notice.PostNoticeUseCase
+import com.project.giunne.common.domain.usecase.notice.ReadNoticeUseCase
+import com.project.giunne.common.domain.usecase.notice.UnreadNoticeCountUseCase
 import com.project.giunne.common.domain.usecase.roadmap.CreateRecreationUseCase
-import com.project.giunne.common.domain.usecase.roadmap.GetRecreationTeacherListUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetAllRoadMapUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetQuestCodeUseCase
+import com.project.giunne.common.domain.usecase.roadmap.GetRecreationTeacherListUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetSearchRecreationUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetSpecificStudentCourseUseCase
 import com.project.giunne.common.domain.usecase.roadmap.GetStudentCourseUseCase
@@ -106,4 +113,11 @@ val useCaseModule: Module = module {
     single { ChangeStudentPasswordUseCase(get()) }
     single { PostFCMTokenUseCase(get()) }
     single { GetFCMTokenListUseCase(get()) }
+    single { GetNoticeListUseCase(get()) }
+    single { GetNoticeDetailUseCase(get()) }
+    single { ModifyNoticeUseCase(get()) }
+    single { PostNoticeUseCase(get()) }
+    single { DeleteNoticeUseCase(get()) }
+    single { ReadNoticeUseCase(get()) }
+    single { UnreadNoticeCountUseCase(get()) }
 }
