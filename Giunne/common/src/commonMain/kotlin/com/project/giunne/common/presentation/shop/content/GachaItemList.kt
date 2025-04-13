@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import coil3.compose.AsyncImage
 import com.project.giunne.common.data.util.DefineUrl
 import com.project.giunne.common.util.gdp
+import com.project.giunne.common.util.removeSpaceUrl
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.DrawableResource
@@ -54,7 +55,7 @@ fun GachaItemList(
             AsyncImage(
                 modifier = Modifier
                     .width(120.gdp),
-                model = DefineUrl.IMAGE_BASE_URL + gachaItems[it],
+                model = DefineUrl.IMAGE_BASE_URL + gachaItems[it].removeSpaceUrl(),
                 contentDescription = "아이템"
             )
             if (itemListState[it] == itemListState.last()) {

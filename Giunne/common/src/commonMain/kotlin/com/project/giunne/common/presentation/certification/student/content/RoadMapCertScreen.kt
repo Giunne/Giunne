@@ -27,6 +27,7 @@ import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import com.project.giunne.common.util.removeSpaceUrl
 
 private const val TAG = "RoadMapCertScreen"
 @Composable
@@ -82,7 +83,7 @@ fun RoadMapCertScreen(
                     icon = {
                         AsyncImage(
                             modifier = Modifier.size(48.gdp),
-                            model = IMAGE_BASE_URL + uploadProgressItem.thumbnailUrl,
+                            model = IMAGE_BASE_URL + uploadProgressItem.thumbnailUrl?.removeSpaceUrl(),
                             contentDescription = null
                         )
                     },

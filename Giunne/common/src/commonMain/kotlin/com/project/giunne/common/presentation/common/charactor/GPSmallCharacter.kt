@@ -17,6 +17,7 @@ import coil3.compose.AsyncImage
 import com.project.giunne.common.data.remote.response.WearingItem
 import com.project.giunne.common.data.util.DefineUrl.IMAGE_BASE_URL
 import com.project.giunne.common.util.gdp
+import com.project.giunne.common.util.removeSpaceUrl
 
 @Composable
 fun GPSmallCharacter(
@@ -35,7 +36,7 @@ fun GPSmallCharacter(
                     .onSizeChanged {
                         characterSize = it
                     },
-                model = IMAGE_BASE_URL + url,
+                model = IMAGE_BASE_URL + url.removeSpaceUrl(),
                 contentDescription = null
             )
         }
@@ -58,7 +59,7 @@ fun GPSmallCharacter(
                             itemSize = it
                         }
                             .alpha(0f),
-                        model = IMAGE_BASE_URL + item.itemImage.fileUrl,
+                        model = IMAGE_BASE_URL + item.itemImage.fileUrl.removeSpaceUrl(),
                         contentDescription = null
                     )
                 }.first().measure(unconstrainedConstraints)
@@ -76,7 +77,7 @@ fun GPSmallCharacter(
                                 y = item.itemImage.itemImagePosition?.positionY?.times(4)
                                     ?.times(characterSize.height.toFloat() / 1024.gdp.toPx())?.gdp ?: 0.gdp
                             ),
-                        model = IMAGE_BASE_URL + item.itemImage.fileUrl,
+                        model = IMAGE_BASE_URL + item.itemImage.fileUrl.removeSpaceUrl(),
                         contentDescription = null
                     )
                 }.first().measure(constraints)

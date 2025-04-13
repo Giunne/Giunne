@@ -8,3 +8,7 @@ fun String.isValidPassword(): Boolean {
 fun String.isNumeric(): Boolean {
     return this.toIntOrNull() != null || this.toDoubleOrNull() != null
 }
+
+fun String.removeSpaceUrl(): String {
+    return this.replace(" ", "%20")
+}

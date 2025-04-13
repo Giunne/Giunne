@@ -67,7 +67,7 @@ compose.desktop {
         }
         jvmArgs += listOf(
             "-Xmx2G",
-            "-Dfile.encoding=UTF-8"
+//            "-Dfile.encoding=UTF-8"
         )
     }
 }

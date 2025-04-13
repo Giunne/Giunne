@@ -20,6 +20,7 @@ import com.project.giunne.common.data.util.DefineUrl
 import com.project.giunne.common.data.util.DefineUrl.IMAGE_BASE_URL
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.gdp
+import com.project.giunne.common.util.removeSpaceUrl
 
 private const val TAG = "GPShopCharacter"
 @Composable
@@ -34,7 +35,7 @@ fun GPShopCharacter(
         AsyncImage(
             modifier = modifier,
 //            model = character,
-            model = IMAGE_BASE_URL + (items.find { it.categoryId == 6 } ?: items.find { it.categoryId == 1 })?.itemImages?.find { it.level == currentLevel }?.fileUrl.orEmpty(),
+            model = IMAGE_BASE_URL + (items.find { it.categoryId == 6 } ?: items.find { it.categoryId == 1 })?.itemImages?.find { it.level == currentLevel }?.fileUrl.orEmpty().removeSpaceUrl(),
             contentDescription = null
         )
         items.filter { it.categoryId != 1 && it.categoryId != 6 }.forEach { item ->
@@ -63,7 +64,7 @@ fun GPShopCharacter(
                             itemSize = it
                         }
                             .alpha(0.1f),
-                        model = IMAGE_BASE_URL + currentItem?.fileUrl,
+                        model = IMAGE_BASE_URL + currentItem?.fileUrl?.removeSpaceUrl(),
                         contentDescription = null
                     )
                 }.first().measure(unconstrainedConstraints)
@@ -79,7 +80,7 @@ fun GPShopCharacter(
                                 x = currentItem?.itemImagePositions?.find { it.level == currentLevel }?.positionX?.gdp ?: 0.gdp,
                                 y = currentItem?.itemImagePositions?.find { it.level == currentLevel }?.positionY?.gdp ?: 0.gdp
                             ),
-                        model = IMAGE_BASE_URL + currentItem?.fileUrl,
+                        model = IMAGE_BASE_URL + currentItem?.fileUrl?.removeSpaceUrl(),
                         contentDescription = null
                     )
                 }.first().measure(constraints)

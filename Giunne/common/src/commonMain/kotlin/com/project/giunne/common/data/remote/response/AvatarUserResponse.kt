@@ -1,5 +1,6 @@
 package com.project.giunne.common.data.remote.response
 
+import com.project.giunne.common.util.removeSpaceUrl
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -63,7 +64,7 @@ data class ItemImage(
 ) {
     fun asShopItemImage(): ItemCategoryImage {
         return ItemCategoryImage(
-            fileUrl = fileUrl,
+            fileUrl = fileUrl.removeSpaceUrl(),
             id = id,
             level = level,
             isRepresent = isRepresent,

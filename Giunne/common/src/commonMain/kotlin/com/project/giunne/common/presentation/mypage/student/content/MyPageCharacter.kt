@@ -24,6 +24,7 @@ import com.project.giunne.common.presentation.home.common.RowWithDropShadow
 import com.project.giunne.common.presentation.home.student.content.LevelBadgeBox
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.gdp
+import com.project.giunne.common.util.removeSpaceUrl
 
 @Composable
 fun MyPageCharacter(
@@ -82,7 +83,7 @@ fun MyPageCharacter(
             ) {
                 AsyncImage(
                     modifier = Modifier.size((64 / 2).gdp),
-                    model = IMAGE_BASE_URL + nextLevelCharacterUrl,
+                    model = IMAGE_BASE_URL + nextLevelCharacterUrl.removeSpaceUrl(),
                     contentDescription = "다음 레벨 캐릭터"
                 )
             }

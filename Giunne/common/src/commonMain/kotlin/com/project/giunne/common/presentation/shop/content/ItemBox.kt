@@ -21,6 +21,7 @@ import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import com.project.giunne.common.util.removeSpaceUrl
 
 @Composable
 fun ItemBox(
@@ -57,7 +58,7 @@ fun ItemBox(
                     modifier = Modifier
                         .width(maxWidth / 2)
                         .wrapContentHeight(),
-                    model = IMAGE_BASE_URL + thumbnailUrl,
+                    model = IMAGE_BASE_URL + thumbnailUrl.removeSpaceUrl(),
                     contentDescription = "아이템"
                 )
             }
@@ -72,7 +73,7 @@ fun ItemBox(
                 modifier = Modifier
                     .width(maxWidth / 2)
                     .wrapContentHeight(),
-                model = imageUrl,
+                model = imageUrl.removeSpaceUrl(),
                 contentDescription = "아이템"
             )
         }
