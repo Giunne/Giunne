@@ -34,6 +34,7 @@ import com.project.giunne.common.presentation.roadmap.node.roadMap5
 import com.project.giunne.common.presentation.roadmap.teacher.state.RoadMapState
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.AvatarUtil
+import com.project.giunne.common.util.Define
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
@@ -84,7 +85,7 @@ fun TeacherExerciseRoadmapScreen(
                     onAllSelectedChange = {
                         roadMapComponent.checkedStudentAll(it)
                     },
-                    studentList = roadMapState.studentList,
+                    studentList = roadMapState.studentList.filter { it.playerId != Define.playerId.toInt() },
                     onCheckedChanged = { studentCheck, checked ->
                         roadMapComponent.checkedStudent(studentCheck, checked)
                     },

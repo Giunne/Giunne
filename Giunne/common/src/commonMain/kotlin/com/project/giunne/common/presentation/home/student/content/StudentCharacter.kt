@@ -29,7 +29,8 @@ fun StudentCharacter(
     wearingItems: List<WearingItem>
 ) {
     val totalExp = if (needExp != 0) needExp else currentExp
-    val percent = currentExp.toFloat() / totalExp.toFloat()
+    val percent = if (totalExp != 0) currentExp.toFloat() / totalExp.toFloat() else 1f
+
     Column(
         modifier = Modifier
             .fillMaxSize()
