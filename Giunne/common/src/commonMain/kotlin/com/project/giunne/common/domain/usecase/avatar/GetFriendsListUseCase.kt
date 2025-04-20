@@ -11,6 +11,7 @@ class GetFriendsListUseCase(
         return avatarRepository
             .getRecreationAvatarList(recreationId = recreationId)
             .successOr(listOf())
+            .filter { !it.nickname.contains("선생님") }
             .sortedWith(
                 comparator = compareBy<AvatarUserResponse> { it.exp }.reversed()
             )

@@ -55,7 +55,7 @@ fun RunningCertScreen(
                         )
                         .fillMaxWidth()
                         .height(262.gdp),
-                    weekText = checkProgressItem.questName,
+                    weekText = checkProgressItem.questName + " - ${checkProgressItem.questStateInfo.currentApproveCount + 1}",
                     image = imageUploadState.imageFile,
                     onUploadButtonClicked = {
                         imageUploadStore.onClickImageUploadButton()
@@ -77,7 +77,7 @@ fun RunningCertScreen(
                         )
                         .fillMaxWidth()
                         .height(262.gdp),
-                    weekText = uploadProgressItem.questName,
+                    weekText = uploadProgressItem.questName + " - ${uploadProgressItem.questStateInfo.currentApproveCount + 1}",
                     progressText = "선생님이 확인중이에요!",
                     icon = {
                         Image(
