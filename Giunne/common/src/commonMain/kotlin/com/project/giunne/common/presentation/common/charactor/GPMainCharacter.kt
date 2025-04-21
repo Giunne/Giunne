@@ -17,6 +17,7 @@ import coil3.compose.AsyncImage
 import com.project.giunne.common.data.remote.response.WearingItem
 import com.project.giunne.common.data.util.DefineUrl.IMAGE_BASE_URL
 import com.project.giunne.common.util.gdp
+import com.project.giunne.common.util.removeSpaceUrl
 
 @Composable
 fun GPMainCharacter(
@@ -30,7 +31,7 @@ fun GPMainCharacter(
         characterUrl?.let { url ->
             AsyncImage(
                 modifier = modifier,
-                model = IMAGE_BASE_URL + url,
+                model = IMAGE_BASE_URL + url.removeSpaceUrl(),
                 contentDescription = null
             )
         }
@@ -53,7 +54,7 @@ fun GPMainCharacter(
                             itemSize = it
                         }
                             .alpha(0f),
-                        model = IMAGE_BASE_URL + item.itemImage.fileUrl,
+                        model = IMAGE_BASE_URL + item.itemImage.fileUrl.removeSpaceUrl(),
                         contentDescription = null
                     )
                 }.first().measure(unconstrainedConstraints)
@@ -69,7 +70,7 @@ fun GPMainCharacter(
                                 x = item.itemImage.itemImagePosition?.positionX?.gdp ?: 0.gdp,
                                 y = item.itemImage.itemImagePosition?.positionY?.gdp ?: 0.gdp
                             ),
-                        model = IMAGE_BASE_URL + item.itemImage.fileUrl,
+                        model = IMAGE_BASE_URL + item.itemImage.fileUrl.removeSpaceUrl(),
                         contentDescription = null
                     )
                 }.first().measure(constraints)

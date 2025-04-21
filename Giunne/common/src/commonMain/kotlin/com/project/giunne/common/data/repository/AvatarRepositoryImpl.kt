@@ -17,7 +17,6 @@ import com.project.giunne.common.data.util.NetworkResult
 import com.project.giunne.common.data.util.TokenHandler.handleTokenForResponse
 import com.project.giunne.common.data.util.handleApi
 import com.project.giunne.common.domain.repository.AvatarRepository
-import com.project.giunne.common.util.Define.recreationId
 
 private const val TAG = "AvatarRepositoryImpl"
 class AvatarRepositoryImpl(

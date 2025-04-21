@@ -61,6 +61,7 @@ import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.common.util.onZoomEvent
 import com.project.giunne.common.util.rememberZoomState
+import com.project.giunne.common.util.removeSpaceUrl
 import com.project.giunne.icon_expand
 import com.project.giunne.icon_upload_image
 import com.project.giunne.image_loader_1
@@ -172,7 +173,7 @@ fun StudentCommunityDetailScreen(
 
                                         }
                                     ),
-                                model = communityState.postingDetailInfo.fileUrl,
+                                model = communityState.postingDetailInfo.fileUrl.removeSpaceUrl(),
                                 placeholder = painterResource(Res.drawable.image_loader_1),
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop

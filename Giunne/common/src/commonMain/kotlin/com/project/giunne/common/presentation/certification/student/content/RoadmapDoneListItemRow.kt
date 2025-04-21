@@ -26,6 +26,7 @@ import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import com.project.giunne.common.util.removeSpaceUrl
 import com.project.giunne.icon_plus
 import com.project.giunne.roadcon_3_beast
 import org.jetbrains.compose.resources.painterResource
@@ -57,7 +58,7 @@ fun RoadmapDoneListItemRow(
             content = {
                 AsyncImage(
                     modifier = Modifier.size(32.gdp),
-                    model = IMAGE_BASE_URL + historyItem.thumbnailUrl,
+                    model = IMAGE_BASE_URL + historyItem.thumbnailUrl?.removeSpaceUrl(),
                     contentDescription = null
                 )
             }

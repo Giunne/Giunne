@@ -43,6 +43,14 @@ object Define {
         get() = PreferencesUtil.settingsRepository!!.currentJoggingIdPref.get().toInt()
         set(value) { PreferencesUtil.settingsRepository!!.currentJoggingIdPref.set(value.toString()) }
 
+    var currentLevel: Int
+        get() = PreferencesUtil.settingsRepository!!.currentLevelPref.get().toInt()
+        set(value) { PreferencesUtil.settingsRepository!!.currentLevelPref.set(value.toString()) }
+
+    var currentPlayerId: Int
+        get() = PreferencesUtil.settingsRepository!!.currentPlayerIdPref.get().toInt()
+        set(value) { PreferencesUtil.settingsRepository!!.currentPlayerIdPref.set(value.toString()) }
+
     fun savePrefAuthInfo(
         authResponse: AuthResponse
     ) {

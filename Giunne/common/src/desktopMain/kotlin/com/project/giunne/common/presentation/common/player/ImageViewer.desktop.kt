@@ -34,6 +34,7 @@ import com.project.giunne.common.util.ZoomStore
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.onZoomEvent
 import com.project.giunne.common.util.rememberZoomState
+import com.project.giunne.common.util.removeSpaceUrl
 import com.project.giunne.icon_rotate
 import com.project.giunne.icon_search
 import org.jetbrains.compose.resources.painterResource
@@ -93,7 +94,7 @@ actual fun ImageViewer(
 
                             }
                         ),
-                    model = imagePath,
+                    model = imagePath.removeSpaceUrl(),
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
                 )

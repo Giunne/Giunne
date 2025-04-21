@@ -118,7 +118,7 @@ internal fun StudentMyPageScreen(
                             .padding(horizontal = 16.gdp),
                         wearingItems = userInfoState.value.wearingItems,
                         level = userInfoState.value.level,
-                        percent = userInfoState.value.exp / totalExp.toFloat()
+                        percent = if (totalExp != 0) userInfoState.value.exp / totalExp.toFloat() else 1f
                     )
 
                     Row(

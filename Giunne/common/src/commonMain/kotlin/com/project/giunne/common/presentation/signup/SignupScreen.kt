@@ -201,7 +201,7 @@ internal fun SignupScreen(
                         onTextChanged = { infoStore.onPassTextChanged(it) },
                         sideContent = {
                             GPText(
-                                text = "영어, 특수문자, 숫자를 포함한 8자리",
+                                text = "영어, 숫자를 포함한 8자리",
                                 textSize = 10.gsp,
                                 fontFamily = GPFontFamily.Medium,
                                 textColor = GPColor.ButtonGray

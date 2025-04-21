@@ -96,6 +96,7 @@ class StudentJoinRecreationComponent(
                 }
                 // playerId, accessToken 업데이트
                 Define.playerId = recreationId
+                Define.recreationId = response.recreationId.toInt()
                 Define.accessToken = response.accessToken
                 AvatarUtil.getRecreationList(recreationId, 1)
                 postSideEffect(StudentJoinEvent.SuccessLogin("선택한 로드맵에 연결 되었습니다! 👏🏼", playerId = recreationId))

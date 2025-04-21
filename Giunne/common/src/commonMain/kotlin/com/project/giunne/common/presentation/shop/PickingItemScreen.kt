@@ -46,6 +46,7 @@ import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import com.project.giunne.common.util.removeSpaceUrl
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 
@@ -98,7 +99,7 @@ fun PickingItemScreen(
                     if (gachaState.randomItem.itemImages.isNotEmpty()) {
                         AsyncImage(
                             modifier = Modifier.size(120.gdp),
-                            model = DefineUrl.IMAGE_BASE_URL + gachaState.randomItem.itemImages.first().fileUrl, // TODO 레벨 정보 Define에 넣어주고 분기
+                            model = DefineUrl.IMAGE_BASE_URL + gachaState.randomItem.itemImages.first().fileUrl.removeSpaceUrl(), // TODO 레벨 정보 Define에 넣어주고 분기
                             contentDescription = "이미지"
                         )
                     }

@@ -32,6 +32,7 @@ import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.common.util.isNumeric
+import com.project.giunne.common.util.removeSpaceUrl
 import com.project.giunne.icon_lock
 import com.project.giunne.icon_plus
 import org.jetbrains.compose.resources.painterResource
@@ -116,7 +117,7 @@ fun RoadMapExerciseStage(
                                 AsyncImage(
                                     modifier = Modifier
                                         .size((node.boxSize * 0.6).dp),
-                                    model = IMAGE_BASE_URL + url,
+                                    model = IMAGE_BASE_URL + url.removeSpaceUrl(),
                                     contentDescription = "운동 이미지"
                                 )
                             }

@@ -20,6 +20,8 @@ class SettingRepository(
     val recreationIdPref: SettingConfig<*> = LongSettingConfig(settings, "RECREATION", 0)
     val currentExerciseIdPref: SettingConfig<*> = LongSettingConfig(settings, "EXERCISE", 0)
     val currentJoggingIdPref: SettingConfig<*> = LongSettingConfig(settings, "JOGGING", 0)
+    val currentLevelPref: SettingConfig<*> = LongSettingConfig(settings, "LEVEL", 0)
+    val currentPlayerIdPref: SettingConfig<*> = LongSettingConfig(settings, "CURRENT_PLAYER", 0)
 
     fun clear(): Unit = settings.clear()
 }

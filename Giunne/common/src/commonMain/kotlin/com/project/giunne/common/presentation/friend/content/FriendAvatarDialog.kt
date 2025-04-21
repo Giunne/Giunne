@@ -32,6 +32,7 @@ import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import com.project.giunne.common.util.removeSpaceUrl
 
 @Composable
 fun FriendAvatarDialog(
@@ -63,7 +64,7 @@ fun FriendAvatarDialog(
             Box {
                 AsyncImage(
                     modifier = Modifier.size(256.gdp),
-                    model = IMAGE_BASE_URL + characterUrl,
+                    model = IMAGE_BASE_URL + characterUrl.removeSpaceUrl(),
                     contentDescription = null
                 )
                 wearingItems.filter { it.categoryId != 1 && it.categoryId != 6 }.forEach { item ->
@@ -85,7 +86,7 @@ fun FriendAvatarDialog(
                                     itemSize = it
                                 }
                                     .alpha(0f),
-                                model = IMAGE_BASE_URL + item.itemImage.fileUrl,
+                                model = IMAGE_BASE_URL + item.itemImage.fileUrl.removeSpaceUrl(),
                                 contentDescription = null
                             )
                         }.first().measure(unconstrainedConstraints)
@@ -101,7 +102,7 @@ fun FriendAvatarDialog(
                                         x = item.itemImage.itemImagePosition?.positionX?.gdp ?: 0.gdp,
                                         y = item.itemImage.itemImagePosition?.positionY?.gdp ?: 0.gdp
                                     ),
-                                model = IMAGE_BASE_URL + item.itemImage.fileUrl,
+                                model = IMAGE_BASE_URL + item.itemImage.fileUrl.removeSpaceUrl(),
                                 contentDescription = null
                             )
                         }.first().measure(constraints)
