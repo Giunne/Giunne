@@ -50,7 +50,7 @@ compose.desktop {
             copyright = "Giunne all rights reserved."
             vendor = "Giunne"
             packageName = "Giunne"
-            packageVersion = "1.0.3"
+            packageVersion = "1.0.5"
             includeAllModules = true
             description = "Giunne Project"
             windows {
@@ -67,7 +67,7 @@ compose.desktop {
         }
         jvmArgs += listOf(
             "-Xmx2G",
-            "-Dfile.encoding=UTF-8"
+//            "-Dfile.encoding=UTF-8"
         )
     }
 }

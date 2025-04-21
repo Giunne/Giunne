@@ -65,6 +65,7 @@ import com.project.giunne.common.util.gsp
 import com.project.giunne.common.util.isNumeric
 import com.project.giunne.common.util.onZoomEvent
 import com.project.giunne.common.util.rememberZoomState
+import com.project.giunne.common.util.removeSpaceUrl
 import com.project.giunne.icon_expand
 import com.project.giunne.image_loader_1
 import kotlinx.coroutines.launch
@@ -180,7 +181,7 @@ internal fun TeacherCommunityDetailScreen(
                                         state = state,
                                         onSingleTapEvent = {}
                                     ),
-                                model = communityState.postingDetailInfo.fileUrl,
+                                model = communityState.postingDetailInfo.fileUrl.removeSpaceUrl(),
                                 placeholder = painterResource(Res.drawable.image_loader_1),
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop

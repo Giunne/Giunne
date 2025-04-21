@@ -28,6 +28,7 @@ import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
+import com.project.giunne.common.util.removeSpaceUrl
 
 @Composable
 fun RoadMapTeacherExerciseStage(
@@ -96,7 +97,7 @@ fun RoadMapTeacherExerciseStage(
                                 AsyncImage(
                                     modifier = Modifier
                                         .size((node.boxSize * 0.6).dp),
-                                    model = IMAGE_BASE_URL + url,
+                                    model = IMAGE_BASE_URL + url.removeSpaceUrl(),
                                     contentDescription = "운동 이미지"
                                 )
                             }

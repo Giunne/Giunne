@@ -29,6 +29,7 @@ import com.project.giunne.common.presentation.certification.student.state.CertPr
 import com.project.giunne.common.presentation.common.addFocusCleaner
 import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
+import com.project.giunne.common.presentation.common.dialog.GPLevelUpDialog
 import com.project.giunne.common.presentation.common.dialog.GPSuccessRoadMapDialog
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.home.common.EmptyResult
@@ -67,6 +68,7 @@ internal fun StudentHomeScreen(
 
     val homeState by component.uiState.collectAsStateWithLifecycle()
     val userInfoState = AvatarUtil.uiState.collectAsState()
+    val levelUpEffects by AvatarUtil.levelUpEffects.collectAsState(false)
 
     LaunchedEffect(Define.playerId) {
         if (Define.playerId != 0L) {
@@ -221,6 +223,17 @@ internal fun StudentHomeScreen(
                         component.dismissSuccessJoggingDialog()
                     }
                 )
+            }
+
+            with (levelUpEffects) {
+                if (this) {
+                    GPLevelUpDialog(
+                        level = userInfoState.value.level.toString(),
+                        onDismiss = {
+                            AvatarUtil.dismissLevelUpDialog()
+                        }
+                    )
+                }
             }
         }
     }
