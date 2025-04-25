@@ -2,7 +2,6 @@ package com.project.giunne.common.presentation.friend.teacher
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,55 +11,43 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import com.project.giunne.Res
 import com.project.giunne.character_cat_level_1
-import com.project.giunne.common.data.remote.request.GradeStudentRequest
 import com.project.giunne.common.data.remote.request.PasswordResetRequest
 import com.project.giunne.common.data.remote.request.StudentExpRequest
 import com.project.giunne.common.data.remote.request.StudentPointRequest
 import com.project.giunne.common.presentation.certification.student.content.PageSelectRow
 import com.project.giunne.common.presentation.certification.student.state.CertPage
 import com.project.giunne.common.presentation.common.addFocusCleaner
-import com.project.giunne.common.presentation.common.button.GPButton
 import com.project.giunne.common.presentation.common.content.Loader
 import com.project.giunne.common.presentation.common.dialog.GPAlertDialog
 import com.project.giunne.common.presentation.common.dialog.GPConfirmDialog
 import com.project.giunne.common.presentation.common.spacer.SpH
-import com.project.giunne.common.presentation.common.spacer.SpW
 import com.project.giunne.common.presentation.common.text.GPText
-import com.project.giunne.common.presentation.friend.content.CheckModifyPoint
 import com.project.giunne.common.presentation.friend.content.ModifyExpDialog
 import com.project.giunne.common.presentation.friend.content.ModifyPointDialog
 import com.project.giunne.common.presentation.friend.content.StudentRoadMapDialog
 import com.project.giunne.common.presentation.friend.content.TeacherFriendItemRow
-import com.project.giunne.common.presentation.friend.content.TeacherModifyStudentPoint
 import com.project.giunne.common.presentation.friend.intent.FriendStore
 import com.project.giunne.common.ui.theme.GPColor
 import com.project.giunne.common.util.AvatarUtil
-import com.project.giunne.common.util.Define.playerId
 import com.project.giunne.common.util.GLog
 import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
 import com.project.giunne.common.util.gsp
 import com.project.giunne.common.util.isNumeric
-import kotlinx.serialization.json.JsonNull.content
 import org.jetbrains.compose.resources.painterResource
 
 private const val TAG = "TeacherFriendScreen"
@@ -156,7 +143,7 @@ internal fun TeacherFriendScreen(
                                 )
                             },
                             onClick = { playerId ->
-                                friendStore.getSpecificStudentCourse(1, playerId)
+                                friendStore.getSpecificStudentCourse(playerId)
                             }
                         )
                     }

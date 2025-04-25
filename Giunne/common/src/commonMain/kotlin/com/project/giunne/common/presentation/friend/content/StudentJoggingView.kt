@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -20,16 +22,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import com.project.giunne.Res
 import com.project.giunne.common.data.remote.response.StudentCourseInfo
-import com.project.giunne.common.presentation.common.noRippleClickable
 import com.project.giunne.common.presentation.common.shape.GPSquircleShapeWithBorder
 import com.project.giunne.common.presentation.common.text.GPText
 import com.project.giunne.common.presentation.roadmap.content.DrawJoggingLine
+import com.project.giunne.common.presentation.roadmap.content.RoadMapGradeCount
 import com.project.giunne.common.ui.theme.GPColor
-import com.project.giunne.common.util.GPFontFamily
 import com.project.giunne.common.util.gdp
-import com.project.giunne.common.util.gsp
-import com.project.giunne.icon_check
 import com.project.giunne.icon_lock
+import com.project.giunne.icon_plus
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -76,45 +76,76 @@ fun StudentJoggingView(
                 verticalArrangement = Arrangement.spacedBy(16.gdp),
             ) {
                 items(joggingWeek) { week ->
-                    val courseInfo = questInfoList.find { it.courseName == week } ?: StudentCourseInfo()
+                    val courseInfo =
+                        questInfoList.find { it.courseName == week } ?: StudentCourseInfo()
                     val questStateInfo = courseInfo.questInfo.questStateInfo
                     val status = questStateInfo.questProgress
                     val isBonus = questStateInfo.hasExtraPoints
+                    val starPoint = courseInfo.questInfo.questStateInfo.starPoint
+
                     GPSquircleShapeWithBorder(
                         modifier = Modifier.size(64.gdp),
-                        backgroundColor = if (status == "CONFIRM") {
-                            GPColor.Green
-                        } else if (status == "LOCK") {
-                            GPColor.TextBlack
-                        } else {
-                            GPColor.White
+                        backgroundColor = when (status) {
+                            "LOCK_OPEN" -> {
+                                GPColor.TextBlack
+                            }
+
+                            else -> {
+                                GPColor.White
+                            }
                         },
-                        borderColor = if (status == "CONFIRM") {
-                            GPColor.Green
-                        } else if (isBonus) {
-                            GPColor.MainOrangeColor
-                        } else {
-                            GPColor.BorderLightGray
+                        borderColor = when (status) {
+                            "CONFIRM" -> {
+                                GPColor.MainOrangeColor
+                            }
+
+                            "CHECK", "UPLOAD" -> {
+                                GPColor.Yellow
+                            }
+
+                            else -> {
+                                GPColor.BorderLightGray
+                            }
                         },
-                    ) {
-                        if (status == "CONFIRM") {
-                            Icon(
-                                painter = painterResource(Res.drawable.icon_check),
-                                contentDescription = "성공",
-                                tint = GPColor.White
-                            )
-                        } else if (status == "LOCK") {
-                            Icon(
-                                modifier = Modifier
-                                    .size(24.gdp),
-                                painter = painterResource(Res.drawable.icon_lock),
-                                contentDescription = "잠금",
-                                tint = GPColor.MainOrangeColor
-                            )
-                        } else {
-                            GPText(
-                                text = week,
-                            )
+
+                        ) {
+                        GPText(
+                            text = week,
+                        )
+                        when (status) {
+                            "CONFIRM" -> {
+                                if (isBonus) {
+                                    Icon(
+                                        modifier = Modifier
+                                            .size(10.gdp)
+                                            .align(Alignment.TopEnd)
+                                            .offset(x = (-8).gdp, y = 8.gdp),
+                                        painter = painterResource(Res.drawable.icon_plus),
+                                        contentDescription = "추가동작",
+                                        tint = GPColor.TextBlack_232323
+                                    )
+                                }
+
+                                RoadMapGradeCount(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 4.gdp)
+                                        .height(20.gdp)
+                                        .offset(y = 8.gdp)
+                                        .align(Alignment.BottomCenter),
+                                    starPoint = starPoint
+                                )
+                            }
+
+                            "LOCK_OPEN" -> {
+                                Icon(
+                                    modifier = Modifier
+                                        .size(24.gdp),
+                                    painter = painterResource(Res.drawable.icon_lock),
+                                    contentDescription = "잠금",
+                                    tint = GPColor.MainOrangeColor
+                                )
+                            }
                         }
                     }
                 }
