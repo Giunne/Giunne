@@ -3,21 +3,33 @@ package com.project.giunne.common.presentation.roadmap.content
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import com.project.giunne.common.data.remote.response.CourseInfo
-import com.project.giunne.common.presentation.roadmap.dummy.joggingUiState
 import com.project.giunne.common.ui.theme.GPColor
 
 @Composable
 fun DrawTeacherJoggingLine(
     modifier: Modifier,
+    lazyGridState: LazyGridState,
     weeks: List<String>,
     boxSize: Float,
     spacing: Float
 ) {
+    // 스크롤 오프셋 계산
+    val scrollOffset = remember {
+        derivedStateOf {
+            val firstVisibleItemIndex = lazyGridState.firstVisibleItemIndex
+            val firstVisibleItemScrollOffset = lazyGridState.firstVisibleItemScrollOffset
+            val rowIndex = firstVisibleItemIndex / 3
+            rowIndex * (boxSize + spacing) + firstVisibleItemScrollOffset
+        }
+    }
+
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
@@ -28,7 +40,7 @@ fun DrawTeacherJoggingLine(
             val canvasWidth = size.width
 
             val startX = (canvasWidth - (3 * boxSize + 2 * spacing)) / 2
-            val startY = 0f
+            val startY = -scrollOffset.value // 스크롤에 따라 Y 위치 조정
 
             weeks.indices.forEach { index ->
                 val colIndex = index % 3
@@ -58,7 +70,7 @@ fun DrawTeacherJoggingLine(
                  * 1. 왼쪽과 오른쪽 번갈아 가며 하나씩 연결 해야함
                  * 2. ex) 12-13, 10-9, 7-6 ...
                  */
-                if (rowIndex % 2 == 0 && colIndex == 0 && index != 12) {
+                if (rowIndex % 2 == 1 && colIndex == 0 && index != 27) {
                     // 아래 박스와 연결
                     val bottomBoxTop = startY + (rowIndex + 1) * (boxSize + spacing)
                     val bottomCenterY = bottomBoxTop + boxSize / 2
@@ -71,7 +83,7 @@ fun DrawTeacherJoggingLine(
                     )
                 }
 
-                if (rowIndex % 2 == 1 && colIndex == 2) {
+                if (rowIndex % 2 == 0 && colIndex == 2) {
                     // 아래 박스와 연결
                     val bottomBoxTop = startY + (rowIndex + 1) * (boxSize + spacing)
                     val bottomCenterY = bottomBoxTop + boxSize / 2
