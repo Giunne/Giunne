@@ -65,12 +65,13 @@ class FriendStore(
     }
 
     fun getSpecificStudentCourse(
-        roadmapId: Long,
         playerId: Int
     ) {
         scope.launch {
             setState { copy(loading = true) }
             runCatching {
+                // 선택된 로드맵 ID
+                val roadmapId = uiState.value.roadmapId
                 getSpecificStudentCourseUseCase(roadmapId, playerId)
             }.onSuccess { response ->
                 setState {
